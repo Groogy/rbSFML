@@ -1,0 +1,26 @@
+This is the Ruby bindings of the SFML2 library developed and maintained by Groogy
+and Trickster. 
+
+I hope you enjoy using rbSFML. If you make anything in it then we are very interested
+in hearing about it. We can always be reached at http://www.sfml-dev.org/forum for 
+support, ideas or just have a nice chat.
+
+#######################
+#       INSTALL       #
+#######################
+Of course this means this library depends on SFML2 so you'll have to install
+SFML2 on your development machine in order to compile rbSFML. 
+
+NOTE for Windows users: Currently you'll have to place SFML2 include headers and static library
+files in the root folder of the rbSFML library in Windows for it to find them. 
+Hopefully this will be fixed.
+
+#######################
+#       CONTACT       #
+#######################
+Groogy: 
+	* Email:  groogy@groogy.se
+	* Forum:  http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=921
+	* Github: https://github.com/Groogy
+Trickster:
+	* Forum: http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=869
