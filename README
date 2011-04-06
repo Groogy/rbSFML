@@ -12,8 +12,9 @@ Of course this means this library depends on SFML2 so you'll have to install
 SFML2 on your development machine in order to compile rbSFML. 
 
 NOTE for Windows users: Currently you'll have to place SFML2 include headers and static library
-files in the root folder of the rbSFML library in Windows for it to find them. 
-Hopefully this will be fixed.
+files in sub-folder of the rbSFML library in Windows for it to find them. 
+Hopefully this will be fixed. Place the SFML include folder in a folder called "includes"
+and the static libraries in a folder called "libs".
 
 This library also of course depends in a proper Ruby installation and rake.
 The library was created using Ruby-1.9.2 but it might work with lower versions too.
