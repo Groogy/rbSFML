@@ -388,10 +388,6 @@ void Init_RenderImage( void )
 	rb_define_method( globalRenderImageClass, "getWidth", RenderImage_GetWidth, 0 );
 	rb_define_method( globalRenderImageClass, "getHeight", RenderImage_GetHeight, 0 );
 	
-	// Class Aliases
-	rb_define_alias( CLASS_OF( globalRenderImageClass ), "is_available", "isAvailable" );
-	rb_define_alias( CLASS_OF( globalRenderImageClass ), "available?", "isAvailable" );
-	
 	// Instance Aliases
 	rb_define_alias( globalRenderImageClass, "image", "getImage" );
 	

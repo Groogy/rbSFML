@@ -98,6 +98,4 @@ void Init_Context( void )
 	// Aliases
 	rb_define_alias( globalContextClass, "active=", "setActive" );
 	rb_define_alias( globalContextClass, "set_active", "setActive" );
-	
-	rb_define_alias( CLASS_OF( globalContextClass ), "set_reference_active", "setReferenceActive" );
 }

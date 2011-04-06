@@ -381,4 +381,5 @@ void Init_Shader( void )
 	rb_define_alias( globalShaderClass, "[]=", "setParameter" );
 	
 	rb_define_alias( globalShaderClass, "set_texture", "setTexture" );
+	rb_define_alias( globalShaderClass, "set_current_texture", "setCurrentTexture" );
 }
