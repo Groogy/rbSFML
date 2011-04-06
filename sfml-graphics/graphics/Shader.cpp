@@ -152,7 +152,7 @@ static VALUE Shader_SetParameter( int argc, VALUE *args, VALUE self )
 }
 
 /* call-seq:
- *   shader.setParameter( name, texture )
+ *   shader.setTexture( name, texture )
  *
  * Change a texture parameter of the shader.
  *
@@ -180,6 +180,30 @@ static VALUE Shader_SetTexture( VALUE self, VALUE aName, VALUE aTexture )
 	sf::Shader *object = NULL;
 	Data_Get_Struct( self, sf::Shader, object );
 	object->SetTexture( name, *texture );
+	return Qnil;
+}
+
+/* call-seq:
+ *   shader.setCurrentTexture( name )
+ *
+ * Set the current object texture in the shader.
+ *
+ * This function maps a shader texture variable to the image of the object being drawn. Example:
+ *
+ *   // This is the variable in the pixel shader
+ *   uniform sampler2D current;
+ *
+ *
+ *   shader.SetCurrentTexture("current");
+ *
+ */
+static VALUE Shader_SetCurrentTexture( VALUE self, VALUE aName )
+{
+	VALIDATE_CLASS( aName, rb_cString, "name" );
+	const char * name = rb_string_value_cstr( &aName );
+	sf::Shader *object = NULL;
+	Data_Get_Struct( self, sf::Shader, object );
+	object->SetCurrentTexture( name );
 	return Qnil;
 }
 
@@ -265,14 +289,6 @@ static VALUE Shader_IsAvailable( VALUE aKlass )
 	return ( sf::Shader::IsAvailable() == true ? Qtrue : Qfalse );
 }
 
-static VALUE CreateCurrentTextureWrapper( void )
-{
-	sf::Image * image = const_cast< sf::Image * >( &sf::Shader::CurrentTexture );
-	VALUE rbData = Data_Wrap_Struct( globalImageClass, 0, 0, image );
-	rb_obj_call_init( rbData, 0, 0 );
-	return rbData;
-}
-
 void Init_Shader( void )
 {
 /* SFML namespace which contains the classes of this module. */
@@ -337,9 +353,6 @@ void Init_Shader( void )
 	rb_define_alloc_func( globalShaderClass, Shader_Alloc );
 	rb_define_singleton_method( globalShaderClass, "isAvailable", Shader_IsAvailable, 0 );
 	
-	// Class Constants
-	rb_define_const( globalShaderClass, "CurrentTexture", CreateCurrentTextureWrapper() );
-	
 	// Instance methods
 	rb_define_method( globalShaderClass, "initialize", Shader_Initialize, -1 );
 	rb_define_method( globalShaderClass, "initialize_copy", Shader_InitializeCopy, 1 );
@@ -347,6 +360,7 @@ void Init_Shader( void )
 	rb_define_method( globalShaderClass, "loadFromMemory", Shader_LoadFromMemory, 1 );
 	rb_define_method( globalShaderClass, "setParameter", Shader_SetParameter, -1 );
 	rb_define_method( globalShaderClass, "setTexture", Shader_SetTexture, 2 );
+	rb_define_method( globalShaderClass, "setCurrentTexture", Shader_SetCurrentTexture, 1 );
 	rb_define_method( globalShaderClass, "bind", Shader_Bind, 0 );
 	rb_define_method( globalShaderClass, "unbind", Shader_Unbind, 0 );
 	

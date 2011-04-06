@@ -60,25 +60,6 @@ static VALUE Context_SetActive( VALUE self, VALUE anArgument )
 	return Qnil;
 }
 
-/* call-seq:
- *   Context.SetReferenceActive()	-> true or false
- *
- * This function is meant to be called internally; it is used to deactivate the 
- * current context by activating another one (so that we still have an active 
- * context on the current thread).
- */
-static VALUE Context_SetReferenceActive( VALUE aKlass )
-{
-	if( sf::Context::SetReferenceActive() == true )
-	{
-		return Qtrue;
-	}
-	else
-	{
-		return Qfalse;
-	}
-}
-
 static VALUE Context_Alloc( VALUE aKlass )
 {
 	sf::Context *object = new sf::Context();
@@ -110,7 +91,6 @@ void Init_Context( void )
 	// Class methods
 	//rb_define_singleton_method( globalContextClass, "new", Context_New, 0 );
 	rb_define_alloc_func( globalContextClass, Context_Alloc );
-	rb_define_singleton_method( globalContextClass, "setReferenceActive", Context_SetReferenceActive, 0 );
 	
 	// Instance methods
 	rb_define_method( globalContextClass, "setActive", Context_SetActive, 1 );

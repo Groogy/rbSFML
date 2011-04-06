@@ -306,20 +306,6 @@ static VALUE RenderImage_Alloc( VALUE aKlass )
 	return Data_Wrap_Struct( aKlass, 0, RenderImage_Free, object );
 }
 
-/* call-seq:
- *   RenderImage.isAvailable()	-> true or false
- *
- * Check whether the system supports render images or not.
- *
- * It is very important to always call this function before trying to use the RenderImage class, as the feature may 
- * not be supported on all platforms (especially very old ones). If this function returns false, then you won't be 
- * able to use the class at all.
- */
-static VALUE RenderImage_IsAvailable( VALUE aKlass )
-{
-	return ( sf::RenderImage::IsAvailable() == true ? Qtrue : Qfalse );
-}
-
 void Init_RenderImage( void )
 {
 /* SFML namespace which contains the classes of this module. */
@@ -339,11 +325,6 @@ void Init_RenderImage( void )
  *   - etc.
  *
  * Usage example:
- *
- *   # First of all: make sure that rendering to image is supported
- *   if SFML::RenderImage.available? == false
- *     # Handle error
- *   end
  *
  *   # Create a new render-window
  *   window = SFML::RenderWindow.new( SFML::VideoMode.new(800, 600), "SFML window" )
@@ -391,7 +372,6 @@ void Init_RenderImage( void )
 	// Class methods
 	//rb_define_singleton_method( globalRenderImageClass, "new", RenderImage_New, 0 );
 	rb_define_alloc_func( globalRenderImageClass, RenderImage_Alloc );
-	rb_define_singleton_method( globalRenderImageClass, "isAvailable", RenderImage_IsAvailable, 0 );
 	
 	// Instance methods
 	rb_define_method( globalRenderImageClass, "initialize", RenderImage_Initialize, -1 );
