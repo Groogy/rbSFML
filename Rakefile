@@ -110,8 +110,8 @@ INSTALL = "install"
 LOCATION = CONFIG['sitearchdir'] + '/sfml'
 
 RUBYSFML_INC = "shared"
-SFML_INC = ENV.key?('SFML_INCLUDE') ? ENV['SFML_INCLUDE'] : '../../include'
-SFML_LIB = ENV.key?('SFML_LIB') ? ENV['SFML_LIB'] : '../../lib'
+SFML_INC = ENV.key?('SFML_INCLUDE') ? ENV['SFML_INCLUDE'] : File.dirname(__FILE__)
+SFML_LIB = ENV.key?('SFML_LIB') ? ENV['SFML_LIB'] : File.dirname(__FILE__)
 SFML_LIBS = '-lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system'
 RUBY_INC = CONFIG['rubyhdrdir']
 RUBY_LIB = (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC']) + ' ' + CONFIG['SOLIBS']
