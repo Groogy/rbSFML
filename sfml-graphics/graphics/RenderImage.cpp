@@ -375,7 +375,7 @@ void Init_RenderImage( void )
 	
 	// Instance methods
 	rb_define_method( globalRenderImageClass, "initialize", RenderImage_Initialize, -1 );
-	rb_define_method( globalRenderImageClass, "draw", RenderImage_Create, -1 );
+	rb_define_method( globalRenderImageClass, "draw", RenderImage_Draw, -1 );
 	rb_define_method( globalRenderImageClass, "create", RenderImage_Create, -1 );
 	rb_define_method( globalRenderImageClass, "display", RenderImage_Display, 0 );
 	rb_define_method( globalRenderImageClass, "getImage", RenderImage_GetImage, 0 );
