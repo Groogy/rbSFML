@@ -73,6 +73,7 @@ static VALUE Shape_AddPoint( int argc, VALUE *args, VALUE self )
 			case 2:
 				x = NUM2DBL( args[0] );
 				y = NUM2DBL( args[1] );
+				break;
 			default:
 				rb_raise( rb_eArgError, "Expected 2..4 arguments but was given %d", argc );
 				
@@ -98,6 +99,7 @@ static VALUE Shape_AddPoint( int argc, VALUE *args, VALUE self )
 				temp = Vector2_ForceType( args[0] );
 				x = NUM2DBL( Vector2_GetX( temp ) );
 				y = NUM2DBL( Vector2_GetY( temp ) );
+				break;
 			default:
 				rb_raise( rb_eArgError, "Expected 1..3 arguments but was given %d", argc );
 				
