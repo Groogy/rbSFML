@@ -21,6 +21,7 @@
  */
  
 #include "RenderWindow.hpp"
+#include "Color.hpp"
 #include "main.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -119,6 +120,38 @@ static VALUE RenderWindow_GetHeight( VALUE self )
 	sf::RenderWindow *object = NULL;
 	Data_Get_Struct( self, sf::RenderWindow, object );
 	return INT2FIX( object->GetHeight() );
+}
+
+/* call-seq:
+ *   render_target.clear( color = SFML::Color::Black )
+ *
+ * Clear the entire target with a single color.
+ *
+ * This function is usually called once every frame, to clear the previous contents of the target.
+ */
+static VALUE RenderWindow_Clear( int argc, VALUE *args, VALUE self )
+{
+	sf::Color color = sf::Color::Black;
+	switch( argc )
+	{
+		case 1:
+		{
+				VALUE temp = Color_ForceType( args[0] );
+				color.r = FIX2UINT( Color_GetR( temp ) );
+				color.g = FIX2UINT( Color_GetG( temp ) );
+				color.b = FIX2UINT( Color_GetB( temp ) );
+				color.a = FIX2UINT( Color_GetA( temp ) );
+		}
+		case 0:
+			break;
+		default:
+			rb_raise( rb_eArgError, "Expected 0 or 1 arguments but was given %d", argc );
+	}
+	
+	sf::RenderWindow *object = NULL;
+	Data_Get_Struct( self, sf::RenderWindow, object );
+	object->Clear( color );
+	return Qnil;
 }
 
 static VALUE RenderWindow_Alloc( VALUE aKlass )
@@ -223,6 +256,7 @@ void Init_RenderWindow( void )
 	
 	// Instance methods
 	rb_define_method( globalRenderWindowClass, "draw", RenderWindow_Draw, -1 );
+	rb_define_method( globalRenderWindowClass, "clear", RenderWindow_Clear, -1 );
 	rb_define_method( globalRenderWindowClass, "getView", RenderWindow_GetView, 0 );
 	rb_define_method( globalRenderWindowClass, "setView", RenderWindow_SetView, 1 );
 	rb_define_method( globalRenderWindowClass, "getDefaultView", RenderWindow_GetDefaultView, 0 );
