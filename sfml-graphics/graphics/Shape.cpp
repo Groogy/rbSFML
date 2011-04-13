@@ -60,16 +60,16 @@ static VALUE Shape_AddPoint( int argc, VALUE *args, VALUE self )
 		{
 			case 4:
 				temp = Color_ForceType( args[3] );
-				outlineColor.r = INT2FIX( Color_GetR( temp ) );
-				outlineColor.g = INT2FIX( Color_GetG( temp ) );
-				outlineColor.b = INT2FIX( Color_GetB( temp ) );
-				outlineColor.a = INT2FIX( Color_GetA( temp ) );
+				outlineColor.r = NUM2INT( Color_GetR( temp ) );
+				outlineColor.g = NUM2INT( Color_GetG( temp ) );
+				outlineColor.b = NUM2INT( Color_GetB( temp ) );
+				outlineColor.a = NUM2INT( Color_GetA( temp ) );
 			case 3:
 				temp = Color_ForceType( args[2] );
-				color.r = INT2FIX( Color_GetR( temp ) );
-				color.g = INT2FIX( Color_GetG( temp ) );
-				color.b = INT2FIX( Color_GetB( temp ) );
-				color.a = INT2FIX( Color_GetA( temp ) );
+				color.r = NUM2INT( Color_GetR( temp ) );
+				color.g = NUM2INT( Color_GetG( temp ) );
+				color.b = NUM2INT( Color_GetB( temp ) );
+				color.a = NUM2INT( Color_GetA( temp ) );
 			case 2:
 				x = NUM2DBL( args[0] );
 				y = NUM2DBL( args[1] );
@@ -85,16 +85,16 @@ static VALUE Shape_AddPoint( int argc, VALUE *args, VALUE self )
 		{
 			case 3:
 				temp = Color_ForceType( args[2] );
-				outlineColor.r = INT2FIX( Color_GetR( temp ) );
-				outlineColor.g = INT2FIX( Color_GetG( temp ) );
-				outlineColor.b = INT2FIX( Color_GetB( temp ) );
-				outlineColor.a = INT2FIX( Color_GetA( temp ) );
+				outlineColor.r = NUM2INT( Color_GetR( temp ) );
+				outlineColor.g = NUM2INT( Color_GetG( temp ) );
+				outlineColor.b = NUM2INT( Color_GetB( temp ) );
+				outlineColor.a = NUM2INT( Color_GetA( temp ) );
 			case 2:
 				temp = Color_ForceType( args[1] );
-				color.r = INT2FIX( Color_GetR( temp ) );
-				color.g = INT2FIX( Color_GetG( temp ) );
-				color.b = INT2FIX( Color_GetB( temp ) );
-				color.a = INT2FIX( Color_GetA( temp ) );
+				color.r = NUM2INT( Color_GetR( temp ) );
+				color.g = NUM2INT( Color_GetG( temp ) );
+				color.b = NUM2INT( Color_GetB( temp ) );
+				color.a = NUM2INT( Color_GetA( temp ) );
 			case 1:
 				temp = Vector2_ForceType( args[0] );
 				x = NUM2DBL( Vector2_GetX( temp ) );

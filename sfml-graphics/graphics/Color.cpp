@@ -139,7 +139,7 @@ static VALUE Color_Add( VALUE self, VALUE aRightOperand )
 	unsigned int newB = MIN( leftB + rightB, 255 );
 	unsigned int newA = MIN( leftA + rightA, 255 );
 	
-	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, newR, newG, newB, newA );
+	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, INT2FIX( newR ), INT2FIX( newG ), INT2FIX( newB ), INT2FIX( newA ) );
 }
 
 /* call-seq:
@@ -162,12 +162,12 @@ static VALUE Color_Multiply( VALUE self, VALUE aRightOperand )
 	unsigned int rightA = FIX2INT( Color_GetA( right ) );
 
 	// Do calculation	
-	unsigned int newR = leftR * rightR / 255;
-	unsigned int newG = leftG * rightG / 255;
-	unsigned int newB = leftB * rightB / 255;
-	unsigned int newA = leftA * rightA / 255;
+	unsigned int newR = ( leftR * rightR ) / 255;
+	unsigned int newG = ( leftG * rightG ) / 255;
+	unsigned int newB = ( leftB * rightB ) / 255;
+	unsigned int newA = ( leftA * rightA ) / 255;
 	
-	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, newR, newG, newB, newA );
+	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, INT2FIX( newR ), INT2FIX( newG ), INT2FIX( newB ), INT2FIX( newA ) );
 }
 
 /* call-seq:
@@ -206,10 +206,10 @@ static VALUE Color_Equal( VALUE self, VALUE anArgument )
  */
 static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 {
-	rb_iv_set( self, "@r", INT2NUM( 0 ) );
-	rb_iv_set( self, "@g", INT2NUM( 0 ) );
-	rb_iv_set( self, "@b", INT2NUM( 0 ) );
-	rb_iv_set( self, "@a", INT2NUM( 255 ) );
+	rb_iv_set( self, "@r", INT2FIX( 0 ) );
+	rb_iv_set( self, "@g", INT2FIX( 0 ) );
+	rb_iv_set( self, "@b", INT2FIX( 0 ) );
+	rb_iv_set( self, "@a", INT2FIX( 255 ) );
 	
 	switch( argc )
 	{
@@ -231,7 +231,7 @@ static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 			rb_iv_set( self, "@b", args[2]);
 			break;
 		default:
-			rb_raise( rb_eArgError, "Expected 0, 3 or 4 arguments but was given %d", argc );
+			rb_raise( rb_eArgError, "Expected 0, 1, 3 or 4 arguments but was given %d", argc );
 	}
 	return self;
 }
