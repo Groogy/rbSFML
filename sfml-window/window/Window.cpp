@@ -170,7 +170,7 @@ static VALUE Window_GetEvent( VALUE self )
 	sf::Event event;
 	sf::Window *window = NULL;
 	Data_Get_Struct( self, sf::Window, window );
-	if( window->GetEvent( event ) == true )
+	if( window->PollEvent( event ) == true )
 	{
 		VALUE rbObject = rb_funcall( globalEventClass, rb_intern( "new" ), 1, INT2FIX( event.Type ) );
 		sf::Event *rubyRawEvent = NULL;
