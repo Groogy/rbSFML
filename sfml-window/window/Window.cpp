@@ -157,7 +157,7 @@ static VALUE Window_EnableKeyRepeat( VALUE self, VALUE anEnableFlag )
 }
 
 /* call-seq:
- *   window.getEvent()	-> event or nil
+ *   window.pollEvent()	-> event or nil
  *
  * Pop the event on top of events stack, if any, and return it.
  *
@@ -165,7 +165,7 @@ static VALUE Window_EnableKeyRepeat( VALUE self, VALUE anEnableFlag )
  * event may be present in the events stack, thus you should always call this function in a loop to make sure that you
  * process every pending event. 
  */
-static VALUE Window_GetEvent( VALUE self )
+static VALUE Window_PollEvent( VALUE self )
 {
 	sf::Event event;
 	sf::Window *window = NULL;
@@ -687,7 +687,7 @@ void Init_Window( void )
 	rb_define_method( globalWindowClass, "create", Window_Create, -1 );
 	rb_define_method( globalWindowClass, "display", Window_Display, 0 );
 	rb_define_method( globalWindowClass, "enableKeyRepeat", Window_EnableKeyRepeat, 1 );
-	rb_define_method( globalWindowClass, "getEvent", Window_GetEvent, 0 );
+	rb_define_method( globalWindowClass, "pollEvent", Window_PollEvent, 0 );
 	rb_define_method( globalWindowClass, "getFrameTime", Window_GetFrameTime , 0 );
 	rb_define_method( globalWindowClass, "getHeight", Window_GetHeight, 0 );
 	rb_define_method( globalWindowClass, "getInput", Window_GetInput, 0 );
@@ -714,7 +714,7 @@ void Init_Window( void )
 	rb_define_alias( globalWindowClass, "keyRepeat=", "enableKeyRepeat" );
 	rb_define_alias( globalWindowClass, "key_repeat=", "enableKeyRepeat" );
 	
-	rb_define_alias( globalWindowClass, "get_event", "getEvent" );
+	rb_define_alias( globalWindowClass, "poll_event", "pollEvent" );
 	
 	rb_define_alias( globalWindowClass, "frameTime", "getFrameTime" );
 	rb_define_alias( globalWindowClass, "frame_time", "getFrameTime" );
