@@ -7,7 +7,7 @@ app.position = [300, 300]
 input = app.input
 
 while app.open?
-  while event = app.get_event
+  while event = app.poll_event
     if event.type == SFML::Event::Closed
       app.close
     end

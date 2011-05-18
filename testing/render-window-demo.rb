@@ -18,7 +18,7 @@ text = SFML::Text.new( "This is a test!" )
 text.position = [ 20, 20 ]
 
 while app.open?
-  while event = app.get_event
+  while event = app.poll_event
     if event.type == SFML::Event::Closed
       app.close
     end
