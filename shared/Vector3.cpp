@@ -278,7 +278,7 @@ static VALUE Vector3_Initialize( VALUE self, VALUE someArgs )
 	{
 		VALUE arg1 = rb_ary_entry( someArgs, 0 );
 		VALUE arg2 = rb_ary_entry( someArgs, 1 );
-		VALUE arg3 = rb_ary_entry( someArgs, 1 );
+		VALUE arg3 = rb_ary_entry( someArgs, 2 );
 		Vector3_internal_ValidateTypes( arg1, arg2, arg3 );
 		
 		rb_iv_set( self, "@x", arg1 );
