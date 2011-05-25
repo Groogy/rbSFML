@@ -35,16 +35,16 @@ static void Clock_Free( sf::Clock *anObject )
 }
 
 /* call-seq:
- *   clock.getElapsedTime()		-> Float
+ *   clock.getElapsedTime()		-> Fixnum
  *
  * This function returns the time elapsed since the last call to Reset() 
- * (or the construction of the instance if Reset() has not been called) in seconds.
+ * (or the construction of the instance if Reset() has not been called) in miliseconds.
  */
 static VALUE Clock_GetElapsedTime( VALUE self )
 {
 	sf::Clock *object = NULL;
 	Data_Get_Struct( self, sf::Clock, object );
-	return rb_float_new( object->GetElapsedTime() );
+	return INT2FIX( object->GetElapsedTime() );
 }
 
 /* call-seq:

@@ -182,15 +182,13 @@ static VALUE SoundBuffer_GetChannelsCount( VALUE self )
 /* call-seq:
  *   sound_buffer.getDuration()	-> fixnum
  *
- * Get the number of channels used by the sound.
- *
- * If the sound is mono then the number of channels will be 1, 2 for stereo, etc.
+ * Get the total duration of the sound
  */
 static VALUE SoundBuffer_GetDuration( VALUE self )
 {
 	sf::SoundBuffer *object = NULL;
 	Data_Get_Struct( self, sf::SoundBuffer, object );
-	return rb_float_new( object->GetDuration() );
+	return INT2FIX( object->GetDuration() );
 }
 
 /* call-seq:

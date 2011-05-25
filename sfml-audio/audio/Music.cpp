@@ -75,7 +75,7 @@ static VALUE Music_Initialize( int argc, VALUE *args, VALUE self )
 }
 
 /* call-seq:
- *   music.getDuration()	-> float
+ *   music.getDuration()	-> fixnum
  *
  * Get the total duration of the music. 
  */
@@ -83,7 +83,7 @@ static VALUE Music_GetDuration( VALUE self )
 {
 	sf::Music *object = NULL;
 	Data_Get_Struct( self, sf::Music, object );
-	return rb_float_new( object->GetDuration() );
+	return INT2FIX( object->GetDuration() );
 }
 
 static VALUE Music_Alloc( VALUE aKlass )

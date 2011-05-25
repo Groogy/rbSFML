@@ -185,7 +185,7 @@ static VALUE Window_PollEvent( VALUE self )
 }
 
 /* call-seq:
- *   window.getFrameTime()	-> float
+ *   window.getFrameTime()	-> fixnum
  *
  * This function returns the time elapsed during the last frame. This can be useful for calculating the framerate, or 
  * for updating the application's objects.
@@ -194,7 +194,7 @@ static VALUE Window_GetFrameTime( VALUE self )
 {
 	sf::Window *object = NULL;
 	Data_Get_Struct( self, sf::Window, object );
-	return rb_float_new( object->GetFrameTime() );
+	return INT2FIX( object->GetFrameTime() );
 }
 
 /* call-seq:

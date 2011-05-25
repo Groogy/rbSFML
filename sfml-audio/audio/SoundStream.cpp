@@ -90,9 +90,9 @@ protected:
 		}
 	}
 	
-	virtual void OnSeek( float anOffset )
+	virtual void OnSeek( sf::Uint32 anOffset )
 	{
-		rb_funcall( mySelf, myOnSeekID, 1, rb_float_new( anOffset ) );
+		rb_funcall( mySelf, myOnSeekID, 1, INT2FIX( anOffset ) );
 	}
 	
 	VALUE mySelf;
@@ -206,12 +206,12 @@ static VALUE SoundStream_SetPlayingOffset( VALUE self, VALUE anOffset )
 {
 	sf::SoundStream *object = NULL;
 	Data_Get_Struct( self, sf::SoundStream, object );
-	object->SetPlayingOffset( NUM2DBL( anOffset ) );
+	object->SetPlayingOffset( FIX2INT( anOffset ) );
 	return Qnil;
 }
 
 /* call-seq:
- *   sound_stream.getPlayingOffset()	-> float
+ *   sound_stream.getPlayingOffset()	-> fixnum
  *
  * Get the current playing position of the stream. 
  */
@@ -219,7 +219,7 @@ static VALUE SoundStream_GetPlayingOffset( VALUE self, VALUE anOffset )
 {
 	sf::SoundStream *object = NULL;
 	Data_Get_Struct( self, sf::SoundStream, object );
-	return rb_float_new( object->GetPlayingOffset() );
+	return INT2FIX( object->GetPlayingOffset() );
 }
 
 /* call-seq:

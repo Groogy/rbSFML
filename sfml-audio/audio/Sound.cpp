@@ -206,7 +206,7 @@ static VALUE Sound_SetPlayingOffset( VALUE self, VALUE aOffset )
 {
 	sf::Sound *object = NULL;
 	Data_Get_Struct( self, sf::Sound, object );
-	object->SetPlayingOffset( NUM2DBL( aOffset ) );
+	object->SetPlayingOffset( FIX2INT( aOffset ) );
 	return Qnil;
 }
 
@@ -248,7 +248,7 @@ static VALUE Sound_GetPlayingOffset( VALUE self )
 {
 	sf::Sound *object = NULL;
 	Data_Get_Struct( self, sf::Sound, object );
-	return rb_float_new( object->GetPlayingOffset() );
+	return INT2FIX( object->GetPlayingOffset() );
 }
 
 /* call-seq:
