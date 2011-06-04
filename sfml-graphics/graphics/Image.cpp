@@ -521,17 +521,22 @@ static VALUE Image_GetTexCoords( VALUE self, VALUE aRectangle )
  *   Image.new()						-> image
  *   Image.new( filename )				-> image
  *   Image.new( width, height, pixels )	-> image
+ *   Image.new( width, height, color ) -> image
  *
  * Will create a new image instance.
  * 
  * If a filename argument is specified then Image#loadFromFile will be called on the created instance. If width, height
- * and pixels are specified then Image#loadFromPixels will be called on the created instance.
+ * and pixels are specified then Image#loadFromPixels will be called on the created instance.  If width, height
+ * and a color are specified then Image#create will be called on the created instance.
  */
 static VALUE Image_Initialize( int argc, VALUE *args, VALUE self )
 {
 	if( argc > 1 )
 	{
-		rb_funcall2( self, rb_intern( "loadFromPixels" ), argc, args );
+		if (!rb_obj_is_kind_of(args[2], globalColorClass))
+			rb_funcall2( self, rb_intern( "loadFromPixels" ), argc, args );
+		else
+			rb_funcall2( self, rb_intern( "create" ), argc, args );
 	}
 	else if( argc > 0 )
 	{
