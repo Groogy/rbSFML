@@ -539,9 +539,9 @@ static VALUE Image_Initialize( int argc, VALUE *args, VALUE self )
 		else
 			rb_funcall2( self, rb_intern( "create" ), argc, args );
 		break;
-	case 1
+	case 1:
 		rb_funcall2( self, rb_intern( "loadFromFile" ), argc, args );
-		break:
+		break;
 	case 0:
 		break;
 	default:

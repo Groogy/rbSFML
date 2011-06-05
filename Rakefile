@@ -97,7 +97,7 @@ Rake::GemPackageTask.new(spec) do |pkg|
 end
 
 RDoc::Task.new do |rd|
-    rd.title = "RSFML #{RUBYSFML_VERSION} Documentation"
+    rd.title = "rbSFML #{RUBYSFML_VERSION} Documentation"
     rd.rdoc_files.include(SO_SRCS.values)
     rd.options << '--line-numbers' << '--quiet' << '--all'
     rd.rdoc_dir = "doc"
@@ -180,7 +180,7 @@ task :install => [:build, LOCATION] do
 end
 
 task :uninstall do
-    puts "Uninstalling library to #{LOCATION}"
+    puts "Uninstalling library from #{LOCATION}"
     begin
         SO_SRCS.each_key do |so_file|
             sh "rm -f #{LOCATION}/#{so_file}.so"
