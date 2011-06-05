@@ -531,16 +531,21 @@ static VALUE Image_GetTexCoords( VALUE self, VALUE aRectangle )
  */
 static VALUE Image_Initialize( int argc, VALUE *args, VALUE self )
 {
-	if( argc > 1 )
+	switch( argc )
 	{
+	case 3:
 		if (!rb_obj_is_kind_of(args[2], globalColorClass))
 			rb_funcall2( self, rb_intern( "loadFromPixels" ), argc, args );
 		else
 			rb_funcall2( self, rb_intern( "create" ), argc, args );
-	}
-	else if( argc > 0 )
-	{
+		break;
+	case 1
 		rb_funcall2( self, rb_intern( "loadFromFile" ), argc, args );
+		break:
+	case 0:
+		break;
+	default:
+		rb_raise( rb_eArgError, "Expected 0, 1 or 3 arguments but was given %d", argc );
 	}
 	return self;
 }
