@@ -365,7 +365,7 @@ static VALUE Image_GetPixelsPtr( VALUE self )
 }
 
 /* call-seq:
- *   image.updatePixels( pixels, rectangle = [0, 0, image.width, image.height] )
+ *   image.updatePixels( pixels, rectangle = imageBounds )
  *
  * Update a sub-rectangle of the image from an array of pixels.
  *

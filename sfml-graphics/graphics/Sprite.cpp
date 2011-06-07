@@ -41,8 +41,8 @@ static void Sprite_Free( sf::Sprite *anObject )
 }
 
 /* call-seq:
- *   Sprite.new()											-> sprite
  *   Sprite.new( image, position = [0, 0], scale = [1, 1], rotation = 0.0, color = SFML::Color::White )	-> sprite
+ *   Sprite.new()											-> sprite
  *
  * Construct the sprite from a source image.
  */

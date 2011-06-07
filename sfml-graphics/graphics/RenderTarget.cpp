@@ -188,7 +188,7 @@ static VALUE RenderTarget_GetView( VALUE self )
 }
 
 /* call-seq:
- *   render_target.getDefaultView()	-> VIEW
+ *   render_target.getDefaultView()	-> view
  *
  * Get the default view of the render target.
  *

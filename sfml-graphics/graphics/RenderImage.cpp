@@ -241,9 +241,9 @@ static VALUE RenderImage_SetSmooth( VALUE self, VALUE aSmoothFlag )
  *
  * Change the current active view.
  *
- * The new view will affect everything that is drawn, until another view is activated. The render target keeps its own
+ * The new view will affect everything that is drawn, until another view is activated. The render image keeps its own
  * copy of the view object, so it is not necessary to keep the original one alive as long as it is in use. To restore
- * the original view of the target, you can pass the result of getDefaultView() to this function.
+ * the original view of the renderimage, you can pass the result of getDefaultView() to this function.
  */
 static VALUE RenderImage_SetView( VALUE self, VALUE aView )
 {

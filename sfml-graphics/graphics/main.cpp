@@ -57,13 +57,18 @@ static bool CheckDependencies( void )
 	return false;
 }
 
-/* Available blending modes for drawable objects. */
+
 static void CreateBlendEnum( void )
 {
+	/* Available blending modes for drawable objects. */
 	globalBlendNamespace = rb_define_module_under( globalSFMLNamespace, "Blend" );
+	/* Pixel = Src * a + Dest * (1 - a). (Default) */
 	rb_define_const( globalBlendNamespace, "Alpha", INT2FIX( sf::Blend::Alpha ) );
+	/* Pixel = Src + Dest. */
 	rb_define_const( globalBlendNamespace, "Add", INT2FIX( sf::Blend::Add ) );
+	/* Pixel = Src * Dest.  */
 	rb_define_const( globalBlendNamespace, "Multiply", INT2FIX( sf::Blend::Multiply ) );
+	/* No Blending */
 	rb_define_const( globalBlendNamespace, "None", INT2FIX( sf::Blend::None ) );
 }
 
