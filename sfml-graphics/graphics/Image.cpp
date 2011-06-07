@@ -80,6 +80,8 @@ static VALUE Image_LoadFromPixels( VALUE self, VALUE aWidth, VALUE aHeight, VALU
 	const unsigned int rawHeight = FIX2UINT( aHeight );
 	VALIDATE_CLASS( somePixels, rb_cArray, "pixels" );
 	const unsigned long dataSize = rawWidth * rawHeight * 4;
+	if (RARRAY_LEN(somePixels) < dataSize)
+		return Qfalse;
 	sf::Uint8 * const tempData = new sf::Uint8[dataSize];
 	VALUE pixels = rb_funcall( somePixels, rb_intern("flatten"), 0 );
 	for(unsigned long index = 0; index < dataSize; index++)
@@ -534,7 +536,7 @@ static VALUE Image_Initialize( int argc, VALUE *args, VALUE self )
 	switch( argc )
 	{
 	case 3:
-		if (!rb_obj_is_kind_of(args[2], globalColorClass))
+		if (rb_obj_is_kind_of(args[2], globalColorClass) == Qfalse)
 			rb_funcall2( self, rb_intern( "loadFromPixels" ), argc, args );
 		else
 			rb_funcall2( self, rb_intern( "create" ), argc, args );

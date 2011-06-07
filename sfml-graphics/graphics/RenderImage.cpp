@@ -236,6 +236,15 @@ static VALUE RenderImage_SetSmooth( VALUE self, VALUE aSmoothFlag )
 	return Qnil;
 }
 
+/* call-seq:
+ *   render_image.setView( view )
+ *
+ * Change the current active view.
+ *
+ * The new view will affect everything that is drawn, until another view is activated. The render target keeps its own
+ * copy of the view object, so it is not necessary to keep the original one alive as long as it is in use. To restore
+ * the original view of the target, you can pass the result of getDefaultView() to this function.
+ */
 static VALUE RenderImage_SetView( VALUE self, VALUE aView )
 {
 	VALIDATE_CLASS( aView, globalViewClass, "view" );
@@ -247,6 +256,11 @@ static VALUE RenderImage_SetView( VALUE self, VALUE aView )
 	return Qnil;
 }
 
+/* call-seq:
+ *   render_image.getView()	-> view
+ *
+ * Retrieve the view currently in use in the render image.
+ */
 static VALUE RenderImage_GetView( VALUE self )
 {
 	sf::RenderImage *object = NULL;
@@ -258,6 +272,13 @@ static VALUE RenderImage_GetView( VALUE self )
 	return rbData;
 }
 
+/* call-seq:
+ *   render_image.getDefaultView()	-> view
+ *
+ * Get the default view of the render image.
+ *
+ * The default view has the initial size of the render target, and never changes after the target has been created.
+ */
 static VALUE RenderImage_GetDefaultView( VALUE self )
 {
 	sf::RenderImage *object = NULL;
@@ -269,6 +290,11 @@ static VALUE RenderImage_GetDefaultView( VALUE self )
 	return rbData;
 }
 
+/* call-seq:
+ *   render_image.getWidth	-> fixnum
+ *
+ * Get the width of the render image.
+ */
 static VALUE RenderImage_GetWidth( VALUE self )
 {
 	sf::RenderImage *object = NULL;
@@ -276,6 +302,11 @@ static VALUE RenderImage_GetWidth( VALUE self )
 	return INT2FIX( object->GetWidth() );
 }
 
+/* call-seq:
+ *   render_image.getHeight	-> fixnum
+ *
+ * Get the height of the render image.
+ */
 static VALUE RenderImage_GetHeight( VALUE self )
 {
 	sf::RenderImage *object = NULL;
