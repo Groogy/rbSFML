@@ -346,7 +346,7 @@ void Init_RenderTarget( void )
 	rb_define_alias( globalRenderTargetModule, "defaultView", "getDefaultView" );
 	rb_define_alias( globalRenderTargetModule, "default_view", "getDefaultView" );
 	rb_define_alias( globalRenderTargetModule, "get_viewport", "getViewport" );
-	rb_define_alias( globalRenderTargetModule, "convert_cords", "convertCoords" );
+	rb_define_alias( globalRenderTargetModule, "convert_coords", "convertCoords" );
 	rb_define_alias( globalRenderTargetModule, "save_gl_states", "saveGLStates" );
 	rb_define_alias( globalRenderTargetModule, "restore_gl_states", "restoreGLStates" );
 }
