@@ -189,7 +189,7 @@ void Init_Listener( void )
 	rb_define_alias( CLASS_OF( globalListenerModule ), "global_volume", "getGlobalVolume" );
 	rb_define_alias( CLASS_OF( globalListenerModule ), "get_global_volume", "getGlobalVolume" );
 	
-	rb_define_alias( CLASS_OF( globalListenerModule ), "set_postion", "setGlobalVolume" );
+	rb_define_alias( CLASS_OF( globalListenerModule ), "set_position", "setGlobalVolume" );
 	rb_define_alias( CLASS_OF( globalListenerModule ), "position=", "setGlobalVolume" );
 	rb_define_alias( CLASS_OF( globalListenerModule ), "position", "getGlobalVolume" );
 	rb_define_alias( CLASS_OF( globalListenerModule ), "get_position", "getGlobalVolume" );
