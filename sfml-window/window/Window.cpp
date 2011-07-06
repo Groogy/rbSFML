@@ -320,6 +320,19 @@ static VALUE Window_SetCursorPosition2( VALUE self, VALUE anArgument )
 }
 
 /* call-seq:
+ *   window.getCursorPosition()		-> vector2
+ *
+ * Get the position of the mouse cursor. 
+ */
+static VALUE Window_GetCursorPosition( VALUE self )
+{
+	sf::Window *object = NULL;
+	Data_Get_Struct( self, sf::Window, object );
+	sf::Vector2i position = object->GetCursorPosition();
+	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, INT2FIX( position.x ), INT2FIX( position.y ) );;
+}
+
+/* call-seq:
  *   window.setFramerateLimit( new_limit )
  *
  * Limit the framerate to a maximum fixed frequency.

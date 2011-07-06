@@ -20,12 +20,12 @@
  *    source distribution.
  */
 
-#ifndef SFML_RUBYEXT_INPUT_HEADER_
-#define SFML_RUBYEXT_INPUT_HEADER_
+#ifndef SFML_RUBYEXT_MOUSE_HEADER_
+#define SFML_RUBYEXT_MOUSE_HEADER_
 
 #include "ruby.h"
 
 // Ruby initiation function
-void Init_Input( void );
+void Init_Mouse( void );
 
-#endif // SFML_RUBYEXT_INPUT_HEADER_
+#endif // SFML_RUBYEXT_MOUSE_HEADER_

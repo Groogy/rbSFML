@@ -28,107 +28,17 @@
 #include "Event.hpp"
 #include "VideoMode.hpp"
 #include "Window.hpp"
+#include "Joystick.hpp"
+#include "Keyboard.hpp"
+#include "Mouse.hpp"
 
 #include <SFML/Window.hpp>
 
 #include <iostream>
 
-/* SFML Namespace which contains all classes in this module. */
-VALUE globalKeyNamespace;
-VALUE globalMouseNamespace;
-VALUE globalJoyNamespace;
 VALUE globalStyleNamespace;
 extern VALUE globalVector2Class;
 extern VALUE globalNonCopyableModule;
-
-static const char * keyNamesMisc[] =
-{
-	"Escape", "LControl", "LShift", "LAlt", "LSystem", "RControl", "RShift", "RAlt", "RSystem", 
-	"Menu", "LBracket", "RBracket", "SemiColon", "Comma", "Period", "Quote", "Slash", 
-	"BackSlash", "Tilde", "Equal", "Dash", "Space", "Return", "Back", "Tab", "PageUp", 
-	"PageDown", "End", "Home", "Insert", "Delete", "Add", "Subtract", "Multiply", 
-	"Divide", "Left", "Right", "Up", "Down", "Numpad0", "Numpad1", "Numpad2", "Numpad3", 
-	"Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "F1", "F2", "F3", 
-	"F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "Pause",
-	"Count"
-};
-
-/* Definition of key codes for keyboard events. 
- *
- * All SFML::Keyboard constants exists, I just haven't written them all so Rdoc can interpret them yet.
- */
-static void CreateKeyEnum( void )
-{
-	globalKeyNamespace = rb_define_module_under( globalSFMLNamespace, "Keyboard" );
-	rb_define_const( globalKeyNamespace, "A", INT2FIX( sf::Keyboard::A ) );
-	rb_define_const( globalKeyNamespace, "B", INT2FIX( sf::Keyboard::B ) );
-	rb_define_const( globalKeyNamespace, "C", INT2FIX( sf::Keyboard::C ) );
-	rb_define_const( globalKeyNamespace, "D", INT2FIX( sf::Keyboard::D ) );
-	rb_define_const( globalKeyNamespace, "E", INT2FIX( sf::Keyboard::E ) );
-	rb_define_const( globalKeyNamespace, "F", INT2FIX( sf::Keyboard::F ) );
-	rb_define_const( globalKeyNamespace, "G", INT2FIX( sf::Keyboard::G ) );
-	rb_define_const( globalKeyNamespace, "H", INT2FIX( sf::Keyboard::H ) );
-	rb_define_const( globalKeyNamespace, "I", INT2FIX( sf::Keyboard::I ) );
-	rb_define_const( globalKeyNamespace, "J", INT2FIX( sf::Keyboard::J ) );
-	rb_define_const( globalKeyNamespace, "K", INT2FIX( sf::Keyboard::K ) );
-	rb_define_const( globalKeyNamespace, "L", INT2FIX( sf::Keyboard::L ) );
-	rb_define_const( globalKeyNamespace, "M", INT2FIX( sf::Keyboard::M ) );
-	rb_define_const( globalKeyNamespace, "N", INT2FIX( sf::Keyboard::N ) );
-	rb_define_const( globalKeyNamespace, "O", INT2FIX( sf::Keyboard::O ) );
-	rb_define_const( globalKeyNamespace, "P", INT2FIX( sf::Keyboard::P ) );
-	rb_define_const( globalKeyNamespace, "Q", INT2FIX( sf::Keyboard::Q ) );
-	rb_define_const( globalKeyNamespace, "R", INT2FIX( sf::Keyboard::R ) );
-	rb_define_const( globalKeyNamespace, "S", INT2FIX( sf::Keyboard::S ) );
-	rb_define_const( globalKeyNamespace, "T", INT2FIX( sf::Keyboard::T ) );
-	rb_define_const( globalKeyNamespace, "U", INT2FIX( sf::Keyboard::U ) );
-	rb_define_const( globalKeyNamespace, "W", INT2FIX( sf::Keyboard::W ) );
-	rb_define_const( globalKeyNamespace, "V", INT2FIX( sf::Keyboard::V ) );
-	rb_define_const( globalKeyNamespace, "X", INT2FIX( sf::Keyboard::X ) );
-	rb_define_const( globalKeyNamespace, "Y", INT2FIX( sf::Keyboard::Y ) );
-	rb_define_const( globalKeyNamespace, "Z", INT2FIX( sf::Keyboard::Z ) );
-	
-	rb_define_const( globalKeyNamespace, "Num0", INT2FIX( sf::Keyboard::Num0 ) );
-	rb_define_const( globalKeyNamespace, "Num1", INT2FIX( sf::Keyboard::Num1 ) );
-	rb_define_const( globalKeyNamespace, "Num2", INT2FIX( sf::Keyboard::Num2 ) );
-	rb_define_const( globalKeyNamespace, "Num3", INT2FIX( sf::Keyboard::Num3 ) );
-	rb_define_const( globalKeyNamespace, "Num4", INT2FIX( sf::Keyboard::Num4 ) );
-	rb_define_const( globalKeyNamespace, "Num5", INT2FIX( sf::Keyboard::Num5 ) );
-	rb_define_const( globalKeyNamespace, "Num6", INT2FIX( sf::Keyboard::Num6 ) );
-	rb_define_const( globalKeyNamespace, "Num7", INT2FIX( sf::Keyboard::Num7 ) );
-	rb_define_const( globalKeyNamespace, "Num8", INT2FIX( sf::Keyboard::Num8 ) );
-	rb_define_const( globalKeyNamespace, "Num9", INT2FIX( sf::Keyboard::Num9 ) );
-	
-	for( int index = static_cast< int >( sf::Keyboard::Escape ); index <= sf::Keyboard::KeyCount; index++ )
-	{
-		rb_define_const( globalKeyNamespace, keyNamesMisc[ index - sf::Keyboard::Escape ], INT2FIX( index ) );
-	}
-}
-
-/* Definition of button codes for mouse events. */
-static void CreateMouseEnum( void )
-{
-	globalMouseNamespace = rb_define_module_under( globalSFMLNamespace, "Mouse" );
-	rb_define_const( globalMouseNamespace, "Left", INT2FIX( sf::Mouse::Left ) );
-	rb_define_const( globalMouseNamespace, "Right", INT2FIX( sf::Mouse::Right ) );
-	rb_define_const( globalMouseNamespace, "Middle", INT2FIX( sf::Mouse::Middle ) );
-	rb_define_const( globalMouseNamespace, "XButton1", INT2FIX( sf::Mouse::XButton1 ) );
-	rb_define_const( globalMouseNamespace, "XButton2", INT2FIX( sf::Mouse::XButton2 ) );
-	rb_define_const( globalMouseNamespace, "ButtonCount", INT2FIX( sf::Mouse::ButtonCount ) );
-}
-
-/* Definition of joystick axis for joystick events. */
-static void CreateJoyEnum( void )
-{
-	globalJoyNamespace = rb_define_module_under( globalSFMLNamespace, "Joystick" );
-	rb_define_const( globalJoyNamespace, "X", INT2FIX( sf::Joystick::X ) );
-	rb_define_const( globalJoyNamespace, "Y", INT2FIX( sf::Joystick::Y ) );
-	rb_define_const( globalJoyNamespace, "Z", INT2FIX( sf::Joystick::Z ) );
-	rb_define_const( globalJoyNamespace, "R", INT2FIX( sf::Joystick::R ) );
-	rb_define_const( globalJoyNamespace, "U", INT2FIX( sf::Joystick::U ) );
-	rb_define_const( globalJoyNamespace, "V", INT2FIX( sf::Joystick::V ) );
-	rb_define_const( globalJoyNamespace, "PovX", INT2FIX( sf::Joystick::PovX ) );
-	rb_define_const( globalJoyNamespace, "PovY", INT2FIX( sf::Joystick::PovY ) );
-}
 
 /* Enumeration of the window styles. */
 static void CreateStyleEnum( void )
@@ -166,11 +76,11 @@ void Init_window( void )
 	
 	rb_define_const( globalSFMLNamespace, "WindowLoaded", Qtrue );
 	
-	CreateKeyEnum();
-	CreateMouseEnum();
-	CreateJoyEnum();
 	CreateStyleEnum();
 	
+	Init_Joystick();
+	Init_Keyboard();
+	Init_Mouse();
 	Init_Context();
 	Init_ContextSettings();
 	Init_Event();
