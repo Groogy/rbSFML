@@ -26,10 +26,12 @@
 
 VALUE globalEventClass;
 
-/* Joystick buttons events parameters (JoyButtonPressed, JoyButtonReleased). */
-VALUE globalJoyButtonEventClass;
-/* Joystick axis move event parameters (JoyMoved). */
-VALUE globalJoyMoveEventClass;
+/* Joystick buttons events parameters (JoystickButtonPressed, JoystickButtonReleased). */
+VALUE globalJoystickButtonEventClass;
+/* Joystick connection events parameters (JoystickConnected, JoystickDisconnected). */
+VALUE globalJoystickConnectEventClass;
+/* Joystick axis move event parameters (JoystickMoved). */
+VALUE globalJoystickMoveEventClass;
 /* Keyboard event parameters (KeyPressed, KeyReleased). */
 VALUE globalKeyEventClass;
 /* Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased). */
@@ -78,21 +80,25 @@ static void Event_Free( sf::Event *anObject )
 }
 
 /* Index of the joystick (0 or 1). */
-static VALUE JoyButtonEvent_GetJoystickId( VALUE self )
-EVENT_TYPE_ACCESSORS( JoyButton, JoystickId, INT2NUM )
+static VALUE JoystickButtonEvent_GetJoystickId( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickButton, JoystickId, INT2NUM )
 /* Index of the button that has been pressed. */
-static VALUE JoyButtonEvent_GetButton( VALUE self )
-EVENT_TYPE_ACCESSORS( JoyButton, Button, INT2NUM )
+static VALUE JoystickButtonEvent_GetButton( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickButton, Button, INT2NUM )
 
 /* Index of the joystick (0 or 1). */
-static VALUE JoyMoveEvent_GetJoystickId( VALUE self )
-EVENT_TYPE_ACCESSORS( JoyMove, JoystickId, INT2NUM )
+static VALUE JoystickConnectEvent_GetJoystickId( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickConnect, JoystickId, INT2NUM )
+
+/* Index of the joystick (0 or 1). */
+static VALUE JoystickMoveEvent_GetJoystickId( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickMove, JoystickId, INT2NUM )
 /* Axis on which the joystick moved. */
-static VALUE JoyMoveEvent_GetAxis( VALUE self )
-EVENT_TYPE_ACCESSORS( JoyMove, Axis, AXIS2NUM )
+static VALUE JoystickMoveEvent_GetAxis( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickMove, Axis, AXIS2NUM )
 /* New position on the axis (in range [-100, 100]). */
-static VALUE JoyMoveEvent_GetPosition( VALUE self )
-EVENT_TYPE_ACCESSORS( JoyMove, Position, rb_float_new )
+static VALUE JoystickMoveEvent_GetPosition( VALUE self )
+EVENT_TYPE_ACCESSORS( JoystickMove, Position, rb_float_new )
 
 /* Code of the key that has been pressed. */
 static VALUE KeyEvent_GetCode( VALUE self )
@@ -174,14 +180,19 @@ static VALUE Event_Initialize( VALUE self, VALUE aType )
 	const char * name = NULL;
 	switch( object->Type )
 	{
-		case sf::Event::JoyButtonPressed:
-		case sf::Event::JoyButtonReleased:
-			eventType = Data_Wrap_Struct( globalJoyButtonEventClass, 0, 0, &object->JoyButton );
-			name = "@joyButton";
+		case sf::Event::JoystickButtonPressed:
+		case sf::Event::JoystickButtonReleased:
+			eventType = Data_Wrap_Struct( globalJoystickButtonEventClass, 0, 0, &object->JoystickButton );
+			name = "@joystickButton";
 			break;
-		case sf::Event::JoyMoved:
-			eventType = Data_Wrap_Struct( globalJoyMoveEventClass, 0, 0, &object->JoyMove );
-			name = "@joyMove";
+		case sf::Event::JoystickConnected:
+		case sf::Event::JoystickDisconnected:
+			eventType = Data_Wrap_Struct( globalJoystickConnectEventClass, 0, 0, &object->JoystickConnect );
+			name = "@joystickConnect";
+			break;
+		case sf::Event::JoystickMoved:
+			eventType = Data_Wrap_Struct( globalJoystickMoveEventClass, 0, 0, &object->JoystickMove );
+			name = "@joystickMove";
 			break;
 		case sf::Event::KeyPressed:
 		case sf::Event::KeyReleased:
@@ -276,15 +287,16 @@ void Init_Event( void )
  *     # etc ...
  *   end
  */
-	globalEventClass 			= rb_define_class_under( sfml, "Event", rb_cObject );
-	globalJoyButtonEventClass 	= rb_define_class_under( globalEventClass, "JoyButton", rb_cObject );
-	globalJoyMoveEventClass		= rb_define_class_under( globalEventClass, "JoyMove", rb_cObject );
-	globalKeyEventClass 		= rb_define_class_under( globalEventClass, "Key", rb_cObject );
-	globalMouseButtonEventClass = rb_define_class_under( globalEventClass, "MouseButton", rb_cObject );
-	globalMouseMoveEventClass 	= rb_define_class_under( globalEventClass, "MouseMove", rb_cObject );
-	globalMouseWheelEventClass 	= rb_define_class_under( globalEventClass, "MouseWheel", rb_cObject );
-	globalSizeEventClass 		= rb_define_class_under( globalEventClass, "Size", rb_cObject );
-	globalTextEventClass 		= rb_define_class_under( globalEventClass, "Text", rb_cObject );
+	globalEventClass 				= rb_define_class_under( sfml, "Event", rb_cObject );
+	globalJoystickButtonEventClass 	= rb_define_class_under( globalEventClass, "JoystickButton", rb_cObject );
+	globalJoystickConnectEventClass	= rb_define_class_under( globalEventClass, "JoystickMove", rb_cObject );
+	globalJoystickMoveEventClass	= rb_define_class_under( globalEventClass, "JoystickMove", rb_cObject );
+	globalKeyEventClass 			= rb_define_class_under( globalEventClass, "Key", rb_cObject );
+	globalMouseButtonEventClass 	= rb_define_class_under( globalEventClass, "MouseButton", rb_cObject );
+	globalMouseMoveEventClass 		= rb_define_class_under( globalEventClass, "MouseMove", rb_cObject );
+	globalMouseWheelEventClass 		= rb_define_class_under( globalEventClass, "MouseWheel", rb_cObject );
+	globalSizeEventClass 			= rb_define_class_under( globalEventClass, "Size", rb_cObject );
+	globalTextEventClass 			= rb_define_class_under( globalEventClass, "Text", rb_cObject );
 	
 	rb_define_const( globalEventClass, "Closed", INT2NUM( sf::Event::Closed ) );
 	rb_define_const( globalEventClass, "Resized", INT2NUM( sf::Event::Resized ) );
@@ -299,9 +311,11 @@ void Init_Event( void )
 	rb_define_const( globalEventClass, "MouseMoved", INT2NUM( sf::Event::MouseMoved ) );
 	rb_define_const( globalEventClass, "MouseEntered", INT2NUM( sf::Event::MouseEntered ) );
 	rb_define_const( globalEventClass, "MouseLeft", INT2NUM( sf::Event::MouseLeft ) );
-	rb_define_const( globalEventClass, "JoyButtonPressed", INT2NUM( sf::Event::JoyButtonPressed ) );
-	rb_define_const( globalEventClass, "JoyButtonReleased", INT2NUM( sf::Event::JoyButtonReleased ) );
-	rb_define_const( globalEventClass, "JoyMoved", INT2NUM( sf::Event::JoyMoved ) );
+	rb_define_const( globalEventClass, "JoystickButtonPressed", INT2NUM( sf::Event::JoystickButtonPressed ) );
+	rb_define_const( globalEventClass, "JoystickButtonReleased", INT2NUM( sf::Event::JoystickButtonReleased ) );
+	rb_define_const( globalEventClass, "JoystickMoved", INT2NUM( sf::Event::JoystickMoved ) );
+	rb_define_const( globalEventClass, "JoystickConnected", INT2NUM( sf::Event::JoystickConnected ) );
+	rb_define_const( globalEventClass, "JoystickDisconnected", INT2NUM( sf::Event::JoystickDisconnected ) );
 	rb_define_const( globalEventClass, "Count", INT2NUM( sf::Event::Count ) );
 	
 	// Class methods
@@ -313,8 +327,9 @@ void Init_Event( void )
 	rb_define_method( globalEventClass, "initialize_copy", Event_InitializeCopy, 1 );
 	
 	rb_define_attr( globalEventClass, "type", 1, 0 );
-	rb_define_attr( globalEventClass, "joyButton", 1, 0 );
-	rb_define_attr( globalEventClass, "joyMove", 1, 0 );
+	rb_define_attr( globalEventClass, "joystickButton", 1, 0 );
+	rb_define_attr( globalEventClass, "joystickConnect", 1, 0 );
+	rb_define_attr( globalEventClass, "joystickMove", 1, 0 );
 	rb_define_attr( globalEventClass, "key", 1, 0 );
 	rb_define_attr( globalEventClass, "mouseButton", 1, 0 );
 	rb_define_attr( globalEventClass, "mouseMove", 1, 0 );
@@ -322,14 +337,27 @@ void Init_Event( void )
 	rb_define_attr( globalEventClass, "size", 1, 0 );
 	rb_define_attr( globalEventClass, "text", 1, 0 );
 	
-	// JoyButton methods
-	rb_define_method( globalJoyButtonEventClass, "joystickId", JoyButtonEvent_GetJoystickId, 0 );
-	rb_define_method( globalJoyButtonEventClass, "button", JoyButtonEvent_GetButton, 0 );
+	rb_define_alias( globalEventClass, "joystick_button", "joystickButton" );
+	rb_define_alias( globalEventClass, "joystick_connect", "joystickConnect" );
+	rb_define_alias( globalEventClass, "joystick_move", "joystickMove" );
+	rb_define_alias( globalEventClass, "mouse_button", "mouseButton" );
+	rb_define_alias( globalEventClass, "mouse_move", "mouseMove" );
+	rb_define_alias( globalEventClass, "mouse_wheel", "mouseWheel" );
 	
-	// JoyMove methods
-	rb_define_method( globalJoyMoveEventClass, "joystickId", JoyMoveEvent_GetJoystickId, 0 );
-	rb_define_method( globalJoyMoveEventClass, "axis", JoyMoveEvent_GetAxis, 0 );
-	rb_define_method( globalJoyMoveEventClass, "position", JoyMoveEvent_GetPosition, 0 );
+	// JoystickButton methods
+	rb_define_method( globalJoystickButtonEventClass, "joystickId", JoystickButtonEvent_GetJoystickId, 0 );
+	rb_define_method( globalJoystickButtonEventClass, "button", JoystickButtonEvent_GetButton, 0 );
+	rb_define_alias( globalJoystickButtonEventClass, "joystick_id", "joystickId" );
+	
+	// JoystickConnect methods
+	rb_define_method( globalJoystickConnectEventClass, "joystickId", JoystickConnectEvent_GetJoystickId, 0 );
+	rb_define_alias( globalJoystickConnectEventClass, "joystick_id", "joystickId" );
+	
+	// JoystickMove methods
+	rb_define_method( globalJoystickMoveEventClass, "joystickId", JoystickMoveEvent_GetJoystickId, 0 );
+	rb_define_method( globalJoystickMoveEventClass, "axis", JoystickMoveEvent_GetAxis, 0 );
+	rb_define_method( globalJoystickMoveEventClass, "position", JoystickMoveEvent_GetPosition, 0 );
+	rb_define_alias( globalJoystickMoveEventClass, "joystick_id", "joystickId" );
 	
 	// Key methods
 	rb_define_method( globalKeyEventClass, "code", KeyEvent_GetCode, 0 );

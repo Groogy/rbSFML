@@ -21,6 +21,7 @@
  */
  
 #include <SFML/Window/Window.hpp>
+#include <SFML/Window/Event.hpp>
 #include "Window.hpp"
 #include "VideoMode.hpp"
 #include "Vector2.hpp"
@@ -32,7 +33,6 @@ VALUE globalWindowClass;
 extern VALUE globalVideoModeClass;
 extern VALUE globalContextSettingsClass;
 extern VALUE globalEventClass;
-extern VALUE globalInputClass;
 extern VALUE globalVector2Class;
 extern VALUE globalNonCopyableModule;
 
@@ -209,21 +209,6 @@ static VALUE Window_GetHeight( VALUE self )
 	sf::Window *object = NULL;
 	Data_Get_Struct( self, sf::Window, object );
 	return INT2FIX( object->GetHeight() );
-}
-
-/* call-seq:
- *   window.getInput()	-> input
- *
- * This input gives access to the real-time state of keyboard, mouse and joysticks for this window
- */
-static VALUE Window_GetInput( VALUE self )
-{
-	sf::Window *object = NULL;
-	Data_Get_Struct( self, sf::Window, object );
-	VALUE rbData = Data_Wrap_Struct( globalInputClass, 0, 0, const_cast< sf::Input * >( &object->GetInput() ) );
-	rb_obj_call_init( rbData, 0, 0 );
-	rb_iv_set( rbData, "@__owner_ref", self );
-	return rbData;
 }
 
 /* call-seq:
@@ -690,7 +675,6 @@ void Init_Window( void )
 	rb_define_method( globalWindowClass, "pollEvent", Window_PollEvent, 0 );
 	rb_define_method( globalWindowClass, "getFrameTime", Window_GetFrameTime , 0 );
 	rb_define_method( globalWindowClass, "getHeight", Window_GetHeight, 0 );
-	rb_define_method( globalWindowClass, "getInput", Window_GetInput, 0 );
 	rb_define_method( globalWindowClass, "getSettings", Window_GetSettings, 0 );
 	rb_define_method( globalWindowClass, "getWidth", Window_GetWidth, 0 );
 	rb_define_method( globalWindowClass, "isOpened", Window_IsOpened, 0 );
@@ -720,7 +704,6 @@ void Init_Window( void )
 	rb_define_alias( globalWindowClass, "frame_time", "getFrameTime" );
 	
 	rb_define_alias( globalWindowClass, "height", "getHeight" );
-	rb_define_alias( globalWindowClass, "input", "getInput" );
 	rb_define_alias( globalWindowClass, "settings", "getSettings" );
 	rb_define_alias( globalWindowClass, "width", "getWidth" );
 	
