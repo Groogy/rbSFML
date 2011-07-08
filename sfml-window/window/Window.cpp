@@ -291,48 +291,6 @@ static VALUE Window_SetActive( VALUE self, VALUE anActiveFlag )
 }
 
 /* call-seq:
- *   window.setCursorPosition( new_x, new_y )
- *
- * Change the position of the mouse cursor. 
- */
-static VALUE Window_SetCursorPosition( VALUE self, VALUE aX, VALUE aY )
-{
-	sf::Window *object = NULL;
-	Data_Get_Struct( self, sf::Window, object );
-	object->SetCursorPosition( FIX2UINT( aX ), FIX2UINT( aY ) );
-	return Qnil;
-}
-
-/* call-seq:
- *   window.cursorPosition=( vector2 )
- *
- * Change the position of the mouse cursor. 
- */
-static VALUE Window_SetCursorPosition2( VALUE self, VALUE anArgument )
-{
-	VALUE argument = Vector2_ForceType( anArgument );
-	sf::Window *object = NULL;
-	Data_Get_Struct( self, sf::Window, object );
-	VALUE argumentX = Vector2_GetX( argument );
-	VALUE argumentY = Vector2_GetY( argument );
-	object->SetCursorPosition( FIX2UINT( argumentX ), FIX2UINT( argumentY ) );
-	return Qnil;
-}
-
-/* call-seq:
- *   window.getCursorPosition()		-> vector2
- *
- * Get the position of the mouse cursor. 
- */
-static VALUE Window_GetCursorPosition( VALUE self )
-{
-	sf::Window *object = NULL;
-	Data_Get_Struct( self, sf::Window, object );
-	sf::Vector2i position = object->GetCursorPosition();
-	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, INT2FIX( position.x ), INT2FIX( position.y ) );;
-}
-
-/* call-seq:
  *   window.setFramerateLimit( new_limit )
  *
  * Limit the framerate to a maximum fixed frequency.
@@ -692,8 +650,6 @@ void Init_Window( void )
 	rb_define_method( globalWindowClass, "getWidth", Window_GetWidth, 0 );
 	rb_define_method( globalWindowClass, "isOpened", Window_IsOpened, 0 );
 	rb_define_method( globalWindowClass, "setActive", Window_SetActive, 1 );
-	rb_define_method( globalWindowClass, "setCursorPosition", Window_SetCursorPosition, 2 );
-	rb_define_method( globalWindowClass, "cursorPosition=", Window_SetCursorPosition2, 1 );
 	rb_define_method( globalWindowClass, "setFramerateLimit", Window_SetFramerateLimit, 1 );
 	rb_define_method( globalWindowClass, "setIcon", Window_SetIcon, 3 );
 	rb_define_method( globalWindowClass, "setJoystickThreshold", Window_SetJoystickThreshold, 1 );
@@ -724,9 +680,6 @@ void Init_Window( void )
 	rb_define_alias( globalWindowClass, "open?", "isOpened" );
 	
 	rb_define_alias( globalWindowClass, "active=", "setActive" );
-	
-	rb_define_alias( globalWindowClass, "set_cursor_position", "setCursorPosition" );
-	rb_define_alias( globalWindowClass, "cursor_position=", "cursorPosition=" );
 	
 	rb_define_alias( globalWindowClass, "framerateLimit=", "setFramerateLimit" );
 	rb_define_alias( globalWindowClass, "framerate_limit=", "setFramerateLimit" );

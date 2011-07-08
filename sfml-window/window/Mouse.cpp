@@ -21,6 +21,7 @@
  */
  
 #include "Mouse.hpp"
+#include "Vector2.hpp"
 #include "main.hpp"
 #include <SFML/Window/Mouse.hpp>
 
@@ -28,6 +29,7 @@ VALUE globalMouseModule;
 
 /* External classes */
 extern VALUE globalVector2Class;
+extern VALUE globalWindowClass;
 
 /* Definition of button codes for mouse events. */
 static void DefineMouseEnums( void )
@@ -58,19 +60,85 @@ static VALUE Mouse_IsButtonPressed( VALUE self, VALUE aButton )
 }
 
 /* call-seq:
- *   SFML::Mouse.getPosition()		-> vector2
+ *   SFML::Mouse.getPosition()			-> vector2
+ *   SFML::Mouse.getPosition( window ) 	-> vector2
  *
  * Get the current position of the mouse.
  *
  * This function returns the current position of the mouse cursor. 
- * If the cursor is over a SFML window, the returned position is 
- * relative to this window. Otherwise, the returned position is in 
- * desktop coordinates.
+ * If a window is passed as argument then the coordinates will be
+ * relative to that window.
  */
-static VALUE Mouse_GetPosition( VALUE self )
+static VALUE Mouse_GetPosition( int argc, VALUE *args, VALUE self )
 {
-	sf::Vector2i position = sf::Mouse::GetPosition();
-	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, INT2FIX( position.x ), INT2FIX( position.y ) );;
+	sf::Vector2i position;
+	sf::Window *window = NULL;
+	switch( argc )
+	{
+	case 0:
+		position = sf::Mouse::GetPosition();
+		break;
+	case 1:
+		VALIDATE_CLASS( args[ 0 ], globalWindowClass, "window" );
+		Data_Get_Struct( args[ 0 ], sf::Window, window );
+		position = sf::Mouse::GetPosition( *window );
+		break;
+	default:
+		rb_raise( rb_eArgError, "Expected 0 or 1 arguments but was given %d", argc );
+		break;
+	}
+	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, INT2FIX( position.x ), INT2FIX( position.y ) );
+}
+
+/* call-seq:
+ *   SFML::Mouse.setPosition( position )
+ *   SFML::Mouse.setPosition( position, window )
+ *
+ * Set the current position of the mouse.
+ *
+ * This function sets the current position of the mouse cursor. 
+ * If a window is passed as argument then the coordinates will be
+ * relative to that window.
+ */
+static VALUE Mouse_SetPosition( int argc, VALUE *args, VALUE self )
+{
+	sf::Vector2i position;
+	sf::Window *window = NULL;
+	switch( argc )
+	{
+	case 1:
+		VALIDATE_CLASS( args[ 0 ], globalVector2Class, "position" );
+		position.x = NUM2INT( Vector2_GetX( args[ 0 ] ) );
+		position.y = NUM2INT( Vector2_GetY( args[ 0 ] ) );
+		sf::Mouse::SetPosition( position );
+		break;
+	case 2:
+		VALIDATE_CLASS( args[ 0 ], globalVector2Class, "position" );
+		position.x = NUM2INT( Vector2_GetX( args[ 0 ] ) );
+		position.y = NUM2INT( Vector2_GetY( args[ 0 ] ) );
+		VALIDATE_CLASS( args[ 0 ], globalWindowClass, "window" );
+		Data_Get_Struct( args[ 0 ], sf::Window, window );
+		sf::Mouse::SetPosition( position, *window );
+	default:
+		rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
+		break;
+	}
+	return Qnil;
+}
+
+/* call-seq:
+ *   SFML::Mouse.position=( position )
+ *
+ * Set the current position of the mouse.
+ */
+static VALUE Mouse_SetPosition2( VALUE self, VALUE aPosition )
+{
+	sf::Vector2i position;
+	VALIDATE_CLASS( aPosition, globalVector2Class, "position" );
+	position.x = NUM2INT( Vector2_GetX( aPosition ) );
+	position.y = NUM2INT( Vector2_GetY( aPosition ) );
+	sf::Mouse::SetPosition( position );
+	return Qnil;
 }
 
 void Init_Mouse( void )
@@ -114,7 +182,9 @@ void Init_Mouse( void )
 	
 	// Instance methods
 	rb_define_module_function( globalMouseModule, "isButtonPressed", Mouse_IsButtonPressed, 1 );
-	rb_define_module_function( globalMouseModule, "getPosition", Mouse_GetPosition, 0 );
+	rb_define_module_function( globalMouseModule, "getPosition", Mouse_GetPosition, -1 );
+	rb_define_module_function( globalMouseModule, "setPosition", Mouse_SetPosition, -1 );
+	rb_define_module_function( globalMouseModule, "position=", Mouse_SetPosition2, 1 );
 	
 	// Aliases
 	rb_define_alias( CLASS_OF( globalMouseModule ), "isButtonPressed?", "isButtonPressed" );
@@ -124,4 +194,6 @@ void Init_Mouse( void )
 	
 	rb_define_alias( CLASS_OF( globalMouseModule ), "get_position", "getPosition" );
 	rb_define_alias( CLASS_OF( globalMouseModule ), "position", "getPosition" );
+	
+	rb_define_alias( CLASS_OF( globalMouseModule ), "set_position", "setPosition" );
 }
