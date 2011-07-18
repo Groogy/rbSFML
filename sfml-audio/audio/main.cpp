@@ -25,6 +25,14 @@
 #include "Vector2.hpp"
 #include "Vector3.hpp"
 #include "NonCopyable.hpp"
+#include "Listener.hpp"
+#include "SoundSource.hpp"
+#include "Sound.hpp"
+#include "SoundBuffer.hpp"
+#include "SoundRecorder.hpp"
+#include "SoundBufferRecorder.hpp"
+#include "SoundStream.hpp"
+#include "Music.hpp"
 
 static bool CheckDependencies( void )
 {
@@ -48,4 +56,13 @@ void Init_audio( void )
 	globalVector3Class = RetrieveSFMLClass( "Vector3" );
 	globalNonCopyableModule = RetrieveSFMLClass( "NonCopyable" );*/
 	rb_define_const(globalSFMLNamespace, "AudioLoaded", Qtrue);
+	
+	Init_Listener();
+	Init_SoundSource();
+	Init_Sound();
+	Init_SoundBuffer();
+	Init_SoundRecorder();
+	Init_SoundBufferRecorder();
+	Init_SoundStream();
+	Init_Music();
 }
