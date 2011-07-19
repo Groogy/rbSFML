@@ -47,29 +47,19 @@ public:
 protected:
 	virtual bool OnStart()
 	{
-		if( rb_respond_to( mySelf, myOnStartID ) == 0 )
+		if( rb_funcall( mySelf, myOnStartID, 0 ) == Qfalse )
 		{
-			return true;
+			return false;
 		}
 		else
 		{
-			if( rb_funcall( mySelf, myOnStartID, 0 ) == Qfalse )
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 	
 	virtual void OnStop()
 	{
-		if( rb_respond_to( mySelf, myOnStopID ) != 0 )
-		{
-			rb_funcall( mySelf, myOnStopID, 0 );
-		}
+		rb_funcall( mySelf, myOnStopID, 0 );
 	}
 	
 	virtual bool OnProcessSamples( const sf::Int16 *someSamples, std::size_t someCount )
@@ -154,6 +144,36 @@ static VALUE SoundRecorder_GetSampleRate( VALUE self )
 	sf::SoundRecorder *object = NULL;
 	Data_Get_Struct( self, sf::SoundRecorder, object );
 	return INT2FIX( object->GetSampleRate() );
+}
+
+/* call-seq:
+ *   sound_recorder.onStart()	-> true or false
+ *
+ * Callback function when recorder starts.
+ */
+static VALUE SoundRecorder_OnStart( VALUE self )
+{
+	return Qtrue;
+}
+
+/* call-seq:
+ *   sound_recorder.onStop()
+ *
+ * Callback function when recorder stops.
+ */
+static VALUE SoundRecorder_OnStop( VALUE self )
+{
+	return Qnil;
+}
+
+/* call-seq:
+ *   sound_recorder.onProcessSamples( samples, count )	-> true or false
+ *
+ * Callback function when recorder processes samples.
+ */
+static VALUE SoundRecorder_OnProcessSamples( VALUE self )
+{
+	return Qfalse;
 }
 
 /* call-seq:
@@ -256,6 +276,9 @@ void Init_SoundRecorder( void )
 	rb_define_method( globalSoundRecorderClass, "start", SoundRecorder_Start, -1 );
 	rb_define_method( globalSoundRecorderClass, "stop", SoundRecorder_Stop, 0 );
 	rb_define_method( globalSoundRecorderClass, "getSampleRate", SoundRecorder_GetSampleRate, 0 );
+	rb_define_method( globalSoundRecorderClass, "onStart", SoundRecorder_OnStart, 0 );
+	rb_define_method( globalSoundRecorderClass, "onStop", SoundRecorder_OnStop, 0 );
+	rb_define_method( globalSoundRecorderClass, "onProcessSamples", SoundRecorder_OnProcessSamples, 2 );
 		
 	// Class Aliases
 	rb_define_alias( CLASS_OF( globalSoundRecorderClass ), "is_available", "isAvailable" );
@@ -266,6 +289,7 @@ void Init_SoundRecorder( void )
 	rb_define_alias( globalSoundRecorderClass, "sampleRate", "getSampleRate" );
 	rb_define_alias( globalSoundRecorderClass, "sample_rate", "getSampleRate" );
 	
-	rb_define_alias( globalSoundRecorderClass, "on_start", "on_start" );
-	rb_define_alias( globalSoundRecorderClass, "on_stop", "on_stop" );
+	rb_define_alias( globalSoundRecorderClass, "on_start", "onStart" );
+	rb_define_alias( globalSoundRecorderClass, "on_stop", "onStop" );
+	rb_define_alias( globalSoundRecorderClass, "on_process_samples", "onProcessSamples" );
 }
