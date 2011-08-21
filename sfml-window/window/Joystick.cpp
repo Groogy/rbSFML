@@ -43,7 +43,7 @@ static void DefineJoystickEnums( void )
 }
 
 /* call-seq:
- *   SFML::Joystick.isConnected( joystickId )	-> true or false
+ *   Joystick.isConnected( joystickId )	-> true or false
  *
  * Check if a joystick is connected.
  */
@@ -60,7 +60,7 @@ static VALUE Joystick_IsConnected( VALUE self, VALUE anID )
 }
 
 /* call-seq:
- *   SFML::Joystick.getButtonCount( joystickId )	-> fixnum
+ *   Joystick.getButtonCount( joystickId )	-> fixnum
  *
  * Return the number of buttons supported by a joystick.
  *
@@ -72,7 +72,7 @@ static VALUE Joystick_GetButtonCount( VALUE self, VALUE anID )
 }
 
 /* call-seq:
- *   SFML::Joystick.hasAxis( joystickId, axis )	-> true or false
+ *   Joystick.hasAxis( joystickId, axis )	-> true or false
  *
  * Check if a joystick supports a given axis.
  *
@@ -91,7 +91,7 @@ static VALUE Joystick_HasAxis( VALUE self, VALUE anID, VALUE anAxis )
 }
 
 /* call-seq:
- *   SFML::Joystick.isButtonPressed( joystickId, button )	-> true or false
+ *   Joystick.isButtonPressed( joystickId, button )	-> true or false
  *
  * Check if a joystick button is pressed. 
  *
@@ -110,7 +110,7 @@ static VALUE Joystick_IsButtonPressed( VALUE self, VALUE anID, VALUE aButton )
 }
 
 /* call-seq:
- *   SFML::Joystick.getAxisPosition( joystickId, axis )	-> float
+ *   Joystick.getAxisPosition( joystickId, axis )	-> float
  *
  * Get the current position of a joystick axis. 
  *
@@ -122,7 +122,7 @@ static VALUE Joystick_GetAxisPosition( VALUE self, VALUE anID, VALUE anAxis )
 }
 
 /* call-seq:
- *   SFML::Joystick.update()
+ *   Joystick.update()
  *
  * Update the states of all joysticks.
  *
@@ -212,9 +212,12 @@ void Init_Joystick( void )
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "has_axis?", "hasAxis" );
 	
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "isButtonPressed?", "isButtonPressed" );
+	rb_define_alias( CLASS_OF( globalJoystickModule ), "buttonPressed?", "isButtonPressed" );
+	rb_define_alias( CLASS_OF( globalJoystickModule ), "buttonPressed", "isButtonPressed" );
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "is_button_pressed", "isButtonPressed" );
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "is_button_pressed?", "isButtonPressed" );
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "button_pressed?", "isButtonPressed" );
+	rb_define_alias( CLASS_OF( globalJoystickModule ), "button_pressed", "isButtonPressed" );
 	
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "axisPosition", "getAxisPosition" );
 	rb_define_alias( CLASS_OF( globalJoystickModule ), "get_axis_position", "getAxisPosition" );

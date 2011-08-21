@@ -26,6 +26,7 @@
 #include "Vector2.hpp"
 #include "Vector3.hpp"
 #include "NonCopyable.hpp"
+#include "InputStream.hpp"
 
 void Init_system( void )
 {
@@ -38,4 +39,5 @@ void Init_system( void )
 	Init_Vector2();
 	Init_Vector3();
 	Init_NonCopyable();
+	Init_InputStream();
 }

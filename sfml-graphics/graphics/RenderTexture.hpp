@@ -20,12 +20,12 @@
  *    source distribution.
  */
 
-#ifndef SFML_RUBYEXT_RENDER_IMAGE_HEADER_
-#define SFML_RUBYEXT_RENDER_IMAGE_HEADER_
+#ifndef SFML_RUBYEXT_RENDER_TEXTURE_HEADER_
+#define SFML_RUBYEXT_RENDER_TEXTURE_HEADER_
 
 #include "ruby.h"
 
 // Ruby initiation function
-void Init_RenderImage( void );
+void Init_RenderTexture( void );
 
-#endif // SFML_RUBYEXT_RENDER_IMAGE_HEADER_
+#endif // SFML_RUBYEXT_RENDER_TEXTURE_HEADER_

@@ -37,21 +37,25 @@ extern VALUE globalRendererClass;
 class rbDrawable : public sf::Drawable
 {
 public:
+	rbDrawable()
+	: myRenderSym( rb_intern( "render" ) )
+	{
+	}
+
 	void Init( VALUE aSelf )
 	{
 		myRubySelf = aSelf;
-		myRenderID = rb_intern( "render" );
 	}
 	
 protected:
 	VALUE myRubySelf;
-	ID myRenderID;
+	const ID myRenderSym;
 	
 	virtual void Render( sf::RenderTarget& aTarget, sf::Renderer& aRenderer ) const
 	{
 		VALUE targetWrap = Data_Wrap_Struct( globalRenderTargetInstanceClass, 0, 0, &aTarget );
 		VALUE rendererWrap = Data_Wrap_Struct( globalRendererClass, 0, 0, &aRenderer );
-		rb_funcall( myRubySelf, myRenderID, 2, targetWrap, rendererWrap );
+		rb_funcall( myRubySelf, myRenderSym, 2, targetWrap, rendererWrap );
 	}
 };
 
@@ -550,7 +554,6 @@ static VALUE Drawable_Allocate( VALUE aKlass )
 
 static VALUE Drawable_Included( VALUE aModule, VALUE aBase )
 {
-	//rb_define_singleton_method( aBase, "allocate", Drawable_Allocate, 0 );
 	rb_define_alloc_func( aBase, Drawable_Allocate );
 	return Qnil;
 }
@@ -618,6 +621,11 @@ void Init_Drawable( void )
  *     end
  *   end
  *
+ * Note on the bindings behaviour! Here on rbSFML there is a little specia lcase when it comes to defining
+ * your custom drawables. If you do a simple draw call using a window you would expect it to be the one passed 
+ * as the target argument in the SFML::Drawable#render method but it is not. The target argument references a new
+ * object created only to wrap the render target part of, in this case, the window. This kind of simulates how it
+ * looks and behaves in the C++ SFML except for that it is the same memory references in C++ but in ruby it is not.
  */
 	globalDrawableModule = rb_define_module_under( sfml, "Drawable" );
 	
@@ -651,30 +659,44 @@ void Init_Drawable( void )
 	
 	// Aliases
 	rb_define_alias( globalDrawableModule, "position=", "setPosition" );
+	rb_define_alias( globalDrawableModule, "set_position", "setPosition" );
 	rb_define_alias( globalDrawableModule, "position", "getPosition" );
+	rb_define_alias( globalDrawableModule, "get_position", "getPosition" );
 	rb_define_alias( globalDrawableModule, "x=", "setX" );
 	rb_define_alias( globalDrawableModule, "y=", "setY" );
 	
 	rb_define_alias( globalDrawableModule, "scale=", "setScale" );
+	rb_define_alias( globalDrawableModule, "set_scale", "setScale" );
 	rb_define_alias( globalDrawableModule, "scale", "getScale" );
+	rb_define_alias( globalDrawableModule, "get_scale", "getScale" );
 	rb_define_alias( globalDrawableModule, "scaleX=", "setScaleX" );
 	rb_define_alias( globalDrawableModule, "scale_x=", "setScaleX" );
+	rb_define_alias( globalDrawableModule, "set_scale_x", "setScaleX" );
 	rb_define_alias( globalDrawableModule, "scaleY=", "setScaleY" );
 	rb_define_alias( globalDrawableModule, "scale_y=", "setScaleY" );
+	rb_define_alias( globalDrawableModule, "set_scale_y", "setScaleY" );
 	
 	rb_define_alias( globalDrawableModule, "origin=", "setOrigin" );
+	rb_define_alias( globalDrawableModule, "set_origin", "setOrigin" );
 	rb_define_alias( globalDrawableModule, "origin", "getOrigin" );
+	rb_define_alias( globalDrawableModule, "get_origin", "getOrigin" );
 	
 	rb_define_alias( globalDrawableModule, "rotation=", "setRotation" );
+	rb_define_alias( globalDrawableModule, "set_rotation", "setRotation" );
 	rb_define_alias( globalDrawableModule, "rotation", "getRotation" );
+	rb_define_alias( globalDrawableModule, "get_rotation", "getRotation" );
 	
 	rb_define_alias( globalDrawableModule, "color=", "setColor" );
+	rb_define_alias( globalDrawableModule, "set_color", "setColor" );
 	rb_define_alias( globalDrawableModule, "color", "getColor" );
+	rb_define_alias( globalDrawableModule, "get_color", "getColor" );
 	
 	rb_define_alias( globalDrawableModule, "blendMode=", "setBlendMode" );
 	rb_define_alias( globalDrawableModule, "blend_mode=", "setBlendMode" );
+	rb_define_alias( globalDrawableModule, "set_blend_mode", "setBlendMode" );
 	rb_define_alias( globalDrawableModule, "blendMode", "getBlendMode" );
 	rb_define_alias( globalDrawableModule, "blend_mode", "getBlendMode" );
+	rb_define_alias( globalDrawableModule, "get_blend_mode", "getBlendMode" );
 	
 	rb_define_alias( globalDrawableModule, "transform_to_local", "transformToLocal" );
 	rb_define_alias( globalDrawableModule, "transform_to_global", "transformToGlobal" );

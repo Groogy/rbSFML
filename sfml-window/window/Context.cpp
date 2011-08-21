@@ -38,7 +38,7 @@ static void Context_Free( sf::Context *anObject )
 }
 
 /* call-seq:
- *   context.SetActive(bool)	-> nil
+ *   context.setActive(bool)	-> nil
  *
  * Activate or deactivate explicitely the context.
  */
@@ -80,7 +80,7 @@ void Init_Context( void )
  * Note that a context is only active in its current thread, if you create a new
  * thread it will have no valid context by default.
  *
- * To use a sf::Context instance, just construct it and let it live as long as 
+ * To use a SFML::Context instance, just construct it and let it live as long as 
  * you need a valid context. No explicit activation is needed, all it has to do 
  * is to exist. Its destructor will take care of deactivating and freeing all 
  * the attached resources.
@@ -89,7 +89,6 @@ void Init_Context( void )
 	rb_include_module( globalContextClass, globalNonCopyableModule );
 	
 	// Class methods
-	//rb_define_singleton_method( globalContextClass, "new", Context_New, 0 );
 	rb_define_alloc_func( globalContextClass, Context_Alloc );
 	
 	// Instance methods

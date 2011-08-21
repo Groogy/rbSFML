@@ -24,6 +24,7 @@
 #define SFML_RUBYEXT_COLOR_HEADER_
 
 #include "ruby.h"
+#include <SFML/Graphics/Color.hpp>
 
 VALUE Color_ForceType( VALUE someValue );
 
@@ -36,6 +37,9 @@ VALUE Color_SetR( VALUE self, VALUE aVal );
 VALUE Color_SetG( VALUE self, VALUE aVal );
 VALUE Color_SetB( VALUE self, VALUE aVal );
 VALUE Color_SetA( VALUE self, VALUE aVal );
+
+sf::Color Color_ToSFML( VALUE aColor );
+VALUE Color_ToRuby( const sf::Color &aColor );
 
 // Ruby initiation function
 void Init_Color( void );

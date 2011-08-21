@@ -93,6 +93,36 @@ VALUE Rect_SetHeight( VALUE self, VALUE aVal )
 	return rb_funcall( self, id, 1, aVal );
 }
 
+sf::IntRect Rect_ToSFMLi( VALUE aRect )
+{
+	return sf::IntRect(		FIX2INT( Rect_GetLeft( aRect ) ), FIX2INT( Rect_GetTop( aRect ) ), 
+							FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) 
+					  );
+}
+
+sf::FloatRect Rect_ToSFMLf( VALUE aRect )
+{
+	return sf::FloatRect(	NUM2DBL( Rect_GetLeft( aRect ) ), NUM2DBL( Rect_GetTop( aRect ) ), 
+							NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) 
+						);
+}
+
+VALUE Rect_ToRuby( const sf::IntRect &aRect )
+{
+	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
+						INT2FIX( aRect.Left ), INT2FIX( aRect.Top ), 
+						INT2FIX( aRect.Width ), INT2FIX( aRect.Height )
+					 );
+}
+
+VALUE Rect_ToRuby( const sf::FloatRect &aRect )
+{
+	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
+						rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
+						rb_float_new( aRect.Width ), rb_float_new( aRect.Height )
+					 );
+}
+
 /* Internal function
  * Will copy the x and y from aSource to self.
  */

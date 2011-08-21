@@ -30,7 +30,7 @@ VALUE globalRendererClass;
 
 /* External classes */
 extern VALUE globalColorClass;
-extern VALUE globalImageClass;
+extern VALUE globalTextureClass;
 extern VALUE globalShaderClass;
 extern VALUE globalNonCopyableModule;
 
@@ -194,11 +194,11 @@ static VALUE Renderer_SetBlendMode( VALUE self, VALUE aMode )
  */
 static VALUE Renderer_SetTexture( VALUE self, VALUE aTexture )
 {
-	VALIDATE_CLASS( aTexture, globalImageClass, "texture" );
+	VALIDATE_CLASS( aTexture, globalTextureClass, "texture" );
 	sf::Renderer *object = NULL;
 	Data_Get_Struct( self, sf::Renderer, object );
-	sf::Image * texture = NULL;
-	Data_Get_Struct( aTexture, sf::Image, texture );
+	sf::Texture *texture = NULL;
+	Data_Get_Struct( aTexture, sf::Texture, texture );
 	object->SetTexture( texture );
 	return Qnil;
 }

@@ -6,13 +6,14 @@ app = SFML::RenderWindow.new
 app.create( [800, 600], "My Ruby SFML" )
 app.framerate = 100
 app.position = [300, 300]
-input = app.input
 
 shape = SFML::Shape.rectangle( [-10, -10, 20, 20], SFML::Color::White )
 
 image = SFML::Image.new
-image.create( 100, 100, [255, 0, 0] )
-sprite = SFML::Sprite.new( image, [500, 500] )
+image.create( 100, 100, SFML::Color.new( 255, 0, 0 ) )
+texture = SFML::Texture.new( image )
+sprite = SFML::Sprite.new( texture )
+sprite.position = [500, 500]
 
 text = SFML::Text.new( "This is a test!" )
 text.position = [ 20, 20 ]
@@ -25,7 +26,7 @@ while app.open?
   end
   
   app.clear
-  shape.position = [input.mouseX, input.mouseY]
+  shape.position = SFML::Mouse.get_position( app )
   app.draw shape
   app.draw sprite
   app.draw text

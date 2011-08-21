@@ -29,7 +29,8 @@ VALUE globalFontClass;
 /* External classes */
 extern VALUE globalGlyphClass;
 extern VALUE globalRectClass;
-extern VALUE globalImageClass;
+extern VALUE globalTextureClass;
+extern VALUE globalInputStreamClass;
 
 static void Font_Free( sf::Font *anObject )
 {
@@ -50,6 +51,32 @@ static VALUE Font_LoadFromFile( VALUE self, VALUE aFileName )
 	sf::Font *object = NULL;
 	Data_Get_Struct( self, sf::Font, object );
 	if( object->LoadFromFile( rb_string_value_cstr( &aFileName ) ) == true )
+	{
+		return Qtrue;
+	}
+	else
+	{
+		return Qfalse;
+	}
+}
+
+/* call-seq:
+ *   font.loadFromStream( stream )	-> true or false
+ *
+ * Load the font from a custom stream.
+ *
+ * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT,
+ * BDF, PFR and Type 42. Warning: SFML cannot preload all the font data in this function, so the
+ * contents of stream have to remain valid as long as the font is used.
+ */
+static VALUE Font_LoadFromStream( VALUE self, VALUE aStream )
+{
+	sf::Font *object = NULL;
+	Data_Get_Struct( self, sf::Font, object );
+	VALIDATE_CLASS( aStream, globalInputStreamClass, "stream" );
+	sf::InputStream *stream = NULL;
+	Data_Get_Struct( self, sf::InputStream, stream );
+	if( object->LoadFromStream( *stream ) == true )
 	{
 		return Qtrue;
 	}
@@ -113,21 +140,21 @@ static VALUE Font_GetLineSpacing( VALUE self, VALUE aCharacterSize )
 }
 
 /* call-seq:
- *   font.getImage( characterSize )	-> image
+ *   font.getTexture( characterSize )	-> texture
  *
- * Retrieve the image containing the loaded glyphs of a certain size.
+ * Retrieve the texture containing the loaded glyphs of a certain size.
  *
- * The contents of the returned image changes as more glyphs are requested, thus it is not very relevant. 
+ * The contents of the returned texture changes as more glyphs are requested, thus it is not very relevant. 
  * It is mainly used internally by SFML::Text.
  */
-static VALUE Font_GetImage( VALUE self, VALUE aCharacterSize )
+static VALUE Font_GetTexture( VALUE self, VALUE aCharacterSize )
 {
 	sf::Font *object = NULL;
 	Data_Get_Struct( self, sf::Font, object );
-	const sf::Image& image = object->GetImage( FIX2UINT( aCharacterSize ) );
-	VALUE rbImage = Data_Wrap_Struct( globalImageClass, 0, 0, const_cast<sf::Image *>( &image ) );
-	rb_iv_set( rbImage, "@__owner_ref", self );
-	return rbImage;
+	const sf::Texture& texture = object->GetTexture( FIX2UINT( aCharacterSize ) );
+	VALUE rbTexture = Data_Wrap_Struct( globalTextureClass, 0, 0, const_cast< sf::Texture * >( &texture ) );
+	rb_iv_set( rbTexture, "@__owner_ref", self );
+	return rbTexture;
 }
 
 /* call-seq:
@@ -201,7 +228,7 @@ void Init_Font( void )
  * a SFML::Text is a lightweight object which can combine the glyphs data and metrics of a SFML::Font to display any text
  * on a render target. Note that it is also possible to bind several SFML::Text instances to the same sf::Font.
  *
- * It is important to note that the sf::Text instance doesn't copy the font that it uses, it only keeps a reference to 
+ * It is important to note that the SFML::Text instance doesn't copy the font that it uses, it only keeps a reference to 
  * it. Thus, a SFML::Font must not be destructed while it is used by a SFML::Text (i.e. never write a function that uses
  * a local SFML::Font instance for creating a text).
  *
@@ -245,7 +272,7 @@ void Init_Font( void )
 	rb_define_method( globalFontClass, "getGlyph", Font_GetGlyph, 3 );
 	rb_define_method( globalFontClass, "getKerning", Font_GetKerning, 3 );
 	rb_define_method( globalFontClass, "getLineSpacing", Font_GetLineSpacing, 1 );
-	rb_define_method( globalFontClass, "getImage", Font_GetImage, 1 );
+	rb_define_method( globalFontClass, "getTexture", Font_GetTexture, 1 );
 	
 	// Class Aliases
 	rb_define_alias( CLASS_OF( globalFontClass ), "get_default_font", "getDefaultFont" );
@@ -254,12 +281,14 @@ void Init_Font( void )
 	rb_define_alias( CLASS_OF( globalFontClass ), "DefaultFont", "getDefaultFont" );
 	
 	// Instance Aliases
-	rb_define_alias( globalFontClass , "load_from_file", "loadFromFile" );
-	rb_define_alias( globalFontClass , "loadFile", "loadFromFile" );
-	rb_define_alias( globalFontClass , "load_file", "loadFromFile" );
+	rb_define_alias( globalFontClass, "load_from_file", "loadFromFile" );
+	rb_define_alias( globalFontClass, "loadFile", "loadFromFile" );
+	rb_define_alias( globalFontClass, "load_file", "loadFromFile" );
 	
-	rb_define_alias( globalFontClass , "get_glyph", "getGlyph" );
-	rb_define_alias( globalFontClass , "get_kerning", "getKerning" );
-	rb_define_alias( globalFontClass , "get_line_spacing", "getLineSpacing" );
-	rb_define_alias( globalFontClass , "get_image", "getImage" );
+	rb_define_alias( globalFontClass, "get_glyph", "getGlyph" );
+	rb_define_alias( globalFontClass, "get_kerning", "getKerning" );
+	rb_define_alias( globalFontClass, "get_line_spacing", "getLineSpacing" );
+	
+	rb_define_alias( globalFontClass, "get_texture", "getTexture" );
+	rb_define_alias( globalFontClass, "texture", "getTexture" );
 }

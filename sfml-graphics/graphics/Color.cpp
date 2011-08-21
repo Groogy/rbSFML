@@ -22,7 +22,6 @@
  
 #include "Color.hpp"
 #include "main.hpp"
-#include <SFML/Graphics/Color.hpp>
 
 VALUE globalColorClass;
 
@@ -98,8 +97,23 @@ VALUE Color_SetA( VALUE self, VALUE aVal )
 	return rb_funcall( self, id, 1, aVal );
 }
 
+sf::Color Color_ToSFML( VALUE aColor )
+{
+	return sf::Color( 	FIX2INT( Color_GetR( aColor ) ), FIX2INT( Color_GetG( aColor ) ), 
+						FIX2INT( Color_GetB( aColor ) ), FIX2INT( Color_GetA( aColor ) ) 
+					);
+}
+
+VALUE Color_ToRuby( const sf::Color &aColor )
+{
+	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, 
+						INT2FIX( aColor.r ), INT2FIX( aColor.g ), 
+						INT2FIX( aColor.b ), INT2FIX( aColor.a )
+					 );
+}
+
 /* Internal function
- * Will copy the x and y from aSource to self.
+ * Will copy the color components from aSource to self.
  */
 static void Color_internal_CopyFrom( VALUE self, VALUE aSource )
 {

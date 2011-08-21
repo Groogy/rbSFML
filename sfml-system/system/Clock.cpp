@@ -36,9 +36,12 @@ static void Clock_Free( sf::Clock *anObject )
 
 /* call-seq:
  *   clock.getElapsedTime()		-> Fixnum
+ *   clock.get_elapsed_time()	-> Fixnum
+ *   clock.elapsedTime() 		-> Fixnum
+ *   clock.elapsed_time()		-> Fixnum
  *
- * This function returns the time elapsed since the last call to Reset() 
- * (or the construction of the instance if Reset() has not been called) in miliseconds.
+ * This function returns the time elapsed since the last call to reset(
+ * (or the construction of the instance if reset() has not been called) in miliseconds.
  */
 static VALUE Clock_GetElapsedTime( VALUE self )
 {
@@ -87,22 +90,22 @@ void Init_Clock( void )
 	VALUE sfml = rb_define_module( "SFML" );
 /* Utility class for manipulating time.
  *
- * sf::Clock is a lightweight class for measuring time.
+ * SFML::Clock is a lightweight class for measuring time.
  *
  * Its resolution depends on the underlying OS, but you can generally expect a 1 ms resolution.
  */
 	globalClockClass = rb_define_class_under( sfml, "Clock", rb_cObject );
-	rb_define_alloc_func( globalClockClass, Clock_Allocate );
 	
 	// Class methods
-	//rb_define_singleton_method( globalClockClass, "new", Clock_New, -1 );
+	rb_define_alloc_func( globalClockClass, Clock_Allocate );
 	
 	// Instance methods
 	rb_define_method( globalClockClass, "initialize_copy", Clock_InitializeCopy, 1 );
-	rb_define_method( globalClockClass, "elapsed_time", Clock_GetElapsedTime, 0 );
+	rb_define_method( globalClockClass, "getElapsedTime", Clock_GetElapsedTime, 0 );
 	rb_define_method( globalClockClass, "reset", Clock_Reset, 0 );
 	
 	// Aliases
-	rb_define_alias( globalClockClass, "elapsedTime", "elapsed_time" );
-	rb_define_alias( globalClockClass, "getElapsedTime", "elapsed_time" );
+	rb_define_alias( globalClockClass, "elapsedTime", "getElapsedTime" );
+	rb_define_alias( globalClockClass, "get_elapsed_time", "getElapsedTime" );
+	rb_define_alias( globalClockClass, "elapsed_time", "getElapsedTime" );
 }

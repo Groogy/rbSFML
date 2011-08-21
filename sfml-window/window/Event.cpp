@@ -255,7 +255,7 @@ void Init_Event( void )
 	VALUE sfml = rb_define_module( "SFML" );
 /* SFML::Event holds all the informations about a system event that just happened.
  *
- * Events are retrieved using the SFML::Window#GetEvent function.
+ * Events are retrieved using the SFML::Window#getEvent function.
  *
  * A SFML::Event instance contains the type of the event (mouse moved, key pressed, window closed, ...)
  * as well as the details about this particular event. Please note that the event parameters are 
@@ -266,7 +266,7 @@ void Init_Event( void )
  *
  * The ruby version differs from C++ in that the parameters are still stored in a union but that
  * the values can be directly accessed from the event object. If you try to access any data which
- * would be considered undefined then SFML::SomeKindOfException will be thrown.
+ * that does not belong to the type then undefined values will be returned.
  *
  * Usage example:
  *

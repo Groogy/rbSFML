@@ -23,7 +23,7 @@
 #include "Shader.hpp"
 #include "Vector2.hpp"
 #include "Vector3.hpp"
-#include "Image.hpp"
+#include "Texture.hpp"
 #include "main.hpp"
 #include <SFML/Graphics/Shader.hpp>
 
@@ -31,7 +31,7 @@ VALUE globalShaderClass;
 /* External classes */
 extern VALUE globalVector2Class;
 extern VALUE globalVector3Class;
-extern VALUE globalImageClass;
+extern VALUE globalTextureClass;
 
 static void Shader_Free( sf::Shader *anObject )
 {
@@ -163,19 +163,19 @@ static VALUE Shader_SetParameter( int argc, VALUE *args, VALUE self )
  *   uniform sampler2D current;
  *   uniform sampler2D other;
  * 
- *   image = SFML::Image.new
+ *   texture = SFML::Texture.new
  *   ...
  *   shader.setParameter( "current", SFML::Shader::CurrentTexture )
- *   shader.setParameter( "other", image )
+ *   shader.setParameter( "other", texture )
  *
 * It is important to note that texture must remain alive as long as the shader uses it, no copy is made internally.
  */
 static VALUE Shader_SetTexture( VALUE self, VALUE aName, VALUE aTexture )
 {
 	VALIDATE_CLASS( aName, rb_cString, "name" );
-	VALIDATE_CLASS( aTexture, globalImageClass, "texture" );
-	sf::Image *texture = NULL;
-	Data_Get_Struct( self, sf::Image, texture );
+	VALIDATE_CLASS( aTexture, globalTextureClass, "texture" );
+	sf::Texture *texture = NULL;
+	Data_Get_Struct( self, sf::Texture, texture );
 	const char * name = rb_string_value_cstr( &aName );
 	sf::Shader *object = NULL;
 	Data_Get_Struct( self, sf::Shader, object );
@@ -194,7 +194,7 @@ static VALUE Shader_SetTexture( VALUE self, VALUE aName, VALUE aTexture )
  *   uniform sampler2D current;
  *
  *
- *   shader.SetCurrentTexture("current");
+ *   shader.current_texture = "current"
  *
  */
 static VALUE Shader_SetCurrentTexture( VALUE self, VALUE aName )

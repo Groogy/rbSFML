@@ -20,29 +20,13 @@
  *    source distribution.
  */
  
-#ifndef SFML_RUBYEXT_RECT_HEADER_
-#define SFML_RUBYEXT_RECT_HEADER_
+#ifndef SFML_RUBYEXT_INPUT_STREAM_HEADER_
+#define SFML_RUBYEXT_INPUT_STREAM_HEADER_
 
 #include "ruby.h"
-#include <SFML/Graphics/Rect.hpp>
 
-VALUE Rect_ForceType( VALUE someValue );
+extern VALUE globalInputStreamModule;
 
-VALUE Rect_GetLeft( VALUE self );
-VALUE Rect_GetTop( VALUE self );
-VALUE Rect_GetWidth( VALUE self );
-VALUE Rect_GetHeight( VALUE self );
+void Init_InputStream( void );
 
-VALUE Rect_SetLeft( VALUE self, VALUE aVal );
-VALUE Rect_SetTop( VALUE self, VALUE aVal );
-VALUE Rect_SetWidth( VALUE self, VALUE aVal );
-VALUE Rect_SetHeight( VALUE self, VALUE aVal );
-
-sf::IntRect Rect_ToSFMLi( VALUE aRect );
-sf::FloatRect Rect_ToSFMLf( VALUE aRect );
-VALUE Rect_ToRuby( const sf::IntRect &aRect );
-VALUE Rect_ToRuby( const sf::FloatRect &aRect );
-
-void Init_Rect( void );
-
-#endif // SFML_RUBYEXT_RECT_HEADER_
+#endif // SFML_RUBYEXT_INPUT_STREAM_HEADER_

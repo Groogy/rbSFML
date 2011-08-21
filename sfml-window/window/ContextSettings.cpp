@@ -23,7 +23,6 @@
 #include "ContextSettings.hpp"
 #include "main.hpp"
 #include <SFML/Window/ContextSettings.hpp>
-#include <iostream>
 
 VALUE globalContextSettingsClass;
 
@@ -229,12 +228,11 @@ void Init_ContextSettings( void )
  * if one or more of these values are not supported by the system; instead, 
  * SFML will try to find the closest valid match. You can then retrieve the 
  * settings that the window actually used to create its context, with 
- * Window::GetSettings().
+ * Window#getSettings().
  */
 	globalContextSettingsClass = rb_define_class_under( sfml, "ContextSettings", rb_cObject );
 	
 	// Class methods
-	//rb_define_singleton_method( globalContextSettingsClass, "new", ContextSettings_New, -1 );
 	rb_define_alloc_func( globalContextSettingsClass, ContextSettings_Alloc );
 	
 	// Instance methods
@@ -281,6 +279,4 @@ void Init_ContextSettings( void )
 	rb_define_alias( globalContextSettingsClass, "minor=", "minorVersion=" );
 	rb_define_alias( globalContextSettingsClass, "minor_version", "minorVersion" );
 	rb_define_alias( globalContextSettingsClass, "minor_version=", "minorVersion=" );
-	
-	
 }

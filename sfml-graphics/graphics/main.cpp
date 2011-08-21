@@ -31,13 +31,14 @@
 #include "Glyph.hpp"
 #include "Image.hpp"
 #include "Renderer.hpp"
-#include "RenderImage.hpp"
+#include "RenderTexture.hpp"
 #include "RenderTarget.hpp"
 #include "RenderWindow.hpp"
 #include "Shape.hpp"
 #include "Shader.hpp"
 #include "Sprite.hpp"
 #include "Text.hpp"
+#include "Texture.hpp"
 #include "View.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -96,11 +97,12 @@ void Init_graphics( void )
 	Init_Image();
 	Init_Renderer();
 	Init_RenderTarget();
-	Init_RenderImage();
+	Init_RenderTexture();
 	Init_RenderWindow();
 	Init_Shape();
 	Init_Shader();
 	Init_Sprite();
 	Init_Text();
+	Init_Texture();
 	Init_View();
 }

@@ -1,3 +1,4 @@
+
 /* rbSFML - Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or
  * implied warranty. In no event will the authors be held
