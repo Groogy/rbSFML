@@ -201,8 +201,8 @@ static VALUE Texture_Create( VALUE self, VALUE aWidth, VALUE aHeight )
 	unsigned int width = 0;
 	unsigned int height = 0;
 	
-	width = NUM2UINT( aWidth );
-	height = NUM2UINT( aHeight );
+	width = FIX2UINT( aWidth );
+	height = FIX2UINT( aHeight );
 	
 	return ( object->Create( width, height ) == true ? Qtrue : Qfalse );
 }

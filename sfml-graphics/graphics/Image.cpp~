@@ -158,7 +158,7 @@ static VALUE Image_Create( int argc, VALUE *args, VALUE self )
 		case 3:
 			if( rb_obj_is_kind_of( args[ 2 ], rb_cArray ) == Qtrue )
 			{
-				priv_CreateFromPixels( object, NUM2UINT( args[ 0 ] ), NUM2UINT( args[ 1 ] ), args[ 2 ] );
+				priv_CreateFromPixels( object, FIX2UINT( args[ 0 ] ), FIX2UINT( args[ 1 ] ), args[ 2 ] );
 				return Qnil;
 			}
 			else
