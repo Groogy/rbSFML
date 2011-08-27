@@ -259,7 +259,7 @@ static VALUE Drawable_SetColor( VALUE self, VALUE aColor )
 	VALUE color = Color_ForceType( aColor );
 	rbDrawable *object = NULL;
 	Data_Get_Struct( self, rbDrawable, object );
-	object->SetColor( sf::Color( Color_GetR( color ), Color_GetG( color ), Color_GetB( color ), Color_GetA( color ) ) );
+	object->SetColor( Color_ToSFML( color ) );
 	return Qnil;
 }
 

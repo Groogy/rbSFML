@@ -143,6 +143,7 @@ static void priv_CreateFromPixels( sf::Image *self, unsigned int aWidth, unsigne
  *
  * [r0 g0 b0 a0 r1 g1 b1 a1 r2...]
  */
+ #include <iostream>
 static VALUE Image_Create( int argc, VALUE *args, VALUE self )
 {
 	sf::Image *object = NULL;
@@ -150,7 +151,6 @@ static VALUE Image_Create( int argc, VALUE *args, VALUE self )
 	
 	unsigned int width = 0;
 	unsigned int height = 0;
-	VALUE rubyColor = Qnil;
 	sf::Color color;
 	
 	switch( argc )

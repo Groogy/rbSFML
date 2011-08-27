@@ -50,11 +50,11 @@ void Init_audio( void )
 	globalSFMLNamespace = rb_define_module( "SFML" );
 	if( CheckDependencies() == false )
 	{
-		rb_raise( rb_eRuntimeError, "This module depends on sfml-window" );
+		rb_raise( rb_eRuntimeError, "This module depends on sfml-system" );
 	}
-	/*globalVector2Class = RetrieveSFMLClass( "Vector2" );
+	globalVector2Class = RetrieveSFMLClass( "Vector2" );
 	globalVector3Class = RetrieveSFMLClass( "Vector3" );
-	globalNonCopyableModule = RetrieveSFMLClass( "NonCopyable" );*/
+	globalNonCopyableModule = RetrieveSFMLClass( "NonCopyable" );
 	rb_define_const(globalSFMLNamespace, "AudioLoaded", Qtrue);
 	
 	Init_Listener();

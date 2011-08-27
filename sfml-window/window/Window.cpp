@@ -634,7 +634,6 @@ void Init_Window( void )
 	rb_include_module( globalWindowClass, globalNonCopyableModule );
 	
 	// Class methods
-	//rb_define_singleton_method( globalWindowClass, "new", Window_New , -1 );
 	rb_define_alloc_func( globalWindowClass, Window_Alloc );
 	
 	// Instance methods

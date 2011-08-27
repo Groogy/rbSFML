@@ -268,7 +268,6 @@ void Init_SoundRecorder( void )
 	rb_include_module( globalSoundRecorderClass, globalNonCopyableModule );
 	
 	// Class methods
-	//rb_define_singleton_method( globalSoundRecorderClass, "new", SoundRecorder_New, -1 );
 	rb_define_alloc_func( globalSoundRecorderClass, SoundRecorder_Alloc );
 	rb_define_singleton_method( globalSoundRecorderClass, "isAvailable", SoundRecorder_IsAvailable, 0 );
 	

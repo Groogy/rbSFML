@@ -72,7 +72,6 @@ static VALUE Texture_LoadFromFile( int argc, VALUE *args, VALUE self )
 	
 	sf::IntRect area;
 	std::string filename;
-	
 	switch( argc )
 	{
 	case 2:
@@ -602,7 +601,7 @@ void Init_Texture( void )
 	// Instance methods
 	rb_define_method( globalTextureClass, "initialize", Texture_Initialize, -1 );
 	rb_define_method( globalTextureClass, "initialize_copy", Texture_InitializeCopy, 1 );
-	rb_define_method( globalTextureClass, "loadFromFile", Texture_LoadFromFile, 1 );
+	rb_define_method( globalTextureClass, "loadFromFile", Texture_LoadFromFile, -1 );
 	rb_define_method( globalTextureClass, "loadFromImage", Texture_LoadFromImage, -1 );
 	rb_define_method( globalTextureClass, "create", Texture_Create, 2 );
 	rb_define_method( globalTextureClass, "bind", Texture_Bind, 0 );
