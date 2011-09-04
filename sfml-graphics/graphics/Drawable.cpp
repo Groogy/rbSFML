@@ -59,7 +59,7 @@ protected:
 	}
 };
 
-static void Drawable_Free( rbDrawable *object )
+static void Drawable_Free( sf::Drawable *object )
 {
 	delete object;
 }
@@ -75,7 +75,7 @@ static void Drawable_Free( rbDrawable *object )
  */
 static VALUE Drawable_SetPosition( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
+	sf::Drawable *object = NULL;
 	VALUE arg0 = Qnil;
 	float positionX = 0.0f;
 	float positionY = 0.0f;
@@ -94,7 +94,7 @@ static VALUE Drawable_SetPosition( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
 	}
 	
-	Data_Get_Struct( self, rbDrawable, object );
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetPosition( positionX, positionY );
 	
 	return Qnil;
@@ -107,8 +107,8 @@ static VALUE Drawable_SetPosition( int argc, VALUE *args, VALUE self )
  */
 static VALUE Drawable_SetX( VALUE self, VALUE aX )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetX( NUM2DBL( aX ) );
 	return Qnil;
 }
@@ -120,8 +120,8 @@ static VALUE Drawable_SetX( VALUE self, VALUE aX )
  */
 static VALUE Drawable_SetY( VALUE self, VALUE aY )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetY( NUM2DBL( aY ) );
 	return Qnil;
 }
@@ -138,7 +138,7 @@ static VALUE Drawable_SetY( VALUE self, VALUE aY )
  */
 static VALUE Drawable_SetScale( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
+	sf::Drawable *object = NULL;
 	VALUE arg0 = Qnil;
 	float scaleX = 0.0f;
 	float scaleY = 0.0f;
@@ -157,7 +157,7 @@ static VALUE Drawable_SetScale( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
 	}
 	
-	Data_Get_Struct( self, rbDrawable, object );
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetScale( scaleX, scaleY );
 	
 	return Qnil;
@@ -172,8 +172,8 @@ static VALUE Drawable_SetScale( int argc, VALUE *args, VALUE self )
  */
 static VALUE Drawable_SetScaleX( VALUE self, VALUE aX )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetScaleX( NUM2DBL( aX ) );
 	return Qnil;
 }
@@ -187,8 +187,8 @@ static VALUE Drawable_SetScaleX( VALUE self, VALUE aX )
  */
 static VALUE Drawable_SetScaleY( VALUE self, VALUE aY )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetScaleY( NUM2DBL( aY ) );
 	return Qnil;
 }
@@ -205,7 +205,7 @@ static VALUE Drawable_SetScaleY( VALUE self, VALUE aY )
  */
 static VALUE Drawable_SetOrigin( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
+	sf::Drawable *object = NULL;
 	VALUE arg0 = Qnil;
 	float originX = 0.0f;
 	float originY = 0.0f;
@@ -224,7 +224,7 @@ static VALUE Drawable_SetOrigin( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
 	}
 	
-	Data_Get_Struct( self, rbDrawable, object );
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetOrigin( originX, originY );
 	
 	return Qnil;
@@ -240,8 +240,8 @@ static VALUE Drawable_SetOrigin( int argc, VALUE *args, VALUE self )
  */
 static VALUE Drawable_SetRotation( VALUE self, VALUE aRotation )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetRotation( NUM2DBL( aRotation ) );
 	return Qnil;
 }
@@ -257,8 +257,8 @@ static VALUE Drawable_SetRotation( VALUE self, VALUE aRotation )
 static VALUE Drawable_SetColor( VALUE self, VALUE aColor )
 {
 	VALUE color = Color_ForceType( aColor );
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetColor( Color_ToSFML( color ) );
 	return Qnil;
 }
@@ -274,8 +274,8 @@ static VALUE Drawable_SetColor( VALUE self, VALUE aColor )
  */
 static VALUE Drawable_SetBlendMode( VALUE self, VALUE aMode )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->SetBlendMode( static_cast<sf::Blend::Mode>( FIX2INT( aMode ) ) );
 	return Qnil;
 }
@@ -287,8 +287,8 @@ static VALUE Drawable_SetBlendMode( VALUE self, VALUE aMode )
  */
 static VALUE Drawable_GetPosition( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	const sf::Vector2f &vector = object->GetPosition();
 	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, rb_float_new( vector.x ), rb_float_new( vector.y ) );
 }
@@ -300,8 +300,8 @@ static VALUE Drawable_GetPosition( VALUE self )
  */
 static VALUE Drawable_GetScale( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	const sf::Vector2f &vector = object->GetScale();
 	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, rb_float_new( vector.x ), rb_float_new( vector.y ) );
 }
@@ -313,8 +313,8 @@ static VALUE Drawable_GetScale( VALUE self )
  */
 static VALUE Drawable_GetOrigin( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	const sf::Vector2f &vector = object->GetOrigin();
 	return rb_funcall( globalVector2Class, rb_intern( "new" ), 2, rb_float_new( vector.x ), rb_float_new( vector.y ) );
 }
@@ -328,8 +328,8 @@ static VALUE Drawable_GetOrigin( VALUE self )
  */
 static VALUE Drawable_GetRotation( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	return rb_float_new( object->GetRotation() );
 }
 
@@ -340,8 +340,8 @@ static VALUE Drawable_GetRotation( VALUE self )
  */
 static VALUE Drawable_GetColor( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	const sf::Color &color = object->GetColor();
 	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, 	INT2FIX( color.r ), INT2FIX( color.g ), 
 									INT2FIX( color.b ), INT2FIX( color.a ) );
@@ -354,8 +354,8 @@ static VALUE Drawable_GetColor( VALUE self )
  */
 static VALUE Drawable_GetBlendMode( VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	return INT2FIX( object->GetBlendMode() );
 }
 
@@ -369,7 +369,7 @@ static VALUE Drawable_GetBlendMode( VALUE self )
  */
 static VALUE Drawable_Move( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
+	sf::Drawable *object = NULL;
 	VALUE arg0 = Qnil;
 	float moveX = 0.0f;
 	float moveY = 0.0f;
@@ -388,7 +388,7 @@ static VALUE Drawable_Move( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
 	}
 	
-	Data_Get_Struct( self, rbDrawable, object );
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->Move( moveX, moveY );
 	
 	return Qnil;
@@ -404,7 +404,7 @@ static VALUE Drawable_Move( int argc, VALUE *args, VALUE self )
  */
 static VALUE Drawable_Scale( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
+	sf::Drawable *object = NULL;
 	VALUE arg0 = Qnil;
 	float scaleX = 0.0f;
 	float scaleY = 0.0f;
@@ -423,7 +423,7 @@ static VALUE Drawable_Scale( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 1 or 2 arguments but was given %d", argc );
 	}
 	
-	Data_Get_Struct( self, rbDrawable, object );
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->Scale( scaleX, scaleY );
 	
 	return Qnil;
@@ -438,8 +438,8 @@ static VALUE Drawable_Scale( int argc, VALUE *args, VALUE self )
  */
 static VALUE Drawable_Rotate( VALUE self, VALUE aRotation )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	object->Rotate( NUM2DBL( aRotation ) );
 	return Qnil;
 }
@@ -456,8 +456,8 @@ static VALUE Drawable_Rotate( VALUE self, VALUE aRotation )
 static VALUE Drawable_TransformToLocal( VALUE self, VALUE aPoint )
 {
 	VALUE point = Vector2_ForceType( aPoint );
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	sf::Vector2f newPoint = object->TransformToLocal( sf::Vector2f( NUM2DBL( Vector2_GetX( point ) ), 
 									NUM2DBL( Vector2_GetY( point ) ) )
 							);
@@ -475,8 +475,8 @@ static VALUE Drawable_TransformToLocal( VALUE self, VALUE aPoint )
 static VALUE Drawable_TransformToGlobal( VALUE self, VALUE aPoint )
 {
 	VALUE point = Vector2_ForceType(aPoint);
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	sf::Vector2f newPoint = object->TransformToGlobal( sf::Vector2f( NUM2DBL( Vector2_GetX( point ) ), 
 									NUM2DBL( Vector2_GetY( point ) ) )
 							);
@@ -494,8 +494,8 @@ static VALUE Drawable_TransformToGlobal( VALUE self, VALUE aPoint )
  */
 static VALUE Drawable_Initialize( int argc, VALUE *args, VALUE self )
 {
-	rbDrawable *object = NULL;
-	Data_Get_Struct( self, rbDrawable, object );
+	sf::Drawable *object = NULL;
+	Data_Get_Struct( self, sf::Drawable, object );
 	VALUE aPosition = Qnil;
 	VALUE aScale = Qnil;
 	VALUE aColor = Qnil;
