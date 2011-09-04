@@ -87,9 +87,9 @@ VALUE Vector3_ForceType( VALUE someValue )
 static void Vector3_internal_CopyFrom( VALUE self, VALUE aSource )
 {
 	VALUE vectorSource = Vector3_ForceType( aSource );
-	VALUE x = Vector3_GetX( self );
-	VALUE y = Vector3_GetY( self );
-	VALUE z = Vector3_GetZ( self );
+	VALUE x = Vector3_GetX( vectorSource );
+	VALUE y = Vector3_GetY( vectorSource );
+	VALUE z = Vector3_GetZ( vectorSource );
 	
 	Vector3_SetX( self, x );
 	Vector3_SetY( self, y );
