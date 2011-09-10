@@ -9,7 +9,10 @@ support, ideas or just have a nice chat.
 #    DEPENDENCIES     #
 #######################
 Of course this means this library depends on SFML2 so you'll have to install
-SFML2 on your development machine in order to compile rbSFML. 
+SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module
+from the SFML Github repository that rbSFML is known to compile against but you can try and use
+the latest version of SFML as long as SFML has not come with anything API breaking. If that is
+the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
 NOTE for Windows users: Currently you'll have to place SFML2 include headers and static library
 files in sub-folder of the rbSFML library in Windows for it to find them. 
