@@ -25,7 +25,7 @@
 #include "main.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/RenderImage.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 
 VALUE globalRenderTargetModule;
 VALUE globalRenderTargetInstanceClass;
@@ -89,7 +89,7 @@ static VALUE RenderTarget_Clear( int argc, VALUE *args, VALUE self )
 static VALUE RenderTarget_Draw( int argc, VALUE *args, VALUE self )
 {
 	sf::RenderWindow *window = NULL;
-	sf::RenderImage *image = NULL;
+	sf::RenderTexture *image = NULL;
 	
 	if( CLASS_OF( self ) == globalRenderWindowClass )
 	{
@@ -97,7 +97,7 @@ static VALUE RenderTarget_Draw( int argc, VALUE *args, VALUE self )
 	}
 	else
 	{
-		Data_Get_Struct( self, sf::RenderImage, image );
+		Data_Get_Struct( self, sf::RenderTexture, image );
 	}
 	
 	switch( argc )
