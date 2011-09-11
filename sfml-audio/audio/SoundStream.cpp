@@ -395,6 +395,8 @@ void Init_SoundStream( void )
 	rb_define_alias( globalSoundStreamClass, "playingOffset=", "setPlayingOffset" );
 	rb_define_alias( globalSoundStreamClass, "playing_offset=", "setPlayingOffset" );
 	
-	rb_define_alias( globalSoundStreamClass, "loop", "getPlayingOffset" );
-	rb_define_alias( globalSoundStreamClass, "loop=", "setPlayingOffset" );
+	rb_define_alias( globalSoundStreamClass, "loop", "getLoop" );
+	rb_define_alias( globalSoundStreamClass, "get_loop", "getLoop" );
+	rb_define_alias( globalSoundStreamClass, "loop=", "setLoop" );
+	rb_define_alias( globalSoundStreamClass, "set_loop", "setLoop" );
 }
