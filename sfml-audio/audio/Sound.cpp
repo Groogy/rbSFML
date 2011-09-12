@@ -324,7 +324,7 @@ void Init_Sound( void )
 	rb_define_alloc_func( globalSoundClass, Sound_Alloc );
 	
 	// Instance methods
-	rb_define_method( globalSoundClass, "initialize", Sound_Initialize, 0 );
+	rb_define_method( globalSoundClass, "initialize", Sound_Initialize, -1 );
 	rb_define_method( globalSoundClass, "initialize_copy", Sound_InitializeCopy, 1 );
 	rb_define_method( globalSoundClass, "play", Sound_Play, 0 );
 	rb_define_method( globalSoundClass, "pause", Sound_Pause, 0 );
