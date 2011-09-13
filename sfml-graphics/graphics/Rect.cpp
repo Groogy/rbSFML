@@ -27,8 +27,8 @@
 VALUE globalRectClass;
 
 /* Internal function
- * Forces the argument someValue to be a Vector2. IF it can convert it then it will.
- * So you can always safely asume that this function returns a Vector2 object.
+ * Forces the argument someValue to be a Rect. IF it can convert it then it will.
+ * So you can always safely asume that this function returns a Rect object.
  * If it fails then an exception will be thrown.
  */
 VALUE Rect_ForceType( VALUE someValue )
@@ -47,7 +47,8 @@ VALUE Rect_ForceType( VALUE someValue )
 	}
 	else
 	{
-		rb_raise( rb_eRuntimeError, "expected Array or Rect" );
+		VALUE typeName = rb_funcall( CLASS_OF( someValue ), rb_intern( "to_s" ), 0 );
+		rb_raise( rb_eTypeError, "Expected argument to be either Array or Rect but was given %s", rb_string_value_cstr( &typeName ) );
 	}
 }
 
@@ -95,32 +96,32 @@ VALUE Rect_SetHeight( VALUE self, VALUE aVal )
 
 sf::IntRect Rect_ToSFMLi( VALUE aRect )
 {
-	return sf::IntRect(		FIX2INT( Rect_GetLeft( aRect ) ), FIX2INT( Rect_GetTop( aRect ) ), 
-							FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) 
-					  );
+	return sf::IntRect( FIX2INT( Rect_GetLeft( aRect ) ), FIX2INT( Rect_GetTop( aRect ) ), 
+	                    FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) 
+	                  );
 }
 
 sf::FloatRect Rect_ToSFMLf( VALUE aRect )
 {
-	return sf::FloatRect(	NUM2DBL( Rect_GetLeft( aRect ) ), NUM2DBL( Rect_GetTop( aRect ) ), 
-							NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) 
-						);
+	return sf::FloatRect( NUM2DBL( Rect_GetLeft( aRect ) ), NUM2DBL( Rect_GetTop( aRect ) ), 
+	                      NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) 
+	                    );
 }
 
 VALUE Rect_ToRuby( const sf::IntRect &aRect )
 {
 	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
-						INT2FIX( aRect.Left ), INT2FIX( aRect.Top ), 
-						INT2FIX( aRect.Width ), INT2FIX( aRect.Height )
-					 );
+	                   INT2FIX( aRect.Left ), INT2FIX( aRect.Top ), 
+	                   INT2FIX( aRect.Width ), INT2FIX( aRect.Height )
+	                 );
 }
 
 VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 {
 	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
-						rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
-						rb_float_new( aRect.Width ), rb_float_new( aRect.Height )
-					 );
+	                   rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
+	                   rb_float_new( aRect.Width ), rb_float_new( aRect.Height )
+	                 );
 }
 
 /* Internal function
