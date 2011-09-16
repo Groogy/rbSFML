@@ -46,7 +46,11 @@
 VALUE globalBlendNamespace;
 
 /* External classes */
+#ifdef SFML_RUBYEXT_SFML // Compiling 'sfml.so'?
+extern VALUE globalWindowClass;
+#else
 VALUE globalWindowClass;
+#endif
 
 static bool CheckDependencies( void )
 {
