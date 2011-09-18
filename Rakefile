@@ -135,3 +135,8 @@ task :uninstall do
     system "rm -rf #{INST_DIR}"
   end
 end
+
+task :test do
+  load( "test/test.rb" )
+end
+
