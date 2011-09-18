@@ -114,14 +114,15 @@ end
 
 task :install do
   mkdir_p SO_DIR if !File.exist?(SO_DIR)
-  list = FileList.new(SO_DIR)
+  list = FileList.new(SO_DIR + "/*.so")
   if list.size == 0
     puts "Nothing to install."
   else
     mkdir_p INST_DIR if !File.exist?(INST_DIR)
     puts "Installing library to #{INST_DIR}"
     list.each do |file|
-      system "#{INSTALL} #{SO_DIR}/#{file}.so #{INST_DIR}"
+      puts "Installing #{file}..."
+      system "#{INSTALL} #{file} #{INST_DIR}"
     end
   end
 end
