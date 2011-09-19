@@ -26,6 +26,7 @@ Recommended is this setup:
 	* SFML2 - Latest revision
 	* Ruby-1.9.2p136
 	* Rake, version 0.8.7
+	* Yard, version 0.7.2
 
 #######################
 #       INSTALL       #
@@ -43,8 +44,8 @@ want to do.
 		  ruby installation. The path to place it manually is: 
 		  <pathto>/ruby192/lib/ruby/site_ruby/1.9.1/i386-msvcrt/sfml/
 		  The last folder "sfml" is probably one you'll have to create manually.
-	* rake rdoc
-		- Builds the rdoc documentation of the library.
+	* rake doc
+		- Builds the documentation of the library (requires yard).
 
 #######################
 #       CONTACT       #
@@ -55,3 +56,4 @@ Groogy:
 	* Github: https://github.com/Groogy
 Trickster:
 	* Forum: http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=869
+	* Github: https://github.com/TricksterGuy

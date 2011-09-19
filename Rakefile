@@ -1,5 +1,6 @@
 require 'rake'
 require 'rake/clean'
+require 'yard'
 require 'rbconfig'
 include Config
 
@@ -110,6 +111,18 @@ task :sfml do
   create_obj(:audio)
   create_obj(:sfml)
   create_so(:sfml)
+end
+
+YARD::Rake::YardocTask.new do |rd|
+	rd.name = 'doc'
+	rd.files = FileList.new('sfml-audio/audio/*.cpp') +
+	FileList.new('sfml-graphics/graphics/*.cpp') +
+        FileList.new('sfml-window/window/*.cpp') +
+        FileList.new('sfml-system/system/*.cpp') +
+        FileList.new('sfml-all/all/*.cpp') +
+        FileList.new('sfml-sfml/sfml/*.cpp') +
+        FileList.new('shared/*.cpp')
+
 end
 
 task :install do
