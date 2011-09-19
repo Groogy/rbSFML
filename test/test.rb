@@ -1,28 +1,42 @@
 require 'test/unit'
 
-if File.exist? './sfml/sfml.so'
-  require './sfml/sfml.so'
+begin
+  require 'sfml/sfml.so'
+rescue Exception
+  begin
+    require 'sfml/system.so'
+  rescue Exception
+  else
+    $system = true
+  end
+  begin
+    require 'sfml/window.so'
+  rescue Exception
+  else
+    $window = true
+  end
+  begin
+    require 'sfml/graphics.so'
+  rescue Exception
+  else
+    $graphics = true
+  end
+  begin
+    require 'sfml/audio.so'
+  rescue Exception
+  else
+    $audio = true
+  end
+else
   $system = true
   $window = true
   $graphics = true
   $audio = true
-else
-  if File.exist? './sfml/system.so'
-    require './sfml/system.so'
-    $system = true
-  end
-  if File.exist? './sfml/window.so'
-    require './sfml/window.so'
-    $window = true
-  end
-  if File.exist? './sfml/graphics.so'
-    require './sfml/graphics.so'
-    $graphics = true
-  end
-  if File.exist? './sfml/audio.so'
-    require './sfml/audio.so'
-    $audio = true
-  end
+end
+
+unless $system or $window or $graphics or $audio
+  puts "Failed to load rbSFML library. Nothing to test."
+  exit
 end
 
 if $system
