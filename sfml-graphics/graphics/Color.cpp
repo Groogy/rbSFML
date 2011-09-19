@@ -26,7 +26,7 @@
 VALUE globalColorClass;
 
 /* Internal function
- * Forces the argument someValue to be a Color. IF it can convert it then it will.
+ * Forces the argument someValue to be a Color. If it can convert it then it will.
  * So you can always safely asume that this function returns a Color object.
  * If it fails then an exception will be thrown.
  */
@@ -37,12 +37,11 @@ VALUE Color_ForceType( VALUE someValue )
 		VALUE arg1 = rb_ary_entry( someValue, 0 );
 		VALUE arg2 = rb_ary_entry( someValue, 1 );
 		VALUE arg3 = rb_ary_entry( someValue, 2 );
-		if( FIX2INT( rb_funcall( someValue, rb_intern( "size" ), 0 ) ) == 4 )
+		if( RARRAY_LEN( someValue ) == 4 )
 		{
 			VALUE arg4 = rb_ary_entry( someValue, 3 );
 			return rb_funcall( globalColorClass, rb_intern( "new" ), 4, arg1, arg2, arg3, arg4 );
 		}
-		
 		return rb_funcall( globalColorClass, rb_intern( "new" ), 3, arg1, arg2, arg3 );
 	}
 	else if( rb_obj_is_kind_of( someValue, globalColorClass ) == Qtrue )
@@ -51,65 +50,58 @@ VALUE Color_ForceType( VALUE someValue )
 	}
 	else
 	{
-		rb_raise( rb_eRuntimeError, "expected Array or Color" );
+		VALUE typeName = rb_funcall( CLASS_OF( someValue ), rb_intern( "to_s" ), 0 );
+		rb_raise( rb_eTypeError, "Expected argument to be either Array or Color but was given %s", rb_string_value_cstr( &typeName ) );
 	}
 }
 
 VALUE Color_GetR( VALUE self )
 {
-	static ID id = rb_intern( "r" );
-	return rb_funcall( self, id, 0 );
+	return rb_iv_get( self, "@r" );
 }
 VALUE Color_GetG( VALUE self )
 {
-	static ID id = rb_intern( "g" );
-	return rb_funcall( self, id, 0 );
+	return rb_iv_get( self, "@g" );
 }
 VALUE Color_GetB( VALUE self )
 {
-	static ID id = rb_intern( "b" );
-	return rb_funcall( self, id, 0 );
+	return rb_iv_get( self, "@b" );
 }
 VALUE Color_GetA( VALUE self )
 {
-	static ID id = rb_intern( "a" );
-	return rb_funcall( self, id, 0 );
+	return rb_iv_get( self, "@a" );
 }
 
-VALUE Color_SetR( VALUE self, VALUE aVal )
+void Color_SetR( VALUE self, VALUE aVal )
 {
-	static ID id = rb_intern( "r=" );
-	return rb_funcall( self, id, 1, aVal );
+	rb_iv_set( self, "@r", aVal );
 }
-VALUE Color_SetG( VALUE self, VALUE aVal )
+void Color_SetG( VALUE self, VALUE aVal )
 {
-	static ID id = rb_intern( "g=" );
-	return rb_funcall( self, id, 1, aVal );
+	rb_iv_set( self, "@g", aVal );
 }
-VALUE Color_SetB( VALUE self, VALUE aVal )
+void Color_SetB( VALUE self, VALUE aVal )
 {
-	static ID id = rb_intern( "b=" );
-	return rb_funcall( self, id, 1, aVal );
+	rb_iv_set( self, "@b", aVal );
 }
-VALUE Color_SetA( VALUE self, VALUE aVal )
+void Color_SetA( VALUE self, VALUE aVal )
 {
-	static ID id = rb_intern( "a=" );
-	return rb_funcall( self, id, 1, aVal );
+	rb_iv_set( self, "@a", aVal );
 }
 
 sf::Color Color_ToSFML( VALUE aColor )
 {
-	return sf::Color( 	FIX2INT( Color_GetR( aColor ) ), FIX2INT( Color_GetG( aColor ) ), 
-						FIX2INT( Color_GetB( aColor ) ), FIX2INT( Color_GetA( aColor ) ) 
-					);
+	return sf::Color( FIX2INT( Color_GetR( aColor ) ), FIX2INT( Color_GetG( aColor ) ), 
+                    FIX2INT( Color_GetB( aColor ) ), FIX2INT( Color_GetA( aColor ) ) 
+	                );
 }
 
 VALUE Color_ToRuby( const sf::Color &aColor )
 {
 	return rb_funcall( globalColorClass, rb_intern( "new" ), 4, 
-						INT2FIX( aColor.r ), INT2FIX( aColor.g ), 
-						INT2FIX( aColor.b ), INT2FIX( aColor.a )
-					 );
+	                   INT2FIX( aColor.r ), INT2FIX( aColor.g ), 
+	                   INT2FIX( aColor.b ), INT2FIX( aColor.a )
+	                 );
 }
 
 /* Internal function
@@ -220,15 +212,14 @@ static VALUE Color_Equal( VALUE self, VALUE anArgument )
  */
 static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 {
-	rb_iv_set( self, "@r", INT2FIX( 0 ) );
-	rb_iv_set( self, "@g", INT2FIX( 0 ) );
-	rb_iv_set( self, "@b", INT2FIX( 0 ) );
 	rb_iv_set( self, "@a", INT2FIX( 255 ) );
 	
 	switch( argc )
 	{
 		case 0:
-			// Nothing needs to be done
+      rb_iv_set( self, "@r", INT2FIX( 0 ) );
+      rb_iv_set( self, "@g", INT2FIX( 0 ) );
+      rb_iv_set( self, "@b", INT2FIX( 0 ) );
 			break;
 		case 1:
 			Color_internal_CopyFrom( self, args[0] );
@@ -290,9 +281,9 @@ void Init_Color( void )
 	
 	// Instance methods
 	rb_define_method( globalColorClass, "initialize", Color_Initialize, -1 );
-	rb_define_method( globalColorClass, "+", Color_Add, 1 );
-	rb_define_method( globalColorClass, "*", Color_Multiply, 1 );
-	rb_define_method( globalColorClass, "==", Color_Equal, 1 );
+	rb_define_method( globalColorClass, "+",          Color_Add,         1 );
+	rb_define_method( globalColorClass, "*",          Color_Multiply,    1 );
+	rb_define_method( globalColorClass, "==",         Color_Equal,       1 );
 	
 	// Attribute accessors
 	rb_define_attr( globalColorClass, "r", 1, 1 );
@@ -301,21 +292,30 @@ void Init_Color( void )
 	rb_define_attr( globalColorClass, "a", 1, 1 );
 	
 	// Class constants
-	rb_define_const( globalColorClass, "Black", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 0 ), INT2FIX( 0 ), INT2FIX( 0 ) ) );
-	rb_define_const( globalColorClass, "White", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 255 ), INT2FIX( 255 ) ) );
-	rb_define_const( globalColorClass, "Red", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 0 ), INT2FIX( 0 ) ) );
-	rb_define_const( globalColorClass, "Green", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 0 ), INT2FIX( 255 ), INT2FIX( 0 ) ) );
-	rb_define_const( globalColorClass, "Blue", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 0 ), INT2FIX( 0 ), INT2FIX( 255 ) ) );
-	rb_define_const( globalColorClass, "Yellow", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 255 ), INT2FIX( 0 ) ) );
-	rb_define_const( globalColorClass, "Magneta", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 0 ), INT2FIX( 255 ) ) );
-	rb_define_const( globalColorClass, "Cyan", rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 0 ), INT2FIX( 255 ), INT2FIX( 255 ) ) );
+  VALUE const_black   = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX(   0 ), INT2FIX(   0 ), INT2FIX(   0 ) );
+  VALUE const_white   = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 255 ), INT2FIX( 255 ) );
+  VALUE const_red     = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX(   0 ), INT2FIX(   0 ) );
+  VALUE const_green   = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX(   0 ), INT2FIX( 255 ), INT2FIX(   0 ) );
+  VALUE const_blue    = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX(   0 ), INT2FIX(   0 ), INT2FIX( 255 ) );
+  VALUE const_yellow  = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX( 255 ), INT2FIX(   0 ) );
+  VALUE const_magneta = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX( 255 ), INT2FIX(   0 ), INT2FIX( 255 ) );
+  VALUE const_cyan    = rb_funcall( globalColorClass, rb_intern( "new" ), 3, INT2FIX(   0 ), INT2FIX( 255 ), INT2FIX( 255 ) );
+  
+	rb_define_const( globalColorClass, "Black",   const_black   );
+	rb_define_const( globalColorClass, "White",   const_white   );
+	rb_define_const( globalColorClass, "Red",     const_red     );
+	rb_define_const( globalColorClass, "Green",   const_green   );
+	rb_define_const( globalColorClass, "Blue",    const_blue    );
+	rb_define_const( globalColorClass, "Yellow",  const_yellow  );
+	rb_define_const( globalColorClass, "Magneta", const_magneta );
+	rb_define_const( globalColorClass, "Cyan",    const_cyan    );
 	
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Black" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "White" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Red" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Green" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Blue" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Yellow" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Magneta" ) ), rb_intern( "freeze" ), 0 );
-	rb_funcall( rb_cvar_get( globalColorClass, rb_intern( "Cyan" ) ), rb_intern( "freeze" ), 0 );
+	rb_funcall( const_black,   rb_intern( "freeze" ), 0 );
+	rb_funcall( const_white,   rb_intern( "freeze" ), 0 );
+	rb_funcall( const_red,     rb_intern( "freeze" ), 0 );
+	rb_funcall( const_green,   rb_intern( "freeze" ), 0 );
+	rb_funcall( const_blue,    rb_intern( "freeze" ), 0 );
+	rb_funcall( const_yellow,  rb_intern( "freeze" ), 0 );
+	rb_funcall( const_magneta, rb_intern( "freeze" ), 0 );
+	rb_funcall( const_cyan,    rb_intern( "freeze" ), 0 );
 }
