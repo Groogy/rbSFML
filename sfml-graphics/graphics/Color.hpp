@@ -33,10 +33,10 @@ VALUE Color_GetG( VALUE self );
 VALUE Color_GetB( VALUE self );
 VALUE Color_GetA( VALUE self );
 
-VALUE Color_SetR( VALUE self, VALUE aVal );
-VALUE Color_SetG( VALUE self, VALUE aVal );
-VALUE Color_SetB( VALUE self, VALUE aVal );
-VALUE Color_SetA( VALUE self, VALUE aVal );
+void Color_SetR( VALUE self, VALUE aVal );
+void Color_SetG( VALUE self, VALUE aVal );
+void Color_SetB( VALUE self, VALUE aVal );
+void Color_SetA( VALUE self, VALUE aVal );
 
 sf::Color Color_ToSFML( VALUE aColor );
 VALUE Color_ToRuby( const sf::Color &aColor );

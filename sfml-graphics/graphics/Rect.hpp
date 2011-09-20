@@ -33,10 +33,10 @@ VALUE Rect_GetTop( VALUE self );
 VALUE Rect_GetWidth( VALUE self );
 VALUE Rect_GetHeight( VALUE self );
 
-VALUE Rect_SetLeft( VALUE self, VALUE aVal );
-VALUE Rect_SetTop( VALUE self, VALUE aVal );
-VALUE Rect_SetWidth( VALUE self, VALUE aVal );
-VALUE Rect_SetHeight( VALUE self, VALUE aVal );
+void Rect_SetLeft( VALUE self, VALUE aVal );
+void Rect_SetTop( VALUE self, VALUE aVal );
+void Rect_SetWidth( VALUE self, VALUE aVal );
+void Rect_SetHeight( VALUE self, VALUE aVal );
 
 sf::IntRect Rect_ToSFMLi( VALUE aRect );
 sf::FloatRect Rect_ToSFMLf( VALUE aRect );
