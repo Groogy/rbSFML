@@ -4,7 +4,6 @@ require 'sfml/window'
 app = SFML::Window.new( [800, 600], "My Ruby SFML" )
 app.framerate = 100
 app.position = [300, 300]
-input = app.input
 
 while app.open?
   while event = app.poll_event
@@ -13,7 +12,8 @@ while app.open?
     end
   end
   
-  p [input.mouse_x, input.mouse_y]
+  
+  p [SFML::Mouse.get_position.x, SFML::Mouse.get_position.y]
   
   app.display
 end
