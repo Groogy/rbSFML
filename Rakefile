@@ -41,7 +41,8 @@ def calc_md5
     list.each do |file|
 	  code = File.read(file)
       digest = Digest::MD5.hexdigest(code)
-	  OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}.o")
+	  s = ".s" if ARGV.include? "static"
+	  OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}#{s}.o")
 	end
   end
   OBJS[:sfml] = OBJS.values.reduce(:+) - OBJS[:all] - OBJS[:shared]
@@ -80,7 +81,13 @@ def create_so(src)
 end
 
 task :default => [:all]
-task :static
+
+task :static do
+  if ARGV == ["static"]
+	Rake::Task["all"].invoke
+  end
+end
+
 task :all => [:audio, :graphics, :window, :system] do
   create_obj(:all)
   create_so(:all)
@@ -121,15 +128,14 @@ task :sfml do
 end
 
 if ARGV.include? 'doc'
-  # Only requires yard if needed.
   require 'yard'
-  YARD::Rake::YardocTask.new do |rd|
-    rd.name = 'doc'
-    rd.files = FileList.new('sfml-audio/audio/*.cpp') +
-               FileList.new('sfml-graphics/graphics/*.cpp') +
-               FileList.new('sfml-window/window/*.cpp') +
-               FileList.new('sfml-system/system/*.cpp') +
-               FileList.new('shared/*.cpp')
+  YARD::Rake::YardocTask.new do |yard|
+    yard.name = 'doc'
+    yard.files = FileList.new('sfml-audio/doc/*.rb') +
+                 FileList.new('sfml-graphics/doc/*.rb') +
+                 FileList.new('sfml-window/doc/*.rb') +
+                 FileList.new('sfml-system/doc/*.rb') +
+                 FileList.new('shared/*.rb')
   end
 end
 

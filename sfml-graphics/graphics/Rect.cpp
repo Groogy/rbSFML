@@ -116,24 +116,15 @@ VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 	                 );
 }
 
-/* Internal function
- * Will copy the x and y from aSource to self.
- */
 static void Rect_internal_CopyFrom( VALUE self, VALUE aSource )
 {
 	VALUE rect = Rect_ForceType( aSource );
-  rb_iv_set( self, "@left",   rb_iv_get( rect, "@left"   ) );
-  rb_iv_set( self, "@top",    rb_iv_get( rect, "@top"    ) );
-  rb_iv_set( self, "@width",  rb_iv_get( rect, "@width"  ) );
-  rb_iv_set( self, "@height", rb_iv_get( rect, "@height" ) );
+	rb_iv_set( self, "@left",   rb_iv_get( rect, "@left"   ) );
+	rb_iv_set( self, "@top",    rb_iv_get( rect, "@top"    ) );
+	rb_iv_set( self, "@width",  rb_iv_get( rect, "@width"  ) );
+	rb_iv_set( self, "@height", rb_iv_get( rect, "@height" ) );
 }
 
-/* call-seq:
- *   rect.contains( x, y )	-> true or false
- *   rect.contains( vector2 )	-> true or false
- * 
- * Check if a point is inside the rectangle's area.
- */
 static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 {
 	VALUE pointX;
@@ -173,13 +164,6 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 	}
 }
 
-/* call-seq:
- *   rect.intersects( rectangle )	-> intersection rectangel or nil
- * 
- * Check the intersection between two rectangles.
- *
- * This method returns the overlapped rectangle if intersecting otherwise nil.
- */
 static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 {
 	VALUE selfLeft 	 = rb_iv_get( self, "@left" );
@@ -245,15 +229,25 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 	}
 }
 
-/* call-seq:
- *   Rect.new() 				-> rect
- *   Rect.new( [left, top, width, height] )	-> rect
- *   Rect.new( rect ) 				-> rect
- *   Rect.new( left, top, width, height )	-> rect
- *   Rect.new( position, size )			-> rect
- * 
- * Create a new rect instance.
- */
+static VALUE Rect_inspect( VALUE self )
+{
+	VALUE left   = rb_funcall( rb_iv_get( self, "@left"   ), rb_intern( "inspect" ), 0 );
+	VALUE top    = rb_funcall( rb_iv_get( self, "@top"    ), rb_intern( "inspect" ), 0 );
+	VALUE width  = rb_funcall( rb_iv_get( self, "@width"  ), rb_intern( "inspect" ), 0 );
+	VALUE height = rb_funcall( rb_iv_get( self, "@height" ), rb_intern( "inspect" ), 0 );
+	VALUE comma  = rb_str_new2( ", " );
+	VALUE result = rb_str_new2( "Rect(" );
+	rb_str_concat( result, left   );
+	rb_str_concat( result, comma  );
+	rb_str_concat( result, top    );
+	rb_str_concat( result, comma  );
+	rb_str_concat( result, width  );
+	rb_str_concat( result, comma  );
+	rb_str_concat( result, height );
+	rb_str_concat( result, rb_str_new2( ")" ) );
+	return result;
+}
+
 static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 {	
 	VALUE arg0;
@@ -314,60 +308,21 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 
 void Init_Rect( void )
 {
-/* SFML namespace which contains the classes of this module. */
 	VALUE sfml = rb_define_module( "SFML" );
-/* Utility class for manipulating 2D axis aligned rectangles.
- *
- * A rectangle is defined by its top-left corner and its size.
- *
- * It is a very simple class defined for convenience, so its member variables (left, top, width and height) are public 
- * and can be accessed directly, just like the vector classes (SFML::Vector2 and SFML::Vector3).
- *
- * To keep things simple, SFML::Rect doesn't define functions to emulate the properties that are not directly members 
- * (such as right, bottom, center, etc.), it rather only provides intersection functions.
- *
- * SFML::Rect uses the usual rules for its boundaries:
- *
- *   - The left and top edges are included in the rectangle's area
- *   - The right (left + width) and bottom (top + height) edges are excluded from the rectangle's area
- *
- * This means that SFML::Rect.new(0, 0, 1, 1) and SFML::Rect.new(1, 1, 1, 1) don't intersect.
- *
- * SFML::Rect works just like SFML::Vector2 and SFML::Vector3 when it comes to types. It will accept any value that is 
- * Numeric but all values must be of the same class.
- *
- * Usage example:
- *
- *   # Define a rectangle, located at (0, 0) with a size of 20x5
- *   r1 = SFML::Rect.new( 0, 0, 20, 5 )
- *
- *   # Define another rectangle, located at (4, 2) with a size of 18x10
- *   position = SFML::Vector2.new( 4, 2 )
- *   size = SFML::Vector2.new( 18, 10 )
- *   r2 = SFML::Rect.new( position, size )
- *  
- *   # Test intersections with the point (3, 1)
- *   b1 = r1.contains( 3, 1 ) # true
- *   b2 = r2.contains( 3, 1 ) # false
- *
- *   # Test the intersection between r1 and r2
- *   result = r1.intersects( r2 ) # If r1 don't intersect r2 then result would be nil
- *   # result == (4, 2, 16, 3)
- *
- */
 	globalRectClass = rb_define_class_under( sfml, "Rect", rb_cObject );
 	
 	// Instance methods
 	rb_define_method( globalRectClass, "initialize", Rect_Initialize, -1 );
 	rb_define_method( globalRectClass, "contains",   Rect_Contains,   -1 );
 	rb_define_method( globalRectClass, "intersects", Rect_Intersects,  1 );
-		
+	rb_define_method( globalRectClass, "inspect",    Rect_inspect,     0 );
+	
 	// Attribute accessors
 	rb_define_attr( globalRectClass, "left",   1, 1 );
 	rb_define_attr( globalRectClass, "top",    1, 1 );
 	rb_define_attr( globalRectClass, "width",  1, 1 );
 	rb_define_attr( globalRectClass, "height", 1, 1 );
-  
+	
 	// Instance aliases
 	rb_define_alias( globalRectClass, "Contains",   "contains"   );
 	rb_define_alias( globalRectClass, "include?",   "contains"   );
