@@ -122,26 +122,10 @@ VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 static void Rect_internal_CopyFrom( VALUE self, VALUE aSource )
 {
 	VALUE rect = Rect_ForceType( aSource );
-  rb_iv_set( self, "@left",   rb_iv_get( rect, "@left" ) );
-  rb_iv_set( self, "@top",    rb_iv_get( rect, "@top" ) );
-  rb_iv_set( self, "@width",  rb_iv_get( rect, "@width" ) );
+  rb_iv_set( self, "@left",   rb_iv_get( rect, "@left"   ) );
+  rb_iv_set( self, "@top",    rb_iv_get( rect, "@top"    ) );
+  rb_iv_set( self, "@width",  rb_iv_get( rect, "@width"  ) );
   rb_iv_set( self, "@height", rb_iv_get( rect, "@height" ) );
-}
-
-/* Internal function
- * Validate that the passed types are the same and numeric.
- */
-static void Rect_internal_ValidateTypes( VALUE aFirst, VALUE aSecond, VALUE aThird, VALUE aFourth )
-{
-	if( CLASS_OF( aFirst ) != CLASS_OF( aSecond ) || CLASS_OF( aFirst ) != CLASS_OF( aThird ) || CLASS_OF( aFirst ) != CLASS_OF( aFourth ) )
-	{
-		rb_raise( rb_eRuntimeError, "left, top, width and height must be of same type" );
-	}
-	
-	if( rb_obj_is_kind_of( aFirst, rb_cNumeric ) == Qfalse )
-	{
-		rb_raise( rb_eRuntimeError, "left, top, width and height must be numeric!" );
-	}
 }
 
 /* call-seq:
@@ -294,7 +278,28 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			rb_iv_set( self, "@height", Vector2_GetY( arg1 ) );
 			break;
 		case 4:
-			Rect_internal_ValidateTypes( args[0], args[1], args[2], args[3] );
+			// Ensure all arguments are kind of Numeric.
+			if ( rb_obj_is_kind_of( args[0], rb_cNumeric ) == Qfalse or 
+			     rb_obj_is_kind_of( args[1], rb_cNumeric ) == Qfalse or
+			     rb_obj_is_kind_of( args[2], rb_cNumeric ) == Qfalse or
+			     rb_obj_is_kind_of( args[3], rb_cNumeric ) == Qfalse )
+			{
+				rb_raise( rb_eRuntimeError, "left, top, width and height must be kind of Numeric." );
+			}
+			
+			// Ensure all arguments are instance of Float or Fixnum.
+			if ( rb_class_of(args[0]) != rb_cFixnum or 
+			     rb_class_of(args[1]) != rb_cFixnum or 
+			     rb_class_of(args[2]) != rb_cFixnum or 
+			     rb_class_of(args[3]) != rb_cFixnum )
+			{
+				ID id = rb_intern( "to_f" );
+				args[0] = rb_funcall( args[0], id, 0 );
+				args[1] = rb_funcall( args[1], id, 0 );
+				args[2] = rb_funcall( args[2], id, 0 );
+				args[3] = rb_funcall( args[3], id, 0 );
+			}
+			
 			rb_iv_set( self, "@left",   args[0]);
 			rb_iv_set( self, "@top",    args[1]);
 			rb_iv_set( self, "@width",  args[2]);
@@ -363,7 +368,7 @@ void Init_Rect( void )
 	rb_define_attr( globalRectClass, "width",  1, 1 );
 	rb_define_attr( globalRectClass, "height", 1, 1 );
   
-	// Instance Aliases
+	// Instance aliases
 	rb_define_alias( globalRectClass, "Contains",   "contains"   );
 	rb_define_alias( globalRectClass, "include?",   "contains"   );
 	rb_define_alias( globalRectClass, "Intersects", "intersects" );
