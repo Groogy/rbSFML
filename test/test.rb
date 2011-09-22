@@ -34,10 +34,12 @@ else
   $audio = true
 end
 
-unless $system or $window or $graphics or $audio
-  puts "Failed to load rbSFML library. Nothing to test."
-  exit
-end
+warn "Cannot load System module"   unless $system
+warn "Cannot load Window module"   unless $window
+warn "Cannot load Graphics module" unless $graphics
+warn "Cannot load Audio module"    unless $audio
+
+exit unless $system or $window or $graphics or $audio
 
 if $system
   

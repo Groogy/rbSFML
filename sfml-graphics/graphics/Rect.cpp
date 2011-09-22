@@ -231,11 +231,14 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 
 static VALUE Rect_inspect( VALUE self )
 {
-	VALUE left   = rb_funcall( rb_iv_get( self, "@left"   ), rb_intern( "inspect" ), 0 );
-	VALUE top    = rb_funcall( rb_iv_get( self, "@top"    ), rb_intern( "inspect" ), 0 );
-	VALUE width  = rb_funcall( rb_iv_get( self, "@width"  ), rb_intern( "inspect" ), 0 );
-	VALUE height = rb_funcall( rb_iv_get( self, "@height" ), rb_intern( "inspect" ), 0 );
-	VALUE comma  = rb_str_new2( ", " );
+	static VALUE comma  = rb_str_new2( ", " );
+	static VALUE rparen = rb_str_new2( ")" );
+	
+	VALUE left   = rb_inspect( rb_iv_get( self, "@left"   ) );
+	VALUE top    = rb_inspect( rb_iv_get( self, "@top"    ) );
+	VALUE width  = rb_inspect( rb_iv_get( self, "@width"  ) );
+	VALUE height = rb_inspect( rb_iv_get( self, "@height" ) );
+	
 	VALUE result = rb_str_new2( "Rect(" );
 	rb_str_concat( result, left   );
 	rb_str_concat( result, comma  );
@@ -244,7 +247,8 @@ static VALUE Rect_inspect( VALUE self )
 	rb_str_concat( result, width  );
 	rb_str_concat( result, comma  );
 	rb_str_concat( result, height );
-	rb_str_concat( result, rb_str_new2( ")" ) );
+	rb_str_concat( result, rparen );
+	
 	return result;
 }
 
@@ -278,7 +282,7 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			     rb_obj_is_kind_of( args[2], rb_cNumeric ) == Qfalse or
 			     rb_obj_is_kind_of( args[3], rb_cNumeric ) == Qfalse )
 			{
-				rb_raise( rb_eRuntimeError, "left, top, width and height must be kind of Numeric." );
+				rb_raise( rb_eArgError, "left, top, width and height must be kind of Numeric." );
 			}
 			
 			// Ensure all arguments are instance of Float or Fixnum.
@@ -287,6 +291,7 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			     rb_class_of(args[2]) != rb_cFixnum or 
 			     rb_class_of(args[3]) != rb_cFixnum )
 			{
+				// NOTE: Unsafely asumes that all Numeric objects respond to #to_f.
 				ID id = rb_intern( "to_f" );
 				args[0] = rb_funcall( args[0], id, 0 );
 				args[1] = rb_funcall( args[1], id, 0 );
