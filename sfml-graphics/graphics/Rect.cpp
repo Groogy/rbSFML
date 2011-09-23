@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any
  *    source distribution.
  */
- 
+
 #include "Rect.hpp"
 #include "Vector2.hpp"
 #include "main.hpp"
@@ -39,7 +39,7 @@ VALUE Rect_ForceType( VALUE someValue )
 		VALUE arg2 = rb_ary_entry( someValue, 1 );
 		VALUE arg3 = rb_ary_entry( someValue, 2 );
 		VALUE arg4 = rb_ary_entry( someValue, 3 );
-		return rb_funcall( globalRectClass, rb_intern( "new" ), 4, arg1, arg2, arg3, arg4 );
+		return rb_class_new_instance( 4, arg1, arg2, arg3, arg4, globalRectClass );
 	}
 	else if( rb_obj_is_kind_of( someValue, globalRectClass ) == Qtrue )
 	{
@@ -47,8 +47,9 @@ VALUE Rect_ForceType( VALUE someValue )
 	}
 	else
 	{
-		VALUE typeName = rb_funcall( CLASS_OF( someValue ), rb_intern( "to_s" ), 0 );
-		rb_raise( rb_eTypeError, "Expected argument to be either Array or Rect but was given %s", rb_string_value_cstr( &typeName ) );
+		rb_raise( rb_eTypeError,
+		          "Expected argument to be either Array or Rect but was given %s",
+		          rb_obj_classname( someValue ) );
 	}
 }
 
@@ -89,31 +90,29 @@ void Rect_SetHeight( VALUE self, VALUE aVal )
 sf::IntRect Rect_ToSFMLi( VALUE aRect )
 {
 	return sf::IntRect( FIX2INT( Rect_GetLeft( aRect ) ), FIX2INT( Rect_GetTop( aRect ) ), 
-	                    FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) 
-	                  );
+	                    FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) );
 }
 
 sf::FloatRect Rect_ToSFMLf( VALUE aRect )
 {
 	return sf::FloatRect( NUM2DBL( Rect_GetLeft( aRect ) ), NUM2DBL( Rect_GetTop( aRect ) ), 
-	                      NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) 
-	                    );
+	                      NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) );
 }
 
 VALUE Rect_ToRuby( const sf::IntRect &aRect )
 {
-	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
-	                   INT2FIX( aRect.Left ), INT2FIX( aRect.Top ), 
-	                   INT2FIX( aRect.Width ), INT2FIX( aRect.Height )
-	                 );
+	return rb_class_new_instance( 4,
+	                              INT2FIX( aRect.Left ), INT2FIX( aRect.Top ),
+	                              INT2FIX( aRect.Width ), INT2FIX( aRect.Height ),
+	                              globalRectClass );
 }
 
 VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 {
-	return rb_funcall( globalRectClass, rb_intern( "new" ), 4, 
-	                   rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
-	                   rb_float_new( aRect.Width ), rb_float_new( aRect.Height )
-	                 );
+	return rb_class_new_instance( 4,
+	                              rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
+	                              rb_float_new( aRect.Width ), rb_float_new( aRect.Height ), 
+	                              globalRectClass );
 }
 
 static void Rect_internal_CopyFrom( VALUE self, VALUE aSource )
@@ -129,9 +128,9 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 {
 	VALUE pointX;
 	VALUE pointY;
-	VALUE left 	 = rb_iv_get( self, "@left" );
-	VALUE top    = rb_iv_get( self, "@top" );
-	VALUE width  = rb_iv_get( self, "@width" );
+	VALUE left   = rb_iv_get( self, "@left"   );
+	VALUE top    = rb_iv_get( self, "@top"    );
+	VALUE width  = rb_iv_get( self, "@width"  );
 	VALUE height = rb_iv_get( self, "@height" );
   
 	switch( argc )
@@ -170,14 +169,15 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 	VALUE selfTop    = rb_iv_get( self, "@top" );
 	VALUE selfWidth  = rb_iv_get( self, "@width" );
 	VALUE selfHeight = rb_iv_get( self, "@height" );
-	VALUE selfRight  = rb_funcall( selfLeft, rb_intern( "+" ), 1, selfWidth );
-	VALUE selfBottom = rb_funcall( selfTop, rb_intern( "+" ), 1, selfHeight );
+	VALUE selfRight  = rb_funcall( selfLeft, rb_intern( "+" ), 1, selfWidth  );
+	VALUE selfBottom = rb_funcall( selfTop,  rb_intern( "+" ), 1, selfHeight );
+	
 	VALUE rectLeft 	 = rb_iv_get( aRect, "@left" );
 	VALUE rectTop    = rb_iv_get( aRect, "@top" );
 	VALUE rectWidth  = rb_iv_get( aRect, "@width" );
 	VALUE rectHeight = rb_iv_get( aRect, "@height" );
-	VALUE rectRight  = rb_funcall( rectLeft, rb_intern( "+" ), 1, rectWidth );
-	VALUE rectBottom = rb_funcall( rectTop, rb_intern( "+" ), 1, rectHeight );
+	VALUE rectRight  = rb_funcall( rectLeft, rb_intern( "+" ), 1, rectWidth  );
+	VALUE rectBottom = rb_funcall( rectTop,  rb_intern( "+" ), 1, rectHeight );
 	
 	VALUE left, top, right, bottom;
 	
@@ -217,11 +217,12 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 		bottom = rectBottom;
 	}
 	
-	if( rb_funcall( left, rb_intern( "<" ), 1, right) == Qtrue && rb_funcall( top, rb_intern( "<" ), 1, bottom) == Qtrue )
+	if( rb_funcall( left, rb_intern( "<" ), 1, right  ) == Qtrue && 
+	    rb_funcall( top,  rb_intern( "<" ), 1, bottom ) == Qtrue )
 	{
-		VALUE newWidth  = rb_funcall( right, rb_intern( "-" ), 1, left );
-		VALUE newHeight = rb_funcall( bottom, rb_intern( "-" ), 1, top );
-		return rb_funcall( globalRectClass, rb_intern( "new" ), 4, left, top, newWidth, newHeight );
+		VALUE width  = rb_funcall( right,  rb_intern( "-" ), 1, left );
+		VALUE height = rb_funcall( bottom, rb_intern( "-" ), 1, top  );
+		return rb_class_new_instance( 4, left, top, width, height, globalRectClass );
 	}
 	else
 	{
@@ -291,12 +292,10 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			     rb_class_of(args[2]) != rb_cFixnum or 
 			     rb_class_of(args[3]) != rb_cFixnum )
 			{
-				// NOTE: Unsafely asumes that all Numeric objects respond to #to_f.
-				ID id = rb_intern( "to_f" );
-				args[0] = rb_funcall( args[0], id, 0 );
-				args[1] = rb_funcall( args[1], id, 0 );
-				args[2] = rb_funcall( args[2], id, 0 );
-				args[3] = rb_funcall( args[3], id, 0 );
+				args[0] = rb_convert_type( args[0], T_FLOAT, "Float", "to_f" );
+				args[1] = rb_convert_type( args[1], T_FLOAT, "Float", "to_f" );
+				args[2] = rb_convert_type( args[2], T_FLOAT, "Float", "to_f" );
+				args[3] = rb_convert_type( args[3], T_FLOAT, "Float", "to_f" );
 			}
 			
 			rb_iv_set( self, "@left",   args[0]);

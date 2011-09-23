@@ -34,10 +34,10 @@ else
   $audio = true
 end
 
-warn "Cannot load System module"   unless $system
-warn "Cannot load Window module"   unless $window
-warn "Cannot load Graphics module" unless $graphics
-warn "Cannot load Audio module"    unless $audio
+warn "Warning: Cannot load System module"   unless $system
+warn "Warning: Cannot load Window module"   unless $window
+warn "Warning: Cannot load Graphics module" unless $graphics
+warn "Warning: Cannot load Audio module"    unless $audio
 
 exit unless $system or $window or $graphics or $audio
 
@@ -51,6 +51,7 @@ end
 
 if $graphics
   load "test/graphics/test_color.rb"
+  load "test/graphics/test_rect.rb"
 end
 
 if $audio
