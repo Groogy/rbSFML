@@ -66,7 +66,7 @@ VALUE Vector2_ForceType( VALUE someValue )
 	}
 	else
 	{
-		rb_raise( rb_eRuntimeError, "expected Array or Vector2" );
+		rb_raise( rb_eTypeError, "expected Array or Vector2" );
 	}
 }
 

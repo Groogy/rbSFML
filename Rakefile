@@ -45,7 +45,7 @@ def calc_md5
 	  OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}#{s}.o")
 	end
   end
-  OBJS[:sfml] = OBJS.values.reduce(:+) - OBJS[:all] - OBJS[:shared]
+  OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
 end
 
 def create_obj(src)
@@ -84,7 +84,8 @@ task :default => [:all]
 
 task :static do
   if ARGV == ["static"]
-	Rake::Task["all"].invoke
+    ARGV << "sfml"
+	Rake::Task["sfml"].invoke
   end
 end
 

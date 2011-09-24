@@ -278,9 +278,9 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			break;
 		case 4:
 			// Ensure all arguments are kind of Numeric.
-			VALIDATE_CLASS( args[0], rb_cNumeric, "left" );
-			VALIDATE_CLASS( args[1], rb_cNumeric, "top" );
-			VALIDATE_CLASS( args[2], rb_cNumeric, "width" );
+			VALIDATE_CLASS( args[0], rb_cNumeric, "left"   );
+			VALIDATE_CLASS( args[1], rb_cNumeric, "top"    );
+			VALIDATE_CLASS( args[2], rb_cNumeric, "width"  );
 			VALIDATE_CLASS( args[3], rb_cNumeric, "height" );
 			
 			// Ensure all arguments are instance of Float or Fixnum.
