@@ -39,7 +39,8 @@ VALUE Rect_ForceType( VALUE someValue )
 		VALUE arg2 = rb_ary_entry( someValue, 1 );
 		VALUE arg3 = rb_ary_entry( someValue, 2 );
 		VALUE arg4 = rb_ary_entry( someValue, 3 );
-		return rb_class_new_instance( 4, arg1, arg2, arg3, arg4, globalRectClass );
+		VALUE args[] = { arg1, arg2, arg3, arg4 };
+		return rb_class_new_instance( 4, args, globalRectClass );
 	}
 	else if( rb_obj_is_kind_of( someValue, globalRectClass ) == Qtrue )
 	{
@@ -95,24 +96,22 @@ sf::IntRect Rect_ToSFMLi( VALUE aRect )
 
 sf::FloatRect Rect_ToSFMLf( VALUE aRect )
 {
-	return sf::FloatRect( NUM2DBL( Rect_GetLeft( aRect ) ), NUM2DBL( Rect_GetTop( aRect ) ), 
+	return sf::FloatRect( NUM2DBL( Rect_GetLeft( aRect ) ),  NUM2DBL( Rect_GetTop( aRect ) ), 
 	                      NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) );
 }
 
 VALUE Rect_ToRuby( const sf::IntRect &aRect )
 {
-	return rb_class_new_instance( 4,
-	                              INT2FIX( aRect.Left ), INT2FIX( aRect.Top ),
-	                              INT2FIX( aRect.Width ), INT2FIX( aRect.Height ),
-	                              globalRectClass );
+	VALUE args[] = { INT2FIX( aRect.Left  ), INT2FIX( aRect.Top    ),
+	                 INT2FIX( aRect.Width ), INT2FIX( aRect.Height ) };
+	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
 VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 {
-	return rb_class_new_instance( 4,
-	                              rb_float_new( aRect.Left ), rb_float_new( aRect.Top ), 
-	                              rb_float_new( aRect.Width ), rb_float_new( aRect.Height ), 
-	                              globalRectClass );
+	VALUE args[] = { rb_float_new( aRect.Left  ), rb_float_new( aRect.Top    ), 
+	                 rb_float_new( aRect.Width ), rb_float_new( aRect.Height ) };
+	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
 static void Rect_internal_CopyFrom( VALUE self, VALUE aSource )
@@ -222,7 +221,8 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 	{
 		VALUE width  = rb_funcall( right,  rb_intern( "-" ), 1, left );
 		VALUE height = rb_funcall( bottom, rb_intern( "-" ), 1, top  );
-		return rb_class_new_instance( 4, left, top, width, height, globalRectClass );
+		VALUE args[] = { left, top, width, height };
+		return rb_class_new_instance( 4, args, globalRectClass );
 	}
 	else
 	{
@@ -260,10 +260,10 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 	switch( argc )
 	{
 		case 0:
-			rb_iv_set( self, "@left",   INT2NUM( 0 ) );
-			rb_iv_set( self, "@top",    INT2NUM( 0 ) );
-			rb_iv_set( self, "@width",  INT2NUM( 0 ) );
-			rb_iv_set( self, "@height", INT2NUM( 0 ) );
+			rb_iv_set( self, "@left",   INT2FIX( 0 ) );
+			rb_iv_set( self, "@top",    INT2FIX( 0 ) );
+			rb_iv_set( self, "@width",  INT2FIX( 0 ) );
+			rb_iv_set( self, "@height", INT2FIX( 0 ) );
 			break;
 		case 1:
 			Rect_internal_CopyFrom( self, args[0] );
@@ -278,19 +278,13 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			break;
 		case 4:
 			// Ensure all arguments are kind of Numeric.
-			if ( rb_obj_is_kind_of( args[0], rb_cNumeric ) == Qfalse or 
-			     rb_obj_is_kind_of( args[1], rb_cNumeric ) == Qfalse or
-			     rb_obj_is_kind_of( args[2], rb_cNumeric ) == Qfalse or
-			     rb_obj_is_kind_of( args[3], rb_cNumeric ) == Qfalse )
-			{
-				rb_raise( rb_eArgError, "left, top, width and height must be kind of Numeric." );
-			}
+			VALIDATE_CLASS( args[0], rb_cNumeric, "left" );
+			VALIDATE_CLASS( args[1], rb_cNumeric, "top" );
+			VALIDATE_CLASS( args[2], rb_cNumeric, "width" );
+			VALIDATE_CLASS( args[3], rb_cNumeric, "height" );
 			
 			// Ensure all arguments are instance of Float or Fixnum.
-			if ( rb_class_of(args[0]) != rb_cFixnum or 
-			     rb_class_of(args[1]) != rb_cFixnum or 
-			     rb_class_of(args[2]) != rb_cFixnum or 
-			     rb_class_of(args[3]) != rb_cFixnum )
+			if ( !IMMEDIATE_P(args[0]) or !IMMEDIATE_P(args[1]) or !IMMEDIATE_P(args[2]) or !IMMEDIATE_P(args[3]) )
 			{
 				args[0] = rb_convert_type( args[0], T_FLOAT, "Float", "to_f" );
 				args[1] = rb_convert_type( args[1], T_FLOAT, "Float", "to_f" );
@@ -331,6 +325,7 @@ void Init_Rect( void )
 	rb_define_alias( globalRectClass, "Contains",   "contains"   );
 	rb_define_alias( globalRectClass, "include?",   "contains"   );
 	rb_define_alias( globalRectClass, "Intersects", "intersects" );
+	rb_define_alias( globalRectClass, "to_s",       "inspect"    );
 	rb_define_alias( globalRectClass, "Left",       "left"       );
 	rb_define_alias( globalRectClass, "Left=",      "left="      );
 	rb_define_alias( globalRectClass, "Top",        "top"        );

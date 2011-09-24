@@ -1,5 +1,5 @@
 
-class TestColor < Test::Unit::TestCase
+class TestRect < Test::Unit::TestCase
   include SFML
   
   def test_initialization1
