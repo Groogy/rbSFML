@@ -20,23 +20,20 @@
  *    source distribution.
  */
  
-#include "global.hpp"
+#include "Error.hpp"
+#include "main.hpp"
+#include <SFML/System.hpp>
 
-VALUE globalSFMLNamespace;
+VALUE globalErrorClass = Qnil;
 
-VALUE RetrieveSFMLClass( const char * aName )
+void Init_Error( void )
 {
-	ID name = rb_intern( aName );
-	if( rb_cvar_defined( globalSFMLNamespace, name ) == Qfalse )
-	{
-		rb_raise( rb_eRuntimeError, "This module depends on SFML::%s", aName );
-	}
-	
-	return rb_cvar_get( globalSFMLNamespace, name );
-}
-
-void SFML_RaiseError( void )
-{
-	static ID symRaiseError = rb_intern( "raise_error" );
-	rb_funcall( globalSFMLNamespace, symRaiseError, 0 );
+/* SFML namespace which contains the classes of this module. */
+	VALUE sfml = rb_define_module( "SFML" );
+/* Utility class for manipulating time.
+ *
+ * SFML::Error is an exception class to show error messages from SFML in a
+ * more ruby like way.
+ */
+	globalErrorClass = rb_define_class_under( sfml, "Error", rb_eRuntimeError );
 }

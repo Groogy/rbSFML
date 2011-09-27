@@ -89,6 +89,7 @@ static VALUE RenderTexture_Create( int argc, VALUE *args, VALUE self )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }
@@ -206,8 +207,12 @@ static VALUE RenderTexture_SetActive( int argc, VALUE *args, VALUE self )
 		default:
 			rb_raise( rb_eArgError, "Expected 0 or 1 arguments but was given %d", argc );	
 	}
-	object->SetActive( flag );
-	return Qnil;
+	VALUE result = ( object->SetActive( flag ) == true ? Qtrue : Qfalse );
+	if( result == Qfalse )
+	{
+		SFML_RaiseError();
+	}
+	return result;
 }
 
 /* call-seq:

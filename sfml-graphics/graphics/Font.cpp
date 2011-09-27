@@ -56,6 +56,7 @@ static VALUE Font_LoadFromFile( VALUE self, VALUE aFileName )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }
@@ -82,6 +83,7 @@ static VALUE Font_LoadFromStream( VALUE self, VALUE aStream )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }

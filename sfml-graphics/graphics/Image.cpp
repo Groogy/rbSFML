@@ -60,6 +60,7 @@ static VALUE Image_LoadFromFile( VALUE self, VALUE aFileName )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }
@@ -85,6 +86,7 @@ static VALUE Image_LoadFromStream( VALUE self, VALUE aStream )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }
@@ -107,6 +109,7 @@ static VALUE Image_SaveToFile( VALUE self, VALUE aFileName )
 	}
 	else
 	{
+		SFML_RaiseError();
 		return Qfalse;
 	}
 }

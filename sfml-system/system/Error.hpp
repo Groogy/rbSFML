@@ -19,24 +19,13 @@
  * 3. This notice may not be removed or altered from any
  *    source distribution.
  */
- 
-#include "global.hpp"
 
-VALUE globalSFMLNamespace;
+#ifndef SFML_RUBYEXT_ERROR_HEADER_
+#define SFML_RUBYEXT_ERROR_HEADER_
 
-VALUE RetrieveSFMLClass( const char * aName )
-{
-	ID name = rb_intern( aName );
-	if( rb_cvar_defined( globalSFMLNamespace, name ) == Qfalse )
-	{
-		rb_raise( rb_eRuntimeError, "This module depends on SFML::%s", aName );
-	}
-	
-	return rb_cvar_get( globalSFMLNamespace, name );
-}
+#include "ruby.h"
 
-void SFML_RaiseError( void )
-{
-	static ID symRaiseError = rb_intern( "raise_error" );
-	rb_funcall( globalSFMLNamespace, symRaiseError, 0 );
-}
+// Ruby initiation function
+void Init_Error( void );
+
+#endif // SFML_RUBYEXT_ERROR_HEADER_

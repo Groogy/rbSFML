@@ -30,6 +30,7 @@
 extern VALUE globalSFMLNamespace;
 
 VALUE RetrieveSFMLClass( const char * aName );
+void SFML_RaiseError( void );
 
 typedef VALUE ( *RubyFunctionPtr )( ... );
 

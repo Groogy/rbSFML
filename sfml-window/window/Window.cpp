@@ -275,19 +275,26 @@ static VALUE Window_SetActive( VALUE self, VALUE anActiveFlag )
 {
 	sf::Window *object = NULL;
 	Data_Get_Struct( self, sf::Window, object );
+	VALUE result = Qfalse;
 	if( anActiveFlag == Qfalse )
 	{
-		object->SetActive( false );
+		result = ( object->SetActive( false ) == true ? Qtrue : Qfalse );
 	}
 	else if( anActiveFlag == Qtrue )
 	{
-		object->SetActive( true );
+		result = ( object->SetActive( true ) == true ? Qtrue : Qfalse );
 	}
 	else
 	{
 		rb_raise( rb_eTypeError, "Expected true or false" );
 	}
-	return Qnil;
+	
+	if( result == Qfalse )
+	{
+		SFML_RaiseError();
+	}
+	
+	return result;
 }
 
 /* call-seq:
