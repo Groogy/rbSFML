@@ -33,7 +33,11 @@ VALUE globalRectClass;
  */
 VALUE Rect_ForceType( VALUE someValue )
 {
-	if( rb_obj_is_kind_of( someValue, rb_cArray ) == Qtrue )
+	if( rb_obj_is_kind_of( someValue, globalRectClass ) == Qtrue )
+	{
+		return someValue;
+	}
+	else if( rb_obj_is_kind_of( someValue, rb_cArray ) == Qtrue )
 	{
 		VALUE arg1 = rb_ary_entry( someValue, 0 );
 		VALUE arg2 = rb_ary_entry( someValue, 1 );
@@ -42,15 +46,9 @@ VALUE Rect_ForceType( VALUE someValue )
 		VALUE args[] = { arg1, arg2, arg3, arg4 };
 		return rb_class_new_instance( 4, args, globalRectClass );
 	}
-	else if( rb_obj_is_kind_of( someValue, globalRectClass ) == Qtrue )
-	{
-		return someValue;
-	}
 	else
 	{
-		rb_raise( rb_eTypeError,
-		          "Expected argument to be either Array or Rect but was given %s",
-		          rb_obj_classname( someValue ) );
+		rb_raise( rb_eTypeError, "can't convert %s into Color", rb_obj_classname( someValue ) );
 	}
 }
 
@@ -232,14 +230,12 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 
 static VALUE Rect_inspect( VALUE self )
 {
-	static VALUE comma  = rb_str_new2( ", " );
-	static VALUE rparen = rb_str_new2( ")" );
-	
 	VALUE left   = rb_inspect( rb_iv_get( self, "@left"   ) );
 	VALUE top    = rb_inspect( rb_iv_get( self, "@top"    ) );
 	VALUE width  = rb_inspect( rb_iv_get( self, "@width"  ) );
 	VALUE height = rb_inspect( rb_iv_get( self, "@height" ) );
-	
+	VALUE comma  = rb_str_new2( ", " );
+	VALUE rparen = rb_str_new2( ")" );
 	VALUE result = rb_str_new2( "Rect(" );
 	rb_str_concat( result, left   );
 	rb_str_concat( result, comma  );
@@ -249,7 +245,6 @@ static VALUE Rect_inspect( VALUE self )
 	rb_str_concat( result, comma  );
 	rb_str_concat( result, height );
 	rb_str_concat( result, rparen );
-	
 	return result;
 }
 
@@ -326,6 +321,7 @@ void Init_Rect( void )
 	rb_define_alias( globalRectClass, "include?",   "contains"   );
 	rb_define_alias( globalRectClass, "Intersects", "intersects" );
 	rb_define_alias( globalRectClass, "to_s",       "inspect"    );
+	rb_define_alias( globalRectClass, "to_str",     "inspect"    );
 	rb_define_alias( globalRectClass, "Left",       "left"       );
 	rb_define_alias( globalRectClass, "Left=",      "left="      );
 	rb_define_alias( globalRectClass, "Top",        "top"        );

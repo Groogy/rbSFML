@@ -6,7 +6,6 @@ include Config
 
 CFLAGS = CONFIG['CFLAGS']
 CC = CONFIG['CC']
-INSTALL = "install"
 INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
 SFML_INC = ENV.key?('SFML_INCLUDE') ? ENV['SFML_INCLUDE'] : File.dirname(__FILE__) + '/includes'
 SFML_LIB = ENV.key?('SFML_LIB') ? ENV['SFML_LIB'] : File.dirname(__FILE__) + '/libs'
@@ -52,21 +51,21 @@ def create_obj(src)
   calc_md5
   list = SRCS[src]
   dir = "#{OBJ_DIR}/#{src}"
-  mkdir_p OBJ_DIR if !File.exist?(OBJ_DIR)
-  mkdir_p dir if !File.exist?(dir)
+  mkdir OBJ_DIR if !File.exist?(OBJ_DIR)
+  mkdir dir if !File.exist?(dir)
   s = ARGV.include?("static") ? "-DSFML_STATIC" : ""
   c = ARGV.include?("sfml") ? "-DSFML_RUBYEXT_SFML" : ""
   list.each_with_index do |file, i|
     obj = OBJS[src][i]
     next if File.exist?(obj)
     puts "Compiling #{src}/#{File.basename(file)}"
-    system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{c} -I#{SFML_INC} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -Ishared"
+    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{c} -I#{SFML_INC} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -Ishared"
   end
 end
 
 def create_so(src)
   file = "#{SO_DIR}/#{src}.so"
-  mkdir_p SO_DIR if !File.exist?(SO_DIR)
+  mkdir SO_DIR if !File.exist?(SO_DIR)
   puts "Creating #{src}.so"
   objs = OBJS[src]
   s = (ARGV.include?("static") ? "-s" : "")
@@ -77,7 +76,7 @@ def create_so(src)
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   end
-  system "#{LINK} -o #{file} #{objs.join(' ')} #{OBJS[:shared].join(' ')} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml}"
+  exit unless system "#{LINK} -o #{file} #{objs.join(' ')} #{OBJS[:shared].join(' ')} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml}"
 end
 
 task :default => [:all]
@@ -137,11 +136,12 @@ if ARGV.include? 'doc'
                  FileList.new('sfml-window/doc/*.rb') +
                  FileList.new('sfml-system/doc/*.rb') +
                  FileList.new('shared/*.rb')
+	yard.options << "--verbose" << "--no-save" << "--no-cache"
   end
 end
 
 task :install do
-  mkdir_p SO_DIR if !File.exist?(SO_DIR)
+  mkdir SO_DIR if !File.exist?(SO_DIR)
   list = FileList.new(SO_DIR + "/*.so")
   if list.size == 0
     puts "Nothing to install."
@@ -150,7 +150,7 @@ task :install do
     puts "Installing library to #{INST_DIR}"
     list.each do |file|
       puts "Installing #{file}..."
-      system "#{INSTALL} #{file} #{INST_DIR}"
+      copy_file(file, File.join(INST_DIR, File.basename(file)))
     end
   end
 end
@@ -160,7 +160,7 @@ task :uninstall do
     puts "Nothing to uninstall."
   else
     puts "Uninstalling library from #{INST_DIR}"
-    system "rm -rf #{INST_DIR}"
+    remove_dir(INST_DIR, true)
   end
 end
 

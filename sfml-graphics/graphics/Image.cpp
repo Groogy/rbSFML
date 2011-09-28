@@ -154,7 +154,8 @@ static VALUE Image_Create( int argc, VALUE *args, VALUE self )
 	
 	unsigned int width = 0;
 	unsigned int height = 0;
-	sf::Color color;
+	sf::Color tmp_color;
+	sf::Color* color = &tmp_color;  
 	
 	switch( argc )
 	{
@@ -176,7 +177,7 @@ static VALUE Image_Create( int argc, VALUE *args, VALUE self )
 			rb_raise( rb_eArgError, "Expected 2 or 3 arguments but was given %d", argc );
 	}
 	
-	object->Create( width, height, color );
+	object->Create( width, height, *color );
 	return Qnil;
 }
 

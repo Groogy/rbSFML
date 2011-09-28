@@ -35,7 +35,7 @@ class TestRect < Test::Unit::TestCase
     assert_equal("rect2 = #{rect2}", "rect2 = " + rect2.inspect)
   end
   
-  def test_errors
+  def test_exceptions
     assert_raise(TypeError)     { Rect.new("aaa")         }
     assert_raise(TypeError)     { Rect.new("aaa", "bbb")  }
     assert_raise(ArgumentError) { Rect.new(1, 2, 3)       }

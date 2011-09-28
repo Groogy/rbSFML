@@ -28,18 +28,20 @@
 
 VALUE Color_ForceType( VALUE someValue );
 
+// TODO: Make get and set functions static. (Using Color_ToSFML)
 VALUE Color_GetR( VALUE self );
 VALUE Color_GetG( VALUE self );
 VALUE Color_GetB( VALUE self );
 VALUE Color_GetA( VALUE self );
 
-void Color_SetR( VALUE self, VALUE aVal );
-void Color_SetG( VALUE self, VALUE aVal );
-void Color_SetB( VALUE self, VALUE aVal );
-void Color_SetA( VALUE self, VALUE aVal );
+VALUE Color_SetR( VALUE self, VALUE aVal );
+VALUE Color_SetG( VALUE self, VALUE aVal );
+VALUE Color_SetB( VALUE self, VALUE aVal );
+VALUE Color_SetA( VALUE self, VALUE aVal );
 
-sf::Color Color_ToSFML( VALUE aColor );
-VALUE Color_ToRuby( const sf::Color &aColor );
+sf::Color* Color_ToSFML( VALUE aColor );
+VALUE Color_ToRuby( sf::Color *aColor );
+VALUE Color_ToRuby( sf::Color &aColor );
 
 // Ruby initiation function
 void Init_Color( void );
