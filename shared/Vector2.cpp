@@ -76,8 +76,8 @@ VALUE Vector2_ForceType( VALUE someValue )
 static void Vector2_internal_CopyFrom( VALUE self, VALUE aSource )
 {
 	VALUE vectorSource = Vector2_ForceType( aSource );
-	VALUE x = Vector2_GetX( self );
-	VALUE y = Vector2_GetY( self );
+	VALUE x = Vector2_GetX( vectorSource );
+	VALUE y = Vector2_GetY( vectorSource );
 	
 	Vector2_SetX( self, x );
 	Vector2_SetY( self, y );
