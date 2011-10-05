@@ -24,12 +24,14 @@ module SFML
   #
   # Colors can also be added and modulated (multiplied) using the operators <tt>+</tt> and <tt>*</tt>. 
   # 
+  # A array whose arguments fits on <tt>Color.new()</tt> can be used as argument anywhere a color is requested.
+  # 
   # @example
   #   c1 = Color.new(255, 0, 0) # red
   #   c1.red = 0                # make it black
   #   c1.blue = 128             # make it dark blue
   class Color
-  
+    
     # @return [Fixnum]
     attr_accessor :r
     alias red r
@@ -51,9 +53,6 @@ module SFML
     # @overload initialize(color)
     #   Constructs the color from another color, with the same components.
     #   @param [Color] color Another color
-    # @overload initialize(ary)
-    #   Constructs the color from a array.
-    #   @param [Array] ary Array in the format <tt>[red, green, blue, alpha]</tt>, <tt>alpha</tt> is optional.
     # @overload initialize(red, green, blue, alpha=255)
     #   Constructs the color from its 4 RGBA components.
     #   @param [Numeric] red Red component (in the range <tt>[0, 255]</tt>)
@@ -89,6 +88,30 @@ module SFML
     def inspect
     end
     alias to_s inspect
+    
+    # Black predefined color. 
+    Black = Color.new(0, 0, 0)
+    
+    # White predefined color. 
+    White = Color.new(255, 255, 255)
+    
+    # Red predefined color. 
+    Red = Color.new(255, 0, 0)
+    
+    # Green predefined color. 
+    Green = Color.new(0, 255, 0)
+    
+    # Blue predefined color. 
+    Blue = Color.new(0, 0, 255)
+    
+    # Yellow predefined color. 
+    Yellow = Color.new(255, 255, 0)
+    
+    # Magenta predefined color. 
+    Magenta = Color.new(255, 0, 255)
+    
+    # Cyan predefined color. 
+    Cyan = Color.new(0, 255, 255)
     
   end
   

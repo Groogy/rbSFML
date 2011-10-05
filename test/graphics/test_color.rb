@@ -57,12 +57,12 @@ class TestColor < Test::Unit::TestCase
   end
   
   def test_exceptions
-    assert_raise(TypeError)     { Color.new("aaa")     }
-    assert_raise(ArgumentError) { Color.new(1, 2)      }
+    assert_raise(TypeError)     { Color.new("aaa") }
+    assert_raise(ArgumentError) { Color.new(1, 2) }
     assert_raise(TypeError)     { Color.new(0, 0, "0") }
-    assert_raise(RuntimeError)  { Color::White.r = 0   }
-    assert_raise(TypeError)     { Color::White + nil   }
-    assert_raise(TypeError)     { [5, 5, 5] + Color::Black } # TODO: Make it working
+    assert_raise(RuntimeError)  { Color::White.r = 0 }
+    assert_raise(TypeError)     { Color::White + nil }
+    assert_raise(TypeError)     { [5, 5, 5] + Color::Black }
   end
   
 end

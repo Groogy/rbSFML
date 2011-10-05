@@ -54,68 +54,87 @@ VALUE Color_ForceType( VALUE someValue )
 	}
 }
 
+// Ruby method: r
 VALUE Color_GetR( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->r );
 }
 
+// Ruby method: g
 VALUE Color_GetG( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->g );
 }
 
+// Ruby method: b
 VALUE Color_GetB( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->b );
 }
 
+// Ruby method: a
 VALUE Color_GetA( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->a );
 }
 
+// Ruby method: r=
 VALUE Color_SetR( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->r = FIX2INT( aVal );
 }
 
+// Ruby method: g=
 VALUE Color_SetG( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->g = FIX2INT( aVal );
 }
 
+// Ruby method: b=
 VALUE Color_SetB( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->b = FIX2INT( aVal );
 }
 
+// Ruby method: a=
 VALUE Color_SetA( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->a = FIX2INT( aVal );
 }
 
+/* Internal:
+ * Returns a SFML color from a ruby one.
+ */
 sf::Color* Color_ToSFML( VALUE aColor ) {
 	sf::Color *object = NULL;
 	Data_Get_Struct( aColor, sf::Color, object );
 	return object;
 }
 
-// For dynamicaly allocated pointers.
+/* Internal:
+ * Returns a ruby object from a pointer. It assumes that the pointer
+ * will not be freed and will never be invalid. (It frees the pointer
+ * when the object is gabage collected.)
+ */
 VALUE Color_ToRuby( sf::Color *aColor )
 {
 	return Data_Wrap_Struct( globalColorClass, 0, Color_Free, aColor );
 }
 
-// For objects that will be automatically deleted. (May cause Segmentation Fault)
+/* Internal:
+ * Returns a ruby object from a reference. It assumes that the return value
+ * will not be sent to the end user and that the object will free itself.
+ */
 VALUE Color_ToRuby( sf::Color &aColor )
 {
 	return Data_Wrap_Struct( globalColorClass, 0, 0, &aColor );
 }
 
+// Ruby method: initialize_copy
 static VALUE Color_InitializeCopy( VALUE self, VALUE aSource )
 {
 	sf::Color *object = Color_ToSFML( self );
@@ -123,6 +142,7 @@ static VALUE Color_InitializeCopy( VALUE self, VALUE aSource )
 	*object = *source;
 }
 
+// Ruby method: +
 static VALUE Color_Add( VALUE self, VALUE aRightOperand )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -131,6 +151,7 @@ static VALUE Color_Add( VALUE self, VALUE aRightOperand )
 	return Color_ToRuby( result );
 }
 
+// Ruby method: *
 static VALUE Color_Multiply( VALUE self, VALUE aRightOperand )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -139,6 +160,7 @@ static VALUE Color_Multiply( VALUE self, VALUE aRightOperand )
 	return Color_ToRuby( result );
 }
 
+// Ruby method: ==
 static VALUE Color_Equal( VALUE self, VALUE anArgument )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -146,6 +168,7 @@ static VALUE Color_Equal( VALUE self, VALUE anArgument )
 	return (*left) == (*right) ? Qtrue : Qfalse;
 }
 
+// Ruby method: inspect
 static VALUE Color_inspect( VALUE self )
 {
 	sf::Color* color = Color_ToSFML( self );
@@ -167,6 +190,7 @@ static VALUE Color_inspect( VALUE self )
 	return result;
 }
 
+// Ruby method: initialize
 static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 {
 	sf::Color *color = Color_ToSFML( self );
@@ -199,12 +223,22 @@ static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 	return self;
 }
 
+// Ruby method: memory_usage
+static VALUE Color_MemoryUsage( VALUE self )
+{
+	return INT2FIX( sizeof( sf::Color ) );
+}
+
+// Ruby method: allocate
 static VALUE Color_Alloc( VALUE aKlass )
 {
 	sf::Color *object = new sf::Color();
 	return Data_Wrap_Struct( aKlass, 0, Color_Free, object );
 }
 
+/* Internal:
+ * Creates the Color class.
+ */
 void Init_Color( void )
 {
 	VALUE sfml = rb_define_module( "SFML" );
@@ -228,6 +262,7 @@ void Init_Color( void )
 	rb_define_method( globalColorClass, "g=",              Color_SetG,            1 );
 	rb_define_method( globalColorClass, "b=",              Color_SetB,            1 );
 	rb_define_method( globalColorClass, "a=",              Color_SetA,            1 );
+	rb_define_method( globalColorClass, "memory_usage",    Color_MemoryUsage,     0 );
 	
 	// Instance aliasses
 	rb_define_alias( globalColorClass, "red",    "r"       );

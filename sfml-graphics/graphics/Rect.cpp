@@ -115,6 +115,9 @@ sf::FloatRect Rect_ToSFMLf( VALUE aRect )
 	                      NUM2DBL( Rect_GetWidth( aRect ) ), NUM2DBL( Rect_GetHeight( aRect ) ) );
 }
 
+/* Internal:
+ * Returns a ruby rect from a SFML one.
+ */
 VALUE Rect_ToRuby( const sf::IntRect &aRect )
 {
 	VALUE args[] = { INT2FIX( aRect.Left  ), INT2FIX( aRect.Top    ),
@@ -122,6 +125,9 @@ VALUE Rect_ToRuby( const sf::IntRect &aRect )
 	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
+/* Internal:
+ * Returns a ruby rect from a SFML one.
+ */
 VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 {
 	VALUE args[] = { rb_float_new( aRect.Left  ), rb_float_new( aRect.Top    ), 
@@ -129,6 +135,7 @@ VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
+// Ruby method: initialize_copy
 static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 {
 	rb_iv_set( self, "@left",   rb_iv_get( aSource, "@left"   ) );
@@ -137,7 +144,8 @@ static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 	rb_iv_set( self, "@height", rb_iv_get( aSource, "@height" ) );
 }
 
-static VALUE Rect_equal( VALUE self, VALUE aValue )
+// Ruby method: ==
+static VALUE Rect_Equal( VALUE self, VALUE aValue )
 {
 	if ( CLASS_OF( aValue ) != globalRectClass ) return Qfalse;
 	if ( !rb_equal( rb_iv_get( self, "@left"   ), rb_iv_get( aValue, "@left"   ) ) ) return Qfalse;
@@ -148,6 +156,7 @@ static VALUE Rect_equal( VALUE self, VALUE aValue )
 	return Qtrue;
 }
 
+// Ruby method: contains
 static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 {
 	VALUE pointX;
@@ -181,6 +190,7 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 	return ( first == Qtrue && second == Qtrue && third == Qtrue && fourth == Qtrue ) ? Qtrue : Qfalse;
 }
 
+// Ruby method: intersects
 static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 {
 	VALUE selfLeft 	 = rb_iv_get( self, "@left"   );
@@ -239,6 +249,7 @@ static VALUE Rect_inspect( VALUE self )
 	return result;
 }
 
+// Ruby method: initialize
 static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 {	
 	VALUE list[4];
@@ -262,7 +273,7 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			list[3] = Vector2_GetY( args[1] );
 			
 			// Ensure all arguments are instance of Float or Fixnum.
-			if ( !IMMEDIATE_P(list[0]) or !IMMEDIATE_P(list[1]) or !IMMEDIATE_P(list[2]) or !IMMEDIATE_P(list[3]) )
+			if ( !FIXNUM_P(list[0]) or !FIXNUM_P(list[1]) or !FIXNUM_P(list[2]) or !FIXNUM_P(list[3]) )
 			{
 				list[0] = rb_convert_type( list[0], T_FLOAT, "Float", "to_f" );
 				list[1] = rb_convert_type( list[1], T_FLOAT, "Float", "to_f" );
@@ -283,7 +294,7 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			VALIDATE_CLASS( args[3], rb_cNumeric, "height" );
 			
 			// Ensure all arguments are instance of Float or Fixnum.
-			if ( !IMMEDIATE_P(args[0]) or !IMMEDIATE_P(args[1]) or !IMMEDIATE_P(args[2]) or !IMMEDIATE_P(args[3]) )
+			if ( !FIXNUM_P(args[0]) or !FIXNUM_P(args[1]) or !FIXNUM_P(args[2]) or !FIXNUM_P(args[3]) )
 			{
 				args[0] = rb_convert_type( args[0], T_FLOAT, "Float", "to_f" );
 				args[1] = rb_convert_type( args[1], T_FLOAT, "Float", "to_f" );
@@ -303,6 +314,15 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 	return self;
 }
 
+// Ruby method: memory_usage
+static VALUE Rect_MemoryUsage( VALUE self )
+{
+	return INT2FIX(0);
+}
+
+/* Internal:
+ * Creates the Rect class.
+ */
 void Init_Rect( void )
 {
 	VALUE sfml = rb_define_module( "SFML" );
@@ -311,10 +331,11 @@ void Init_Rect( void )
 	// Instance methods
 	rb_define_method( globalRectClass, "initialize",      Rect_Initialize,     -1 );
 	rb_define_method( globalRectClass, "initialize_copy", Rect_InitializeCopy,  1 );
-	rb_define_method( globalRectClass, "==",              Rect_equal,           1 );
+	rb_define_method( globalRectClass, "==",              Rect_Equal,           1 );
 	rb_define_method( globalRectClass, "contains",        Rect_Contains,       -1 );
 	rb_define_method( globalRectClass, "intersects",      Rect_Intersects,      1 );
 	rb_define_method( globalRectClass, "inspect",         Rect_inspect,         0 );
+	rb_define_method( globalRectClass, "memory_usage",    Rect_MemoryUsage,     0 );
 	
 	// Attribute accessors
 	rb_define_attr( globalRectClass, "left",   1, 1 );
@@ -338,4 +359,8 @@ void Init_Rect( void )
 	rb_define_alias( globalRectClass, "Width=",     "width="     );
 	rb_define_alias( globalRectClass, "Height",     "height"     );
 	rb_define_alias( globalRectClass, "Height=",    "height="    );
+	rb_define_alias( globalRectClass, "x",          "left"       );
+	rb_define_alias( globalRectClass, "x=",         "left="      );
+	rb_define_alias( globalRectClass, "y",          "top"        );
+	rb_define_alias( globalRectClass, "y=",         "top="       );
 }

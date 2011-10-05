@@ -12,6 +12,8 @@ module SFML
   # 
   # This means that <tt>Rect(0, 0, 1, 1)</tt> and <tt>Rect(1, 1, 1, 1)</tt> don't intersect.
   # 
+  # A array whose arguments fits on <tt>Rect.new()</tt> can be used as argument anywhere a rect is requested.
+  # 
   # @example  
   #   # Define a rectangle, located at (0, 0) with a size of 20x5
   #   r1 = Rect.new(0, 0, 20, 5)
@@ -33,10 +35,12 @@ module SFML
     # @return [Fixnum, Float]
     attr_accessor :left
     alias Left left
+    alias x left
     
     # @return [Fixnum, Float]
     attr_accessor :top
     alias Top top
+    alias y top
     
     # @return [Fixnum, Float]
     attr_accessor :width
@@ -51,9 +55,6 @@ module SFML
     # @overload initialize(rect)
     #   Constructs the rectangle from another rectangle, with the same coordinates.
     #   @param [Rect] rect Another rectangle
-    # @overload initialize(ary)
-    #   Constructs the rectangle from a array.
-    #   @param [Array] ary Array in the format <tt>[left, top, width, height]</tt>
     # @overload initialize(left, top, width, height)
     #   Constructs the rectangle from its coordinates. Be careful, the last two parameters are the <tt>width</tt> and <tt>height</tt>, not the <tt>right</tt> and <tt>bottom</tt> coordinates!
     #   @param [Numeric] left Left coordinate of the rectangle
@@ -91,8 +92,6 @@ module SFML
     # @return [Rect, NilClass] The overlapped rectangle if they intersects, <tt>nil</tt> otherwise
     # @overload intersects(rect)
     #   @param [Rect] rect Another rectangle
-    # @overload intersects(ary)
-    #   @param [Array] ary Array in the format <tt>[left, top, width, height]</tt>
     def intersects
     end
     alias Intersects intersects
