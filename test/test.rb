@@ -2,37 +2,37 @@ require 'test/unit'
 
 begin
   require 'sfml/sfml.so'
-  puts "Loaded 'sfml/sfml.so'"
 rescue Exception
   begin
     require 'sfml/system.so'
-    puts "Loaded 'sfml/system.so'"
   rescue Exception
   else
+    puts "Loaded 'sfml/system.so'"
     $system = true
   end
   begin
     require 'sfml/window.so'
-    puts "Loaded 'sfml/window.so'"
   rescue Exception
   else
+    puts "Loaded 'sfml/window.so'"
     $window = true
   end
   begin
     require 'sfml/graphics.so'
-    puts "Loaded 'sfml/graphics.so'"
   rescue Exception
   else
+    puts "Loaded 'sfml/graphics.so'"
     $graphics = true
   end
   begin
     require 'sfml/audio.so'
-    puts "Loaded 'sfml/audio.so'"
   rescue Exception
   else
+    puts "Loaded 'sfml/audio.so'"
     $audio = true
   end
 else
+  puts "Loaded 'sfml/sfml.so'"
   $system = true
   $window = true
   $graphics = true

@@ -137,6 +137,17 @@ static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 	rb_iv_set( self, "@height", rb_iv_get( aSource, "@height" ) );
 }
 
+static VALUE Rect_equal( VALUE self, VALUE aValue )
+{
+	if ( CLASS_OF( aValue ) != globalRectClass ) return Qfalse;
+	if ( !rb_equal( rb_iv_get( self, "@left"   ), rb_iv_get( aValue, "@left"   ) ) ) return Qfalse;
+	if ( !rb_equal( rb_iv_get( self, "@top"    ), rb_iv_get( aValue, "@top"    ) ) ) return Qfalse;
+	if ( !rb_equal( rb_iv_get( self, "@width"  ), rb_iv_get( aValue, "@width"  ) ) ) return Qfalse;
+	if ( !rb_equal( rb_iv_get( self, "@height" ), rb_iv_get( aValue, "@height" ) ) ) return Qfalse;
+	if ( CLASS_OF( rb_iv_get( self, "@left"   ) ) != CLASS_OF( rb_iv_get( aValue, "@left"   ) )) return Qfalse;
+	return Qtrue;
+}
+
 static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 {
 	VALUE pointX;
@@ -149,6 +160,7 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 	switch( argc )
 	{
 		case 1:
+			args[0] = Vector2_ForceType( args[0] );
 			pointX = Vector2_GetX( args[0] );
 			pointY = Vector2_GetY( args[0] );
 			break;
@@ -178,6 +190,7 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 	VALUE selfRight  = rb_funcall( selfLeft, rb_intern( "+" ), 1, selfWidth  );
 	VALUE selfBottom = rb_funcall( selfTop,  rb_intern( "+" ), 1, selfHeight );
 	
+	aRect = Rect_ForceType( aRect );
 	VALUE rectLeft 	 = rb_iv_get( aRect, "@left"   );
 	VALUE rectTop    = rb_iv_get( aRect, "@top"    );
 	VALUE rectWidth  = rb_iv_get( aRect, "@width"  );
@@ -298,6 +311,7 @@ void Init_Rect( void )
 	// Instance methods
 	rb_define_method( globalRectClass, "initialize",      Rect_Initialize,     -1 );
 	rb_define_method( globalRectClass, "initialize_copy", Rect_InitializeCopy,  1 );
+	rb_define_method( globalRectClass, "==",              Rect_equal,           1 );
 	rb_define_method( globalRectClass, "contains",        Rect_Contains,       -1 );
 	rb_define_method( globalRectClass, "intersects",      Rect_Intersects,      1 );
 	rb_define_method( globalRectClass, "inspect",         Rect_inspect,         0 );
