@@ -37,14 +37,16 @@ typedef VALUE ( *RubyFunctionPtr )( ... );
 #define BINDING_VERSION "development"
 #define LIB_VERSION "2.0"
 
-#define MAX( x, y ) ( ( x ) < ( y ) ? ( y ) : ( x ) )
-#define MIN( x, y ) ( ( x ) > ( y ) ? ( x ) : ( y ) )
+#define MAX( x, y ) ( ( x ) > ( y ) ? ( x ) : ( y ) )
+#define MIN( x, y ) ( ( x ) < ( y ) ? ( x ) : ( y ) )
+
+#define RMAX( x, y ) ( rb_funcall( x, rb_intern( ">" ), 1, y ) == Qtrue ? ( x ) : ( y ) )
+#define RMIN( x, y ) ( rb_funcall( x, rb_intern( "<" ), 1, y ) == Qtrue ? ( x ) : ( y ) )
 
 #define VALIDATE_CLASS( variable, type, name ) \
 if( rb_obj_is_kind_of( variable, type ) != Qtrue ) \
 { \
-	VALUE typeName = rb_funcall( type, rb_intern( "to_s" ), 0 ); \
-	rb_raise( rb_eTypeError, "%s argument must be instance of %s", name, rb_string_value_cstr( &typeName ) ); \
+	rb_raise( rb_eTypeError, "%s argument must be kind of %s", name, rb_class2name( type ) ); \
 }
 
 #define rb_define_module_function( klass, name, func, argc, ... ) rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )

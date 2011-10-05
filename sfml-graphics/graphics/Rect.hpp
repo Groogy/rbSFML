@@ -38,6 +38,7 @@ void Rect_SetTop( VALUE self, VALUE aVal );
 void Rect_SetWidth( VALUE self, VALUE aVal );
 void Rect_SetHeight( VALUE self, VALUE aVal );
 
+int Rect_Type( VALUE aRect );
 sf::IntRect Rect_ToSFMLi( VALUE aRect );
 sf::FloatRect Rect_ToSFMLf( VALUE aRect );
 VALUE Rect_ToRuby( const sf::IntRect &aRect );

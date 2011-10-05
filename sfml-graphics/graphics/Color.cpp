@@ -46,19 +46,7 @@ VALUE Color_ForceType( VALUE someValue )
 	}
 	else if( rb_obj_is_kind_of( someValue, rb_cArray ) == Qtrue )
 	{
-		VALUE args[4];
-		args[0] = rb_ary_entry( someValue, 0 );
-		args[1] = rb_ary_entry( someValue, 1 );
-		args[2] = rb_ary_entry( someValue, 2 );
-		if( RARRAY_LEN( someValue ) == 4 )
-		{
-			args[3] = rb_ary_entry( someValue, 3 );
-			return rb_class_new_instance( 4, args, globalColorClass );
-		}
-		else
-		{
-			return rb_class_new_instance( 3, args, globalColorClass );
-		}
+		return rb_class_new_instance( RARRAY_LEN( someValue ), RARRAY_PTR( someValue ), globalColorClass );
 	}
 	else
 	{

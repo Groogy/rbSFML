@@ -89,6 +89,7 @@ module SFML
     def intersects
     end
     alias Intersects intersects
+    alias & intersects
     
     # Returns a formated string to represent the rectangle. 
     # @return [String] <tt>Rect(left, top, width, height)</tt>

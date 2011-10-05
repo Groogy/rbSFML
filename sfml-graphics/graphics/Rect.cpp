@@ -26,8 +26,8 @@
 
 VALUE globalRectClass;
 
-/* Internal function
- * Forces the argument someValue to be a Rect. IF it can convert it then it will.
+/* Internal:
+ * Forces the argument someValue to be a Rect. If it can convert it then it will.
  * So you can always safely asume that this function returns a Rect object.
  * If it fails then an exception will be thrown.
  */
@@ -39,12 +39,7 @@ VALUE Rect_ForceType( VALUE someValue )
 	}
 	else if( rb_obj_is_kind_of( someValue, rb_cArray ) == Qtrue )
 	{
-		VALUE arg1 = rb_ary_entry( someValue, 0 );
-		VALUE arg2 = rb_ary_entry( someValue, 1 );
-		VALUE arg3 = rb_ary_entry( someValue, 2 );
-		VALUE arg4 = rb_ary_entry( someValue, 3 );
-		VALUE args[] = { arg1, arg2, arg3, arg4 };
-		return rb_class_new_instance( 4, args, globalRectClass );
+		return rb_class_new_instance( RARRAY_LEN( someValue ), RARRAY_PTR( someValue ), globalRectClass );
 	}
 	else
 	{
@@ -52,46 +47,68 @@ VALUE Rect_ForceType( VALUE someValue )
 	}
 }
 
+// Getter functions:
 VALUE Rect_GetLeft( VALUE self )
 {
-  return rb_iv_get( self, "@left" );
+	return rb_iv_get( self, "@left" );
 }
 VALUE Rect_GetTop( VALUE self )
 {
-  return rb_iv_get( self, "@top" );
+	return rb_iv_get( self, "@top" );
 }
 VALUE Rect_GetWidth( VALUE self )
 {
-  return rb_iv_get( self, "@width" );
+	return rb_iv_get( self, "@width" );
 }
 VALUE Rect_GetHeight( VALUE self )
 {
-  return rb_iv_get( self, "@height" );
+	return rb_iv_get( self, "@height" );
 }
 
+// Setter functions:
 void Rect_SetLeft( VALUE self, VALUE aVal )
 {
-  rb_iv_set( self, "@left", aVal );
+	rb_iv_set( self, "@left", aVal );
 }
 void Rect_SetTop( VALUE self, VALUE aVal )
 {
-  rb_iv_set( self, "@top", aVal );
+	rb_iv_set( self, "@top", aVal );
 }
 void Rect_SetWidth( VALUE self, VALUE aVal )
 {
-  rb_iv_set( self, "@width", aVal );
+	rb_iv_set( self, "@width", aVal );
 }
 void Rect_SetHeight( VALUE self, VALUE aVal )
 {
-  rb_iv_set( self, "@height", aVal );
+	rb_iv_set( self, "@height", aVal );
 }
 
+/* Internal:
+ * Returns the type of the Rect, outputs 'i' for int rects or 'f' for float rects.
+ */
+int Rect_Type( VALUE aRect )
+{
+	switch( TYPE( rb_iv_get( aRect, "@left" ) ) )
+	{
+		case T_FIXNUM:
+			return 'i';
+		case T_FLOAT:
+			return 'f';
+	}
+}
+
+/* Internal:
+ * Returns a SFML rect from a ruby one. Argument must be a int ruby rect (see Rect_Type)
+ */
 sf::IntRect Rect_ToSFMLi( VALUE aRect )
 {
 	return sf::IntRect( FIX2INT( Rect_GetLeft( aRect ) ), FIX2INT( Rect_GetTop( aRect ) ), 
 	                    FIX2INT( Rect_GetWidth( aRect ) ), FIX2INT( Rect_GetHeight( aRect ) ) );
 }
 
+/* Internal:
+ * Returns a SFML rect from a ruby one. Argument must be a float ruby rect (see Rect_Type)
+ */
 sf::FloatRect Rect_ToSFMLf( VALUE aRect )
 {
 	return sf::FloatRect( NUM2DBL( Rect_GetLeft( aRect ) ),  NUM2DBL( Rect_GetTop( aRect ) ), 
@@ -112,13 +129,12 @@ VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
-static void Rect_internal_CopyFrom( VALUE self, VALUE aSource )
+static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 {
-	VALUE rect = Rect_ForceType( aSource );
-	rb_iv_set( self, "@left",   rb_iv_get( rect, "@left"   ) );
-	rb_iv_set( self, "@top",    rb_iv_get( rect, "@top"    ) );
-	rb_iv_set( self, "@width",  rb_iv_get( rect, "@width"  ) );
-	rb_iv_set( self, "@height", rb_iv_get( rect, "@height" ) );
+	rb_iv_set( self, "@left",   rb_iv_get( aSource, "@left"   ) );
+	rb_iv_set( self, "@top",    rb_iv_get( aSource, "@top"    ) );
+	rb_iv_set( self, "@width",  rb_iv_get( aSource, "@width"  ) );
+	rb_iv_set( self, "@height", rb_iv_get( aSource, "@height" ) );
 }
 
 static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
@@ -150,69 +166,31 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 	VALUE second = rb_funcall( pointX, rb_intern( "<" ), 1, rb_funcall( left, rb_intern( "+" ), 1, width ) );
 	VALUE third  = rb_funcall( pointY, rb_intern( ">=" ), 1, top );
 	VALUE fourth = rb_funcall( pointY, rb_intern( "<" ), 1, rb_funcall( top, rb_intern( "+" ), 1, height ) );
-	if( first == Qtrue && second == Qtrue && third == Qtrue && fourth == Qtrue )
-	{
-		return Qtrue;
-	}
-	else
-	{
-		return Qfalse;
-	}
+	return ( first == Qtrue && second == Qtrue && third == Qtrue && fourth == Qtrue ) ? Qtrue : Qfalse;
 }
 
 static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 {
-	VALUE selfLeft 	 = rb_iv_get( self, "@left" );
-	VALUE selfTop    = rb_iv_get( self, "@top" );
-	VALUE selfWidth  = rb_iv_get( self, "@width" );
+	VALUE selfLeft 	 = rb_iv_get( self, "@left"   );
+	VALUE selfTop    = rb_iv_get( self, "@top"    );
+	VALUE selfWidth  = rb_iv_get( self, "@width"  );
 	VALUE selfHeight = rb_iv_get( self, "@height" );
 	VALUE selfRight  = rb_funcall( selfLeft, rb_intern( "+" ), 1, selfWidth  );
 	VALUE selfBottom = rb_funcall( selfTop,  rb_intern( "+" ), 1, selfHeight );
 	
-	VALUE rectLeft 	 = rb_iv_get( aRect, "@left" );
-	VALUE rectTop    = rb_iv_get( aRect, "@top" );
-	VALUE rectWidth  = rb_iv_get( aRect, "@width" );
+	VALUE rectLeft 	 = rb_iv_get( aRect, "@left"   );
+	VALUE rectTop    = rb_iv_get( aRect, "@top"    );
+	VALUE rectWidth  = rb_iv_get( aRect, "@width"  );
 	VALUE rectHeight = rb_iv_get( aRect, "@height" );
 	VALUE rectRight  = rb_funcall( rectLeft, rb_intern( "+" ), 1, rectWidth  );
 	VALUE rectBottom = rb_funcall( rectTop,  rb_intern( "+" ), 1, rectHeight );
 	
 	VALUE left, top, right, bottom;
 	
-	if( rb_funcall( selfLeft, rb_intern( ">" ), 1, rectLeft ) == Qtrue )
-	{
-		left = selfLeft;
-	}
-	else
-	{
-		left = rectLeft;
-	}
-	
-	if( rb_funcall( selfTop, rb_intern( ">" ), 1, rectTop ) == Qtrue )
-	{
-		top = selfTop;
-	}
-	else
-	{
-		top = rectTop;
-	}
-	
-	if( rb_funcall( selfRight , rb_intern( "<" ), 1, rectRight ) == Qtrue )
-	{
-		right = selfRight;
-	}
-	else
-	{
-		right = rectRight;
-	}
-	
-	if( rb_funcall( selfBottom , rb_intern( "<" ), 1, rectBottom ) == Qtrue )
-	{
-		bottom = selfBottom;
-	}
-	else
-	{
-		bottom = rectBottom;
-	}
+	left   = RMAX( selfLeft,   rectLeft   );
+	top    = RMAX( selfTop,    rectTop    );
+	right  = RMIN( selfRight,  rectRight  );
+	bottom = RMIN( selfBottom, rectBottom );
 	
 	if( rb_funcall( left, rb_intern( "<" ), 1, right  ) == Qtrue && 
 	    rb_funcall( top,  rb_intern( "<" ), 1, bottom ) == Qtrue )
@@ -250,8 +228,7 @@ static VALUE Rect_inspect( VALUE self )
 
 static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 {	
-	VALUE arg0;
-	VALUE arg1;
+	VALUE list[4];
 	switch( argc )
 	{
 		case 0:
@@ -261,15 +238,29 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 			rb_iv_set( self, "@height", INT2FIX( 0 ) );
 			break;
 		case 1:
-			Rect_internal_CopyFrom( self, args[0] );
+			Rect_InitializeCopy( self, Rect_ForceType( args[0] ) );
 			break;
 		case 2:
-			arg0 = Vector2_ForceType( args[0] );
-			arg1 = Vector2_ForceType( args[1] );
-			rb_iv_set( self, "@left",   Vector2_GetX( arg0 ) );
-			rb_iv_set( self, "@top",    Vector2_GetY( arg0 ) );
-			rb_iv_set( self, "@width",  Vector2_GetX( arg1 ) );
-			rb_iv_set( self, "@height", Vector2_GetY( arg1 ) );
+			args[0] = Vector2_ForceType( args[0] );
+			args[1] = Vector2_ForceType( args[1] );
+			list[0] = Vector2_GetX( args[0] );
+			list[1] = Vector2_GetY( args[0] );
+			list[2] = Vector2_GetX( args[1] );
+			list[3] = Vector2_GetY( args[1] );
+			
+			// Ensure all arguments are instance of Float or Fixnum.
+			if ( !IMMEDIATE_P(list[0]) or !IMMEDIATE_P(list[1]) or !IMMEDIATE_P(list[2]) or !IMMEDIATE_P(list[3]) )
+			{
+				list[0] = rb_convert_type( list[0], T_FLOAT, "Float", "to_f" );
+				list[1] = rb_convert_type( list[1], T_FLOAT, "Float", "to_f" );
+				list[2] = rb_convert_type( list[2], T_FLOAT, "Float", "to_f" );
+				list[3] = rb_convert_type( list[3], T_FLOAT, "Float", "to_f" );
+			}
+			
+			rb_iv_set( self, "@left",   list[0]);
+			rb_iv_set( self, "@top",    list[1]);
+			rb_iv_set( self, "@width",  list[2]);
+			rb_iv_set( self, "@height", list[3]);
 			break;
 		case 4:
 			// Ensure all arguments are kind of Numeric.
@@ -305,10 +296,11 @@ void Init_Rect( void )
 	globalRectClass = rb_define_class_under( sfml, "Rect", rb_cObject );
 	
 	// Instance methods
-	rb_define_method( globalRectClass, "initialize", Rect_Initialize, -1 );
-	rb_define_method( globalRectClass, "contains",   Rect_Contains,   -1 );
-	rb_define_method( globalRectClass, "intersects", Rect_Intersects,  1 );
-	rb_define_method( globalRectClass, "inspect",    Rect_inspect,     0 );
+	rb_define_method( globalRectClass, "initialize",      Rect_Initialize,     -1 );
+	rb_define_method( globalRectClass, "initialize_copy", Rect_InitializeCopy,  1 );
+	rb_define_method( globalRectClass, "contains",        Rect_Contains,       -1 );
+	rb_define_method( globalRectClass, "intersects",      Rect_Intersects,      1 );
+	rb_define_method( globalRectClass, "inspect",         Rect_inspect,         0 );
 	
 	// Attribute accessors
 	rb_define_attr( globalRectClass, "left",   1, 1 );
@@ -318,8 +310,10 @@ void Init_Rect( void )
 	
 	// Instance aliases
 	rb_define_alias( globalRectClass, "Contains",   "contains"   );
+	rb_define_alias( globalRectClass, "contains?",  "contains"   );
 	rb_define_alias( globalRectClass, "include?",   "contains"   );
 	rb_define_alias( globalRectClass, "Intersects", "intersects" );
+	rb_define_alias( globalRectClass, "&",          "intersects" );
 	rb_define_alias( globalRectClass, "to_s",       "inspect"    );
 	rb_define_alias( globalRectClass, "to_str",     "inspect"    );
 	rb_define_alias( globalRectClass, "Left",       "left"       );
