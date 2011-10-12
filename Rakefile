@@ -6,17 +6,20 @@ include Config
 
 CFLAGS = CONFIG['CFLAGS']
 CC = CONFIG['CC']
-INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
-SFML_INC = ENV.key?('SFML_INCLUDE') ? ENV['SFML_INCLUDE'] : File.dirname(__FILE__) + '/includes'
-SFML_LIB = ENV.key?('SFML_LIB') ? ENV['SFML_LIB'] : File.dirname(__FILE__) + '/libs'
+
+SFML_INC = ENV['SFML_INCLUDE'] || File.dirname(__FILE__) + '/include'
+SFML_LIB = ENV['SFML_LIB'] || File.dirname(__FILE__) + '/lib'
+
 RUBY_INC = CONFIG['rubyhdrdir']
 RUBY_LIB = CONFIG['libdir']
 RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
+
 LINK = CONFIG['LDSHAREDXX']
 # Windows screws up this variable...
 LINK.sub!("$(if $(filter-out -g -g0,#{CONFIG["debugflags"]}),,-s)", '')
 LINK_FLAGS = CONFIG['DLDFLAGS'] + " " + CONFIG['LDFLAGS']
 LINK_FLAGS.sub!("$(DEFFILE)", "")
+
 SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
         :graphics => FileList.new('sfml-graphics/graphics/*.cpp'),
         :window   => FileList.new('sfml-window/window/*.cpp'),
@@ -24,37 +27,44 @@ SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
         :all      => FileList.new('sfml-all/all/*.cpp'),
         :sfml     => FileList.new('sfml-sfml/sfml/*.cpp'),
         :shared   => FileList.new('shared/*.cpp')}
-OBJ_DIR = 'obj'
-SO_DIR = 'sfml'
 LIBS = []
 OBJS = {}
 SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
+
+OBJ_DIR = 'obj'
+SO_DIR = 'sfml'
+DOC_DIR = 'doc'
+INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
+
 CLEAN.include(OBJ_DIR)
 CLOBBER.include(SO_DIR)
+CLOBBER.include(DOC_DIR)
 
 def calc_md5
   return if OBJS.size > 0
-  puts "Calculating MD5 checksum..."
+  puts "Calculating MD5 checksum"
   SRCS.each do |k, list|
     OBJS[k] = []
     list.each do |file|
-	  code = File.read(file)
+      code = File.read(file)
       digest = Digest::MD5.hexdigest(code)
-	  s = ".s" if ARGV.include? "static"
-	  OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}#{s}.o")
-	end
+      s = ".s" if ARGV.include? "static"
+      OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}#{s}.o")
+    end
   end
   OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
 end
 
-def create_obj(src)
+def compile_o(src)
   calc_md5
   list = SRCS[src]
   dir = "#{OBJ_DIR}/#{src}"
-  mkdir OBJ_DIR if !File.exist?(OBJ_DIR)
-  mkdir dir if !File.exist?(dir)
+  mkdir_p dir
   s = ARGV.include?("static") ? "-DSFML_STATIC" : ""
   c = ARGV.include?("sfml") ? "-DSFML_RUBYEXT_SFML" : ""
+  unless File.exist?(SFML_INC)
+    raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
+  end
   list.each_with_index do |file, i|
     obj = OBJS[src][i]
     next if File.exist?(obj)
@@ -65,10 +75,13 @@ end
 
 def create_so(src)
   file = "#{SO_DIR}/#{src}.so"
-  mkdir SO_DIR if !File.exist?(SO_DIR)
+  mkdir_p SO_DIR
   puts "Creating #{src}.so"
   objs = OBJS[src]
   s = (ARGV.include?("static") ? "-s" : "")
+  unless File.exist?(SFML_LIB)
+    raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
+  end
   sfml = case src
   when :audio;    "-lsfml-audio#{s} -lsfml-system#{s}"
   when :graphics; "-lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
@@ -84,69 +97,69 @@ task :default => [:all]
 task :static do
   if ARGV == ["static"]
     ARGV << "sfml"
-	Rake::Task["sfml"].invoke
+    Rake::Task["sfml"].invoke
   end
 end
 
 task :all => [:audio, :graphics, :window, :system] do
-  create_obj(:all)
+  compile_o(:all)
   create_so(:all)
 end
 
 task :audio do
-  create_obj(:shared)
-  create_obj(:audio)
+  compile_o(:shared)
+  compile_o(:audio)
   create_so(:audio)
 end
 
 task :graphics do
-  create_obj(:shared)
-  create_obj(:graphics)
+  compile_o(:shared)
+  compile_o(:graphics)
   create_so(:graphics)
 end
 
 task :window do
-  create_obj(:shared)
-  create_obj(:window)
+  compile_o(:shared)
+  compile_o(:window)
   create_so(:window)
 end
 
 task :system do
-  create_obj(:shared)
-  create_obj(:system)
+  compile_o(:shared)
+  compile_o(:system)
   create_so(:system)
 end
 
 task :sfml do
-  create_obj(:shared)
-  create_obj(:system)
-  create_obj(:window)
-  create_obj(:graphics)
-  create_obj(:audio)
-  create_obj(:sfml)
+  compile_o(:shared)
+  compile_o(:system)
+  compile_o(:window)
+  compile_o(:graphics)
+  compile_o(:audio)
+  compile_o(:sfml)
   create_so(:sfml)
 end
 
 if ARGV.include? 'doc'
   require 'yard'
   YARD::Rake::YardocTask.new do |yard|
-    yard.name = 'doc'
+    yard.name = DOC_DIR
     yard.files = FileList.new('sfml-audio/doc/*.rb') +
                  FileList.new('sfml-graphics/doc/*.rb') +
                  FileList.new('sfml-window/doc/*.rb') +
                  FileList.new('sfml-system/doc/*.rb') +
                  FileList.new('shared/*.rb')
-	yard.options << "--verbose" << "--no-save" << "--no-cache"
+    yard.options << "--verbose" << "--no-save" << "--no-cache"
   end
 end
 
 task :install do
-  mkdir SO_DIR if !File.exist?(SO_DIR)
-  list = FileList.new(SO_DIR + "/*.so")
+  mkdir_p SO_DIR
+  list = FileList.new("#{SO_DIR}/*.so")
   if list.size == 0
     puts "Nothing to install."
   else
-    mkdir_p INST_DIR if !File.exist?(INST_DIR)
+    mkdir_p INST_DIR
     puts "Installing library to #{INST_DIR}"
     list.each do |file|
       puts "Installing #{file}..."
@@ -165,5 +178,5 @@ task :uninstall do
 end
 
 task :test do
-  load( "test/test.rb" )
+  load "test/test.rb"
 end
