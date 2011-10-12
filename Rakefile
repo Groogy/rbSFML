@@ -20,6 +20,11 @@ LINK.sub!("$(if $(filter-out -g -g0,#{CONFIG["debugflags"]}),,-s)", '')
 LINK_FLAGS = CONFIG['DLDFLAGS'] + " " + CONFIG['LDFLAGS']
 LINK_FLAGS.sub!("$(DEFFILE)", "")
 
+OBJ_DIR = 'obj'
+SO_DIR = 'sfml'
+DOC_DIR = 'doc'
+INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
+
 SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
         :graphics => FileList.new('sfml-graphics/graphics/*.cpp'),
         :window   => FileList.new('sfml-window/window/*.cpp'),
@@ -30,11 +35,6 @@ SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
 LIBS = []
 OBJS = {}
 SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
-
-OBJ_DIR = 'obj'
-SO_DIR = 'sfml'
-DOC_DIR = 'doc'
-INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
 
 CLEAN.include(OBJ_DIR)
 CLOBBER.include(SO_DIR)
