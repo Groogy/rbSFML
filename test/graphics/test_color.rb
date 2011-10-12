@@ -8,6 +8,10 @@ class TestColor < Test::Unit::TestCase
     assert_equal(2, color.g)
     assert_equal(3, color.b)
     assert_equal(4, color.a)
+    assert_instance_of(Fixnum, color.r)
+    assert_instance_of(Fixnum, color.g)
+    assert_instance_of(Fixnum, color.b)
+    assert_instance_of(Fixnum, color.a)
   end
   
   def test_initialization2
@@ -17,6 +21,7 @@ class TestColor < Test::Unit::TestCase
     assert_equal(0, color.b)
     assert_equal(255, color.a)
     assert_equal(Color::Black, color)
+    assert_equal(color, Color.new)
   end
   
   def test_equal
@@ -24,10 +29,10 @@ class TestColor < Test::Unit::TestCase
     c1 = Color::Black
     c2 = Color.new(1, 1, 1)
     c3 = [1, 1, 1]
-    assert(c0 == c0)
-    assert(c0 == c1)
-    assert(c1 != c2)
-    assert(c2 == c3)
+    assert_equal(c0, c0)
+    assert_equal(c0, c1)
+    refute_equal(c1, c2)
+    assert_equal(c2, c3)
   end
   
   def test_add

@@ -8,10 +8,10 @@ class TestRect < Test::Unit::TestCase
     assert_equal(0, rect.top)
     assert_equal(0, rect.width)
     assert_equal(0, rect.height)
-    assert_equal(Fixnum, rect.left.class)
-    assert_equal(Fixnum, rect.top.class)
-    assert_equal(Fixnum, rect.width.class)
-    assert_equal(Fixnum, rect.height.class)
+    assert_instance_of(Fixnum, rect.left)
+    assert_instance_of(Fixnum, rect.top)
+    assert_instance_of(Fixnum, rect.width)
+    assert_instance_of(Fixnum, rect.height)
   end
   
   def test_initialization2
@@ -20,10 +20,10 @@ class TestRect < Test::Unit::TestCase
     assert_equal(15, rect.top)
     assert_equal(50, rect.width)
     assert_equal(40, rect.height)
-    assert_equal(Fixnum, rect.left.class)
-    assert_equal(Fixnum, rect.top.class)
-    assert_equal(Fixnum, rect.width.class)
-    assert_equal(Fixnum, rect.height.class)
+    assert_instance_of(Fixnum, rect.left)
+    assert_instance_of(Fixnum, rect.top)
+    assert_instance_of(Fixnum, rect.width)
+    assert_instance_of(Fixnum, rect.height)
     assert(rect != Rect.new(10.0, 15.0, 50.0, 40.0))
   end
   
@@ -33,10 +33,10 @@ class TestRect < Test::Unit::TestCase
     assert_equal(15.0, rect.top)
     assert_equal(50.0, rect.width)
     assert_equal(40.5, rect.height)
-    assert_equal(Float, rect.left.class)
-    assert_equal(Float, rect.top.class)
-    assert_equal(Float, rect.width.class)
-    assert_equal(Float, rect.height.class)
+    assert_instance_of(Float, rect.left)
+    assert_instance_of(Float, rect.top)
+    assert_instance_of(Float, rect.width)
+    assert_instance_of(Float, rect.height)
   end
   
   def test_initialization4
@@ -47,10 +47,10 @@ class TestRect < Test::Unit::TestCase
     assert_equal(15.0, rect.top)
     assert_equal(20.3, rect.width)
     assert_equal(10.5, rect.height)
-    assert_equal(Float, rect.left.class)
-    assert_equal(Float, rect.top.class)
-    assert_equal(Float, rect.width.class)
-    assert_equal(Float, rect.height.class)
+    assert_instance_of(Float, rect.left)
+    assert_instance_of(Float, rect.top)
+    assert_instance_of(Float, rect.width)
+    assert_instance_of(Float, rect.height)
     assert_equal(rect, Rect.new([pos, size]))
   end
   
@@ -77,8 +77,8 @@ class TestRect < Test::Unit::TestCase
     rect2 = Rect.new(10, 15, 50, 40.5)
     assert_equal("Rect(10, 15, 50, 40)", rect1.inspect)
     assert_equal("Rect(10.0, 15.0, 50.0, 40.5)", rect2.inspect)
-    assert_equal("rect1 = #{rect1}", "rect1 = " + rect1.inspect)
-    assert_equal("rect2 = #{rect2}", "rect2 = " + rect2.inspect)
+    assert_equal(" Rect(10, 15, 50, 40) ", " #{rect1} ")
+    assert_equal(" Rect(10.0, 15.0, 50.0, 40.5) ", " #{rect2} ")
   end
   
   def test_exceptions

@@ -1,50 +1,43 @@
 require 'test/unit'
 
 begin
-  require 'sfml/sfml.so'
-rescue Exception
-  begin
-    require 'sfml/system.so'
-  rescue Exception
-  else
-    puts "Loaded 'sfml/system.so'"
-    $system = true
-  end
-  begin
-    require 'sfml/window.so'
-  rescue Exception
-  else
-    puts "Loaded 'sfml/window.so'"
-    $window = true
-  end
-  begin
-    require 'sfml/graphics.so'
-  rescue Exception
-  else
-    puts "Loaded 'sfml/graphics.so'"
-    $graphics = true
-  end
-  begin
-    require 'sfml/audio.so'
-  rescue Exception
-  else
-    puts "Loaded 'sfml/audio.so'"
-    $audio = true
-  end
-else
-  puts "Loaded 'sfml/sfml.so'"
+  require 'sfml/sfml'
+  puts "Loaded 'sfml/sfml'"
   $system = true
   $window = true
   $graphics = true
   $audio = true
+rescue LoadError
+  begin
+    require 'sfml/system'
+    puts "Loaded 'sfml/system'"
+    $system = true
+  rescue LoadError
+  end
+  begin
+    require 'sfml/window'
+    puts "Loaded 'sfml/window'"
+    $window = true
+  rescue LoadError
+  end
+  begin
+    require 'sfml/graphics'
+    puts "Loaded 'sfml/graphics'"
+    $graphics = true
+  rescue LoadError
+  end
+  begin
+    require 'sfml/audio'
+    puts "Loaded 'sfml/audio'"
+    $audio = true
+  rescue LoadError
+  end
 end
 
 warn "Warning: Cannot load System module"   unless $system
 warn "Warning: Cannot load Window module"   unless $window
 warn "Warning: Cannot load Graphics module" unless $graphics
 warn "Warning: Cannot load Audio module"    unless $audio
-
-exit unless $system or $window or $graphics or $audio
 
 if $system
   
