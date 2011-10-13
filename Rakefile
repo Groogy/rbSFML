@@ -162,13 +162,14 @@ if ARGV.include? 'doc'
     yard.options << "--verbose" << "--no-save" << "--no-cache"
     at_exit do
       uri = "file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html"
-      case
-      when RUBY_PLATFORM.downcase.include?("darwin") # MAC
+      case RUBY_PLATFORM
+      when /(darwin|mac os)/i          # Mac
         system "open #{uri}"
-      when RUBY_PLATFORM.downcase.include?("mswin") ||
-           RUBY_PLATFORM.downcase.include?("mingw")  # Windows
-        system "start #{uri}"
-      when RUBY_PLATFORM.downcase.include?("linux")  # Linux
+      when /(mingw|mswin|windows)/i    # Windows
+        system "start /b #{uri}"
+      when /cygwin/i                   # Cygwin
+        system "cmd /C start /b #{uri}"
+      when /(linux|bsd|aix|solaris)/i  # Linux
         system "xdg-open #{uri}"
       else
         # WTF?
