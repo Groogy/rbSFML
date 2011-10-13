@@ -8,7 +8,7 @@ Dependencies
 
 Of course this means this library depends on SFML2 so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
-**For Windows users:** Currently you'll have to place SFML2 include headers and static library files in sub-folder of the rbSFML library in Windows for it to find them. Hopefully this will be fixed. Place the SFML include folder in a folder called "includes" and the static libraries in a folder called "libs".
+**For Windows users:** Currently you'll have to place SFML2 include headers and static library files in sub-folder of the rbSFML library in Windows for it to find them. Hopefully this will be fixed. Place the SFML include folder in a folder called "include" and the static libraries in a folder called "lib".
 
 Recommended is this setup: (lowers versions might work too)
 
@@ -25,6 +25,10 @@ Open up your choice of command-line terminal. Navigate to the folder where you h
 - `rake`
 
   This command just simply builds all the different modules.
+
+- `rake -T`
+
+  Show all available commands.
 
 - `rake install`
 

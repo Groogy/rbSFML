@@ -94,6 +94,7 @@ end
 
 task :default => [:all]
 
+desc "Link statically against SFML."
 task :static do
   if ARGV == ["static"]
     ARGV << "sfml"
@@ -101,35 +102,41 @@ task :static do
   end
 end
 
+desc "Build the whole rbSFML."
 task :all => [:audio, :graphics, :window, :system] do
   compile_o(:all)
   create_so(:all)
 end
 
+desc "Build only audio module (audio.so)."
 task :audio do
   compile_o(:shared)
   compile_o(:audio)
   create_so(:audio)
 end
 
+desc "Build only graphics module (graphics.so)."
 task :graphics do
   compile_o(:shared)
   compile_o(:graphics)
   create_so(:graphics)
 end
 
+desc "Build only window module (window.so)."
 task :window do
   compile_o(:shared)
   compile_o(:window)
   create_so(:window)
 end
 
+desc "Build only system module (system.so)."
 task :system do
   compile_o(:shared)
   compile_o(:system)
   create_so(:system)
 end
 
+desc "Build rbSFML as a single file (sfml.so)."
 task :sfml do
   compile_o(:shared)
   compile_o(:system)
@@ -139,6 +146,9 @@ task :sfml do
   compile_o(:sfml)
   create_so(:sfml)
 end
+
+desc "Build and open documentation."
+task :doc
 
 if ARGV.include? 'doc'
   require 'yard'
@@ -150,9 +160,24 @@ if ARGV.include? 'doc'
                  FileList.new('sfml-system/doc/*.rb') +
                  FileList.new('shared/*.rb')
     yard.options << "--verbose" << "--no-save" << "--no-cache"
+    at_exit do
+      uri = "file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html"
+      case
+      when RUBY_PLATFORM.downcase.include?("darwin") # MAC
+        system "open #{uri}"
+      when RUBY_PLATFORM.downcase.include?("mswin") ||
+           RUBY_PLATFORM.downcase.include?("mingw")  # Windows
+        system "start #{uri}"
+      when RUBY_PLATFORM.downcase.include?("linux")  # Linux
+        system "xdg-open #{uri}"
+      else
+        # WTF?
+      end
+    end
   end
 end
 
+desc "Install rbSFML."
 task :install do
   mkdir_p SO_DIR
   list = FileList.new("#{SO_DIR}/*.so")
@@ -168,6 +193,7 @@ task :install do
   end
 end
 
+desc "Uninstall rbSFML."
 task :uninstall do
   if !File.exist?(INST_DIR)
     puts "Nothing to uninstall."
@@ -177,6 +203,7 @@ task :uninstall do
   end
 end
 
+desc "Run tests."
 task :test do
   load "test/test.rb"
 end
