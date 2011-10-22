@@ -18,31 +18,31 @@ Recommended is this setup: (lowers versions might work too)
 Installation (on Windows)
 =========================
 
-1. Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
+1.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-2. Download and compile [SFML2](https://github.com/LaurentGomila/SFML). (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+2.  Download and compile [SFML2](https://github.com/LaurentGomila/SFML). (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
 
-3. Copy the `include` folder from SFML and the `lib` folder (here should be `.a` files) to the rbSFML folder. Move the `.dll` files from `lib` to your ruby/bin directory.
+3.  Copy the `include` folder from SFML and the `lib` folder (here should be `.a` files) to the rbSFML folder. Move the `.dll` files from `lib` to your ruby/bin directory.
 
-4. Run one of the following commands in your terminal:
+4.  Run one of the following commands in your terminal:
 
   - `rake`
-  
+
     Build all SFML as shared libraries (need DLLs) - recommended.
-  
+
   - `rake static`
-  
+
     Build all SFML as static libraries (don't need DLLs).
-    
+
   - `rake graphics`
-  
+
     Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it. You can also add `static`.
 
-5. Run `rake install`. (Needs administrative permission to access ruby installation directory)
+5.  Run `rake install`. (Needs administrative permission to access ruby installation directory)
 
-6. You can now use rbSFML in any ruby application with `require "sfml/all"`. 
+6.  You can now use rbSFML in any ruby application with `require "sfml/all"`. 
 
-7. You can run `rake test` to ensure everything is working and `rake doc` to build the documentation (at `doc/frames.html`).
+7.  You can run `rake test` to ensure everything is working and `rake doc` to build the documentation (at `doc/frames.html`).
 
 Questions? [Open a issue](https://github.com/Groogy/rbSFML/issues/new).
 
