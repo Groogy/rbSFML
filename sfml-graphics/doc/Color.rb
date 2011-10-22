@@ -77,7 +77,7 @@ module SFML
     end
     
     # @overload ==(other)
-    #   This operator compares two colors and check if they are equal.
+    #   This operator compares two colors and checks if they are equal.
     #   @param [Color] other The right operand
     #   @return [Color]
     def ==
@@ -88,6 +88,7 @@ module SFML
     def inspect
     end
     alias to_s inspect
+    alias to_str inspect
     
     # Black predefined color. 
     Black = Color.new(0, 0, 0)

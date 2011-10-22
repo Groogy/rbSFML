@@ -44,6 +44,7 @@ sf::FloatRect Rect_ToSFMLf( VALUE aRect );
 VALUE Rect_ToRuby( const sf::IntRect &aRect );
 VALUE Rect_ToRuby( const sf::FloatRect &aRect );
 
+// Ruby initiation function
 void Init_Rect( void );
 
 #endif // SFML_RUBYEXT_RECT_HEADER_

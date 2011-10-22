@@ -67,13 +67,13 @@ module SFML
     #   @param [Vector2] size Size of the rectangle
     def initialize
     end
-	
+    
     # @overload ==(other)
     #   Compares the rect with another one.
     #   @param [Rect] other Rect to be compared with.
-	#   @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt> otherwise
-	def ==
-	end
+    #   @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt> otherwise
+    def ==
+    end
     
     # Checks if a point is inside the rectangle's area.
     # @return [Boolean] <tt>true</tt> if the point is inside, <tt>false</tt> otherwise
@@ -101,8 +101,8 @@ module SFML
     # @return [String] <tt>Rect(left, top, width, height)</tt>
     def inspect
     end
-	alias to_s inspect
-	alias to_str inspect
+    alias to_s inspect
+    alias to_str inspect
     
   end
   

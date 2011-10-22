@@ -135,7 +135,7 @@ VALUE Rect_ToRuby( const sf::FloatRect &aRect )
 	return rb_class_new_instance( 4, args, globalRectClass );
 }
 
-// Ruby method: initialize_copy
+// Rect#initialize_copy
 static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 {
 	rb_iv_set( self, "@left",   rb_iv_get( aSource, "@left"   ) );
@@ -144,7 +144,7 @@ static VALUE Rect_InitializeCopy( VALUE self, VALUE aSource )
 	rb_iv_set( self, "@height", rb_iv_get( aSource, "@height" ) );
 }
 
-// Ruby method: ==
+// Rect#==
 static VALUE Rect_Equal( VALUE self, VALUE aValue )
 {
 	if ( CLASS_OF( aValue ) != globalRectClass ) return Qfalse;
@@ -156,7 +156,7 @@ static VALUE Rect_Equal( VALUE self, VALUE aValue )
 	return Qtrue;
 }
 
-// Ruby method: contains
+// Rect#contains
 static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 {
 	VALUE pointX;
@@ -190,7 +190,7 @@ static VALUE Rect_Contains( int argc, VALUE * args, VALUE self )
 	return ( first == Qtrue && second == Qtrue && third == Qtrue && fourth == Qtrue ) ? Qtrue : Qfalse;
 }
 
-// Ruby method: intersects
+// Rect#intersects
 static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 {
 	VALUE selfLeft 	 = rb_iv_get( self, "@left"   );
@@ -229,6 +229,7 @@ static VALUE Rect_Intersects( VALUE self, VALUE aRect )
 	}
 }
 
+// Rect#inspect
 static VALUE Rect_inspect( VALUE self )
 {
 	VALUE left   = rb_inspect( rb_iv_get( self, "@left"   ) );
@@ -249,7 +250,7 @@ static VALUE Rect_inspect( VALUE self )
 	return result;
 }
 
-// Ruby method: initialize
+// Rect#initialize
 static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 {	
 	VALUE list[4];
@@ -314,15 +315,13 @@ static VALUE Rect_Initialize( int argc, VALUE *args, VALUE self )
 	return self;
 }
 
-// Ruby method: memory_usage
+// Rect#memory_usage
 static VALUE Rect_MemoryUsage( VALUE self )
 {
 	return INT2FIX(0);
 }
 
-/* Internal:
- * Creates the Rect class.
- */
+// Ruby initiation function
 void Init_Rect( void )
 {
 	VALUE sfml = rb_define_module( "SFML" );

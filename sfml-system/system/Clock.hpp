@@ -24,6 +24,11 @@
 #define SFML_RUBYEXT_CLOCK_HEADER_
 
 #include "ruby.h"
+#include <SFML/System/Clock.hpp>
+
+sf::Clock* Clock_ToSFML( VALUE aClock );
+VALUE Clock_ToRuby( sf::Clock *aClock );
+VALUE Clock_ToRuby( sf::Clock &aClock );
 
 // Ruby initiation function
 void Init_Clock( void );

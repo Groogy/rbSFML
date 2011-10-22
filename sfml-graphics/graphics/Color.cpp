@@ -54,52 +54,52 @@ VALUE Color_ForceType( VALUE someValue )
 	}
 }
 
-// Ruby method: r
+// Color#r
 VALUE Color_GetR( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->r );
 }
 
-// Ruby method: g
+// Color#g
 VALUE Color_GetG( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->g );
 }
 
-// Ruby method: b
+// Color#b
 VALUE Color_GetB( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->b );
 }
 
-// Ruby method: a
+// Color#a
 VALUE Color_GetA( VALUE self ) {
 	sf::Color *color = Color_ToSFML( self );
 	return INT2FIX( color->a );
 }
 
-// Ruby method: r=
+// Color#r=
 VALUE Color_SetR( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->r = FIX2INT( aVal );
 }
 
-// Ruby method: g=
+// Color#g=
 VALUE Color_SetG( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->g = FIX2INT( aVal );
 }
 
-// Ruby method: b=
+// Color#b=
 VALUE Color_SetB( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
 	color->b = FIX2INT( aVal );
 }
 
-// Ruby method: a=
+// Color#a=
 VALUE Color_SetA( VALUE self, VALUE aVal ) {
 	rb_check_frozen( self );
 	sf::Color *color = Color_ToSFML( self );
@@ -110,9 +110,9 @@ VALUE Color_SetA( VALUE self, VALUE aVal ) {
  * Returns a SFML color from a ruby one.
  */
 sf::Color* Color_ToSFML( VALUE aColor ) {
-	sf::Color *object = NULL;
-	Data_Get_Struct( aColor, sf::Color, object );
-	return object;
+	sf::Color *color = NULL;
+	Data_Get_Struct( aColor, sf::Color, color );
+	return color;
 }
 
 /* Internal:
@@ -134,15 +134,16 @@ VALUE Color_ToRuby( sf::Color &aColor )
 	return Data_Wrap_Struct( globalColorClass, 0, 0, &aColor );
 }
 
-// Ruby method: initialize_copy
+// Color#initialize_copy
 static VALUE Color_InitializeCopy( VALUE self, VALUE aSource )
 {
 	sf::Color *object = Color_ToSFML( self );
 	sf::Color *source = Color_ToSFML( aSource );
 	*object = *source;
+	return self;
 }
 
-// Ruby method: +
+// Color#+
 static VALUE Color_Add( VALUE self, VALUE aRightOperand )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -151,7 +152,7 @@ static VALUE Color_Add( VALUE self, VALUE aRightOperand )
 	return Color_ToRuby( result );
 }
 
-// Ruby method: *
+// Color#*
 static VALUE Color_Multiply( VALUE self, VALUE aRightOperand )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -160,7 +161,7 @@ static VALUE Color_Multiply( VALUE self, VALUE aRightOperand )
 	return Color_ToRuby( result );
 }
 
-// Ruby method: ==
+// Color#==
 static VALUE Color_Equal( VALUE self, VALUE anArgument )
 {
 	sf::Color *left = Color_ToSFML( self );
@@ -168,7 +169,7 @@ static VALUE Color_Equal( VALUE self, VALUE anArgument )
 	return (*left) == (*right) ? Qtrue : Qfalse;
 }
 
-// Ruby method: inspect
+// Color#inspect
 static VALUE Color_inspect( VALUE self )
 {
 	sf::Color* color = Color_ToSFML( self );
@@ -190,7 +191,7 @@ static VALUE Color_inspect( VALUE self )
 	return result;
 }
 
-// Ruby method: initialize
+// Color#initialize
 static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 {
 	sf::Color *color = Color_ToSFML( self );
@@ -223,22 +224,20 @@ static VALUE Color_Initialize( int argc, VALUE * args, VALUE self )
 	return self;
 }
 
-// Ruby method: memory_usage
+// Color#memory_usage
 static VALUE Color_MemoryUsage( VALUE self )
 {
 	return INT2FIX( sizeof( sf::Color ) );
 }
 
-// Ruby method: allocate
+// Color.allocate
 static VALUE Color_Alloc( VALUE aKlass )
 {
 	sf::Color *object = new sf::Color();
 	return Data_Wrap_Struct( aKlass, 0, Color_Free, object );
 }
 
-/* Internal:
- * Creates the Color class.
- */
+// Ruby initiation function
 void Init_Color( void )
 {
 	VALUE sfml = rb_define_module( "SFML" );
