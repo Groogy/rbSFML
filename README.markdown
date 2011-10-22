@@ -8,8 +8,6 @@ Dependencies
 
 Of course this means this library depends on SFML2 so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
-**For Windows users:** Currently you'll have to place SFML2 include headers and static library files in sub-folder of the rbSFML library in Windows for it to find them. Hopefully this will be fixed. Place the SFML include folder in a folder called "include" and the static libraries in a folder called "lib".
-
 Recommended is this setup: (lowers versions might work too)
 
 - [SFML2 - Latest revision](https://github.com/LaurentGomila/SFML)
@@ -17,27 +15,36 @@ Recommended is this setup: (lowers versions might work too)
 - [Rake, version 0.9.2](https://rubygems.org/gems/rake)
 - [Yard, version 0.7.2](https://rubygems.org/gems/yard)
 
-Instalation
-===========
+Installation (on Windows)
+=========================
 
-Open up your choice of command-line terminal. Navigate to the folder where you have placed the rbSFML source. From here you can run different commands depending on what you want to do. 
+1. Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-- `rake`
+2. Download and compile [SFML2](https://github.com/LaurentGomila/SFML). (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
 
-  This command just simply builds all the different modules.
+3. Copy the `include` folder from SFML and the `lib` folder (here should be `.a` files) to the rbSFML folder. Move the `.dll` files from `lib` to your ruby/bin directory.
 
-- `rake -T`
+4. Run one of the following commands in your terminal:
 
-  Show all available commands.
+  - `rake`
+  
+    Build all SFML as shared libraries (need DLLs) - recommended.
+  
+  - `rake static`
+  
+    Build all SFML as static libraries (don't need DLLs).
+    
+  - `rake graphics`
+  
+    Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it. You can also add `static`.
 
-- `rake install`
+5. Run `rake install`. (Needs administrative permission to access ruby installation directory)
 
-  This command will build the modules and copy them to your ruby folder.  
-  **For Windows users:** If you got Vista or higher this operation might fail depending on your settings for adminstrators and where you actually placed your ruby installation. The path to place it manually is: `<pathto>\ruby192\lib\ruby\site_ruby\1.9.1\i386-msvcrt\sfml\` The last folder "sfml" is probably one you'll have to create manually.
+6. You can now use rbSFML in any ruby application with `require "sfml/all"`. 
 
-- `rake doc`
+7. You can run `rake test` to ensure everything is working and `rake doc` to build the documentation (at `doc/frames.html`).
 
-  Builds the documentation of the library (requires yard).
+Questions? [Open a issue](https://github.com/Groogy/rbSFML/issues/new).
 
 Contact
 =======
