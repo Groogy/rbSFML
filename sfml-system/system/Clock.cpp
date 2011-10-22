@@ -99,8 +99,8 @@ static VALUE Clock_inspect( VALUE self )
 {
 	sf::Clock *clock = Clock_ToSFML( self );
 	VALUE result = rb_str_new2( "Clock(" );
-	rb_str_concat( result, INT2FIX( clock->GetElapsedTime() ) );
-	rb_str_concat( result, rb_str_new2( ")" ) );
+	rb_str_append( result, rb_inspect( INT2FIX( clock->GetElapsedTime() ) ) );
+	rb_str_append( result, rb_str_new2( ")" ) );
 	return result;
 }
 
@@ -141,6 +141,7 @@ void Init_Clock( void )
 	rb_define_alias( globalClockClass, "getElapsedTime",   "GetElapsedTime" );
 	rb_define_alias( globalClockClass, "get_elapsed_time", "GetElapsedTime" );
 	rb_define_alias( globalClockClass, "time",             "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "to_s",             "inspect" );
-	rb_define_alias( globalClockClass, "to_str",           "inspect" );
+	rb_define_alias( globalClockClass, "reset",            "Reset"          );
+	rb_define_alias( globalClockClass, "to_s",             "inspect"        );
+	rb_define_alias( globalClockClass, "to_str",           "inspect"        );
 }

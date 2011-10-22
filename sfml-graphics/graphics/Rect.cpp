@@ -239,14 +239,14 @@ static VALUE Rect_inspect( VALUE self )
 	VALUE comma  = rb_str_new2( ", " );
 	VALUE rparen = rb_str_new2( ")" );
 	VALUE result = rb_str_new2( "Rect(" );
-	rb_str_concat( result, left   );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, top    );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, width  );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, height );
-	rb_str_concat( result, rparen );
+	rb_str_append( result, left   );
+	rb_str_append( result, comma  );
+	rb_str_append( result, top    );
+	rb_str_append( result, comma  );
+	rb_str_append( result, width  );
+	rb_str_append( result, comma  );
+	rb_str_append( result, height );
+	rb_str_append( result, rparen );
 	return result;
 }
 

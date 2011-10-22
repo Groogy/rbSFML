@@ -180,14 +180,14 @@ static VALUE Color_inspect( VALUE self )
 	VALUE comma  = rb_str_new2( ", " );
 	VALUE rparen = rb_str_new2( ")" );
 	VALUE result = rb_str_new2( "Color(" );
-	rb_str_concat( result, r      );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, g      );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, b      );
-	rb_str_concat( result, comma  );
-	rb_str_concat( result, a      );
-	rb_str_concat( result, rparen );
+	rb_str_append( result, r      );
+	rb_str_append( result, comma  );
+	rb_str_append( result, g      );
+	rb_str_append( result, comma  );
+	rb_str_append( result, b      );
+	rb_str_append( result, comma  );
+	rb_str_append( result, a      );
+	rb_str_append( result, rparen );
 	return result;
 }
 

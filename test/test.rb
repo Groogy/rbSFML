@@ -40,7 +40,7 @@ warn "Warning: Cannot load Graphics module" unless $graphics
 warn "Warning: Cannot load Audio module"    unless $audio
 
 if $system
-  
+  load "test/system/test_clock.rb"
 end
 
 if $window
