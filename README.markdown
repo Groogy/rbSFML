@@ -26,17 +26,9 @@ Installation (on Windows)
 
 4.  Run one of the following commands in your terminal:
 
-  - `rake`
-
-    Build all SFML as shared libraries (need DLLs) - recommended.
-
-  - `rake static`
-
-    Build all SFML as static libraries (don't need DLLs).
-
-  - `rake graphics`
-
-    Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it. You can also add `static`.
+  * `rake` - Build all SFML as shared libraries (need DLLs) - recommended.
+  * `rake static` - Build all SFML as static libraries (don't need DLLs).
+  * `rake graphics` - Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it. You can also add `static`.
 
 5.  Run `rake install`. (Needs administrative permission to access ruby installation directory)
 
