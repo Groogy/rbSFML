@@ -22,18 +22,11 @@
  
 #include "Error.hpp"
 #include "main.hpp"
-#include <SFML/System.hpp>
 
-VALUE globalErrorClass = Qnil;
+VALUE globalErrorClass;
 
 void Init_Error( void )
 {
-/* SFML namespace which contains the classes of this module. */
 	VALUE sfml = rb_define_module( "SFML" );
-/* Utility class for manipulating time.
- *
- * SFML::Error is an exception class to show error messages from SFML in a
- * more ruby like way.
- */
 	globalErrorClass = rb_define_class_under( sfml, "Error", rb_eRuntimeError );
 }
