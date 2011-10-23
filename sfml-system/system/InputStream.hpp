@@ -24,9 +24,18 @@
 #define SFML_RUBYEXT_INPUT_STREAM_HEADER_
 
 #include "ruby.h"
+#include <SFML/System/InputStream.hpp>
 
-extern VALUE globalInputStreamModule;
-
-void Init_InputStream( void );
+// Wrapper around a ruby IO object.
+class rbInputStream : public sf::InputStream
+{
+	VALUE myIO;
+public:
+	rbInputStream( VALUE aIO );
+	sf::Int64 Read( char *aDataBuffer, sf::Int64 aSize );
+	sf::Int64 Seek( sf::Int64 aPosition );
+	sf::Int64 Tell();
+	sf::Int64 GetSize();
+};
 
 #endif // SFML_RUBYEXT_INPUT_STREAM_HEADER_

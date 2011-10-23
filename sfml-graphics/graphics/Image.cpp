@@ -24,6 +24,7 @@
 #include "Color.hpp"
 #include "Rect.hpp"
 #include "main.hpp"
+#include "../../sfml-system/system/InputStream.hpp"
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
@@ -77,10 +78,8 @@ static VALUE Image_LoadFromStream( VALUE self, VALUE aStream )
 {
 	sf::Image *object = NULL;
 	Data_Get_Struct( self, sf::Image, object );
-	VALIDATE_CLASS( aStream, globalInputStreamClass, "stream" );
-	sf::InputStream *stream = NULL;
-	Data_Get_Struct( self, sf::InputStream, stream );
-	if( object->LoadFromStream( *stream ) == true )
+	rbInputStream stream( aStream );
+	if( object->LoadFromStream( stream ) == true )
 	{
 		return Qtrue;
 	}
@@ -479,6 +478,7 @@ void Init_Image( void )
 	rb_define_method( globalImageClass, "initialize", Image_Initialize, -1 );
 	rb_define_method( globalImageClass, "initialize_copy", Image_InitializeCopy, 1 );
 	rb_define_method( globalImageClass, "loadFromFile", Image_LoadFromFile, 1 );
+	rb_define_method( globalImageClass, "loadFromStream", Image_LoadFromStream, 1 );
 	rb_define_method( globalImageClass, "saveToFile", Image_SaveToFile, 1 );
 	rb_define_method( globalImageClass, "create", Image_Create, -1 );
 	rb_define_method( globalImageClass, "createMaskFromColor", Image_CreateMaskFromColor, -1 );

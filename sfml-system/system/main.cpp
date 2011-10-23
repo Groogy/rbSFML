@@ -86,5 +86,4 @@ void Init_system( void )
 	Init_Vector2();
 	Init_Vector3();
 	Init_NonCopyable();
-	Init_InputStream();
 }
