@@ -20,23 +20,21 @@
  *    source distribution.
  */
  
-#ifndef SFML_RUBYEXT_VECTOR3_HEADER_
-#define SFML_RUBYEXT_VECTOR3_HEADER_
+#ifndef SFML_RUBYEXT_VECTOR2_HEADER_
+#define SFML_RUBYEXT_VECTOR2_HEADER_
 
 #include "ruby.h"
+#include "main.hpp"
 
-extern VALUE globalVector3Class;
+VALUE Vector2_ForceType( VALUE someValue );
 
-VALUE Vector3_GetX( VALUE self );
-VALUE Vector3_GetY( VALUE self );
-VALUE Vector3_GetZ( VALUE self );
+int Vector2_Type( VALUE aVector2 );
+sf::Vector2i Vector2_ToSFMLi( VALUE aVector2 );
+sf::Vector2f Vector2_ToSFMLf( VALUE aVector2 );
+VALUE Vector2_ToRuby( const sf::Vector2i &aVector2 );
+VALUE Vector2_ToRuby( const sf::Vector2f &aVector2 );
 
-VALUE Vector3_SetX( VALUE self, VALUE aVal );
-VALUE Vector3_SetY( VALUE self, VALUE aVal );
-VALUE Vector3_SetZ( VALUE self, VALUE aVal );
+// Ruby initiation function
+void Init_Vector2( void );
 
-VALUE Vector3_ForceType( VALUE someValue );
-
-void Init_Vector3( void );
-
-#endif // SFML_RUBYEXT_VECTOR3_HEADER_
+#endif // SFML_RUBYEXT_VECTOR2_HEADER_

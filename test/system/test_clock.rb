@@ -9,7 +9,7 @@ class TestClock < Test::Unit::TestCase
   def test_equal
     clock1 = Clock.new
     clock2 = clock1.dup
-    sleep(0.01)
+    sleep(0.010)
     clock3 = Clock.new
     assert_equal(clock1, clock2)
     refute_equal(clock1, clock3)
@@ -24,16 +24,17 @@ class TestClock < Test::Unit::TestCase
   
   def test_elapsed_time
     clock = Clock.new
-    sleep(0.01)
-    assert(clock.time < 20)
+    sleep(0.010)
+    assert(clock.time < 15)
   end
   
   def test_reset
     clock = Clock.new
-    sleep(0.01)
+    sleep(0.010)
+    assert(clock.time < 15)
     clock.reset
-    sleep(0.01)
-    assert(clock.time < 20)
+    sleep(0.010)
+    assert(clock.time < 15)
   end
   
 end

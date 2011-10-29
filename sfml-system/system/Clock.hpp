@@ -24,6 +24,7 @@
 #define SFML_RUBYEXT_CLOCK_HEADER_
 
 #include "ruby.h"
+#include "main.hpp"
 #include <SFML/System/Clock.hpp>
 
 sf::Clock* Clock_ToSFML( VALUE aClock );

@@ -21,9 +21,9 @@
  */
  
 #include "Clock.hpp"
-#include "main.hpp"
 
-VALUE globalClockClass;
+static VALUE mSFML;
+static VALUE cClock;
 
 /* Free a heap allocated object 
  * Not accessible trough ruby directly!
@@ -49,7 +49,7 @@ sf::Clock* Clock_ToSFML( VALUE aClock ) {
  */
 VALUE Clock_ToRuby( sf::Clock *aClock )
 {
-	return Data_Wrap_Struct( globalClockClass, 0, Clock_Free, aClock );
+	return Data_Wrap_Struct( cClock, 0, Clock_Free, aClock );
 }
 
 /* Internal:
@@ -58,14 +58,13 @@ VALUE Clock_ToRuby( sf::Clock *aClock )
  */
 VALUE Clock_ToRuby( sf::Clock &aClock )
 {
-	return Data_Wrap_Struct( globalClockClass, 0, 0, &aClock );
+	return Data_Wrap_Struct( cClock, 0, 0, &aClock );
 }
 
 // Clock#elapsed_time
 static VALUE Clock_GetElapsedTime( VALUE self )
 {
-	sf::Clock *clock = NULL;
-	Data_Get_Struct( self, sf::Clock, clock );
+	sf::Clock *clock = Clock_ToSFML( self );
 	return INT2FIX( clock->GetElapsedTime() );
 }
 
@@ -95,7 +94,7 @@ static VALUE Clock_Equal( VALUE self, VALUE anArgument )
 }
 
 // Clock#inspect
-static VALUE Clock_inspect( VALUE self )
+static VALUE Clock_Inspect( VALUE self )
 {
 	sf::Clock *clock = Clock_ToSFML( self );
 	VALUE result = rb_str_new2( "Clock(" );
@@ -120,28 +119,28 @@ static VALUE Clock_Allocate( VALUE aKlass )
 // Ruby initiation function
 void Init_Clock( void )
 {
-	VALUE sfml = rb_define_module( "SFML" );
-	globalClockClass = rb_define_class_under( sfml, "Clock", rb_cObject );
+	mSFML = rb_define_module( "SFML" );
+	cClock = rb_define_class_under( mSFML, "Clock", rb_cObject );
 	
 	// Class methods
-	rb_define_alloc_func( globalClockClass, Clock_Allocate );
+	rb_define_alloc_func( cClock, Clock_Allocate );
 	
 	// Instance methods
-	rb_define_method( globalClockClass, "initialize_copy", Clock_InitializeCopy, 1 );
-	rb_define_method( globalClockClass, "GetElapsedTime",  Clock_GetElapsedTime, 0 );
-	rb_define_method( globalClockClass, "Reset",           Clock_Reset,          0 );
-	rb_define_method( globalClockClass, "==",              Clock_Equal,          1 );
-	rb_define_method( globalClockClass, "inspect",         Clock_inspect,        0 );
-	rb_define_method( globalClockClass, "memory_usage",    Clock_MemoryUsage,    0 );
+	rb_define_method( cClock, "initialize_copy", Clock_InitializeCopy, 1 );
+	rb_define_method( cClock, "GetElapsedTime",  Clock_GetElapsedTime, 0 );
+	rb_define_method( cClock, "Reset",           Clock_Reset,          0 );
+	rb_define_method( cClock, "==",              Clock_Equal,          1 );
+	rb_define_method( cClock, "inspect",         Clock_Inspect,        0 );
+	rb_define_method( cClock, "memory_usage",    Clock_MemoryUsage,    0 );
 	
 	// Instance aliasses
-	rb_define_alias( globalClockClass, "ElapsedTime",      "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "elapsedTime",      "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "elapsed_time",     "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "getElapsedTime",   "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "get_elapsed_time", "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "time",             "GetElapsedTime" );
-	rb_define_alias( globalClockClass, "reset",            "Reset"          );
-	rb_define_alias( globalClockClass, "to_s",             "inspect"        );
-	rb_define_alias( globalClockClass, "to_str",           "inspect"        );
+	rb_define_alias( cClock, "ElapsedTime",      "GetElapsedTime" );
+	rb_define_alias( cClock, "elapsedTime",      "GetElapsedTime" );
+	rb_define_alias( cClock, "elapsed_time",     "GetElapsedTime" );
+	rb_define_alias( cClock, "getElapsedTime",   "GetElapsedTime" );
+	rb_define_alias( cClock, "get_elapsed_time", "GetElapsedTime" );
+	rb_define_alias( cClock, "time",             "GetElapsedTime" );
+	rb_define_alias( cClock, "reset",            "Reset"          );
+	rb_define_alias( cClock, "to_s",             "inspect"        );
+	rb_define_alias( cClock, "to_str",           "inspect"        );
 }

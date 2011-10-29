@@ -20,13 +20,21 @@
  *    source distribution.
  */
  
-#include "Error.hpp"
+#ifndef SFML_RUBYEXT_VECTOR3_HEADER_
+#define SFML_RUBYEXT_VECTOR3_HEADER_
+
+#include "ruby.h"
 #include "main.hpp"
 
-VALUE globalErrorClass;
+VALUE Vector3_ForceType( VALUE someValue );
 
-void Init_Error( void )
-{
-	VALUE sfml = rb_define_module( "SFML" );
-	globalErrorClass = rb_define_class_under( sfml, "Error", rb_eRuntimeError );
-}
+int Vector3_Type( VALUE aVector3 );
+sf::Vector3i Vector2_ToSFMLi( VALUE aVector3 );
+sf::Vector3f Vector2_ToSFMLf( VALUE aVector3 );
+VALUE Vector3_ToRuby( const sf::Vector2i &aVector3 );
+VALUE Vector3_ToRuby( const sf::Vector2f &aVector3 );
+
+// Ruby initiation function
+void Init_Vector3( void );
+
+#endif // SFML_RUBYEXT_VECTOR2_HEADER_

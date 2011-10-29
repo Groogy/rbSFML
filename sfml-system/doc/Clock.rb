@@ -11,11 +11,10 @@ module SFML
   #   puts clock.elapsed_time
   class Clock
     
-    # @overload ==(other)
-    #   This operator compares two clocks and checks if they are equal.
-    #   @param [Color] other The right operand
-    #   @return [Color]
-    def ==
+    # This operator compares two clocks and checks if they are equal.
+    # @param [Color] other The right operand
+    # @return [Color]
+    def ==(other)
     end
     
     # Returns a formated string to represent the clock. 
@@ -41,6 +40,11 @@ module SFML
     def reset
     end
     alias Reset reset
+    
+    # Returns how much memory was allocated by this object.
+    # @return [Fixnum] Always eight
+    def memory_usage
+    end
     
   end
   

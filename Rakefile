@@ -159,7 +159,7 @@ if ARGV.include? 'doc'
                  FileList.new('sfml-window/doc/*.rb') +
                  FileList.new('sfml-system/doc/*.rb') +
                  FileList.new('shared/*.rb')
-    yard.options << "--verbose" << "--no-save" << "--no-cache"
+    yard.options << "--no-save" << "--no-cache"
     at_exit do
       uri = "file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html"
       case RUBY_PLATFORM

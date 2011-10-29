@@ -20,13 +20,36 @@
  *    source distribution.
  */
  
-#ifndef SFML_RUBYEXT_NON_COPYABLE_HEADER_
-#define SFML_RUBYEXT_NON_COPYABLE_HEADER_
+#include "InputStream.hpp"
 
-#include "ruby.h"
+rbInputStream::rbInputStream( VALUE aIO )
+{
+	myIO = aIO;
+}
 
-extern VALUE globalNonCopyableModule;
+sf::Int64 rbInputStream::Read( char *aDataBuffer, sf::Int64 aSize )
+{
+	VALUE buffer = rb_funcall( myIO, rb_intern( "read" ), 1, LONG2NUM( aSize ) );
+	memcpy( aDataBuffer, RSTRING_PTR( buffer ), RSTRING_LEN( buffer ) );
+	return RSTRING_LEN( buffer );
+}
 
-void Init_NonCopyable( void );
+sf::Int64 rbInputStream::Seek( sf::Int64 aPosition )
+{
+	rb_funcall( myIO, rb_intern( "seek" ), 1, LONG2NUM( aPosition ) );
+	return aPosition;
+}
 
-#endif // SFML_RUBYEXT_NON_COPYABLE_HEADER_
+sf::Int64 rbInputStream::Tell()
+{
+	return NUM2LONG( rb_funcall( myIO, rb_intern( "tell" ), 0 ) );
+}
+
+sf::Int64 rbInputStream::GetSize()
+{
+	VALUE pos = rb_funcall( myIO, rb_intern( "tell" ), 0 );
+	rb_funcall( myIO, rb_intern( "seek" ), 2, LONG2NUM( 0 ), rb_const_get( rb_cIO, rb_intern( "SEEK_END" ) ) );
+	VALUE size = rb_funcall( myIO, rb_intern( "tell" ), 0 );
+	rb_funcall( myIO, rb_intern( "seek" ), 1, pos );
+	return size;
+}

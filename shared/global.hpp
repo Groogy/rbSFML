@@ -23,19 +23,16 @@
 #ifndef SFML_RUBYEXT_GLOBAL_HEADER_
 #define SFML_RUBYEXT_GLOBAL_HEADER_
 
+#include <sstream>
+#include <iostream>
 #include "ruby.h"
-
-#define SFML_DYNAMIC
-
-extern VALUE globalSFMLNamespace;
-
-VALUE RetrieveSFMLClass( const char * aName );
-void SFML_RaiseError( void );
-
-typedef VALUE ( *RubyFunctionPtr )( ... );
+#include "InputStream.hpp"
+#include "SFML/System.hpp"
 
 #define BINDING_VERSION "development"
 #define LIB_VERSION "2.0"
+
+VALUE RetrieveSFMLClass( const char * aName );
 
 #define MAX( x, y ) ( ( x ) > ( y ) ? ( x ) : ( y ) )
 #define MIN( x, y ) ( ( x ) < ( y ) ? ( x ) : ( y ) )
@@ -49,6 +46,7 @@ if( rb_obj_is_kind_of( variable, type ) != Qtrue ) \
 	rb_raise( rb_eTypeError, "%s argument must be kind of %s", name, rb_class2name( type ) ); \
 }
 
+typedef VALUE ( *RubyFunctionPtr )( ... );
 #define rb_define_module_function( klass, name, func, argc, ... ) rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 #define rb_define_singleton_method( klass, name, func, argc, ... ) rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 #define rb_define_method( klass, name, func, argc, ... ) rb_define_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )

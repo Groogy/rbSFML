@@ -41,6 +41,8 @@ warn "Warning: Cannot load Audio module"    unless $audio
 
 if $system
   load "test/system/test_clock.rb"
+  load "test/system/test_vector2.rb"
+  load "test/system/test_vector3.rb"
 end
 
 if $window

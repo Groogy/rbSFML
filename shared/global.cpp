@@ -22,21 +22,13 @@
  
 #include "global.hpp"
 
-VALUE globalSFMLNamespace;
-
-VALUE RetrieveSFMLClass( const char * aName )
+VALUE RetrieveSFMLClass( VALUE mSFML, const char * aName )
 {
 	ID name = rb_intern( aName );
-	if( rb_cvar_defined( globalSFMLNamespace, name ) == Qfalse )
+	if( !rb_const_defined( mSFML, name ) )
 	{
 		rb_raise( rb_eRuntimeError, "This module depends on SFML::%s", aName );
 	}
 	
-	return rb_cvar_get( globalSFMLNamespace, name );
-}
-
-void SFML_RaiseError( void )
-{
-	static ID symRaiseError = rb_intern( "raise_error" );
-	rb_funcall( globalSFMLNamespace, symRaiseError, 0 );
+	return rb_const_get( mSFML, name );
 }

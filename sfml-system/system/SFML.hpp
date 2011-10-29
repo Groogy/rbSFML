@@ -24,8 +24,9 @@
 #define SFML_RUBYEXT_ERROR_HEADER_
 
 #include "ruby.h"
+#include "global.hpp"
 
 // Ruby initiation function
-void Init_Error( void );
+void Init_SFML( void );
 
 #endif // SFML_RUBYEXT_ERROR_HEADER_
