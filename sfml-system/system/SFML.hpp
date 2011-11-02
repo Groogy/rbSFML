@@ -20,8 +20,8 @@
  *    source distribution.
  */
 
-#ifndef SFML_RUBYEXT_ERROR_HEADER_
-#define SFML_RUBYEXT_ERROR_HEADER_
+#ifndef SFML_RUBYEXT_SFML_HEADER_
+#define SFML_RUBYEXT_SFML_HEADER_
 
 #include "ruby.h"
 #include "global.hpp"
