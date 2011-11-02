@@ -70,19 +70,19 @@ static VALUE SFML_SystemLoaded( VALUE self )
 // SFML.window?
 static VALUE SFML_WindowLoaded( VALUE self )
 {
-	return rb_const_defined( self, rb_intern( "Window" ) ) ? Qtrue : Qfalse;
+	return rb_const_defined( mSFML, rb_intern( "WindowLoaded" ) ) ? Qtrue : Qfalse;
 }
 
 // SFML.graphics?
 static VALUE SFML_GraphicsLoaded( VALUE self )
 {
-	return rb_const_defined( self, rb_intern( "Sprite" ) ) ? Qtrue : Qfalse;
+	return rb_const_defined( mSFML, rb_intern( "GraphicsLoaded" ) ) ? Qtrue : Qfalse;
 }
 
 // SFML.audio?
 static VALUE SFML_AudioLoaded( VALUE self )
 {
-	return rb_const_defined( self, rb_intern( "Sound" ) ) ? Qtrue : Qfalse;
+	return rb_const_defined( mSFML, rb_intern( "AudioLoaded" ) ) ? Qtrue : Qfalse;
 }
 
 void Init_SFML( void )

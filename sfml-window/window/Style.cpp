@@ -20,21 +20,20 @@
  *    source distribution.
  */
  
-#include "main.hpp"
-#include "SFML.hpp"
-#include "Clock.hpp"
-#include "Vector2.hpp"
-#include "Vector3.hpp"
+#include "Style.hpp"
 
 static VALUE mSFML;
+static VALUE cStyle;
 
-void Init_system( void )
+void Init_Style( void )
 {
 	mSFML = rb_define_module( "SFML" );
-	rb_define_const( mSFML, "SystemLoaded", Qtrue );
+	cStyle = rb_define_module_under( mSFML, "Style" );
 	
-	Init_SFML();
-	Init_Clock();
-	Init_Vector2();
-	Init_Vector3();
+	rb_define_const( cStyle, "None",       INT2FIX( sf::Style::None       ) );
+	rb_define_const( cStyle, "Titlebar",   INT2FIX( sf::Style::Titlebar   ) );
+	rb_define_const( cStyle, "Resize",     INT2FIX( sf::Style::Resize     ) );
+	rb_define_const( cStyle, "Close",      INT2FIX( sf::Style::Close      ) );
+	rb_define_const( cStyle, "Fullscreen", INT2FIX( sf::Style::Fullscreen ) );
+	rb_define_const( cStyle, "Default",    INT2FIX( sf::Style::Default    ) );
 }

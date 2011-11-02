@@ -19,22 +19,15 @@
  * 3. This notice may not be removed or altered from any
  *    source distribution.
  */
- 
+
+#ifndef SFML_RUBYEXT_STYLE_HEADER_
+#define SFML_RUBYEXT_STYLE_HEADER_
+
+#include "ruby.h"
 #include "main.hpp"
-#include "SFML.hpp"
-#include "Clock.hpp"
-#include "Vector2.hpp"
-#include "Vector3.hpp"
+#include <SFML/Window/WindowStyle.hpp>
 
-static VALUE mSFML;
+// Ruby initiation function
+void Init_Style( void );
 
-void Init_system( void )
-{
-	mSFML = rb_define_module( "SFML" );
-	rb_define_const( mSFML, "SystemLoaded", Qtrue );
-	
-	Init_SFML();
-	Init_Clock();
-	Init_Vector2();
-	Init_Vector3();
-}
+#endif // SFML_RUBYEXT_ERROR_HEADER_

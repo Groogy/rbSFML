@@ -21,70 +21,16 @@
  */
 
 #include "main.hpp"
-#include "Vector2.hpp"
-#include "NonCopyable.hpp"
-#include "Context.hpp"
-#include "ContextSettings.hpp"
-#include "Event.hpp"
-#include "VideoMode.hpp"
-#include "Window.hpp"
-#include "Joystick.hpp"
-#include "Keyboard.hpp"
-#include "Mouse.hpp"
+#include "Style.hpp"
 
-#include <SFML/Window.hpp>
-
-#include <iostream>
-
-VALUE globalStyleNamespace;
-extern VALUE globalVector2Class;
-extern VALUE globalNonCopyableModule;
-
-/* Enumeration of the window styles. */
-static void CreateStyleEnum( void )
-{
-	globalStyleNamespace = rb_define_module_under( globalSFMLNamespace, "Style" );
-	rb_define_const( globalStyleNamespace, "None", INT2FIX( sf::Style::None ) );
-	rb_define_const( globalStyleNamespace, "Titlebar", INT2FIX( sf::Style::Titlebar ) );
-	rb_define_const( globalStyleNamespace, "Resize", INT2FIX( sf::Style::Resize ) );
-	rb_define_const( globalStyleNamespace, "Close", INT2FIX( sf::Style::Close ) );
-	rb_define_const( globalStyleNamespace, "Fullscreen", INT2FIX( sf::Style::Fullscreen ) );
-	rb_define_const( globalStyleNamespace, "Default", INT2FIX( sf::Style::Default ) );
-}
-
-static bool CheckDependencies( void )
-{
-	if( rb_cvar_defined( globalSFMLNamespace, rb_intern( "SystemLoaded" ) ) == Qtrue )
-	{
-		return true;
-	}
-
-	return false;
-}
+static VALUE mSFML;
 
 void Init_window( void )
 {
-	/* SFML namespace which contains the classes of this module. */
-	globalSFMLNamespace = rb_define_module( "SFML" );
-	if( CheckDependencies() == false )
-	{
-		rb_raise( rb_eRuntimeError, "This module depends on sfml-system" );
-	}
+	mSFML = rb_define_module( "SFML" );
+	if ( !rb_const_defined( mSFML, rb_intern( "SystemLoaded" ) ) ) rb_require( "sfml/system" );
+	rb_define_const( mSFML, "WindowLoaded", Qtrue );
 	
-	globalVector2Class = rb_define_class_under(globalSFMLNamespace, "Vector2", rb_cObject );
-	globalNonCopyableModule = rb_define_module_under(globalSFMLNamespace, "NonCopyable");
-	
-	rb_define_const( globalSFMLNamespace, "WindowLoaded", Qtrue );
-	
-	CreateStyleEnum();
-	
-	Init_Joystick();
-	Init_Keyboard();
-	Init_Mouse();
-	Init_Context();
-	Init_ContextSettings();
-	Init_Event();
-	Init_VideoMode();
-	Init_Window();
+	Init_Style();
 }
 
