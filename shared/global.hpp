@@ -29,10 +29,8 @@
 #include "InputStream.hpp"
 #include "SFML/System.hpp"
 
-#define BINDING_VERSION "development"
+#define BINDING_VERSION "development-unstable"
 #define LIB_VERSION "2.0"
-
-VALUE RetrieveSFMLClass( const char * aName );
 
 #define MAX( x, y ) ( ( x ) > ( y ) ? ( x ) : ( y ) )
 #define MIN( x, y ) ( ( x ) < ( y ) ? ( x ) : ( y ) )

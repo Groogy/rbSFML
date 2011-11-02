@@ -48,18 +48,27 @@ module SFML
   VERSION = "2.0"
   
   # rbSFML version
-  BINDING_VERSION = "development"
+  BINDING_VERSION = "development-unstable"
   
-  # Set <tt>true</tt> if you want ruby-like exceptions to be raised.
-  # If it is <tt>false</tt>, SFML errors will be printed to stderr and will be ignored.
+  # Set <tt>true</tt> if you want ruby-like exceptions to be raised. If it is <tt>false</tt>, SFML errors will be printed to stderr and will be ignored.
   # Default is <tt>true</tt>.
   attr_accessor :raise_exceptions
   
-  # Called everytime SFML raises a exception.
-  # Raises a exception if <tt>raise_exceptions</tt> is <tt>true</tt> and clean the exception cache.
-  # Does nothing if called outside SFML internal fucntions.
-  # @note Internal function, don't use it!
-  def SFML.raise
+  # @return [Boolean] <tt>true</tt> if system is loaded, <tt>false</tt> otherwise
+  def SFML.system?
   end
+  
+  # @return [Boolean] <tt>true</tt> if window is loaded, <tt>false</tt> otherwise
+  def SFML.window?
+  end
+  
+  # @return [Boolean] <tt>true</tt> if graphics is loaded, <tt>false</tt> otherwise
+  def SFML.graphics?
+  end
+  
+  # @return [Boolean] <tt>true</tt> if audio is loaded, <tt>false</tt> otherwise
+  def SFML.audio?
+  end
+  
   
 end

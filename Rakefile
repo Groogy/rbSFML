@@ -2,28 +2,25 @@ require 'rake'
 require 'rake/clean'
 require 'rbconfig'
 require 'digest/md5'
-include Config
+include RbConfig
 
-CFLAGS = CONFIG['CFLAGS']
-CC = CONFIG['CC']
-
-SFML_INC = ENV['SFML_INCLUDE'] || File.dirname(__FILE__) + '/include'
-SFML_LIB = ENV['SFML_LIB'] || File.dirname(__FILE__) + '/lib'
+SFML_INC = ENV['SFML_INCLUDE'] || 'include'
+SFML_LIB = ENV['SFML_LIB'] || 'lib'
 
 RUBY_INC = CONFIG['rubyhdrdir']
 RUBY_LIB = CONFIG['libdir']
 RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
 
-LINK = CONFIG['LDSHAREDXX']
-# Windows screws up this variable...
-LINK.sub!("$(if $(filter-out -g -g0,#{CONFIG["debugflags"]}),,-s)", '')
-LINK_FLAGS = CONFIG['DLDFLAGS'] + " " + CONFIG['LDFLAGS']
-LINK_FLAGS.sub!("$(DEFFILE)", "")
+CC = CONFIG['CC']
+CFLAGS = CONFIG['CFLAGS']
+
+LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
+LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']}".sub("$(DEFFILE)", "")
 
 OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
-INST_DIR = File.join(CONFIG['sitearchdir'], 'sfml')
+INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
 
 SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
         :graphics => FileList.new('sfml-graphics/graphics/*.cpp'),
@@ -49,7 +46,7 @@ def calc_md5
       code = File.read(file)
       digest = Digest::MD5.hexdigest(code)
       s = ".s" if ARGV.include? "static"
-      OBJS[k] << File.join("#{OBJ_DIR}/#{k}", "#{File.basename(file)}.#{digest}#{s}.o")
+      OBJS[k] << "#{OBJ_DIR}/#{k}/#{File.basename(file)}.#{digest}#{s}.o"
     end
   end
   OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
@@ -60,8 +57,7 @@ def compile_o(src)
   list = SRCS[src]
   dir = "#{OBJ_DIR}/#{src}"
   mkdir_p dir
-  s = ARGV.include?("static") ? "-DSFML_STATIC" : ""
-  c = ARGV.include?("sfml") ? "-DSFML_RUBYEXT_SFML" : ""
+  s = "-DSFML_STATIC" if ARGV.include? "static"
   unless File.exist?(SFML_INC)
     raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
   end
@@ -69,27 +65,28 @@ def compile_o(src)
     obj = OBJS[src][i]
     next if File.exist?(obj)
     puts "Compiling #{src}/#{File.basename(file)}"
-    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{c} -I#{SFML_INC} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -Ishared"
+    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} -I#{SFML_INC} -Ishared -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
   end
 end
 
 def create_so(src)
-  file = "#{SO_DIR}/#{src}.so"
+  so = "#{SO_DIR}/#{src}.so"
   mkdir_p SO_DIR
   puts "Creating #{src}.so"
-  objs = OBJS[src]
-  s = (ARGV.include?("static") ? "-s" : "")
+  objs = OBJS[src].join(' ')
+  shared = OBJS[:shared].join(' ')
+  s = "-s" if ARGV.include? "static"
   unless File.exist?(SFML_LIB)
     raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
   end
-  sfml = case src
+  sfml_link = case src
   when :audio;    "-lsfml-audio#{s} -lsfml-system#{s}"
   when :graphics; "-lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   when :window;   "-lsfml-window#{s} -lsfml-system#{s}"
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   end
-  exit unless system "#{LINK} -o #{file} #{objs.join(' ')} #{OBJS[:shared].join(' ')} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml}"
+  exit unless system "#{LINK} -o #{so} #{objs} #{shared} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml_link}"
 end
 
 task :default => [:all]
@@ -161,15 +158,15 @@ if ARGV.include? 'doc'
                  FileList.new('shared/*.rb')
     yard.options << "--no-save" << "--no-cache"
     at_exit do
-      uri = "file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html"
+      uri = "file:///\"#{File.dirname(__FILE__)}\"/#{DOC_DIR}/frames.html"
       case RUBY_PLATFORM
-      when /(darwin|mac os)/i          # Mac
+      when /darwin|mac os/i          # Mac OS
         system "open #{uri}"
-      when /(mingw|mswin|windows)/i    # Windows
+      when /mingw|mswin|windows/i    # Windows
         system "start /b #{uri}"
-      when /cygwin/i                   # Cygwin
+      when /cygwin/i                 # Cygwin
         system "cmd /C start /b #{uri}"
-      when /(linux|bsd|aix|solaris)/i  # Linux
+      when /linux|bsd|aix|solaris/i  # Linux
         system "xdg-open #{uri}"
       else
         # WTF?

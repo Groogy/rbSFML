@@ -29,8 +29,8 @@
 VALUE Vector3_ForceType( VALUE someValue );
 
 int Vector3_Type( VALUE aVector3 );
-sf::Vector3i Vector2_ToSFMLi( VALUE aVector3 );
-sf::Vector3f Vector2_ToSFMLf( VALUE aVector3 );
+sf::Vector3i Vector3_ToSFMLi( VALUE aVector3 );
+sf::Vector3f Vector3_ToSFMLf( VALUE aVector3 );
 VALUE Vector3_ToRuby( const sf::Vector2i &aVector3 );
 VALUE Vector3_ToRuby( const sf::Vector2f &aVector3 );
 

@@ -17,24 +17,25 @@ class TestClock < Test::Unit::TestCase
   
   def test_inspect
     clock = Clock.new
-    str = "Clock(#{clock.time})"
-    assert_equal(str, clock.inspect)
-    assert_equal(" #{str} ", " #{clock} ")
+    assert(/Clock\(\d+\)/ =~ clock.inspect)
+    assert_match(/ Clock\(\d+\) /, " #{clock} ")
   end
   
   def test_elapsed_time
     clock = Clock.new
     sleep(0.010)
-    assert(clock.time < 15)
+    assert_in_delta(clock.time, 10, 10)
   end
   
   def test_reset
     clock = Clock.new
+    assert_in_delta(clock.time, 0, 10)
     sleep(0.010)
-    assert(clock.time < 15)
+    assert_in_delta(clock.time, 10, 10)
     clock.reset
+    assert_in_delta(clock.time, 0, 10)
     sleep(0.010)
-    assert(clock.time < 15)
+    assert_in_delta(clock.time, 10, 10)
   end
   
 end

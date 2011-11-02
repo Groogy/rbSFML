@@ -36,7 +36,7 @@ static VALUE SFML_Raise( VALUE self )
 		std::string message = ErrorStream.str();
 		if ( message.size() == 0 ) return Qnil;
 		ErrorStream.str( "" );
-		rb_raise( cError, message.c_str() );
+		rb_raise( cError, message.c_str(), "" );
 	}
 	return Qnil;
 }
@@ -61,6 +61,30 @@ static VALUE SFML_SetRaiseExceptions( VALUE self, VALUE aFlag )
 	}
 }
 
+// SFML.system?
+static VALUE SFML_SystemLoaded( VALUE self )
+{
+	return Qtrue; // You can't call this method without system.
+}
+
+// SFML.window?
+static VALUE SFML_WindowLoaded( VALUE self )
+{
+	return rb_const_defined( self, rb_intern( "Window" ) ) ? Qtrue : Qfalse;
+}
+
+// SFML.graphics?
+static VALUE SFML_GraphicsLoaded( VALUE self )
+{
+	return rb_const_defined( self, rb_intern( "Sprite" ) ) ? Qtrue : Qfalse;
+}
+
+// SFML.audio?
+static VALUE SFML_AudioLoaded( VALUE self )
+{
+	return rb_const_defined( self, rb_intern( "Sound" ) ) ? Qtrue : Qfalse;
+}
+
 void Init_SFML( void )
 {
 	mSFML = rb_define_module( "SFML" );
@@ -74,4 +98,8 @@ void Init_SFML( void )
 	rb_define_module_function( mSFML, "raise",             SFML_Raise,              0 );
 	rb_define_module_function( mSFML, "raise_exceptions",  SFML_GetRaiseExceptions, 0 );
 	rb_define_module_function( mSFML, "raise_exceptions=", SFML_SetRaiseExceptions, 1 );
+	rb_define_module_function( mSFML, "system?",           SFML_SystemLoaded,       0 );
+	rb_define_module_function( mSFML, "window?",           SFML_WindowLoaded,       0 );
+	rb_define_module_function( mSFML, "graphics?",         SFML_GraphicsLoaded,     0 );
+	rb_define_module_function( mSFML, "audio?",            SFML_AudioLoaded,        0 );
 }

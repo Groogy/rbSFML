@@ -8,21 +8,21 @@ Dependencies
 
 Of course this means this library depends on SFML2 so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
-Recommended is this setup: (lowers versions might work too)
+Recommended is this setup: (lowers or highers versions might work too)
 
-- [SFML2 - Latest revision](https://github.com/LaurentGomila/SFML)
-- [Ruby-1.9.2p290](http://www.ruby-lang.org/en/downloads/)
-- [Rake, version 0.9.2](https://rubygems.org/gems/rake)
-- [Yard, version 0.7.2](https://rubygems.org/gems/yard)
+- [SFML2 - commit 01254d4122](https://github.com/LaurentGomila/SFML/tree/01254d41228d1fa6a186ca94c387da4984a0576c)
+- [Ruby 1.9.3p0](http://www.ruby-lang.org/en/downloads/)
+- [Rake 0.9.2](https://rubygems.org/gems/rake)
+- [Yard 0.7.2](https://rubygems.org/gems/yard)
 
 Installation (on Windows)
 =========================
 
 1.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-2.  Download and compile [SFML2](https://github.com/LaurentGomila/SFML). (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+2.  Download and compile SFML2. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
 
-3.  Copy the `include` folder from SFML and the `lib` folder (here should be `.a` files) to the rbSFML folder. Move the `.dll` files from `lib` to your ruby/bin directory.
+3.  Copy the `include` folder from SFML and the `lib` folder (there should be `.a` files) to the rbSFML folder. Move the `.dll` files from `lib` to your `ruby\bin` directory.
 
 4.  Run one of the following commands in your terminal:
 
