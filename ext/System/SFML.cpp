@@ -1,0 +1,102 @@
+/* rbSFML
+ * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from
+ * the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software in
+ *    a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+#define SFML_CPP
+#include <System/SFML.hpp>
+
+std::stringstream gErrorStream;
+VALUE gError;
+
+void rbSFML::Init(VALUE SFML)
+{
+    gError = rb_define_class_under(SFML, "Error", rb_eRuntimeError);
+    
+    rb_define_const(SFML, "SFML_VERSION",    rb_str_new2(SFML_VERSION   ));
+    rb_define_const(SFML, "BINDING_VERSION", rb_str_new2(BINDING_VERSION));
+    
+    SetRaiseExceptions(SFML, Qtrue);
+    
+    rb_define_module_function(SFML, "raise",             Raise,              0);
+    rb_define_module_function(SFML, "raise_exceptions",  GetRaiseExceptions, 0);
+    rb_define_module_function(SFML, "raise_exceptions=", SetRaiseExceptions, 1);
+    rb_define_module_function(SFML, "system?",           SystemLoaded,       0);
+    rb_define_module_function(SFML, "window?",           WindowLoaded,       0);
+    rb_define_module_function(SFML, "graphics?",         GraphicsLoaded,     0);
+    rb_define_module_function(SFML, "audio?",            AudioLoaded,        0);
+}
+
+VALUE rbSFML::Raise(VALUE self)
+{
+    if (RTEST(rb_cv_get(self, "@@raise_exceptions")))
+    {
+        std::string message = gErrorStream.str();
+        if (message.size() == 0) return Qnil;
+        gErrorStream.str("");
+        rb_raise(gError, message.c_str(), "");
+    }
+    return Qnil;
+}
+
+VALUE rbSFML::GetRaiseExceptions(VALUE self)
+{
+    if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions"))) return Qfalse;
+    return rb_cv_get(self, "@@raise_exceptions") ? Qtrue : Qfalse;
+}
+
+VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
+{
+    rb_cv_set(self, "@@raise_exceptions", flag);
+    if (RTEST(flag))
+    {
+        sf::Err().rdbuf(gErrorStream.rdbuf());
+    }
+    else
+    {
+        sf::Err().rdbuf(std::cerr.rdbuf());
+    }
+    return Qnil;
+}
+
+VALUE rbSFML::SystemLoaded(VALUE self)
+{
+    return Qtrue; // You can't call this method without system.
+}
+
+VALUE rbSFML::WindowLoaded(VALUE self)
+{
+    return rb_const_defined(self, rb_intern("WindowLoaded"))
+        ? Qtrue
+        : Qfalse;
+}
+
+VALUE rbSFML::GraphicsLoaded(VALUE self)
+{
+    return rb_const_defined(self, rb_intern("GraphicsLoaded"))
+        ? Qtrue
+        : Qfalse;
+}
+
+VALUE rbSFML::AudioLoaded(VALUE self)
+{
+    return rb_const_defined(self, rb_intern("AudioLoaded"))
+        ? Qtrue
+        : Qfalse;
+}
