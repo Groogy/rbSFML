@@ -20,15 +20,16 @@ LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']}".sub("$(DEFFILE)", "")
 OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
+EXT_DIR = 'ext'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
 
-SRCS = {:audio    => FileList.new('sfml-audio/audio/*.cpp'),
-        :graphics => FileList.new('sfml-graphics/graphics/*.cpp'),
-        :window   => FileList.new('sfml-window/window/*.cpp'),
-        :system   => FileList.new('sfml-system/system/*.cpp'),
-        :all      => FileList.new('sfml-all/all/*.cpp'),
-        :sfml     => FileList.new('sfml-sfml/sfml/*.cpp'),
-        :shared   => FileList.new('shared/*.cpp')}
+SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
+        :graphics => FileList.new("#{EXT_DIR}/Graphics/*.cpp"),
+        :window   => FileList.new("#{EXT_DIR}/Window/*.cpp"),
+        :system   => FileList.new("#{EXT_DIR}/System/*.cpp"),
+        #:all      => FileList.new("#{EXT_DIR}/all.cpp"),
+        #:sfml     => FileList.new("#{EXT_DIR}/sfml.cpp"),
+        :shared   => FileList.new("#{EXT_DIR}/*.cpp")}
 LIBS = []
 OBJS = {}
 SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
@@ -49,7 +50,7 @@ def calc_md5
       OBJS[k] << "#{OBJ_DIR}/#{k}/#{File.basename(file)}.#{digest}#{s}.o"
     end
   end
-  OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
+  #OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
 end
 
 def compile_o(src)
@@ -58,6 +59,7 @@ def compile_o(src)
   dir = "#{OBJ_DIR}/#{src}"
   mkdir_p dir
   s = "-DSFML_STATIC" if ARGV.include? "static"
+  d = "-DRBSFML_#{src.to_s.upcase}"
   unless File.exist?(SFML_INC)
     raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
   end
@@ -65,7 +67,7 @@ def compile_o(src)
     obj = OBJS[src][i]
     next if File.exist?(obj)
     puts "Compiling #{src}/#{File.basename(file)}"
-    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} -I#{SFML_INC} -Ishared -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
+    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{d} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -Wpmf-conversions"
   end
 end
 
@@ -106,21 +108,21 @@ task :all => [:audio, :graphics, :window, :system] do
 end
 
 desc "Build only audio module (audio.so)."
-task :audio do
+task :audio => [:system] do
   compile_o(:shared)
   compile_o(:audio)
   create_so(:audio)
 end
 
 desc "Build only graphics module (graphics.so)."
-task :graphics do
+task :graphics => [:window, :system] do
   compile_o(:shared)
   compile_o(:graphics)
   create_so(:graphics)
 end
 
 desc "Build only window module (window.so)."
-task :window do
+task :window => [:system] do
   compile_o(:shared)
   compile_o(:window)
   create_so(:window)
@@ -151,14 +153,14 @@ if ARGV.include? 'doc'
   require 'yard'
   YARD::Rake::YardocTask.new do |yard|
     yard.name = DOC_DIR
-    yard.files = FileList.new('sfml-audio/doc/*.rb') +
-                 FileList.new('sfml-graphics/doc/*.rb') +
-                 FileList.new('sfml-window/doc/*.rb') +
-                 FileList.new('sfml-system/doc/*.rb') +
-                 FileList.new('shared/*.rb')
+    yard.files = FileList.new('ext/Audio/*.rb') +
+                 FileList.new('ext/Graphics/*.rb') +
+                 FileList.new('ext/Window/*.rb') +
+                 FileList.new('ext/System/*.rb') +
+                 FileList.new('ext/*.rb')
     yard.options << "--no-save" << "--no-cache"
     at_exit do
-      uri = "file:///\"#{File.dirname(__FILE__)}\"/#{DOC_DIR}/frames.html"
+      uri = "\"file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html\""
       case RUBY_PLATFORM
       when /darwin|mac os/i          # Mac OS
         system "open #{uri}"
@@ -168,15 +170,13 @@ if ARGV.include? 'doc'
         system "cmd /C start /b #{uri}"
       when /linux|bsd|aix|solaris/i  # Linux
         system "xdg-open #{uri}"
-      else
-        # WTF?
       end
     end
   end
 end
 
 desc "Install rbSFML."
-task :install do
+task :install => [:uninstall] do
   mkdir_p SO_DIR
   list = FileList.new("#{SO_DIR}/*.so")
   if list.size == 0
