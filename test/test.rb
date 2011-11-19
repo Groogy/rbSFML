@@ -39,7 +39,7 @@ if SFML.system?
 end
 
 if SFML.window?
-  
+  load "test/window/test_videomode.rb"
 end
 
 if SFML.graphics?
