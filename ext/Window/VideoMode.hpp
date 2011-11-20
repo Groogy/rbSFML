@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef VIDEOMODE_HPP
-#define VIDEOMODE_HPP
+#ifndef WINDOW_VIDEOMODE_HPP
+#define WINDOW_VIDEOMODE_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -31,14 +31,14 @@
 namespace rbVideoMode
 {
     
-    static inline void Free(void* clock);
+    static inline void Free(void* video_mode);
     
     static inline VALUE ToRuby(VALUE other);
     static inline VALUE ToRuby(sf::VideoMode* video_mode);
     static inline VALUE ToRuby(sf::VideoMode& video_mode);
     static inline sf::VideoMode* ToSFML(VALUE video_mode);
     
-#if defined(VIDEOMODE_CPP)
+#if defined(WINDOW_VIDEOMODE_CPP)
     VALUE VideoMode;
 #else
     extern VALUE VideoMode;
@@ -132,7 +132,8 @@ VALUE rbVideoMode::ToRuby(sf::VideoMode& video_mode)
 
 sf::VideoMode* rbVideoMode::ToSFML(VALUE video_mode)
 {
+    video_mode = ToRuby(video_mode);
     return (sf::VideoMode*)DATA_PTR(video_mode);
 }
 
-#endif // VIDEOMODE_HPP
+#endif // WINDOW_VIDEOMODE_HPP

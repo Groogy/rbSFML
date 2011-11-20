@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
  
-#define VECTOR3_CPP
+#define SYSTEM_VECTOR3_CPP
 #include "Vector3.hpp"
 
 void rbVector3::Init(VALUE SFML)
@@ -57,8 +57,7 @@ void rbVector3::Init(VALUE SFML)
 }
 
 VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
-{    
-    VALUE x, y, z;
+{
     switch (argc)
     {
         case 0:
@@ -70,9 +69,10 @@ VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
             InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 3:
-            x = argv[0];
-            y = argv[1];
-            z = argv[2];
+        {
+            VALUE x = argv[0];
+            VALUE y = argv[1];
+            VALUE z = argv[2];
             
             // Ensure all arguments are kind of Numeric.
             VALIDATE_CLASS(x, rb_cNumeric);
@@ -91,6 +91,7 @@ VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
             SetY(self, y);
             SetZ(self, z);
             break;
+        }
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0, 1, or 3)", argc);

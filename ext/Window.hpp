@@ -28,5 +28,6 @@
 #include <System.hpp>
 #include <Window/Style.hpp>
 #include <Window/VideoMode.hpp>
+#include <Window/Window.hpp>
 
 #endif // WINDOW_HPP

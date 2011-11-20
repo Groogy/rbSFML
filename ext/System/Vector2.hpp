@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef VECTOR2_HPP
-#define VECTOR2_HPP
+#ifndef SYSTEM_VECTOR2_HPP
+#define SYSTEM_VECTOR2_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -45,7 +45,7 @@ namespace rbVector2
     static inline void SetX(VALUE vector2, VALUE value);
     static inline void SetY(VALUE vector2, VALUE value);
     
-#if defined(VECTOR2_CPP)
+#if defined(SYSTEM_VECTOR2_CPP)
     VALUE Vector2;
 #else
     extern VALUE Vector2;
@@ -149,6 +149,7 @@ VALUE rbVector2::ToRuby(sf::Vector2f& vector2)
 
 sf::Vector2i rbVector2::ToSFMLi(VALUE vector2)
 {
+    vector2 = ToRuby(vector2);
     int x = FIX2INT(GetX(vector2));
     int y = FIX2INT(GetY(vector2));
     return sf::Vector2i(x, y);
@@ -156,6 +157,7 @@ sf::Vector2i rbVector2::ToSFMLi(VALUE vector2)
 
 sf::Vector2f rbVector2::ToSFMLf(VALUE vector2)
 {
+    vector2 = ToRuby(vector2);
     float x = NUM2DBL(GetX(vector2));
     float y = NUM2DBL(GetY(vector2));
     return sf::Vector2f(x, y);
@@ -185,4 +187,4 @@ void rbVector2::SetY(VALUE vector2, VALUE value)
     rb_ivar_set(vector2, id_y, value);
 }
 
-#endif // VECTOR2_HPP
+#endif // SYSTEM_VECTOR2_HPP

@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef STYLE_HPP
-#define STYLE_HPP
+#ifndef WINDOW_STYLE_HPP
+#define WINDOW_STYLE_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -31,7 +31,7 @@
 namespace rbStyle
 {
     
-#if defined(STYLE_CPP)
+#if defined(WINDOW_STYLE_CPP)
     VALUE Style;
 #else
     extern VALUE Style;
@@ -45,4 +45,4 @@ namespace rbStyle
   
 };
 
-#endif // STYLE_HPP
+#endif // WINDOW_STYLE_HPP

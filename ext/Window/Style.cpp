@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#define STYLE_CPP
+#define WINDOW_STYLE_CPP
 #include "Style.hpp"
 
 void rbStyle::Init(VALUE SFML)

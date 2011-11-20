@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
  
-#define VECTOR2_CPP
+#define SYSTEM_VECTOR2_CPP
 #include "Vector2.hpp"
 
 void rbVector2::Init(VALUE SFML)
@@ -54,8 +54,7 @@ void rbVector2::Init(VALUE SFML)
 }
 
 VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
-{    
-    VALUE x, y;
+{
     switch (argc)
     {
         case 0:
@@ -66,8 +65,9 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 2:
-            x = argv[0];
-            y = argv[1];
+        {
+            VALUE x = argv[0];
+            VALUE y = argv[1];
             
             // Ensure all arguments are kind of Numeric.
             VALIDATE_CLASS(x, rb_cNumeric);
@@ -83,6 +83,7 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             SetX(self, x);
             SetY(self, y);
             break;
+        }
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..2)", argc);

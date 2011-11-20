@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef VECTOR3_HPP
-#define VECTOR3_HPP
+#ifndef SYSTEM_VECTOR3_HPP
+#define SYSTEM_VECTOR3_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -47,7 +47,7 @@ namespace rbVector3
     static inline void SetY(VALUE vector3, VALUE value);
     static inline void SetZ(VALUE vector3, VALUE value);
     
-#if defined(VECTOR3_CPP)
+#if defined(SYSTEM_VECTOR3_CPP)
     VALUE Vector3;
 #else
     extern VALUE Vector3;
@@ -153,6 +153,7 @@ VALUE rbVector3::ToRuby(sf::Vector3f& vector3)
 
 sf::Vector3i rbVector3::ToSFMLi(VALUE vector3)
 {
+    vector3 = ToRuby(vector3);
     int x = FIX2INT(GetX(vector3));
     int y = FIX2INT(GetY(vector3));
     int z = FIX2INT(GetZ(vector3));
@@ -161,6 +162,7 @@ sf::Vector3i rbVector3::ToSFMLi(VALUE vector3)
 
 sf::Vector3f rbVector3::ToSFMLf(VALUE vector3)
 {
+    vector3 = ToRuby(vector3);
     float x = NUM2DBL(GetX(vector3));
     float y = NUM2DBL(GetY(vector3));
     float z = NUM2DBL(GetZ(vector3));
@@ -203,4 +205,4 @@ void rbVector3::SetZ(VALUE vector3, VALUE value)
     rb_ivar_set(vector3, id_z, value);
 }
 
-#endif // VECTOR2_HPP
+#endif // SYSTEM_VECTOR2_HPP

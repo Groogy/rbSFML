@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef CLOCK_HPP
-#define CLOCK_HPP
+#ifndef SYSTEM_CLOCK_HPP
+#define SYSTEM_CLOCK_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -38,7 +38,7 @@ namespace rbClock
     static inline VALUE ToRuby(sf::Clock& clock);
     static inline sf::Clock* ToSFML(VALUE clock);
     
-#if defined(CLOCK_CPP)
+#if defined(SYSTEM_CLOCK_CPP)
     VALUE Clock;
 #else
     extern VALUE Clock;
@@ -103,7 +103,8 @@ VALUE rbClock::ToRuby(sf::Clock& clock)
 
 sf::Clock* rbClock::ToSFML(VALUE clock)
 {
+    clock = ToRuby(clock);
     return (sf::Clock*)DATA_PTR(clock);
 }
 
-#endif // CLOCK_HPP
+#endif // SYSTEM_CLOCK_HPP

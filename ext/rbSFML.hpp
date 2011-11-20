@@ -41,12 +41,14 @@ static inline T MIN(T a, T b)
 
 static inline VALUE MAX(VALUE a, VALUE b)
 {
-    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? a : b;
+    static ID id_gt = rb_intern(">");
+    return rb_funcall(a, id_gt, 1, b) == Qtrue ? a : b;
 }
 
 static inline VALUE MIN(VALUE a, VALUE b)
 {
-    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? b : a;
+    static ID id_gt = rb_intern(">");
+    return rb_funcall(a, id_gt, 1, b) == Qtrue ? b : a;
 }
 
 static inline void VALIDATE_CLASS(VALUE obj, VALUE klass)

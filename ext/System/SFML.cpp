@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#define SFML_CPP
+#define SYSTEM_SFML_CPP
 #include <System/SFML.hpp>
 
 std::stringstream gErrorStream;

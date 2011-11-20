@@ -20,7 +20,7 @@
  *    source distribution.
  */
 
-#define VIDEOMODE_CPP
+#define WINDOW_VIDEOMODE_CPP
 #include "VideoMode.hpp"
 
 void rbVideoMode::Init(VALUE SFML)
@@ -106,11 +106,11 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
   
     switch(argc)
     {
-    case 0:
+        case 0:
             video_mode->Width = 0;
             video_mode->Height = 0;
             video_mode->BitsPerPixel = 0;
-      break;
+            break;
         case 1:
             InitializeCopy(self, ToRuby(argv[0]));
             break;

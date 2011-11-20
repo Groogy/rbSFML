@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef SFML_HPP
-#define SFML_HPP
+#ifndef SYSTEM_SFML_HPP
+#define SYSTEM_SFML_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
@@ -33,7 +33,7 @@
 namespace rbSFML
 {
     
-    static inline VALUE ToRuby();
+    static inline VALUE Module();
     
 #if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
     
@@ -64,9 +64,9 @@ namespace rbSFML
     
 };
 
-VALUE rbSFML::ToRuby()
+VALUE rbSFML::Module()
 {
     return rb_define_module("SFML");
 }
 
-#endif // SFML_HPP
+#endif // SYSTEM_SFML_HPP

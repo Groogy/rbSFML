@@ -24,7 +24,7 @@
 extern "C"
 void Init_window()
 {
-    VALUE SFML = rbSFML::ToRuby();
+    VALUE SFML = rbSFML::Module();
     
     if (!rb_cvar_defined(SFML, rb_intern("@@system")))
     {
@@ -35,4 +35,5 @@ void Init_window()
     
     rbStyle::Init(SFML);
     rbVideoMode::Init(SFML);
+    rbWindow::Init(SFML);
 }

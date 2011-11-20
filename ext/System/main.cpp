@@ -24,7 +24,7 @@
 extern "C"
 void Init_system()
 {
-    VALUE SFML = rbSFML::ToRuby();
+    VALUE SFML = rbSFML::Module();
     rb_cvar_set(SFML, rb_intern("@@system"), Qtrue);
     
     rbSFML::Init(SFML);
