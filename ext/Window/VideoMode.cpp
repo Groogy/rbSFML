@@ -72,13 +72,6 @@ void rbVideoMode::Init(VALUE SFML)
     rb_define_alias(VideoMode, "to_str",          "inspect" );
 }
 
-VALUE rbVideoMode::Allocate(VALUE)
-{
-    sf::VideoMode* video_mode = new(std::nothrow) sf::VideoMode;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
-}
-
 VALUE rbVideoMode::GetDesktopMode(VALUE)
 {
     VALUE video_mode = Allocate(VideoMode);

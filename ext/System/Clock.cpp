@@ -46,13 +46,6 @@ void rbClock::Init(VALUE SFML)
     rb_define_alias(Clock, "to_str",           "inspect"     );
 }
 
-VALUE rbClock::Allocate(VALUE)
-{
-    sf::Clock* clock = new(std::nothrow) sf::Clock;
-    if (clock == NULL) rb_memerror();
-    return ToRuby(clock);
-}
-
 VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
 {
     *ToSFML(self) = *ToSFML(clock);

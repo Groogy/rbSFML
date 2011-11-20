@@ -1,23 +1,22 @@
-/* rbSFML - Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
- * This software is provided 'as-is', without any express or
- * implied warranty. In no event will the authors be held
- * liable for any damages arising from the use of this software.
+/* rbSFML
+ * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from
+ * the use of this software.
  *
  * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute
- * it freely, subject to the following restrictions:
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
  *
- * 1. The origin of this software must not be misrepresented;
- *    you must not claim that you wrote the original software.
- *    If you use this software in a product, an acknowledgment
- *    in the product documentation would be appreciated but
- *    is not required.
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software in
+ *    a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
  *
- * 2. Altered source versions must be plainly marked as such,
- *    and must not be misrepresented as being the original software.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
  *
- * 3. This notice may not be removed or altered from any
- *    source distribution.
+ * 3. This notice may not be removed or altered from any source distribution.
  */
 
 #define WINDOW_WINDOW_CPP
@@ -41,27 +40,20 @@ void rbWindow::Init(VALUE SFML)
     rb_define_method(Window, "poll_event", PollEvent,   -1);
     rb_define_method(Window, "wait_event", WaitEvent,   -1);
     rb_define_method(Window, "each_event", EachEvent,    0);
-	
-	// Instance aliasses
-	rb_define_alias(Window, "Create",       "create"    );
-	rb_define_alias(Window, "Close",        "close"     );
-	rb_define_alias(Window, "IsOpened",     "opened?"   );
-	rb_define_alias(Window, "GetWidth",     "width"     );
-	rb_define_alias(Window, "get_width",    "width"     );
-	rb_define_alias(Window, "GetHeight",    "height"    );
-	rb_define_alias(Window, "get_height",   "height"    );
-	rb_define_alias(Window, "GetSettings",  "settings"  );
-	rb_define_alias(Window, "get_settings", "settings"  );
-	rb_define_alias(Window, "PollEvent",    "poll_event");
-	rb_define_alias(Window, "event",        "poll_event");
-	rb_define_alias(Window, "WaitEvent",    "wait_event");
-}
-
-VALUE rbWindow::Allocate(VALUE)
-{
-    sf::Window* video_mode = new(std::nothrow) sf::Window;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
+    
+    // Instance aliasses
+    rb_define_alias(Window, "Create",       "create"    );
+    rb_define_alias(Window, "Close",        "close"     );
+    rb_define_alias(Window, "IsOpened",     "opened?"   );
+    rb_define_alias(Window, "GetWidth",     "width"     );
+    rb_define_alias(Window, "get_width",    "width"     );
+    rb_define_alias(Window, "GetHeight",    "height"    );
+    rb_define_alias(Window, "get_height",   "height"    );
+    rb_define_alias(Window, "GetSettings",  "settings"  );
+    rb_define_alias(Window, "get_settings", "settings"  );
+    rb_define_alias(Window, "PollEvent",    "poll_event");
+    rb_define_alias(Window, "event",        "poll_event");
+    rb_define_alias(Window, "WaitEvent",    "wait_event");
 }
 
 VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
@@ -130,22 +122,30 @@ VALUE rbWindow::GetSettings(VALUE self)
 }
 
 static inline VALUE PollEvent(VALUE self, VALUE event)
-{/*
-    sf::Event event;
-    bool ret = ToSFML(self)->PollEvent(event);
-    return ret ? rbEvent::ToRuby(event) : Qfalse;
-*/}
+{
+    sf::Event ev;
+    bool ret = rbWindow::ToSFML(self)->PollEvent(ev);
+    if (ret)
+    {
+        *rbEvent::ToSFML(event) = ev;
+        return Qtrue;
+    }
+    else
+    {
+        return Qfalse;
+    }
+}
 
 VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
     {
         case 0:
-        {/*
+        {
             VALUE event = rbEvent::Allocate(rbEvent::Event);
             VALUE test = ::PollEvent(self, event);
             return (test == Qtrue) ? event : Qnil;
-        */}
+        }
         case 1:
             return ::PollEvent(self, argv[0]);
         default:
@@ -155,22 +155,30 @@ VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
 }
 
 static inline VALUE WaitEvent(VALUE self, VALUE event)
-{/*
-    sf::Event event;
-    bool ret = ToSFML(self)->WaitEvent(event);
-    return ret ? rbEvent::ToRuby(event) : Qfalse;
-*/}
+{
+    sf::Event ev;
+    bool ret = rbWindow::ToSFML(self)->WaitEvent(ev);
+    if (ret)
+    {
+        *rbEvent::ToSFML(event) = ev;
+        return Qtrue;
+    }
+    else
+    {
+        return Qfalse;
+    }
+}
 
 VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
     {
         case 0:
-        {/*
+        {
             VALUE event = rbEvent::Allocate(rbEvent::Event);
             VALUE test = ::WaitEvent(self, event);
             return (test == Qtrue) ? event : Qnil;
-        */}
+        }
         case 1:
             return ::WaitEvent(self, argv[0]);
         default:
@@ -182,10 +190,12 @@ VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
 VALUE rbWindow::EachEvent(VALUE self)
 {
     RETURN_ENUMERATOR(self, 0, NULL);
-    sf::Event event;
-    while (ToSFML(self)->PollEvent(event))
+    sf::Event ev;
+    while (ToSFML(self)->PollEvent(ev))
     {
-        //rb_yield(rbEvent::ToRuby(event));
+        VALUE event = rbEvent::Allocate(rbEvent::Event);
+        *rbEvent::ToSFML(event) = ev;
+        rb_yield(event);
     }
     return Qnil;
 }

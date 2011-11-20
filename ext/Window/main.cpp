@@ -33,6 +33,7 @@ void Init_window()
     
     rb_cvar_set(SFML, rb_intern("@@window"), Qtrue);
     
+    rbEvent::Init(SFML);
     rbStyle::Init(SFML);
     rbVideoMode::Init(SFML);
     rbWindow::Init(SFML);

@@ -38,6 +38,8 @@ namespace rbClock
     static inline VALUE ToRuby(sf::Clock& clock);
     static inline sf::Clock* ToSFML(VALUE clock);
     
+    static inline VALUE Allocate(VALUE);
+    
 #if defined(SYSTEM_CLOCK_CPP)
     VALUE Clock;
 #else
@@ -47,9 +49,6 @@ namespace rbClock
 #if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
     
     void Init(VALUE SFML);
-    
-    // Clock.allocate
-    static VALUE Allocate(VALUE);
     
     // Clock#initialize_copy(other)
     static VALUE InitializeCopy(VALUE self, VALUE clock);
@@ -76,6 +75,13 @@ namespace rbClock
 void rbClock::Free(void* clock)
 {
     delete (sf::Clock*)clock;
+}
+
+VALUE rbClock::Allocate(VALUE)
+{
+    sf::Clock* clock = new(std::nothrow) sf::Clock;
+    if (clock == NULL) rb_memerror();
+    return ToRuby(clock);
 }
 
 VALUE rbClock::ToRuby(VALUE other)

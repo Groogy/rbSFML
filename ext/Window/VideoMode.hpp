@@ -38,6 +38,8 @@ namespace rbVideoMode
     static inline VALUE ToRuby(sf::VideoMode& video_mode);
     static inline sf::VideoMode* ToSFML(VALUE video_mode);
     
+    static inline VALUE Allocate(VALUE);
+    
 #if defined(WINDOW_VIDEOMODE_CPP)
     VALUE VideoMode;
 #else
@@ -47,9 +49,6 @@ namespace rbVideoMode
 #if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
     
     void Init(VALUE SFML);
-    
-    // VideoMode.allocate
-    static VALUE Allocate(VALUE);
     
     // VideoMode.desktop_mode
     static VALUE GetDesktopMode(VALUE self);
@@ -100,6 +99,13 @@ namespace rbVideoMode
 void rbVideoMode::Free(void* video_mode)
 {
     delete (sf::VideoMode*)video_mode;
+}
+
+VALUE rbVideoMode::Allocate(VALUE)
+{
+    sf::VideoMode* video_mode = new(std::nothrow) sf::VideoMode;
+    if (video_mode == NULL) rb_memerror();
+    return ToRuby(video_mode);
 }
 
 VALUE rbVideoMode::ToRuby(VALUE other)

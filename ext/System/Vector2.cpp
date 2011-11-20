@@ -40,8 +40,8 @@ void rbVector2::Init(VALUE SFML)
     rb_define_method(Vector2, "memory_usage",    GetMemoryUsage,  0);
     
     // Attribute accessors
-    rb_define_attr(Vector2, "x", 1, 1);
-    rb_define_attr(Vector2, "y", 1, 1);
+    rb_define_attr(Vector2, "x", true, true);
+    rb_define_attr(Vector2, "y", true, true);
     
     // Instance aliases
     rb_define_alias(Vector2, "to_s",   "inspect");

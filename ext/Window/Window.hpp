@@ -25,10 +25,10 @@
 #include <ruby.h>
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
+#include <Window/Event.hpp>
 #include <Window/VideoMode.hpp>
 
 #include <SFML/Window/Window.hpp>
-#include <SFML/Window/Event.hpp>
 
 namespace rbWindow
 {
@@ -40,6 +40,8 @@ namespace rbWindow
     static inline VALUE ToRuby(sf::Window& window);
     static inline sf::Window* ToSFML(VALUE window);
     
+    static inline VALUE Allocate(VALUE);
+    
 #if defined(WINDOW_WINDOW_CPP)
     VALUE Window;
 #else
@@ -49,9 +51,6 @@ namespace rbWindow
 #if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
     
     void Init(VALUE SFML);
-    
-    // Window.allocate
-    static VALUE Allocate(VALUE);
     
     // Window#initialize
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
@@ -90,6 +89,13 @@ namespace rbWindow
 void rbWindow::Free(void* window)
 {
     delete (sf::Window*)window;
+}
+
+VALUE rbWindow::Allocate(VALUE)
+{
+    sf::Window* video_mode = new(std::nothrow) sf::Window;
+    if (video_mode == NULL) rb_memerror();
+    return ToRuby(video_mode);
 }
 
 VALUE rbWindow::ToRuby(VALUE other)

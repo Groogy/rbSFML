@@ -25,7 +25,8 @@
 #include <ruby.h>
 
 #include <rbSFML.hpp>
-#include <System.hpp>
+#include <System/SFML.hpp>
+#include <Window/Event.hpp>
 #include <Window/Style.hpp>
 #include <Window/VideoMode.hpp>
 #include <Window/Window.hpp>
