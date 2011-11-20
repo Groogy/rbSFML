@@ -28,6 +28,7 @@
 #include <Window/VideoMode.hpp>
 
 #include <SFML/Window/Window.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace rbWindow
 {
@@ -80,7 +81,7 @@ namespace rbWindow
     static VALUE WaitEvent(int argc, VALUE argv[], VALUE self);
     
     // Window#each_event
-    static VALUE rbWindow::EachEvent(VALUE self);
+    static VALUE EachEvent(VALUE self);
     
 #endif
     
