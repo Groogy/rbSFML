@@ -47,16 +47,15 @@ namespace rbVector3
     static inline void SetY(VALUE vector3, VALUE value);
     static inline void SetZ(VALUE vector3, VALUE value);
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
-    
 #if defined(VECTOR3_CPP)
     VALUE Vector3;
 #else
     extern VALUE Vector3;
 #endif
     
+#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+    
     void Init(VALUE SFML);
-    static void Free(void* vector3);
     
     // Vector3#initialize(...)
     static VALUE Initialize(int argc, VALUE* args, VALUE self);

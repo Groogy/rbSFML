@@ -49,11 +49,6 @@ void rbClock::Init(VALUE SFML)
     rb_define_alias(Clock, "to_str",           "inspect"     );
 }
 
-void rbClock::Free(void* clock)
-{
-    delete (sf::Clock*)clock;
-}
-
 VALUE rbClock::Allocate(VALUE)
 {
     sf::Clock* clock = new(std::nothrow) sf::Clock;

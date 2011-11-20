@@ -45,16 +45,15 @@ namespace rbVector2
     static inline void SetX(VALUE vector2, VALUE value);
     static inline void SetY(VALUE vector2, VALUE value);
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
-    
 #if defined(VECTOR2_CPP)
     VALUE Vector2;
 #else
     extern VALUE Vector2;
 #endif
     
+#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+    
     void Init(VALUE SFML);
-    static void Free(void* vector2);
     
     // Vector2#initialize(...)
     static VALUE Initialize(int argc, VALUE* args, VALUE self);

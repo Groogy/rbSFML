@@ -25,6 +25,7 @@ extern "C"
 void Init_system()
 {
     VALUE SFML = rbSFML::ToRuby();
+    rb_cvar_set(SFML, rb_intern("@@system"), Qtrue);
     
     rbSFML::Init(SFML);
     rbClock::Init(SFML);

@@ -31,12 +31,12 @@
 namespace rbClock
 {
     
+    static inline void Free(void* clock);
+    
     static inline VALUE ToRuby(VALUE other);
     static inline VALUE ToRuby(sf::Clock* clock);
     static inline VALUE ToRuby(sf::Clock& clock);
     static inline sf::Clock* ToSFML(VALUE clock);
-    
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
     
 #if defined(CLOCK_CPP)
     VALUE Clock;
@@ -44,8 +44,9 @@ namespace rbClock
     extern VALUE Clock;
 #endif
     
+#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+    
     void Init(VALUE SFML);
-    static void Free(void* clock);
     
     // Clock.allocate
     static VALUE Allocate(VALUE self);
@@ -71,6 +72,11 @@ namespace rbClock
 #endif
 
 };
+
+void rbClock::Free(void* clock)
+{
+    delete (sf::Clock*)clock;
+}
 
 VALUE rbClock::ToRuby(VALUE other)
 {

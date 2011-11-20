@@ -39,12 +39,12 @@ if SFML.system?
 end
 
 if SFML.window?
-  load "test/window/test_videomode.rb"
+  #load "test/window/test_videomode.rb"
 end
 
 if SFML.graphics?
-  load "test/graphics/test_color.rb"
-  load "test/graphics/test_rect.rb"
+  #load "test/graphics/test_color.rb"
+  #load "test/graphics/test_rect.rb"
 end
 
 if SFML.audio?
