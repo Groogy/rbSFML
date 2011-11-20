@@ -160,7 +160,7 @@ if ARGV.include? 'doc'
                  FileList.new('ext/*.rb')
     yard.options << "--no-save" << "--no-cache"
     at_exit do
-      uri = "\"file:///#{File.dirname(__FILE__)}/#{DOC_DIR}/frames.html\""
+      uri = "file:///\"#{File.dirname(__FILE__)}/#{DOC_DIR}\"/frames.html"
       case RUBY_PLATFORM
       when /darwin|mac os/i          # Mac OS
         system "open #{uri}"

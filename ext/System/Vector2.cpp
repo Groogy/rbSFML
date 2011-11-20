@@ -55,7 +55,7 @@ void rbVector2::Init(VALUE SFML)
 
 VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
 {    
-    VALUE x, y, vector2;
+    VALUE x, y;
     switch (argc)
     {
         case 0:
@@ -63,8 +63,7 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             SetY(self, INT2FIX(0));
             break;
         case 1:
-            vector2 = ToRuby(argv[0]);
-            InitializeCopy(self, vector2);
+            InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 2:
             x = argv[0];

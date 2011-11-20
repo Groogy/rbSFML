@@ -33,18 +33,20 @@ end
 exit unless defined? SFML
 
 if SFML.system?
-  load "test/system/test_clock.rb"
-  load "test/system/test_vector2.rb"
-  load "test/system/test_vector3.rb"
+  load "test/System/Clock.rb"
+  load "test/System/SFML.rb"
+  load "test/System/Vector2.rb"
+  load "test/System/Vector3.rb"
 end
 
 if SFML.window?
-  #load "test/window/test_videomode.rb"
+  load "test/Window/Style.rb"
+  load "test/Window/VideoMode.rb"
 end
 
 if SFML.graphics?
-  #load "test/graphics/test_color.rb"
-  #load "test/graphics/test_rect.rb"
+  #load "test/Graphics/Color.rb"
+  #load "test/Graphics/Rect.rb"
 end
 
 if SFML.audio?

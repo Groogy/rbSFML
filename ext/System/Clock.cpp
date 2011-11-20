@@ -39,10 +39,7 @@ void rbClock::Init(VALUE SFML)
     
     // Instance aliasses
     rb_define_alias(Clock, "GetElapsedTime",   "elapsed_time");
-    rb_define_alias(Clock, "getElapsedTime",   "elapsed_time");
     rb_define_alias(Clock, "get_elapsed_time", "elapsed_time");
-    rb_define_alias(Clock, "ElapsedTime",      "elapsed_time");
-    rb_define_alias(Clock, "elapsedTime",      "elapsed_time");
     rb_define_alias(Clock, "time",             "elapsed_time");
     rb_define_alias(Clock, "Reset",            "reset"       );
     rb_define_alias(Clock, "to_s",             "inspect"     );
@@ -56,11 +53,9 @@ VALUE rbClock::Allocate(VALUE)
     return ToRuby(clock);
 }
 
-VALUE rbClock::InitializeCopy(VALUE self, VALUE other)
+VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
 {
-    sf::Clock* destination = ToSFML(self);
-    sf::Clock* source = ToSFML(other);
-    *destination = *source;
+    *ToSFML(self) = *ToSFML(clock);
     return self;
 }
 

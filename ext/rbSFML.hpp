@@ -24,18 +24,48 @@
 
 #include <ruby.h>
 
-#define SFML_VERSION "2.0"
+#define SFML_VERSION    "2.0"
 #define BINDING_VERSION "development-unstable"
 
-#define MAX(a, b) ( (a) > (b) ? (a) : (b) )
-#define MIN(a, b) ( (a) < (b) ? (a) : (b) )
+template<typename T>
+static inline T MAX(T a, T b)
+{
+    return a > b ? a : b;
+}
 
-#define RMAX(a, b) (rb_funcall((a), rb_intern( ">" ), 1, (b)) == Qtrue ? (a) : (b))
-#define RMIN(a, b) (rb_funcall((a), rb_intern( "<" ), 1, (b)) == Qtrue ? (a) : (b))
+template<typename T>
+static inline T MIN(T a, T b)
+{
+    return a > b ? b : a;
+}
 
-#define VALIDATE_CLASS(variable, type) \
-if (rb_obj_is_kind_of(variable, type) != Qtrue) \
-    rb_raise(rb_eTypeError, "can't convert %s into %s", rb_obj_classname(variable), rb_class2name(type));
+static inline VALUE MAX(VALUE a, VALUE b)
+{
+    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? a : b;
+}
+
+static inline VALUE MIN(VALUE a, VALUE b)
+{
+    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? b : a;
+}
+
+static inline void VALIDATE_CLASS(VALUE obj, VALUE klass)
+{
+    if (rb_obj_is_kind_of(obj, klass) == Qfalse)
+    {
+        rb_raise(rb_eTypeError, "can't convert %s into %s",
+                 rb_obj_classname(obj), rb_class2name(klass));
+    }
+}
+
+static inline void VALIDATE_CLASS(VALUE obj, VALUE klass, bool condition)
+{
+    if (!condition)
+    {
+        rb_raise(rb_eTypeError, "can't convert %s into %s",
+                 rb_obj_classname(obj), rb_class2name(klass));
+    }
+}
 
 typedef VALUE ( *RubyFunctionPtr )( ... );
 #define rb_define_module_function( klass, name, func, argc, ... ) rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )

@@ -51,21 +51,6 @@ module SFML
     def initialize
     end
     
-    # Compares the vector with another one.
-    # @param [Vector2] other Vector to be compared with.
-    # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
-    #   otherwise
-    def ==(other)
-    end
-    
-    # Compares the vector with another one (strictly).
-    # @param [Vector2] other Vector to be compared with.
-    # @return [Boolean] <tt>true</tt> if they are strictly equal,
-    #   <tt>false</tt> otherwise
-    def eql?(other)
-    end
-    alias equal? eql?
-    
     # Calcs the opposite.
     # @return [Vector2]
     def -@
@@ -95,15 +80,30 @@ module SFML
     def /(other)
     end
     
+    # Compares the vector with another one.
+    # @param [Vector2] other Vector to be compared with.
+    # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
+    #   otherwise
+    def ==(other)
+    end
+    
+    # Compares the vector with another one (strictly).
+    # @param [Vector2] other Vector to be compared with.
+    # @return [Boolean] <tt>true</tt> if they are strictly equal,
+    #   <tt>false</tt> otherwise
+    def eql?(other)
+    end
+    alias equal? eql?
+    
     # Returns a formated string to represent the vector. 
-    # @return [String] <tt>Vector2(x, y)</tt>
+    # @return [String]
     def inspect
     end
     alias to_s inspect
     alias to_str inspect
     
     # Returns how much memory was allocated by this object.
-    # @return [Fixnum] Always zero
+    # @return [Fixnum]
     def memory_usage
     end
     

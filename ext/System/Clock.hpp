@@ -49,10 +49,10 @@ namespace rbClock
     void Init(VALUE SFML);
     
     // Clock.allocate
-    static VALUE Allocate(VALUE self);
+    static VALUE Allocate(VALUE);
     
     // Clock#initialize_copy(other)
-    static VALUE InitializeCopy(VALUE self, VALUE other);
+    static VALUE InitializeCopy(VALUE self, VALUE clock);
     
     // Clock#elapsed_time
     static VALUE GetElapsedTime(VALUE self);
