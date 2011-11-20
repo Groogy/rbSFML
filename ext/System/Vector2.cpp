@@ -113,22 +113,23 @@ VALUE rbVector2::Negate(VALUE self)
     VALUE x = GetX(self);
     VALUE y = GetY(self);
     
-    x = rb_funcall(x, rb_intern("-@"), 0);
-    y = rb_funcall(y, rb_intern("-@"), 0);
+    static ID id_negate = rb_intern("-@");
+    x = rb_funcall(x, id_negate, 0);
+    y = rb_funcall(y, id_negate, 0);
     
     VALUE argv[] = {x, y};
     return rb_class_new_instance(2, argv, Vector2);
 }
 
-static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
+static inline VALUE DoMath(VALUE left, ID op, VALUE right)
 {
     VALUE x = rbVector2::GetX(left);
     VALUE y = rbVector2::GetY(left);
     VALUE ox = rbVector2::GetX(right);
     VALUE oy = rbVector2::GetY(right);
     
-    x = rb_funcall(x, rb_intern(op), 1, ox);
-    y = rb_funcall(y, rb_intern(op), 1, oy);
+    x = rb_funcall(x, op, 1, ox);
+    y = rb_funcall(y, op, 1, oy);
     
     VALUE argv[] = {x, y};
     return rb_class_new_instance(2, argv, rbVector2::Vector2);
@@ -136,22 +137,26 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 
 VALUE rbVector2::Add(VALUE self, VALUE other)
 {
-    return DoMath(self, "+", ToRuby(other));
+    static ID id_add = rb_intern("+");
+    return DoMath(self, id_add, ToRuby(other));
 }
 
 VALUE rbVector2::Subtract(VALUE self, VALUE other)
 {
-    return DoMath(self, "-", ToRuby(other));
+    static ID id_subtract = rb_intern("-");
+    return DoMath(self, id_subtract, ToRuby(other));
 }
 
 VALUE rbVector2::Multiply(VALUE self, VALUE other)
 {
-    return DoMath(self, "*", ToRuby(other));
+    static ID id_multiply = rb_intern("*");
+    return DoMath(self, id_multiply, ToRuby(other));
 }
 
 VALUE rbVector2::Divide(VALUE self, VALUE other)
 {
-    return DoMath(self, "/", ToRuby(other));
+    static ID id_divide = rb_intern("/");
+    return DoMath(self, id_divide, ToRuby(other));
 }
 
 VALUE rbVector2::Equal(VALUE self, VALUE other)

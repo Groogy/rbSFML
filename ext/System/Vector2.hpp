@@ -164,22 +164,26 @@ sf::Vector2f rbVector2::ToSFMLf(VALUE vector2)
 
 VALUE rbVector2::GetX(VALUE vector2)
 {
-    return rb_iv_get(vector2, "@x");
+    static ID id_x = rb_intern("@x");
+    return rb_ivar_get(vector2, id_x);
 }
 
 VALUE rbVector2::GetY(VALUE vector2)
 {
-    return rb_iv_get(vector2, "@y");
+    static ID id_y = rb_intern("@y");
+    return rb_ivar_get(vector2, id_y);
 }
 
 void rbVector2::SetX(VALUE vector2, VALUE value)
 {
-    rb_iv_set(vector2, "@x", value);
+    static ID id_x = rb_intern("@x");
+    rb_ivar_set(vector2, id_x, value);
 }
 
 void rbVector2::SetY(VALUE vector2, VALUE value)
 {
-    rb_iv_set(vector2, "@y", value);
+    static ID id_y = rb_intern("@y");
+    rb_ivar_set(vector2, id_y, value);
 }
 
 #endif // VECTOR2_HPP

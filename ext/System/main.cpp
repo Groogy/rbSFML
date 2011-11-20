@@ -25,7 +25,6 @@ extern "C"
 void Init_system()
 {
     VALUE SFML = rbSFML::ToRuby();
-    rb_define_const(SFML, "SystemLoaded", Qtrue);
     
     rbSFML::Init(SFML);
     rbClock::Init(SFML);

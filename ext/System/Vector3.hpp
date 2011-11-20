@@ -170,32 +170,38 @@ sf::Vector3f rbVector3::ToSFMLf(VALUE vector3)
 
 VALUE rbVector3::GetX(VALUE vector3)
 {
-    return rb_iv_get(vector3, "@x");
+    static ID id_x = rb_intern("@x");
+    return rb_ivar_get(vector3, id_x);
 }
 
 VALUE rbVector3::GetY(VALUE vector3)
 {
-    return rb_iv_get(vector3, "@y");
+    static ID id_y = rb_intern("@y");
+    return rb_ivar_get(vector3, id_y);
 }
 
 VALUE rbVector3::GetZ(VALUE vector3)
 {
-    return rb_iv_get(vector3, "@z");
+    static ID id_z = rb_intern("@z");
+    return rb_ivar_get(vector3, id_z);
 }
 
 void rbVector3::SetX(VALUE vector3, VALUE value)
 {
-    rb_iv_set(vector3, "@x", value);
+    static ID id_x = rb_intern("@x");
+    rb_ivar_set(vector3, id_x, value);
 }
 
 void rbVector3::SetY(VALUE vector3, VALUE value)
 {
-    rb_iv_set(vector3, "@y", value);
+    static ID id_y = rb_intern("@y");
+    rb_ivar_set(vector3, id_y, value);
 }
 
 void rbVector3::SetZ(VALUE vector3, VALUE value)
 {
-    rb_iv_set(vector3, "@z", value);
+    static ID id_z = rb_intern("@z");
+    rb_ivar_set(vector3, id_z, value);
 }
 
 #endif // VECTOR2_HPP

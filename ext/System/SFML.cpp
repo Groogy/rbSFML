@@ -82,21 +82,24 @@ VALUE rbSFML::SystemLoaded(VALUE self)
 
 VALUE rbSFML::WindowLoaded(VALUE self)
 {
-    return rb_const_defined(self, rb_intern("WindowLoaded"))
+    static ID id_window = rb_intern("@@window");
+    return rb_cvar_defined(self, id_window)
         ? Qtrue
         : Qfalse;
 }
 
 VALUE rbSFML::GraphicsLoaded(VALUE self)
 {
-    return rb_const_defined(self, rb_intern("GraphicsLoaded"))
+    static ID id_graphics = rb_intern("@@graphics");
+    return rb_cvar_defined(self, id_graphics)
         ? Qtrue
         : Qfalse;
 }
 
 VALUE rbSFML::AudioLoaded(VALUE self)
 {
-    return rb_const_defined(self, rb_intern("AudioLoaded"))
+    static ID id_audio = rb_intern("@@audio");
+    return rb_cvar_defined(self, id_audio)
         ? Qtrue
         : Qfalse;
 }
