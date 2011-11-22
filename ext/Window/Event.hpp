@@ -75,6 +75,9 @@ namespace rbEvent
     // Event#info
     static VALUE Info(VALUE self);
     
+    // Event#===(other)
+    static VALUE CaseEqual(VALUE self, VALUE other);
+    
     // Event#size
     static VALUE Size(VALUE self);
     

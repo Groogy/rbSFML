@@ -125,6 +125,7 @@ void rbEvent::Init(VALUE SFML)
     // Instance methods
     rb_define_method(Event, "type",             Type,            0);
     rb_define_method(Event, "info",             Info,            0);
+    rb_define_method(Event, "===",              CaseEqual,       1);
     rb_define_method(Event, "size",             Size,            0);
     rb_define_method(Event, "key",              Key,             0);
     rb_define_method(Event, "text",             Text,            0);
@@ -186,6 +187,11 @@ VALUE rbEvent::Info(VALUE self)
         case sf::Event::JoystickDisconnected:
             return JoystickConnect(self);
     }
+}
+
+VALUE rbEvent::CaseEqual(VALUE self, VALUE other)
+{
+    return rb_obj_is_kind_of(Info(self), other);
 }
 
 VALUE rbEvent::Size(VALUE self)

@@ -151,6 +151,7 @@ task :doc
 
 if ARGV.include? 'doc'
   require 'yard'
+  # TODO: Find a way to remove '[View source]' from docs.
   YARD::Rake::YardocTask.new do |yard|
     yard.name = DOC_DIR
     yard.files = FileList.new('ext/Audio/*.rb') +
@@ -163,13 +164,13 @@ if ARGV.include? 'doc'
       uri = "file:///\"#{File.dirname(__FILE__)}/#{DOC_DIR}\"/frames.html"
       case RUBY_PLATFORM
       when /darwin|mac os/i          # Mac OS
-        system "open #{uri}"
+        system "open #{uri}" # TODO: It works?
       when /mingw|mswin|windows/i    # Windows
         system "start /b #{uri}"
       when /cygwin/i                 # Cygwin
         system "cmd /C start /b #{uri}"
       when /linux|bsd|aix|solaris/i  # Linux
-        system "xdg-open #{uri}"
+        system "xdg-open #{uri}" # TODO: It works?
       end
     end
   end
