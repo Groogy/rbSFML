@@ -69,9 +69,15 @@ static inline void VALIDATE_CLASS(VALUE obj, VALUE klass, bool condition)
     }
 }
 
-typedef VALUE ( *RubyFunctionPtr )( ... );
-#define rb_define_module_function( klass, name, func, argc, ... ) rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
-#define rb_define_singleton_method( klass, name, func, argc, ... ) rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
-#define rb_define_method( klass, name, func, argc, ... ) rb_define_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
+typedef VALUE (*RubyFunctionPtr)(...);
+
+#define rb_define_module_function(klass, name, func, argc, ...) \
+        rb_define_module_function(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
+        
+#define rb_define_singleton_method(klass, name, func, argc, ...) \
+        rb_define_singleton_method(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
+        
+#define rb_define_method(klass, name, func, argc, ...) \
+        rb_define_method(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
 
 #endif // RBSFML_HPP

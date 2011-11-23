@@ -64,25 +64,52 @@ VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
 VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
 {
     sf::Window* window = ToSFML(self);
-    sf::VideoMode* mode;
+    sf::WindowHandle handle = 0;
+    sf::VideoMode mode;
     std::string title;
+    sf::Uint32 style = 0;
+    sf::ContextSettings settings;
     
     switch (argc)
     {
-        case 2:
-            mode = rbVideoMode::ToSFML(argv[0]);
-            VALIDATE_CLASS(argv[1], rb_cString);
-            title = std::string(RSTRING_PTR(argv[1]), RSTRING_LEN(argv[1]));
-            window->Create(*mode, title);
+        case 1:
+            handle = sf::WindowHandle(FIX2INT(argv[0]));
             break;
         case 3:
-            mode = rbVideoMode::ToSFML(argv[0]);
-            VALIDATE_CLASS(argv[1], rb_cString);
-            title = std::string(RSTRING_PTR(argv[1]), RSTRING_LEN(argv[1]));
-            window->Create(*mode, title, FIX2INT(argv[2]));
+            style = FIX2INT(argv[2]);
+        case 2:
+            if (FIXNUM_P(argv[0]))
+            {
+                // settings = *(rbContextSettings::ToSFML(argv[1]));
+            }
+            else
+            {
+                mode = *(rbVideoMode::ToSFML(argv[0]));
+                VALIDATE_CLASS(argv[1], rb_cString);
+                title.assign(RSTRING_PTR(argv[1]), RSTRING_LEN(argv[1]));
+            }
             break;
         case 4:
-            rb_notimplement(); // TODO
+            // settings = *(rbContextSettings::ToSFML(argv[3]));
+            break;
+    }
+    
+    switch (argc)
+    {
+        case 1:
+            window->Create(handle);
+            break;
+        case 2:
+            if (handle == 0)
+                window->Create(mode, title);
+            else
+                window->Create(handle, settings);
+            break;
+        case 3:
+            window->Create(mode, title, style);
+            break;
+        case 4:
+            window->Create(mode, title, style, settings);
             break;
         default:
             rb_raise(rb_eArgError,
@@ -115,7 +142,7 @@ VALUE rbWindow::GetHeight(VALUE self)
 
 VALUE rbWindow::GetSettings(VALUE self)
 {
-    rb_notimplement(); // TODO
+    // return rbContextSettings::ToRuby(ToSFML(self)->GetSettings());
 }
 
 static inline VALUE PollEvent(VALUE self, VALUE event)

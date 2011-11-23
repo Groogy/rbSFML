@@ -50,21 +50,32 @@ module SFML
     def initialize(*args)
     end
     
-    # This constructor creates the window with the size and pixel depth
-    # defined in <tt>mode</tt>. An optional <tt>style</tt> can be passed to
-    # customize the look and behaviour of the window (borders, title bar,
-    # resizable, closable, ...). If <tt>style</tt> contains
-    # <tt>Style::Fullscreen</tt>, then <tt>mode</tt> must be a valid video
-    # mode. The fourth parameter is an optional structure specifying advanced
-    # OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-    # @param [VideoMode] mode Video mode to use (defines the width, height and
-    #   depth of the rendering area of the window)
-    # @param [String] title Title of the window
-    # @param [Fixnum] style Window style
-    # @param [ContextSettings] settings Additional settings for the underlying
-    #   OpenGL context
-    # @return [NilClass]
-    def create(mode, title, style=Style::Default, settings=ContextSettings.new)
+    # @overload create(mode, title, style=Style::Default, settings=ContextSettings.new)
+    #   This constructor creates the window with the size and pixel depth
+    #   defined in <tt>mode</tt>. An optional <tt>style</tt> can be passed to
+    #   customize the look and behaviour of the window (borders, title bar,
+    #   resizable, closable, ...). If <tt>style</tt> contains
+    #   <tt>Style::Fullscreen</tt>, then <tt>mode</tt> must be a valid video
+    #   mode. The fourth parameter is an optional structure specifying
+    #   advanced OpenGL context settings such as antialiasing, depth-buffer
+    #   bits, etc.
+    #   @param [VideoMode] mode Video mode to use (defines the width, height
+    #     and depth of the rendering area of the window)
+    #   @param [String] title Title of the window
+    #   @param [Fixnum] style Window style
+    #   @param [ContextSettings] settings Additional settings for the
+    #     underlying OpenGL context
+    #   @return [NilClass]
+    # @overload create(handle, settings=ContextSettings.new)
+    #   Create (or recreate) the window from an existing control. Use this
+    #   method if you want to create an OpenGL rendering area into an already
+    #   existing control. If the window was already created, it closes it
+    #   first.
+    #   @param [Fixnum] handle Platform-specific handle of the control
+    #   @param [ContextSettings] settings Additional settings for the
+    #     underlying OpenGL context
+    #   @return [NilClass]
+    def create
     end
     alias Create create
     
