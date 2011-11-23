@@ -10,7 +10,7 @@ Of course this means this library depends on SFML2 so you'll have to install SFM
 
 Recommended is this setup: (lowers or highers versions might work too)
 
-- [SFML2 - commit 09854baccf](https://github.com/LaurentGomila/SFML/commit/09854baccfc370480fe30f10c7a78648034fde3f)
+- [SFML2 - commit 09854baccf](https://github.com/LaurentGomila/SFML/tree/09854baccfc370480fe30f10c7a78648034fde3f)
 - [Ruby 1.9.3p0](http://www.ruby-lang.org/en/downloads/)
 - [Rake 0.9.2](https://rubygems.org/gems/rake)
 - [Yard 0.7.2](https://rubygems.org/gems/yard)
