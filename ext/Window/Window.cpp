@@ -80,7 +80,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
         case 2:
             if (FIXNUM_P(argv[0]))
             {
-                // settings = *(rbContextSettings::ToSFML(argv[1]));
+                settings = *(rbContextSettings::ToSFML(argv[1]));
             }
             else
             {
@@ -90,7 +90,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             }
             break;
         case 4:
-            // settings = *(rbContextSettings::ToSFML(argv[3]));
+            settings = *(rbContextSettings::ToSFML(argv[3]));
             break;
     }
     
@@ -142,7 +142,10 @@ VALUE rbWindow::GetHeight(VALUE self)
 
 VALUE rbWindow::GetSettings(VALUE self)
 {
-    // return rbContextSettings::ToRuby(ToSFML(self)->GetSettings());
+    VALUE settings = rbContextSettings::ToRuby(
+        const_cast<sf::ContextSettings*>(&(ToSFML(self)->GetSettings())));
+    rb_obj_freeze(settings);
+    return settings;
 }
 
 static inline VALUE PollEvent(VALUE self, VALUE event)

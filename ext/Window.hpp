@@ -26,6 +26,7 @@
 
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
+#include <Window/ContextSettings.hpp>
 #include <Window/Event.hpp>
 #include <Window/Style.hpp>
 #include <Window/VideoMode.hpp>
