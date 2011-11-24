@@ -34,14 +34,12 @@ namespace rbSFML
 {
     
     static inline VALUE Module();
+    static inline void PrepareRaiseError();
     static inline void RaiseError();
     
 #if defined(RBSFML_SYSTEM)
     
     void Init(VALUE rbSFML);
-    
-    // SFML.raise
-    static VALUE Raise(VALUE self);
     
     // SFML.raise_exceptions
     static VALUE GetRaiseExceptions(VALUE self);
@@ -70,9 +68,31 @@ VALUE rbSFML::Module()
     return rb_define_module("SFML");
 }
 
+extern std::stringstream gErrorStream; // main.cpp
+
+void rbSFML::PrepareRaiseError()
+{
+    VALUE SFML = Module();
+    VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
+    if (RTEST(flag))
+        sf::Err().rdbuf(gErrorStream.rdbuf());
+}
+
 void rbSFML::RaiseError()
 {
-    rb_funcall(Module(), rb_intern("raise"), 0);
+    VALUE SFML = Module();
+    VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
+    if (RTEST(flag))
+    {
+        std::string message = gErrorStream.str();
+        if (!message.empty())
+        {
+            VALUE Error = rb_const_get(SFML, rb_intern("Error"));
+            rb_raise(Error, message.c_str());
+            sf::Err().rdbuf(std::cerr.rdbuf());
+            gErrorStream.str("");
+        }
+    }
 }
 
 #endif // SYSTEM_SFML_HPP

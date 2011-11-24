@@ -22,39 +22,21 @@
 #define SYSTEM_SFML_CPP
 #include <System/SFML.hpp>
 
-std::stringstream gErrorStream;
-VALUE gError;
-
 void rbSFML::Init(VALUE SFML)
 {
-    gError = rb_define_class_under(SFML, "Error", rb_eRuntimeError);
+    rb_define_class_under(SFML, "Error", rb_eRuntimeError);
     
     rb_define_const(SFML, "SFML_VERSION",    rb_str_new2(SFML_VERSION   ));
     rb_define_const(SFML, "BINDING_VERSION", rb_str_new2(BINDING_VERSION));
     
     SetRaiseExceptions(SFML, Qtrue);
     
-    rb_define_module_function(SFML, "raise",             Raise,              0);
     rb_define_module_function(SFML, "raise_exceptions",  GetRaiseExceptions, 0);
     rb_define_module_function(SFML, "raise_exceptions=", SetRaiseExceptions, 1);
     rb_define_module_function(SFML, "system?",           SystemLoaded,       0);
     rb_define_module_function(SFML, "window?",           WindowLoaded,       0);
     rb_define_module_function(SFML, "graphics?",         GraphicsLoaded,     0);
     rb_define_module_function(SFML, "audio?",            AudioLoaded,        0);
-}
-
-VALUE rbSFML::Raise(VALUE self)
-{
-    VALUE flag = rb_cv_get(self, "@@raise_exceptions");
-    if (RTEST(flag))
-    {
-        std::string message = gErrorStream.str();
-        if (message.empty())
-            return Qnil;
-        gErrorStream.str("");
-        rb_raise(gError, message.c_str());
-    }
-    return Qnil;
 }
 
 VALUE rbSFML::GetRaiseExceptions(VALUE self)
@@ -67,10 +49,6 @@ VALUE rbSFML::GetRaiseExceptions(VALUE self)
 VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
 {
     rb_cv_set(self, "@@raise_exceptions", flag);
-    if (RTEST(flag))
-        sf::Err().rdbuf(gErrorStream.rdbuf());
-    else
-        sf::Err().rdbuf(std::cerr.rdbuf());
 }
 
 VALUE rbSFML::SystemLoaded(VALUE self)

@@ -135,7 +135,6 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
                      "wrong number of arguments(%i for 1..4)", argc);
     }
     
-    rbSFML::RaiseError();
     return Qnil;
 }
 

@@ -19,6 +19,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <sstream>
+std::stringstream gErrorStream;
+
 #include <Window.hpp>
 
 #if !defined(RBSFML_SFML)
