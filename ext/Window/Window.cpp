@@ -30,27 +30,45 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alloc_func(Window, Allocate);
     
     // Instance methods
-    rb_define_method(Window, "initialize", Initialize,  -1);
-    rb_define_method(Window, "create",     Create,      -1);
-    rb_define_method(Window, "close",      Close,        0);
-    rb_define_method(Window, "opened?",    IsOpened,     0);
-    rb_define_method(Window, "width",      GetWidth,     0);
-    rb_define_method(Window, "height",     GetHeight,    0);
-    rb_define_method(Window, "settings",   GetSettings,  0);
-    rb_define_method(Window, "poll_event", PollEvent,   -1);
-    rb_define_method(Window, "wait_event", WaitEvent,   -1);
-    rb_define_method(Window, "each_event", EachEvent,    0);
+    rb_define_method(Window, "initialize",     Initialize,         -1);
+    rb_define_method(Window, "create",         Create,             -1);
+    rb_define_method(Window, "close",          Close,               0);
+    rb_define_method(Window, "opened?",        IsOpened,            0);
+    rb_define_method(Window, "width",          GetWidth,            0);
+    rb_define_method(Window, "height",         GetHeight,           0);
+    rb_define_method(Window, "settings",       GetSettings,         0);
+    rb_define_method(Window, "poll_event",     PollEvent,          -1);
+    rb_define_method(Window, "wait_event",     WaitEvent,          -1);
+    rb_define_method(Window, "each_event",     EachEvent,           0);
+    rb_define_method(Window, "vertical_sync=", EnableVerticalSync,  1);
+    rb_define_method(Window, "mouse_cursor=",  ShowMouseCursor,     1);
+    rb_define_method(Window, "position",       SetPosition,         2);
+    rb_define_method(Window, "position=",      SetPosition2,        1);
+    rb_define_method(Window, "size",           SetSize,             2);
+    rb_define_method(Window, "size=",          SetSize2,            1);
+    rb_define_method(Window, "title=",         SetTitle,            1);
+    rb_define_method(Window, "show=",          Show,                1);
     
     // Instance aliasses
-    rb_define_alias(Window, "Create",       "create"    );
-    rb_define_alias(Window, "Close",        "close"     );
-    rb_define_alias(Window, "IsOpened",     "opened?"   );
-    rb_define_alias(Window, "GetWidth",     "width"     );
-    rb_define_alias(Window, "GetHeight",    "height"    );
-    rb_define_alias(Window, "GetSettings",  "settings"  );
-    rb_define_alias(Window, "PollEvent",    "poll_event");
-    rb_define_alias(Window, "event",        "poll_event");
-    rb_define_alias(Window, "WaitEvent",    "wait_event");
+    rb_define_alias(Window, "Create",             "create"        );
+    rb_define_alias(Window, "Close",              "close"         );
+    rb_define_alias(Window, "IsOpened",           "opened?"       );
+    rb_define_alias(Window, "GetWidth",           "width"         );
+    rb_define_alias(Window, "GetHeight",          "height"        );
+    rb_define_alias(Window, "GetSettings",        "settings"      );
+    rb_define_alias(Window, "PollEvent",          "poll_event"    );
+    rb_define_alias(Window, "event",              "poll_event"    );
+    rb_define_alias(Window, "WaitEvent",          "wait_event"    );
+    rb_define_alias(Window, "EnableVerticalSync", "vertical_sync=");
+    rb_define_alias(Window, "vertical_sync",      "vertical_sync=");
+    rb_define_alias(Window, "ShowMouseCursor",    "mouse_cursor=" );
+    rb_define_alias(Window, "mouse_cursor",       "mouse_cursor=" );
+    rb_define_alias(Window, "SetPosition",        "position"      );
+    rb_define_alias(Window, "SetSize",            "size"          );
+    rb_define_alias(Window, "SetTitle",           "title="        );
+    rb_define_alias(Window, "title",              "title="        );
+    rb_define_alias(Window, "Show",               "show="         );
+    rb_define_alias(Window, "show",               "show="         );
 }
 
 VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
@@ -73,6 +91,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
     switch (argc)
     {
         case 1:
+            VALIDATE_CLASS(argv[0], rb_cFixnum, FIXNUM_P(argv[0]));
             handle = sf::WindowHandle(FIX2INT(argv[0]));
             break;
         case 3:
@@ -113,9 +132,10 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             break;
         default:
             rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 2..4)", argc);
+                     "wrong number of arguments(%i for 1..4)", argc);
     }
     
+    rbSFML::RaiseError();
     return Qnil;
 }
 
@@ -224,5 +244,87 @@ VALUE rbWindow::EachEvent(VALUE self)
         *rbEvent::ToSFML(event) = ev;
         rb_yield(event);
     }
+    return Qnil;
+}
+
+VALUE rbWindow::EnableVerticalSync(VALUE self, VALUE enabled)
+{
+    ToSFML(self)->EnableVerticalSync(RTEST(enabled));
+    return Qnil;
+}
+
+VALUE rbWindow::ShowMouseCursor(VALUE self, VALUE show)
+{
+    ToSFML(self)->ShowMouseCursor(RTEST(show));
+    return Qnil;
+}
+
+VALUE rbWindow::SetPosition(VALUE self, VALUE x, VALUE y)
+{
+    VALIDATE_CLASS(x, rb_cFixnum, FIXNUM_P(x));
+    VALIDATE_CLASS(y, rb_cFixnum, FIXNUM_P(y));
+    
+    ToSFML(self)->SetPosition(FIX2INT(x), FIX2INT(y));
+    return Qnil;
+}
+
+VALUE rbWindow::SetPosition2(VALUE self, VALUE vector2)
+{
+    vector2 = rbVector2::ToRuby(vector2);
+    VALUE x = rbVector2::GetX(vector2);
+    VALUE y = rbVector2::GetY(vector2);
+    
+    switch (rbVector2::Type(vector2))
+    {
+        case T_FIXNUM:
+            ToSFML(self)->SetPosition(FIX2INT(x), FIX2INT(y));
+            break;
+        case T_FLOAT:
+            ToSFML(self)->SetPosition(NUM2DBL(x), NUM2DBL(y));
+            break;
+    }
+    
+    return Qnil;
+}
+
+VALUE rbWindow::SetSize(VALUE self, VALUE width, VALUE height)
+{
+    VALIDATE_CLASS(width,  rb_cFixnum, FIXNUM_P(width ));
+    VALIDATE_CLASS(height, rb_cFixnum, FIXNUM_P(height));
+    
+    ToSFML(self)->SetSize(FIX2INT(width), FIX2INT(height));
+    return Qnil;
+}
+
+VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
+{
+    vector2 = rbVector2::ToRuby(vector2);
+    VALUE width  = rbVector2::GetX(vector2);
+    VALUE height = rbVector2::GetY(vector2);
+    
+    switch (rbVector2::Type(vector2))
+    {
+        case T_FIXNUM:
+            ToSFML(self)->SetSize(FIX2INT(width), FIX2INT(height));
+            break;
+        case T_FLOAT:
+            ToSFML(self)->SetSize(NUM2DBL(width), NUM2DBL(height));
+            break;
+    }
+    
+    return Qnil;
+}
+
+VALUE rbWindow::SetTitle(VALUE self, VALUE title)
+{
+    VALIDATE_CLASS(title, rb_cString);
+    
+    ToSFML(self)->SetTitle(std::string(RSTRING_PTR(title), RSTRING_LEN(title)));
+    return Qnil;
+}
+
+VALUE rbWindow::Show(VALUE self, VALUE show)
+{
+    ToSFML(self)->Show(RTEST(show));
     return Qnil;
 }

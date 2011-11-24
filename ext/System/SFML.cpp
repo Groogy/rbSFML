@@ -45,19 +45,22 @@ void rbSFML::Init(VALUE SFML)
 
 VALUE rbSFML::Raise(VALUE self)
 {
-    if (RTEST(rb_cv_get(self, "@@raise_exceptions")))
+    VALUE flag = rb_cv_get(self, "@@raise_exceptions");
+    if (RTEST(flag))
     {
         std::string message = gErrorStream.str();
-        if (message.size() == 0) return Qnil;
+        if (message.empty())
+            return Qnil;
         gErrorStream.str("");
-        rb_raise(gError, message.c_str(), "");
+        rb_raise(gError, message.c_str());
     }
     return Qnil;
 }
 
 VALUE rbSFML::GetRaiseExceptions(VALUE self)
 {
-    if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions"))) return Qfalse;
+    if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions")))
+        return Qfalse;
     return rb_cv_get(self, "@@raise_exceptions") ? Qtrue : Qfalse;
 }
 
@@ -65,14 +68,9 @@ VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
 {
     rb_cv_set(self, "@@raise_exceptions", flag);
     if (RTEST(flag))
-    {
         sf::Err().rdbuf(gErrorStream.rdbuf());
-    }
     else
-    {
         sf::Err().rdbuf(std::cerr.rdbuf());
-    }
-    return Qnil;
 }
 
 VALUE rbSFML::SystemLoaded(VALUE self)

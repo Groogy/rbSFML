@@ -34,8 +34,9 @@ namespace rbSFML
 {
     
     static inline VALUE Module();
+    static inline void RaiseError();
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+#if defined(RBSFML_SYSTEM)
     
     void Init(VALUE rbSFML);
     
@@ -67,6 +68,11 @@ namespace rbSFML
 VALUE rbSFML::Module()
 {
     return rb_define_module("SFML");
+}
+
+void rbSFML::RaiseError()
+{
+    rb_funcall(Module(), rb_intern("raise"), 0);
 }
 
 #endif // SYSTEM_SFML_HPP

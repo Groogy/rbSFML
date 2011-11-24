@@ -53,7 +53,7 @@ namespace rbVector3
     extern VALUE Vector3;
 #endif
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+#if defined(RBSFML_SYSTEM)
     
     void Init(VALUE SFML);
     
@@ -125,9 +125,9 @@ VALUE rbVector3::ToRuby(VALUE other)
 
 VALUE rbVector3::ToRuby(sf::Vector3i* vector3)
 {
-    int x = INT2FIX(vector3->x);
-    int y = INT2FIX(vector3->y);
-    int z = INT2FIX(vector3->z);
+    VALUE x = INT2FIX(vector3->x);
+    VALUE y = INT2FIX(vector3->y);
+    VALUE z = INT2FIX(vector3->z);
     VALUE argv[] = {x, y, z};
     return rb_class_new_instance(3, argv, Vector3);
 }
@@ -139,9 +139,9 @@ VALUE rbVector3::ToRuby(sf::Vector3i& vector3)
 
 VALUE rbVector3::ToRuby(sf::Vector3f* vector3)
 {
-    float x = rb_float_new(vector3->x);
-    float y = rb_float_new(vector3->y);
-    float z = rb_float_new(vector3->z);
+    VALUE x = rb_float_new(vector3->x);
+    VALUE y = rb_float_new(vector3->y);
+    VALUE z = rb_float_new(vector3->z);
     VALUE argv[] = {x, y, z};
     return rb_class_new_instance(3, argv, Vector3);
 }

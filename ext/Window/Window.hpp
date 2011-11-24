@@ -25,6 +25,7 @@
 #include <ruby.h>
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
+#include <System/Vector2.hpp>
 #include <Window/ContextSettings.hpp>
 #include <Window/Event.hpp>
 #include <Window/VideoMode.hpp>
@@ -49,7 +50,7 @@ namespace rbWindow
     extern VALUE Window;
 #endif
     
-#if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
+#if defined(RBSFML_WINDOW)
     
     void Init(VALUE SFML);
     
@@ -83,6 +84,30 @@ namespace rbWindow
     // Window#each_event
     static VALUE EachEvent(VALUE self);
     
+    // Window#vertical_sync=(enabled)
+    static VALUE EnableVerticalSync(VALUE self, VALUE enabled);
+    
+    // Window#mouse_cursor=(show)
+    static VALUE ShowMouseCursor(VALUE self, VALUE show);
+    
+    // Window#position(x, y)
+    static VALUE SetPosition(VALUE self, VALUE x, VALUE y);
+    
+    // Window#position=(vector2)
+    static VALUE SetPosition2(VALUE self, VALUE vector2);
+    
+    // Window#size(width, height)
+    static VALUE SetSize(VALUE self, VALUE width, VALUE height);
+    
+    // Window#size=(vector2)
+    static VALUE SetSize2(VALUE self, VALUE vector2);
+    
+    // Window#title=(title)
+    static VALUE SetTitle(VALUE self, VALUE title);
+    
+    // Window#show=(show)
+    static VALUE Show(VALUE self, VALUE show);
+    
 #endif
     
 }
@@ -94,9 +119,9 @@ void rbWindow::Free(void* window)
 
 VALUE rbWindow::Allocate(VALUE)
 {
-    sf::Window* video_mode = new(std::nothrow) sf::Window;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
+    sf::Window* window = new(std::nothrow) sf::Window;
+    if (window == NULL) rb_memerror();
+    return ToRuby(window);
 }
 
 VALUE rbWindow::ToRuby(VALUE other)

@@ -46,7 +46,7 @@ namespace rbClock
     extern VALUE Clock;
 #endif
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+#if defined(RBSFML_SYSTEM)
     
     void Init(VALUE SFML);
     

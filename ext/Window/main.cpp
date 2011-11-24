@@ -21,6 +21,20 @@
 
 #include <Window.hpp>
 
+#if !defined(RBSFML_SFML)
+namespace rbVector2
+{
+    VALUE Vector2;
+}
+#endif
+
+static inline void Dependencies(VALUE SFML)
+{
+#if !defined(RBSFML_SFML)
+    rbVector2::Vector2 = rb_const_get(SFML, rb_intern("Vector2"));
+#endif
+}
+
 extern "C"
 void Init_window()
 {
@@ -32,6 +46,8 @@ void Init_window()
     }
     
     rb_cvar_set(SFML, rb_intern("@@window"), Qtrue);
+    
+    Dependencies(SFML);
     
     rbContextSettings::Init(SFML);
     rbEvent::Init(SFML);

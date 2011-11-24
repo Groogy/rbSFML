@@ -51,7 +51,7 @@ namespace rbVector2
     extern VALUE Vector2;
 #endif
     
-#if defined(RBSFML_SYSTEM) || defined(RBSFML_SFML)
+#if defined(RBSFML_SYSTEM)
     
     void Init(VALUE SFML);
     
@@ -123,8 +123,8 @@ VALUE rbVector2::ToRuby(VALUE other)
 
 VALUE rbVector2::ToRuby(sf::Vector2i* vector2)
 {
-    int x = INT2FIX(vector2->x);
-    int y = INT2FIX(vector2->y);
+    VALUE x = INT2FIX(vector2->x);
+    VALUE y = INT2FIX(vector2->y);
     VALUE argv[] = {x, y};
     return rb_class_new_instance(2, argv, Vector2);
 }
@@ -136,8 +136,8 @@ VALUE rbVector2::ToRuby(sf::Vector2i& vector2)
 
 VALUE rbVector2::ToRuby(sf::Vector2f* vector2)
 {
-    float x = rb_float_new(vector2->x);
-    float y = rb_float_new(vector2->y);
+    VALUE x = rb_float_new(vector2->x);
+    VALUE y = rb_float_new(vector2->y);
     VALUE argv[] = {x, y};
     return rb_class_new_instance(2, argv, Vector2);
 }

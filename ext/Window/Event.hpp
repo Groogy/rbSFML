@@ -65,7 +65,7 @@ namespace rbEvent
     extern VALUE Event_JoystickConnect;
 #endif
     
-#if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
+#if defined(RBSFML_WINDOW)
     
     void Init(VALUE SFML);
     

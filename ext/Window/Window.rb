@@ -50,6 +50,7 @@ module SFML
     def initialize(*args)
     end
     
+    # Create (or recreate) the window.
     # @overload create(mode, title, style=Style::Default, settings=ContextSettings.new)
     #   This constructor creates the window with the size and pixel depth
     #   defined in <tt>mode</tt>. An optional <tt>style</tt> can be passed to
@@ -207,6 +208,71 @@ module SFML
     # @return [NilClass, Enumerator]
     def each_event
     end
+    
+    # Enable or disable vertical synchronization. Activating vertical
+    # synchronization will limit the number of frames displayed to the refresh
+    # rate of the monitor. This can avoid some visual artifacts, and limit the
+    # framerate to a good value (but not constant across different computers).
+    # Vertical synchronization is disabled by default.
+    # @param [Boolean] enabled True to enable v-sync, false to deactivate
+    def vertical_sync=(enabled)
+    end
+    alias EnableVerticalSync vertical_sync=
+    alias vertical_sync vertical_sync=
+    
+    # Show or hide the mouse cursor. The mouse cursor is shown by default.
+    # @param [Boolean] show True to show, false to hide
+    def mouse_cursor=(show)
+    end
+    alias ShowMouseCursor mouse_cursor=
+    alias mouse_cursor mouse_cursor=
+    
+    # Change the position of the window on screen. This function only works
+    # for top-level windows (i.e. it will be ignored for windows created from
+    # the handle of a child window/control).
+    # @param [Fixnum] x Left position
+    # @param [Fixnum] y Top position
+    def position(x, y)
+    end
+    alias SetPosition position
+    
+    # Change the position of the window on screen. This function only works
+    # for top-level windows (i.e. it will be ignored for windows created from
+    # the handle of a child window/control).
+    # @param [Vector2] vector2 The position
+    # @example
+    #   window.position = [200, 300]
+    def position=(vector2)
+    end
+    
+    
+    # Change the size of the rendering region of the window. 
+    # @param [Fixnum] width New width, in pixels
+    # @param [Fixnum] height New height, in pixels
+    def size(width, height)
+    end
+    alias SetSize size
+    
+    # Change the size of the rendering region of the window. 
+    # @param [Vector2] vector2 The new size, in pixels
+    # @example
+    #   window.size = [640, 480]
+    def size=(vector2)
+    end
+    
+    # Change the title of the window.
+    # @param [String] title New title
+    def title=(title)
+    end
+    alias SetTitle title=
+    alias title title=
+    
+    # Show or hide the window. The window is shown by default.
+    # @param [Boolean] show True to show, false to hide
+    def show=(show)
+    end
+    alias Show show=
+    alias show show=
     
   end
   
