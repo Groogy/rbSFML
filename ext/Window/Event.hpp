@@ -43,6 +43,7 @@ namespace rbEvent
     
 #if defined(WINDOW_EVENT_CPP)
     VALUE Event;
+    VALUE Event_Type;
     VALUE Event_Size;
     VALUE Event_Key;
     VALUE Event_Text;
@@ -54,6 +55,7 @@ namespace rbEvent
     VALUE Event_JoystickConnect;
 #else
     extern VALUE Event;
+    extern VALUE Event_Type;
     extern VALUE Event_Size;
     extern VALUE Event_Key;
     extern VALUE Event_Text;
@@ -69,14 +71,14 @@ namespace rbEvent
     
     void Init(VALUE SFML);
     
+    static VALUE EventType(int id);
+    static VALUE EventTypeCaseEqual(VALUE self, VALUE other);
+    
     // Event#type
     static VALUE Type(VALUE self);
     
     // Event#info
     static VALUE Info(VALUE self);
-    
-    // Event#===(other)
-    static VALUE CaseEqual(VALUE self, VALUE other);
     
     // Event#size
     static VALUE Size(VALUE self);
@@ -104,6 +106,15 @@ namespace rbEvent
     
     // Event#joystick_connect
     static VALUE JoystickConnect(VALUE self);
+    
+    // Event#==(other)
+    static VALUE Equal(VALUE self, VALUE other);
+    
+    // Event#inspect
+    static VALUE Inspect(VALUE self);
+    
+    // Event#memory_usage
+    static VALUE GetMemoryUsage(VALUE self);
     
 #endif
     

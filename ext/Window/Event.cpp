@@ -28,6 +28,7 @@ void rbEvent::Init(VALUE SFML)
     
     // Subclasses
     Event_Size            = rb_define_class_under(Event, "Size",            rb_cObject);
+    Event_Type            = rb_define_class_under(Event, "Type",            rb_cObject);
     Event_Key             = rb_define_class_under(Event, "Key",             rb_cObject);
     Event_Text            = rb_define_class_under(Event, "Text",            rb_cObject);
     Event_MouseMove       = rb_define_class_under(Event, "MouseMove",       rb_cObject);
@@ -36,6 +37,7 @@ void rbEvent::Init(VALUE SFML)
     Event_JoystickMove    = rb_define_class_under(Event, "JoystickMove",    rb_cObject);
     Event_JoystickButton  = rb_define_class_under(Event, "JoystickButton",  rb_cObject);
     Event_JoystickConnect = rb_define_class_under(Event, "JoystickConnect", rb_cObject);
+    rb_define_method(Event_Type, "===", EventTypeCaseEqual, 1);
     
     // Event::Size accessors
     rb_define_attr(Event_Size, "width",  true, false);
@@ -100,24 +102,24 @@ void rbEvent::Init(VALUE SFML)
     rb_define_alias(Event_JoystickButton, "Button",     "button");
     
     // Constants
-    rb_define_const(Event, "Closed",                 INT2FIX(sf::Event::Closed                ));
-    rb_define_const(Event, "Resized",                INT2FIX(sf::Event::Resized               ));
-    rb_define_const(Event, "LostFocus",              INT2FIX(sf::Event::LostFocus             ));
-    rb_define_const(Event, "GainedFocus",            INT2FIX(sf::Event::GainedFocus           ));
-    rb_define_const(Event, "TextEntered",            INT2FIX(sf::Event::TextEntered           ));
-    rb_define_const(Event, "KeyPressed",             INT2FIX(sf::Event::KeyPressed            ));
-    rb_define_const(Event, "KeyReleased",            INT2FIX(sf::Event::KeyReleased           ));
-    rb_define_const(Event, "MouseWheelMoved",        INT2FIX(sf::Event::MouseWheelMoved       ));
-    rb_define_const(Event, "MouseButtonPressed",     INT2FIX(sf::Event::MouseButtonPressed    ));
-    rb_define_const(Event, "MouseButtonReleased",    INT2FIX(sf::Event::MouseButtonReleased   ));
-    rb_define_const(Event, "MouseMoved",             INT2FIX(sf::Event::MouseMoved            ));
-    rb_define_const(Event, "MouseEntered",           INT2FIX(sf::Event::MouseEntered          ));
-    rb_define_const(Event, "MouseLeft",              INT2FIX(sf::Event::MouseLeft             ));
-    rb_define_const(Event, "JoystickButtonPressed",  INT2FIX(sf::Event::JoystickButtonPressed ));
-    rb_define_const(Event, "JoystickButtonReleased", INT2FIX(sf::Event::JoystickButtonReleased));
-    rb_define_const(Event, "JoystickMoved",          INT2FIX(sf::Event::JoystickMoved         ));
-    rb_define_const(Event, "JoystickConnected",      INT2FIX(sf::Event::JoystickConnected     ));
-    rb_define_const(Event, "JoystickDisconnected",   INT2FIX(sf::Event::JoystickDisconnected  ));
+    rb_define_const(Event, "Closed",                 EventType(sf::Event::Closed                ));
+    rb_define_const(Event, "Resized",                EventType(sf::Event::Resized               ));
+    rb_define_const(Event, "LostFocus",              EventType(sf::Event::LostFocus             ));
+    rb_define_const(Event, "GainedFocus",            EventType(sf::Event::GainedFocus           ));
+    rb_define_const(Event, "TextEntered",            EventType(sf::Event::TextEntered           ));
+    rb_define_const(Event, "KeyPressed",             EventType(sf::Event::KeyPressed            ));
+    rb_define_const(Event, "KeyReleased",            EventType(sf::Event::KeyReleased           ));
+    rb_define_const(Event, "MouseWheelMoved",        EventType(sf::Event::MouseWheelMoved       ));
+    rb_define_const(Event, "MouseButtonPressed",     EventType(sf::Event::MouseButtonPressed    ));
+    rb_define_const(Event, "MouseButtonReleased",    EventType(sf::Event::MouseButtonReleased   ));
+    rb_define_const(Event, "MouseMoved",             EventType(sf::Event::MouseMoved            ));
+    rb_define_const(Event, "MouseEntered",           EventType(sf::Event::MouseEntered          ));
+    rb_define_const(Event, "MouseLeft",              EventType(sf::Event::MouseLeft             ));
+    rb_define_const(Event, "JoystickButtonPressed",  EventType(sf::Event::JoystickButtonPressed ));
+    rb_define_const(Event, "JoystickButtonReleased", EventType(sf::Event::JoystickButtonReleased));
+    rb_define_const(Event, "JoystickMoved",          EventType(sf::Event::JoystickMoved         ));
+    rb_define_const(Event, "JoystickConnected",      EventType(sf::Event::JoystickConnected     ));
+    rb_define_const(Event, "JoystickDisconnected",   EventType(sf::Event::JoystickDisconnected  ));
     
     // Class methods
     rb_define_alloc_func(Event, Allocate);
@@ -125,7 +127,6 @@ void rbEvent::Init(VALUE SFML)
     // Instance methods
     rb_define_method(Event, "type",             Type,            0);
     rb_define_method(Event, "info",             Info,            0);
-    rb_define_method(Event, "===",              CaseEqual,       1);
     rb_define_method(Event, "size",             Size,            0);
     rb_define_method(Event, "key",              Key,             0);
     rb_define_method(Event, "text",             Text,            0);
@@ -135,6 +136,9 @@ void rbEvent::Init(VALUE SFML)
     rb_define_method(Event, "joystick_move",    JoystickMove,    0);
     rb_define_method(Event, "joystick_button",  JoystickButton,  0);
     rb_define_method(Event, "joystick_connect", JoystickConnect, 0);
+    rb_define_method(Event, "==",               Equal,           1);
+    rb_define_method(Event, "inspect",          Inspect,         0);
+    rb_define_method(Event, "memory_usage",     GetMemoryUsage,  0);
     
     // Instance aliasses
     rb_define_alias(Event, "Type",            "type"            );
@@ -147,11 +151,28 @@ void rbEvent::Init(VALUE SFML)
     rb_define_alias(Event, "JoystickMove",    "joystick_move"   );
     rb_define_alias(Event, "JoystickButton",  "joystick_button" );
     rb_define_alias(Event, "JoystickConnect", "joystick_connect");
+    rb_define_alias(Event, "to_s",            "inspect"         );
+    rb_define_alias(Event, "to_str",          "inspect"         );
+}
+
+VALUE rbEvent::EventType(int id)
+{
+    VALUE type = rb_obj_alloc(Event_Type);
+    rb_iv_set(type, "@id", INT2FIX(id));
+    return type;
+}
+
+VALUE rbEvent::EventTypeCaseEqual(VALUE self, VALUE other)
+{
+    other = ToRuby(other);
+    VALUE id1 = rb_iv_get(self, "@id");
+    VALUE id2 = rb_iv_get(Type(other), "@id");
+    return rb_equal(id1, id2);
 }
 
 VALUE rbEvent::Type(VALUE self)
 {
-    return INT2FIX(ToSFML(self)->Type);
+    return EventType(ToSFML(self)->Type);
 }
 
 VALUE rbEvent::Info(VALUE self)
@@ -187,11 +208,6 @@ VALUE rbEvent::Info(VALUE self)
         case sf::Event::JoystickDisconnected:
             return JoystickConnect(self);
     }
-}
-
-VALUE rbEvent::CaseEqual(VALUE self, VALUE other)
-{
-    return rb_obj_is_kind_of(Info(self), other);
 }
 
 VALUE rbEvent::Size(VALUE self)
@@ -295,4 +311,96 @@ VALUE rbEvent::JoystickConnect(VALUE self)
     rb_iv_set(joystick_connect, "@id", INT2FIX(joystick_connect_ev.JoystickId));
     
     return joystick_connect;
+}
+
+VALUE rbEvent::Equal(VALUE self, VALUE other)
+{
+    if (CLASS_OF(other) != Event) return Qfalse;
+    if (Type(self) != Type(other)) return Qfalse;
+    if (Info(self) != Info(other)) return Qfalse;
+    return Qtrue;
+}
+
+VALUE rbEvent::Inspect(VALUE self)
+{
+    VALUE ret = rb_str_new2("Event(");
+    switch (ToSFML(self)->Type)
+    {
+        case sf::Event::Closed:
+            rb_str_append(ret, rb_str_new2("Closed"));
+            break;
+        case sf::Event::LostFocus:
+            rb_str_append(ret, rb_str_new2("LostFocus"));
+            break;
+        case sf::Event::GainedFocus:
+            rb_str_append(ret, rb_str_new2("GainedFocus"));
+            break;
+        case sf::Event::MouseEntered:
+            rb_str_append(ret, rb_str_new2("MouseEntered"));
+            break;
+        case sf::Event::MouseLeft:
+            rb_str_append(ret, rb_str_new2("MouseLeft"));
+            break;
+        case sf::Event::Resized:
+            rb_str_append(ret, rb_str_new2("Resized"));
+            break;
+        case sf::Event::KeyPressed:
+            rb_str_append(ret, rb_str_new2("KeyPressed"));
+            break;
+        case sf::Event::KeyReleased:
+            rb_str_append(ret, rb_str_new2("KeyReleased"));
+            break;
+        case sf::Event::TextEntered:
+            rb_str_append(ret, rb_str_new2("TextEntered"));
+            break;
+        case sf::Event::MouseMoved:
+            rb_str_append(ret, rb_str_new2("MouseMoved"));
+            break;
+        case sf::Event::MouseButtonPressed:
+            rb_str_append(ret, rb_str_new2("MouseButtonPressed"));
+            break;
+        case sf::Event::MouseButtonReleased:
+            rb_str_append(ret, rb_str_new2("MouseButtonReleased"));
+            break;
+        case sf::Event::MouseWheelMoved:
+            rb_str_append(ret, rb_str_new2("MouseWheelMoved"));
+            break;
+        case sf::Event::JoystickMoved:
+            rb_str_append(ret, rb_str_new2("JoystickMoved"));
+            break;
+        case sf::Event::JoystickButtonPressed:
+            rb_str_append(ret, rb_str_new2("JoystickButtonPressed"));
+            break;
+        case sf::Event::JoystickButtonReleased:
+            rb_str_append(ret, rb_str_new2("JoystickButtonReleased"));
+            break;
+        case sf::Event::JoystickConnected:
+            rb_str_append(ret, rb_str_new2("JoystickConnected"));
+            break;
+        case sf::Event::JoystickDisconnected:
+            rb_str_append(ret, rb_str_new2("JoystickDisconnected"));
+            break;
+    }
+    VALUE info = Info(self);
+    if (info != Qnil)
+    {
+        rb_str_append(ret, rb_str_new2(": "));
+        VALUE ary = rb_obj_instance_variables(info);
+        for (int i = 0; i < RARRAY_LEN(ary); ++i)
+        {
+            VALUE iv = RARRAY_PTR(ary)[i];
+            rb_str_append(ret, rb_sym_to_s(iv));
+            rb_str_append(ret, rb_str_new2("="));
+            rb_str_append(ret, rb_inspect(rb_ivar_get(info, rb_to_id(iv))));
+            if (i+1 < RARRAY_LEN(ary))
+                rb_str_append(ret, rb_str_new2(", "));
+        }
+    }
+    rb_str_append(ret, rb_str_new2(")"));
+    return ret;
+}
+
+VALUE rbEvent::GetMemoryUsage(VALUE self)
+{
+    return INT2FIX(sizeof(sf::Event));
 }

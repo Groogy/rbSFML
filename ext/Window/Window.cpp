@@ -53,6 +53,7 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alias(Window, "Create",             "create"        );
     rb_define_alias(Window, "Close",              "close"         );
     rb_define_alias(Window, "IsOpened",           "opened?"       );
+    rb_define_alias(Window, "open?",              "opened?"       );
     rb_define_alias(Window, "GetWidth",           "width"         );
     rb_define_alias(Window, "GetHeight",          "height"        );
     rb_define_alias(Window, "GetSettings",        "settings"      );

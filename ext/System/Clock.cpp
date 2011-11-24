@@ -65,6 +65,7 @@ VALUE rbClock::Reset(VALUE self)
 
 VALUE rbClock::Equal(VALUE self, VALUE other)
 {
+    if (CLASS_OF(other) != Clock) return Qfalse;
     sf::Clock* left = ToSFML(self);
     sf::Clock* right = ToSFML(other);
     return (left->GetElapsedTime()) == (right->GetElapsedTime())

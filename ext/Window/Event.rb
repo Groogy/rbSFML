@@ -336,6 +336,24 @@ module SFML
     end
     alias JoystickConnect joystick_connect
     
+    # This operator compares two events and checks if they are equal.
+    # @param [Event] other Event to be compared with.
+    # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
+    def ==(other)
+    end
+    
+    # Returns a formated string to represent the event. 
+    # @return [String]
+    def inspect
+    end
+    alias to_s inspect
+    alias to_str inspect
+    
+    # Returns how much memory was allocated by this object.
+    # @return [Fixnum]
+    def memory_usage
+    end
+    
   end
   
 end
