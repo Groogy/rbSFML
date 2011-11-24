@@ -154,9 +154,9 @@ VALUE rbVector3::ToRuby(sf::Vector3f& vector3)
 sf::Vector3i rbVector3::ToSFMLi(VALUE vector3)
 {
     vector3 = ToRuby(vector3);
-    int x = FIX2INT(GetX(vector3));
-    int y = FIX2INT(GetY(vector3));
-    int z = FIX2INT(GetZ(vector3));
+    int x = NUM2INT(GetX(vector3));
+    int y = NUM2INT(GetY(vector3));
+    int z = NUM2INT(GetZ(vector3));
     return sf::Vector3i(x, y, z);
 }
 
@@ -171,38 +171,32 @@ sf::Vector3f rbVector3::ToSFMLf(VALUE vector3)
 
 VALUE rbVector3::GetX(VALUE vector3)
 {
-    static ID id_x = rb_intern("@x");
-    return rb_ivar_get(vector3, id_x);
+    return rb_iv_get(vector3, "@x");
 }
 
 VALUE rbVector3::GetY(VALUE vector3)
 {
-    static ID id_y = rb_intern("@y");
-    return rb_ivar_get(vector3, id_y);
+    return rb_iv_get(vector3, "@y");
 }
 
 VALUE rbVector3::GetZ(VALUE vector3)
 {
-    static ID id_z = rb_intern("@z");
-    return rb_ivar_get(vector3, id_z);
+    return rb_iv_get(vector3, "@z");
 }
 
 void rbVector3::SetX(VALUE vector3, VALUE value)
 {
-    static ID id_x = rb_intern("@x");
-    rb_ivar_set(vector3, id_x, value);
+    rb_iv_set(vector3, "@x", value);
 }
 
 void rbVector3::SetY(VALUE vector3, VALUE value)
 {
-    static ID id_y = rb_intern("@y");
-    rb_ivar_set(vector3, id_y, value);
+    rb_iv_set(vector3, "@y", value);
 }
 
 void rbVector3::SetZ(VALUE vector3, VALUE value)
 {
-    static ID id_z = rb_intern("@z");
-    rb_ivar_set(vector3, id_z, value);
+    rb_iv_set(vector3, "@z", value);
 }
 
 #endif // SYSTEM_VECTOR2_HPP

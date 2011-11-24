@@ -150,8 +150,8 @@ VALUE rbVector2::ToRuby(sf::Vector2f& vector2)
 sf::Vector2i rbVector2::ToSFMLi(VALUE vector2)
 {
     vector2 = ToRuby(vector2);
-    int x = FIX2INT(GetX(vector2));
-    int y = FIX2INT(GetY(vector2));
+    int x = NUM2INT(GetX(vector2));
+    int y = NUM2INT(GetY(vector2));
     return sf::Vector2i(x, y);
 }
 
@@ -165,26 +165,22 @@ sf::Vector2f rbVector2::ToSFMLf(VALUE vector2)
 
 VALUE rbVector2::GetX(VALUE vector2)
 {
-    static ID id_x = rb_intern("@x");
-    return rb_ivar_get(vector2, id_x);
+    return rb_iv_get(vector2, "@x");
 }
 
 VALUE rbVector2::GetY(VALUE vector2)
 {
-    static ID id_y = rb_intern("@y");
-    return rb_ivar_get(vector2, id_y);
+    return rb_iv_get(vector2, "@y");
 }
 
 void rbVector2::SetX(VALUE vector2, VALUE value)
 {
-    static ID id_x = rb_intern("@x");
-    rb_ivar_set(vector2, id_x, value);
+    rb_iv_set(vector2, "@x", value);
 }
 
 void rbVector2::SetY(VALUE vector2, VALUE value)
 {
-    static ID id_y = rb_intern("@y");
-    rb_ivar_set(vector2, id_y, value);
+    rb_iv_set(vector2, "@y", value);
 }
 
 #endif // SYSTEM_VECTOR2_HPP

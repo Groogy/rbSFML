@@ -92,8 +92,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
     switch (argc)
     {
         case 1:
-            VALIDATE_CLASS(argv[0], rb_cFixnum, FIXNUM_P(argv[0]));
-            handle = sf::WindowHandle(FIX2INT(argv[0]));
+            handle = sf::WindowHandle(NUM2INT(argv[0]));
             break;
         case 3:
             style = FIX2INT(argv[2]);
@@ -105,8 +104,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             else
             {
                 mode = *(rbVideoMode::ToSFML(argv[0]));
-                VALIDATE_CLASS(argv[1], rb_cString);
-                title.assign(RSTRING_PTR(argv[1]), RSTRING_LEN(argv[1]));
+                title = StringValueCStr(argv[1]);
             }
             break;
         case 4:
@@ -261,10 +259,7 @@ VALUE rbWindow::ShowMouseCursor(VALUE self, VALUE show)
 
 VALUE rbWindow::SetPosition(VALUE self, VALUE x, VALUE y)
 {
-    VALIDATE_CLASS(x, rb_cFixnum, FIXNUM_P(x));
-    VALIDATE_CLASS(y, rb_cFixnum, FIXNUM_P(y));
-    
-    ToSFML(self)->SetPosition(FIX2INT(x), FIX2INT(y));
+    ToSFML(self)->SetPosition(NUM2INT(x), NUM2INT(y));
     return Qnil;
 }
 
@@ -289,10 +284,7 @@ VALUE rbWindow::SetPosition2(VALUE self, VALUE vector2)
 
 VALUE rbWindow::SetSize(VALUE self, VALUE width, VALUE height)
 {
-    VALIDATE_CLASS(width,  rb_cFixnum, FIXNUM_P(width ));
-    VALIDATE_CLASS(height, rb_cFixnum, FIXNUM_P(height));
-    
-    ToSFML(self)->SetSize(FIX2INT(width), FIX2INT(height));
+    ToSFML(self)->SetSize(NUM2INT(width), NUM2INT(height));
     return Qnil;
 }
 
@@ -317,9 +309,7 @@ VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
 
 VALUE rbWindow::SetTitle(VALUE self, VALUE title)
 {
-    VALIDATE_CLASS(title, rb_cString);
-    
-    ToSFML(self)->SetTitle(std::string(RSTRING_PTR(title), RSTRING_LEN(title)));
+    ToSFML(self)->SetTitle(StringValueCStr(title));
     return Qnil;
 }
 

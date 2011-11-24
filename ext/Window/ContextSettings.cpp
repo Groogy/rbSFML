@@ -62,15 +62,15 @@ VALUE rbContextSettings::Initialize(int argc, VALUE argv[], VALUE self)
     switch (argc)
     {
         case 5:
-            settings->MinorVersion = FIX2INT(argv[4]);
+            settings->MinorVersion = NUM2INT(argv[4]);
         case 4:
-            settings->MajorVersion = FIX2INT(argv[3]);
+            settings->MajorVersion = NUM2INT(argv[3]);
         case 3:
-            settings->AntialiasingLevel = FIX2INT(argv[2]);
+            settings->AntialiasingLevel = NUM2INT(argv[2]);
         case 2:
-            settings->StencilBits = FIX2INT(argv[1]);
+            settings->StencilBits = NUM2INT(argv[1]);
         case 1:
-            settings->DepthBits = FIX2INT(argv[0]);
+            settings->DepthBits = NUM2INT(argv[0]);
         case 0:
             break;
         default:
@@ -106,26 +106,26 @@ VALUE rbContextSettings::GetMinorVersion(VALUE self)
 
 VALUE rbContextSettings::SetDepthBits(VALUE self, VALUE value)
 {
-    ToSFML(self)->DepthBits = FIX2INT(value);
+    ToSFML(self)->DepthBits = NUM2INT(value);
 }
     
 VALUE rbContextSettings::SetStencilBits(VALUE self, VALUE value)
 {
-    ToSFML(self)->StencilBits = FIX2INT(value);
+    ToSFML(self)->StencilBits = NUM2INT(value);
 }
     
 VALUE rbContextSettings::SetAntialiasingLevel(VALUE self, VALUE value)
 {
-    ToSFML(self)->AntialiasingLevel = FIX2INT(value);
+    ToSFML(self)->AntialiasingLevel = NUM2INT(value);
 }
     
 VALUE rbContextSettings::SetMajorVersion(VALUE self, VALUE value)
 {
-    ToSFML(self)->MajorVersion = FIX2INT(value);
+    ToSFML(self)->MajorVersion = NUM2INT(value);
 }
     
 VALUE rbContextSettings::SetMinorVersion(VALUE self, VALUE value)
 {
-    ToSFML(self)->MinorVersion = FIX2INT(value);
+    ToSFML(self)->MinorVersion = NUM2INT(value);
 }
 

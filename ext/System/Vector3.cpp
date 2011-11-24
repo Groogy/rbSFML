@@ -69,29 +69,19 @@ VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
             InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 3:
-        {
-            VALUE x = argv[0];
-            VALUE y = argv[1];
-            VALUE z = argv[2];
-            
-            // Ensure all arguments are kind of Numeric.
-            VALIDATE_CLASS(x, rb_cNumeric);
-            VALIDATE_CLASS(y, rb_cNumeric);
-            VALIDATE_CLASS(z, rb_cNumeric);
-            
-            // Ensure all arguments are instance of Float or Fixnum.
-            if (!FIXNUM_P(x) or !FIXNUM_P(y) or !FIXNUM_P(z))
+            if (FIXNUM_P(argv[0]) and FIXNUM_P(argv[1]) and FIXNUM_P(argv[2]))
             {
-                x = rb_convert_type(x, T_FLOAT, "Float", "to_f");
-                y = rb_convert_type(y, T_FLOAT, "Float", "to_f");
-                z = rb_convert_type(z, T_FLOAT, "Float", "to_f");
+                SetX(self, argv[0]);
+                SetY(self, argv[1]);
+                SetZ(self, argv[2]);
             }
-            
-            SetX(self, x);
-            SetY(self, y);
-            SetZ(self, z);
+            else
+            {
+                SetX(self, rb_to_float(argv[0]));
+                SetY(self, rb_to_float(argv[1]));
+                SetZ(self, rb_to_float(argv[2]));
+            }
             break;
-        }
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0, 1, or 3)", argc);

@@ -65,25 +65,17 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 2:
-        {
-            VALUE x = argv[0];
-            VALUE y = argv[1];
-            
-            // Ensure all arguments are kind of Numeric.
-            VALIDATE_CLASS(x, rb_cNumeric);
-            VALIDATE_CLASS(y, rb_cNumeric);
-            
-            // Ensure all arguments are instance of Float or Fixnum.
-            if (!FIXNUM_P(x) or !FIXNUM_P(y))
+            if (FIXNUM_P(argv[0]) and FIXNUM_P(argv[1]))
             {
-                x = rb_convert_type(x, T_FLOAT, "Float", "to_f");
-                y = rb_convert_type(y, T_FLOAT, "Float", "to_f");
+                SetX(self, argv[0]);
+                SetY(self, argv[1]);
             }
-            
-            SetX(self, x);
-            SetY(self, y);
+            else
+            {
+                SetX(self, rb_to_float(argv[0]));
+                SetY(self, rb_to_float(argv[1]));
+            }
             break;
-        }
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..2)", argc);

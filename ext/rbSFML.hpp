@@ -41,32 +41,12 @@ static inline T MIN(T a, T b)
 
 static inline VALUE MAX(VALUE a, VALUE b)
 {
-    static ID id_gt = rb_intern(">");
-    return rb_funcall(a, id_gt, 1, b) == Qtrue ? a : b;
+    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? a : b;
 }
 
 static inline VALUE MIN(VALUE a, VALUE b)
 {
-    static ID id_gt = rb_intern(">");
-    return rb_funcall(a, id_gt, 1, b) == Qtrue ? b : a;
-}
-
-static inline void VALIDATE_CLASS(VALUE obj, VALUE klass)
-{
-    if (rb_obj_is_kind_of(obj, klass) == Qfalse)
-    {
-        rb_raise(rb_eTypeError, "can't convert %s into %s",
-                 rb_obj_classname(obj), rb_class2name(klass));
-    }
-}
-
-static inline void VALIDATE_CLASS(VALUE obj, VALUE klass, bool condition)
-{
-    if (!condition)
-    {
-        rb_raise(rb_eTypeError, "can't convert %s into %s",
-                 rb_obj_classname(obj), rb_class2name(klass));
-    }
+    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? b : a;
 }
 
 typedef VALUE (*RubyFunctionPtr)(...);

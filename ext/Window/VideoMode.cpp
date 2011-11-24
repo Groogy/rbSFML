@@ -108,13 +108,10 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
             InitializeCopy(self, ToRuby(argv[0]));
             break;
         case 3:
-            VALIDATE_CLASS(argv[2], rb_cFixnum, FIXNUM_P(argv[2]));
-            video_mode->BitsPerPixel = FIX2INT(argv[2]);
+            video_mode->BitsPerPixel = NUM2INT(argv[2]);
         case 2:
-            VALIDATE_CLASS(argv[0], rb_cFixnum, FIXNUM_P(argv[0]));
-            VALIDATE_CLASS(argv[1], rb_cFixnum, FIXNUM_P(argv[1]));
-            video_mode->Width = FIX2INT(argv[0]);
-            video_mode->Height = FIX2INT(argv[1]);
+            video_mode->Width = NUM2INT(argv[0]);
+            video_mode->Height = NUM2INT(argv[1]);
             break;
         default:
             rb_raise(rb_eArgError,
@@ -150,17 +147,17 @@ VALUE rbVideoMode::GetBitsPerPixel(VALUE self)
 
 VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 {
-    ToSFML(self)->Width = FIX2INT(value);
+    ToSFML(self)->Width = NUM2INT(value);
 }
 
 VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 {
-    ToSFML(self)->Height = FIX2INT(value);
+    ToSFML(self)->Height = NUM2INT(value);
 }
 
 VALUE rbVideoMode::SetBitsPerPixel(VALUE self, VALUE value)
 {
-    ToSFML(self)->BitsPerPixel = FIX2INT(value);
+    ToSFML(self)->BitsPerPixel = NUM2INT(value);
 }
 
 VALUE rbVideoMode::Compare(VALUE self, VALUE other)
