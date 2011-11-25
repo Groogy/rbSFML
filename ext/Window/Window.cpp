@@ -50,6 +50,11 @@ void rbWindow::Init(VALUE SFML)
     rb_define_method(Window, "size=",          SetSize2,            1);
     rb_define_method(Window, "title=",         SetTitle,            1);
     rb_define_method(Window, "show=",          Show,                1);
+    rb_define_method(Window, "key_repeat=",    EnableKeyRepeat,     1);
+    rb_define_method(Window, "icon",           SetIcon,             3);
+    rb_define_method(Window, "active=",        SetActive,           1);
+    rb_define_method(Window, "display",        Display,             0);
+    rb_define_method(Window, "framerate=",     SetFramerateLimit,   1);
     
     // Instance aliasses
     rb_define_alias(Window, "Create",             "create"        );
@@ -72,6 +77,16 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alias(Window, "title",              "title="        );
     rb_define_alias(Window, "Show",               "show="         );
     rb_define_alias(Window, "show",               "show="         );
+    rb_define_alias(Window, "EnableKeyRepeat",    "key_repeat="   );
+    rb_define_alias(Window, "key_repeat",         "key_repeat="   );
+    rb_define_alias(Window, "SetIcon",            "icon"          );
+    rb_define_alias(Window, "SetActive",          "active="       );
+    rb_define_alias(Window, "active",             "active="       );
+    rb_define_alias(Window, "Display",            "display"       );
+    rb_define_alias(Window, "SetFramerateLimit",  "framerate="    );
+    rb_define_alias(Window, "framerate",          "framerate="    );
+    rb_define_alias(Window, "framerate_limit=",   "framerate="    );
+    rb_define_alias(Window, "framerate_limit",    "framerate="    );
 }
 
 // Window#initialize(...)
@@ -116,7 +131,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             handle = sf::WindowHandle(NUM2INT(argv[0]));
             break;
         case 3:
-            style = FIX2INT(argv[2]);
+            style = NUM2INT(argv[2]);
         case 2:
             if (FIXNUM_P(argv[0]))
             {
@@ -215,8 +230,10 @@ static inline VALUE PollEvent(VALUE self, VALUE event)
     }
 }
 
-// Window#poll_event(event=nil)
-// Window#PollEvent(event=nil)
+// Window#poll_event
+// Window#PollEvent
+// Window#poll_event(event)
+// Window#PollEvent(event)
 VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -252,8 +269,10 @@ static inline VALUE WaitEvent(VALUE self, VALUE event)
     }
 }
 
-// Window#wait_event(event=nil)
-// Window#WaitEvent(event=nil)
+// Window#wait_event
+// Window#WaitEvent
+// Window#wait_event(event)
+// Window#WaitEvent(event)
 VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -383,5 +402,75 @@ VALUE rbWindow::SetTitle(VALUE self, VALUE title)
 VALUE rbWindow::Show(VALUE self, VALUE show)
 {
     ToSFML(self)->Show(RTEST(show));
+    return Qnil;
+}
+
+// Window#key_repeat=(enabled)
+// Window#EnableKeyRepeat(enabled)
+// Window#key_repeat(enabled)
+VALUE rbWindow::EnableKeyRepeat(VALUE self, VALUE enabled)
+{
+    rb_check_frozen(self);
+    ToSFML(self)->EnableKeyRepeat(RTEST(enabled));
+    return Qnil;
+}
+
+// Window#icon(width, height, pixels)
+// Window#SetIcon(width, height, pixels)
+VALUE rbWindow::SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels)
+{
+    unsigned int _width  = NUM2UINT(width);
+    unsigned int _height = NUM2UINT(height);
+    pixels = rb_ary_to_ary(pixels);
+    
+    size_t size = _width * _height * 4;
+    if (RARRAY_LEN(pixels) != size)
+    {
+        rb_raise(rb_eTypeError, "expected array lenght to be %d", size);
+        return Qnil;
+    }
+    
+    sf::Uint8* _pixels = new(std::nothrow) sf::Uint8[size];
+    if (_pixels == NULL) rb_memerror();
+    
+    VALUE* pixels_p = RARRAY_PTR(pixels);
+    for (size_t i = 0; i < size; ++i)
+    {
+        _pixels[i] = NUM2CHR(pixels_p[i]);
+    }
+    
+    ToSFML(self)->SetIcon(_width, _height, _pixels);
+    delete[] _pixels;
+    return Qnil;
+}
+
+// Window#active(active)
+// Window#SetActive(active)
+// Window#active=(active)
+VALUE rbWindow::SetActive(VALUE self, VALUE active)
+{
+    rbSFML::PrepareErrorStream();
+    bool ret = ToSFML(self)->SetActive(RTEST(active));
+    rbSFML::Raise();
+    return ret ? Qtrue : Qfalse;
+}
+
+// Window#display(active)
+// Window#Display(active)
+VALUE rbWindow::Display(VALUE self)
+{
+    ToSFML(self)->Display();
+    return Qnil;
+}
+
+// Window#framerate=(limit)
+// Window#SetFramerateLimit(limit)
+// Window#framerate(limit)
+// Window#framerate_limit=(limit)
+// Window#framerate_limit(limit)
+VALUE rbWindow::SetFramerateLimit(VALUE self, VALUE limit)
+{
+    rb_check_frozen(self);
+    ToSFML(self)->SetFramerateLimit(NUM2INT(limit));
     return Qnil;
 }

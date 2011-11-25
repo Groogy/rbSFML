@@ -1,11 +1,15 @@
-require 'sfml/system'
-require 'sfml/window'
+begin
+  require 'sfml/sfml'
+rescue LoadError
+  require 'sfml/system'
+  require 'sfml/window'
+end
 
 window = SFML::Window.new([800, 600], "My Ruby SFML")
-#window.framerate = 60
+window.framerate = 60
 window.position = [300, 300]
 
-while window.open?
+while window.opened?
   window.each_event do |event|
     p event
     case event
@@ -14,5 +18,5 @@ while window.open?
     end
   end
   
-  #window.display
+  window.display
 end

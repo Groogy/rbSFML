@@ -282,6 +282,60 @@ module SFML
     alias Show show=
     alias show show=
     
+    # Enable or disable automatic key-repeat. If key repeat is enabled, you
+    # will receive repeated <tt>KeyPressed</tt> events while keeping a key
+    # pressed. If it is disabled, you will only get a single event when the
+    # key is pressed. Key repeat is enabled by default.
+    # @param [Boolean] enabled True to enable, false to disable
+    def key_repeat=(enabled)
+    end
+    alias EnableKeyRepeat key_repeat=
+    alias key_repeat key_repeat=
+    
+    # Change the window's icon. <tt>pixels</tt> must be an array of
+    # <tt>4 x width x height</tt> pixels in 32-bits RGBA format. The OS
+    # default icon is used by default.
+    # @param [Fixnum] width Icon's width, in pixels
+    # @param [Fixnum] height Icon's height, in pixels
+    # @param [Array] pixels Pointer to the array of pixels in memory
+    def icon(width, height, pixels)
+    end
+    alias SetIcon icon
+    
+    # Activate or deactivate the window as the current target for OpenGL
+    # rendering. A window is active only on the current thread, if you want to
+    # make it active on another thread you have to deactivate it on the
+    # previous thread first if it was active. Only one window can be active on
+    # a thread at a time, thus the window previously active (if any)
+    # automatically gets deactivated.
+    # @param [Boolean] active True to activate, false to deactivate
+    # @return [Boolean] <tt>true</tt> if operation was successful,
+    #   <tt>false</tt> otherwise 
+    def active=(active)
+    end
+    alias SetActive active=
+    alias active active=
+    
+    # Display on screen what has been rendered to the window so far. This
+    # function is typically called after all OpenGL rendering has been done
+    # for the current frame, in order to show it on screen. 
+    def display
+    end
+    alias Display display
+    
+    # Limit the framerate to a maximum fixed frequency. If a limit is set, the
+    # window will use a small delay after each call to <tt>display</tt> to
+    # ensure that the current frame lasted long enough to match the framerate
+    # limit.
+    # @param [Fixnum] limit Framerate limit, in frames per seconds (use 0 to
+    # disable limit)
+    def framerate=(limit)
+    end
+    alias SetFramerateLimit framerate=
+    alias framerate framerate=
+    alias framerate_limit= framerate=
+    alias framerate_limit framerate=
+    
   end
   
 end

@@ -88,12 +88,16 @@ namespace rbWindow
     // Window#GetSettings
     static VALUE GetSettings(VALUE self);
     
-    // Window#poll_event(event=nil)
-    // Window#PollEvent(event=nil)
+    // Window#poll_event
+    // Window#PollEvent
+    // Window#poll_event(event)
+    // Window#PollEvent(event)
     static VALUE PollEvent(int argc, VALUE argv[], VALUE self);
     
-    // Window#wait_event(event=nil)
-    // Window#WaitEvent(event=nil)
+    // Window#wait_event
+    // Window#WaitEvent
+    // Window#wait_event(event)
+    // Window#WaitEvent(event)
     static VALUE WaitEvent(int argc, VALUE argv[], VALUE self);
     
     // Window#each_event
@@ -132,6 +136,31 @@ namespace rbWindow
     // Window#Show(show)
     // Window#show(show)
     static VALUE Show(VALUE self, VALUE show);
+    
+    // Window#key_repeat=(enabled)
+    // Window#EnableKeyRepeat(enabled)
+    // Window#key_repeat(enabled)
+    static VALUE EnableKeyRepeat(VALUE self, VALUE enabled);
+    
+    // Window#icon(width, height, pixels)
+    // Window#SetIcon(width, height, pixels)
+    static VALUE SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels);
+    
+    // Window#active(active)
+    // Window#SetActive(active)
+    // Window#active=(active)
+    static VALUE SetActive(VALUE self, VALUE active);
+    
+    // Window#display(active)
+    // Window#Display(active)
+    static VALUE Display(VALUE self);
+    
+    // Window#framerate=(limit)
+    // Window#SetFramerateLimit(limit)
+    // Window#framerate(limit)
+    // Window#framerate_limit=(limit)
+    // Window#framerate_limit(limit)
+    static VALUE SetFramerateLimit(VALUE self, VALUE limit);
     
 #endif
     
