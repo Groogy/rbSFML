@@ -75,36 +75,46 @@ namespace rbEvent
     static VALUE EventTypeCaseEqual(VALUE self, VALUE other);
     
     // Event#type
+    // Event#Type
     static VALUE Type(VALUE self);
     
     // Event#info
     static VALUE Info(VALUE self);
     
     // Event#size
+    // Event#Size
     static VALUE Size(VALUE self);
     
     // Event#key
+    // Event#Key
     static VALUE Key(VALUE self);
     
     // Event#text
+    // Event#Text
     static VALUE Text(VALUE self);
     
     // Event#mouse_move
+    // Event#MouseMove
     static VALUE MouseMove(VALUE self);
     
     // Event#mouse_button
+    // Event#MouseButton
     static VALUE MouseButton(VALUE self);
     
     // Event#mouse_wheel
+    // Event#MouseWheel
     static VALUE MouseWheel(VALUE self);
     
     // Event#joystick_move
+    // Event#JoystickMove
     static VALUE JoystickMove(VALUE self);
     
     // Event#joystick_button
+    // Event#JoystickButton
     static VALUE JoystickButton(VALUE self);
     
     // Event#joystick_connect
+    // Event#JoystickConnect
     static VALUE JoystickConnect(VALUE self);
     
     // Event#==(other)

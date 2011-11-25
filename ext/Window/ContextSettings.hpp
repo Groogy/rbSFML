@@ -50,38 +50,60 @@ namespace rbContextSettings
     
     void Init(VALUE SFML);
     
-    // ContextSettings#initialize
+    // ContextSettings#initialize(...)
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
     // ContextSettings#depth_bits
+    // ContextSettings#DepthBits
     static VALUE GetDepthBits(VALUE self);
     
     // ContextSettings#stencil_bits
+    // ContextSettings#StencilBits
     static VALUE GetStencilBits(VALUE self);
     
     // ContextSettings#antialiasing_level
+    // ContextSettings#AntialiasingLevel
     static VALUE GetAntialiasingLevel(VALUE self);
     
     // ContextSettings#major_version
+    // ContextSettings#MajorVersion
     static VALUE GetMajorVersion(VALUE self);
     
     // ContextSettings#minor_version
+    // ContextSettings#MinorVersion
     static VALUE GetMinorVersion(VALUE self);
     
     // ContextSettings#depth_bits=(value)
+    // ContextSettings#DepthBits=(value)
     static VALUE SetDepthBits(VALUE self, VALUE value);
     
     // ContextSettings#stencil_bits=(value)
+    // ContextSettings#StencilBits=(value)
     static VALUE SetStencilBits(VALUE self, VALUE value);
     
     // ContextSettings#antialiasing_level=(value)
+    // ContextSettings#AntialiasingLevel=(value)
     static VALUE SetAntialiasingLevel(VALUE self, VALUE value);
     
     // ContextSettings#major_version=(value)
+    // ContextSettings#MajorVersion=(value)
     static VALUE SetMajorVersion(VALUE self, VALUE value);
     
     // ContextSettings#minor_version=(value)
+    // ContextSettings#MinorVersion=(value)
     static VALUE SetMinorVersion(VALUE self, VALUE value);
+    
+    // ContextSettings#==(other)
+    // ContextSettings#eql?(other)
+    // ContextSettings#equal?(other)
+    static VALUE Equal(VALUE self, VALUE other);
+    
+    // ContextSettings#inspect
+    // ContextSettings#to_s
+    static VALUE Inspect(VALUE self);
+    
+    // ContextSettings#memory_usage
+    static VALUE GetMemoryUsage(VALUE self);
 
 #endif
     

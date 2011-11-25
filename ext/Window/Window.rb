@@ -50,6 +50,14 @@ module SFML
     def initialize(*args)
     end
     
+    # Raises a TypeError to prevent cloning.
+    def clone
+    end
+    
+    # Raises a TypeError to prevent duping.
+    def dup
+    end
+    
     # Create (or recreate) the window.
     # @overload create(mode, title, style=Style::Default, settings=ContextSettings.new)
     #   This constructor creates the window with the size and pixel depth

@@ -39,6 +39,7 @@ void rbSFML::Init(VALUE SFML)
     rb_define_module_function(SFML, "audio?",            AudioLoaded,        0);
 }
 
+// SFML.raise_exceptions
 VALUE rbSFML::GetRaiseExceptions(VALUE self)
 {
     if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions")))
@@ -46,16 +47,19 @@ VALUE rbSFML::GetRaiseExceptions(VALUE self)
     return rb_cv_get(self, "@@raise_exceptions") ? Qtrue : Qfalse;
 }
 
+// SFML.raise_exceptions=(flag)
 VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
 {
     rb_cv_set(self, "@@raise_exceptions", flag);
 }
 
+// SFML.system?
 VALUE rbSFML::SystemLoaded(VALUE self)
 {
     return Qtrue; // You can't call this method without system.
 }
 
+// SFML.window?
 VALUE rbSFML::WindowLoaded(VALUE self)
 {
     static ID id_window = rb_intern("@@window");
@@ -64,6 +68,7 @@ VALUE rbSFML::WindowLoaded(VALUE self)
         : Qfalse;
 }
 
+// SFML.graphics?
 VALUE rbSFML::GraphicsLoaded(VALUE self)
 {
     static ID id_graphics = rb_intern("@@graphics");
@@ -72,6 +77,7 @@ VALUE rbSFML::GraphicsLoaded(VALUE self)
         : Qfalse;
 }
 
+// SFML.audio?
 VALUE rbSFML::AudioLoaded(VALUE self)
 {
     static ID id_audio = rb_intern("@@audio");

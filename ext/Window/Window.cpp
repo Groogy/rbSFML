@@ -31,6 +31,8 @@ void rbWindow::Init(VALUE SFML)
     
     // Instance methods
     rb_define_method(Window, "initialize",     Initialize,         -1);
+    rb_define_method(Window, "clone",          Clone,               0);
+    rb_define_method(Window, "dup",            Dup,                 0);
     rb_define_method(Window, "create",         Create,             -1);
     rb_define_method(Window, "close",          Close,               0);
     rb_define_method(Window, "opened?",        IsOpened,            0);
@@ -72,14 +74,33 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alias(Window, "show",               "show="         );
 }
 
+// Window#initialize(...)
 VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
 {
     if (argc > 0)
     {
         Create(argc, argv, self);
     }
+    
+    return Qnil;
 }
 
+// Window#clone
+VALUE rbWindow::Clone(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't clone instance of Window");
+    return Qnil;
+}
+
+// Window#dup
+VALUE rbWindow::Dup(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dup instance of Window");
+    return Qnil;
+}
+
+// Window#create(...)
+// Window#Create(...)
 VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
 {
     sf::Window* window = ToSFML(self);
@@ -110,8 +131,11 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
         case 4:
             settings = *(rbContextSettings::ToSFML(argv[3]));
             break;
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 1..4)", argc);
     }
-    
+    rbSFML::PrepareErrorStream();
     switch (argc)
     {
         case 1:
@@ -129,35 +153,44 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
         case 4:
             window->Create(mode, title, style, settings);
             break;
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 1..4)", argc);
     }
-    
+    rbSFML::Warn();
     return Qnil;
 }
 
+// Window#close
+// Window#Close
 VALUE rbWindow::Close(VALUE self)
 {
     ToSFML(self)->Close();
     return Qnil;
 }
 
+// Window#opened?
+// Window#IsOpened
+// Window#open?
 VALUE rbWindow::IsOpened(VALUE self)
 {
     return ToSFML(self)->IsOpened() ? Qtrue : Qfalse;
+    return Qnil;
 }
 
+// Window#width
+// Window#GetWidth
 VALUE rbWindow::GetWidth(VALUE self)
 {
     return INT2FIX(ToSFML(self)->GetWidth());
 }
 
+// Window#height
+// Window#GetHeight
 VALUE rbWindow::GetHeight(VALUE self)
 {
     return INT2FIX(ToSFML(self)->GetHeight());
 }
 
+// Window#settings
+// Window#GetSettings
 VALUE rbWindow::GetSettings(VALUE self)
 {
     VALUE settings = rbContextSettings::ToRuby(
@@ -166,6 +199,7 @@ VALUE rbWindow::GetSettings(VALUE self)
     return settings;
 }
 
+// Internal
 static inline VALUE PollEvent(VALUE self, VALUE event)
 {
     sf::Event ev;
@@ -181,6 +215,8 @@ static inline VALUE PollEvent(VALUE self, VALUE event)
     }
 }
 
+// Window#poll_event(event=nil)
+// Window#PollEvent(event=nil)
 VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -197,8 +233,10 @@ VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..1)", argc);
     }
+    return Qnil;
 }
 
+// Internal
 static inline VALUE WaitEvent(VALUE self, VALUE event)
 {
     sf::Event ev;
@@ -214,6 +252,8 @@ static inline VALUE WaitEvent(VALUE self, VALUE event)
     }
 }
 
+// Window#wait_event(event=nil)
+// Window#WaitEvent(event=nil)
 VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -230,8 +270,10 @@ VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..1)", argc);
     }
+    return Qnil;
 }
 
+// Window#each_event
 VALUE rbWindow::EachEvent(VALUE self)
 {
     RETURN_ENUMERATOR(self, 0, NULL);
@@ -245,26 +287,39 @@ VALUE rbWindow::EachEvent(VALUE self)
     return Qnil;
 }
 
+// Window#vertical_sync=(enabled)
+// Window#EnableVerticalSync(enabled)
+// Window#vertical_sync(enabled)
 VALUE rbWindow::EnableVerticalSync(VALUE self, VALUE enabled)
 {
+    rb_check_frozen(self);
     ToSFML(self)->EnableVerticalSync(RTEST(enabled));
     return Qnil;
 }
 
+// Window#mouse_cursor=(show)
+// Window#ShowMouseCursor(show)
+// Window#mouse_cursor(show)
 VALUE rbWindow::ShowMouseCursor(VALUE self, VALUE show)
 {
+    rb_check_frozen(self);
     ToSFML(self)->ShowMouseCursor(RTEST(show));
     return Qnil;
 }
 
+// Window#position(x, y)
+// Window#Position(x, y)
 VALUE rbWindow::SetPosition(VALUE self, VALUE x, VALUE y)
 {
+    rb_check_frozen(self);
     ToSFML(self)->SetPosition(NUM2INT(x), NUM2INT(y));
     return Qnil;
 }
 
+// Window#position=(vector2)
 VALUE rbWindow::SetPosition2(VALUE self, VALUE vector2)
 {
+    rb_check_frozen(self);
     vector2 = rbVector2::ToRuby(vector2);
     VALUE x = rbVector2::GetX(vector2);
     VALUE y = rbVector2::GetY(vector2);
@@ -282,14 +337,19 @@ VALUE rbWindow::SetPosition2(VALUE self, VALUE vector2)
     return Qnil;
 }
 
+// Window#size(width, height)
+// Window#Size(width, height)
 VALUE rbWindow::SetSize(VALUE self, VALUE width, VALUE height)
 {
+    rb_check_frozen(self);
     ToSFML(self)->SetSize(NUM2INT(width), NUM2INT(height));
     return Qnil;
 }
 
+// Window#size=(vector2)
 VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
 {
+    rb_check_frozen(self);
     vector2 = rbVector2::ToRuby(vector2);
     VALUE width  = rbVector2::GetX(vector2);
     VALUE height = rbVector2::GetY(vector2);
@@ -307,12 +367,19 @@ VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
     return Qnil;
 }
 
+// Window#title=(title)
+// Window#SetTitle(title)
+// Window#title(title)
 VALUE rbWindow::SetTitle(VALUE self, VALUE title)
 {
+    rb_check_frozen(self);
     ToSFML(self)->SetTitle(StringValueCStr(title));
     return Qnil;
 }
 
+// Window#show=(show)
+// Window#Show(show)
+// Window#show(show)
 VALUE rbWindow::Show(VALUE self, VALUE show)
 {
     ToSFML(self)->Show(RTEST(show));

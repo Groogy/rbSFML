@@ -42,37 +42,49 @@ void rbClock::Init(VALUE SFML)
     rb_define_alias(Clock, "get_elapsed_time", "elapsed_time");
     rb_define_alias(Clock, "time",             "elapsed_time");
     rb_define_alias(Clock, "Reset",            "reset"       );
+    rb_define_alias(Clock, "eql?",             "=="          );
+    rb_define_alias(Clock, "equal?",           "=="          );
     rb_define_alias(Clock, "to_s",             "inspect"     );
-    rb_define_alias(Clock, "to_str",           "inspect"     );
 }
 
+// Clock#initialize_copy(clock)
 VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
 {
     *ToSFML(self) = *ToSFML(clock);
     return self;
 }
 
+// Clock#elapsed_time
+// Clock#GetElapsedTime
+// Clock#time
 VALUE rbClock::GetElapsedTime(VALUE self)
 {
     return INT2FIX(ToSFML(self)->GetElapsedTime());
 }
 
+// Clock#reset
+// Clock#Reset
 VALUE rbClock::Reset(VALUE self)
 {
     ToSFML(self)->Reset();
     return Qnil;
 }
 
+// Clock#==(other)
+// Clock#eql?(other)
+// Clock#equal?(other)
 VALUE rbClock::Equal(VALUE self, VALUE other)
 {
     if (CLASS_OF(other) != Clock) return Qfalse;
     sf::Clock* left = ToSFML(self);
     sf::Clock* right = ToSFML(other);
-    return (left->GetElapsedTime()) == (right->GetElapsedTime())
+    return left->GetElapsedTime() == right->GetElapsedTime()
         ? Qtrue
         : Qfalse;
 }
 
+// Clock#inspect
+// Clock#to_s
 VALUE rbClock::Inspect(VALUE self)
 {
     VALUE ret = rb_str_new2("Clock(");
@@ -81,6 +93,7 @@ VALUE rbClock::Inspect(VALUE self)
     return ret;
 }
 
+// Clock#memory_usage
 VALUE rbClock::GetMemoryUsage(VALUE self)
 {
     return INT2FIX(sizeof(sf::Clock));

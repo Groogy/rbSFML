@@ -44,15 +44,15 @@ void rbVector2::Init(VALUE SFML)
     rb_define_attr(Vector2, "y", true, true);
     
     // Instance aliases
+    rb_define_alias(Vector2, "equal?", "eql?"   );
     rb_define_alias(Vector2, "to_s",   "inspect");
-    rb_define_alias(Vector2, "to_str", "inspect");
     rb_define_alias(Vector2, "X",      "x"      );
     rb_define_alias(Vector2, "X=",     "x="     );
     rb_define_alias(Vector2, "Y",      "y"      );
     rb_define_alias(Vector2, "Y=",     "y="     );
-    rb_define_alias(Vector2, "equal?", "eql?"   );
 }
 
+// Vector2#initialize(...)
 VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -82,6 +82,7 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
     }
 }
 
+// Vector2#initialize_copy(vector2)
 VALUE rbVector2::InitializeCopy(VALUE self, VALUE vector2)
 {
     VALUE x = GetX(vector2);
@@ -100,6 +101,7 @@ VALUE rbVector2::InitializeCopy(VALUE self, VALUE vector2)
     }
 }
 
+// Vector2#-@
 VALUE rbVector2::Negate(VALUE self)
 {
     VALUE x = GetX(self);
@@ -113,6 +115,7 @@ VALUE rbVector2::Negate(VALUE self)
     return rb_class_new_instance(2, argv, Vector2);
 }
 
+// Internal
 static inline VALUE DoMath(VALUE left, ID op, VALUE right)
 {
     VALUE x = rbVector2::GetX(left);
@@ -127,30 +130,35 @@ static inline VALUE DoMath(VALUE left, ID op, VALUE right)
     return rb_class_new_instance(2, argv, rbVector2::Vector2);
 }
 
+// Vector2#+(other)
 VALUE rbVector2::Add(VALUE self, VALUE other)
 {
     static ID id_add = rb_intern("+");
     return DoMath(self, id_add, ToRuby(other));
 }
 
+// Vector2#-(other)
 VALUE rbVector2::Subtract(VALUE self, VALUE other)
 {
     static ID id_subtract = rb_intern("-");
     return DoMath(self, id_subtract, ToRuby(other));
 }
 
+// Vector2#*(other)
 VALUE rbVector2::Multiply(VALUE self, VALUE other)
 {
     static ID id_multiply = rb_intern("*");
     return DoMath(self, id_multiply, ToRuby(other));
 }
 
+// Vector2#/(other)
 VALUE rbVector2::Divide(VALUE self, VALUE other)
 {
     static ID id_divide = rb_intern("/");
     return DoMath(self, id_divide, ToRuby(other));
 }
 
+// Vector2#==(other)
 VALUE rbVector2::Equal(VALUE self, VALUE other)
 {
     if (CLASS_OF(other) != Vector2) return Qfalse;
@@ -159,6 +167,8 @@ VALUE rbVector2::Equal(VALUE self, VALUE other)
     return Qtrue;
 }
 
+// Vector2#eql?(other)
+// Vector2#equal?(other)
 VALUE rbVector2::StrictEqual(VALUE self, VALUE other)
 {
     if (CLASS_OF(other) != Vector2) return Qfalse;
@@ -167,6 +177,8 @@ VALUE rbVector2::StrictEqual(VALUE self, VALUE other)
     return Qtrue;
 }
 
+// Vector2#inspect
+// Vector2#to_s
 VALUE rbVector2::Inspect(VALUE self)
 {
     VALUE result = rb_str_new2("Vector2(");
@@ -177,6 +189,7 @@ VALUE rbVector2::Inspect(VALUE self)
     return result;
 }
 
+// Vector2#memory_usage
 VALUE rbVector2::GetMemoryUsage(VALUE self)
 {
     return INT2FIX(0);

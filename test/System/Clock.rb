@@ -13,6 +13,8 @@ class TestClock < Test::Unit::TestCase
     clock3 = Clock.new
     assert_equal(clock1, clock2)
     refute_equal(clock1, clock3)
+    assert(clock1.eql? clock2)
+    refute(clock1.eql? clock3)
   end
   
   def test_inspect

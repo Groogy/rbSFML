@@ -82,9 +82,11 @@ namespace rbVector3
     static VALUE Equal(VALUE self, VALUE other);
     
     // Vector3#eql?(other)
+    // Vector3#equal?(other)
     static VALUE StrictEqual(VALUE self, VALUE other);
     
     // Vector3#inspect
+    // Vector3#to_s
     static VALUE Inspect(VALUE self);
     
     // Vector3#memory_usage

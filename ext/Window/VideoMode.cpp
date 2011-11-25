@@ -117,6 +117,7 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..3)", argc);
     }
+    return Qnil;
 }
 
 VALUE rbVideoMode::InitializeCopy(VALUE self, VALUE video_mode)
@@ -148,16 +149,19 @@ VALUE rbVideoMode::GetBitsPerPixel(VALUE self)
 VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 {
     ToSFML(self)->Width = NUM2INT(value);
+    return Qnil;
 }
 
 VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 {
     ToSFML(self)->Height = NUM2INT(value);
+    return Qnil;
 }
 
 VALUE rbVideoMode::SetBitsPerPixel(VALUE self, VALUE value)
 {
     ToSFML(self)->BitsPerPixel = NUM2INT(value);
+    return Qnil;
 }
 
 VALUE rbVideoMode::Compare(VALUE self, VALUE other)

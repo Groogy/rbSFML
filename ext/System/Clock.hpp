@@ -54,15 +54,21 @@ namespace rbClock
     static VALUE InitializeCopy(VALUE self, VALUE clock);
     
     // Clock#elapsed_time
+    // Clock#GetElapsedTime
+    // Clock#time
     static VALUE GetElapsedTime(VALUE self);
     
     // Clock#reset
+    // Clock#Reset
     static VALUE Reset(VALUE self);
     
     // Clock#==(other)
+    // Clock#eql?(other)
+    // Clock#equal?(other)
     static VALUE Equal(VALUE self, VALUE other);
     
     // Clock#inspect
+    // Clock#to_s
     static VALUE Inspect(VALUE self);
     
     // Clock#memory_usage

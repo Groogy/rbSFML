@@ -54,58 +54,83 @@ namespace rbWindow
     
     void Init(VALUE SFML);
     
-    // Window#initialize
+    // Window#initialize(...)
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
-    // Window#create
+    // Window#clone
+    static VALUE Clone(VALUE self);
+    
+    // Window#dup
+    static VALUE Dup(VALUE self);
+    
+    // Window#create(...)
+    // Window#Create(...)
     static VALUE Create(int argc, VALUE args[], VALUE self);
     
     // Window#close
+    // Window#Close
     static VALUE Close(VALUE self);
     
     // Window#opened?
+    // Window#IsOpened
+    // Window#open?
     static VALUE IsOpened(VALUE self);
     
     // Window#width
+    // Window#GetWidth
     static VALUE GetWidth(VALUE self);
     
     // Window#height
+    // Window#GetHeight
     static VALUE GetHeight(VALUE self);
     
     // Window#settings
+    // Window#GetSettings
     static VALUE GetSettings(VALUE self);
     
     // Window#poll_event(event=nil)
+    // Window#PollEvent(event=nil)
     static VALUE PollEvent(int argc, VALUE argv[], VALUE self);
     
     // Window#wait_event(event=nil)
+    // Window#WaitEvent(event=nil)
     static VALUE WaitEvent(int argc, VALUE argv[], VALUE self);
     
     // Window#each_event
     static VALUE EachEvent(VALUE self);
     
     // Window#vertical_sync=(enabled)
+    // Window#EnableVerticalSync(enabled)
+    // Window#vertical_sync(enabled)
     static VALUE EnableVerticalSync(VALUE self, VALUE enabled);
     
     // Window#mouse_cursor=(show)
+    // Window#ShowMouseCursor(show)
+    // Window#mouse_cursor(show)
     static VALUE ShowMouseCursor(VALUE self, VALUE show);
     
     // Window#position(x, y)
+    // Window#Position(x, y)
     static VALUE SetPosition(VALUE self, VALUE x, VALUE y);
     
     // Window#position=(vector2)
     static VALUE SetPosition2(VALUE self, VALUE vector2);
     
     // Window#size(width, height)
+    // Window#Size(width, height)
     static VALUE SetSize(VALUE self, VALUE width, VALUE height);
     
     // Window#size=(vector2)
     static VALUE SetSize2(VALUE self, VALUE vector2);
     
     // Window#title=(title)
+    // Window#SetTitle(title)
+    // Window#title(title)
     static VALUE SetTitle(VALUE self, VALUE title);
     
     // Window#show=(show)
+    // Window#Show(show)
+    // Window#show(show)
     static VALUE Show(VALUE self, VALUE show);
     
 #endif

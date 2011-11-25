@@ -100,7 +100,6 @@ module SFML
     def inspect
     end
     alias to_s inspect
-    alias to_str inspect
     
     # Returns how much memory was allocated by this object.
     # @return [Fixnum]

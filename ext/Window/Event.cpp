@@ -151,10 +151,12 @@ void rbEvent::Init(VALUE SFML)
     rb_define_alias(Event, "JoystickMove",    "joystick_move"   );
     rb_define_alias(Event, "JoystickButton",  "joystick_button" );
     rb_define_alias(Event, "JoystickConnect", "joystick_connect");
+    rb_define_alias(Event, "eql?",            "=="              );
+    rb_define_alias(Event, "equal?",          "=="              );
     rb_define_alias(Event, "to_s",            "inspect"         );
-    rb_define_alias(Event, "to_str",          "inspect"         );
 }
 
+// Internal
 VALUE rbEvent::EventType(int id)
 {
     VALUE type = rb_obj_alloc(Event_Type);
@@ -162,6 +164,7 @@ VALUE rbEvent::EventType(int id)
     return type;
 }
 
+// Internal
 VALUE rbEvent::EventTypeCaseEqual(VALUE self, VALUE other)
 {
     other = ToRuby(other);
@@ -170,11 +173,14 @@ VALUE rbEvent::EventTypeCaseEqual(VALUE self, VALUE other)
     return rb_equal(id1, id2);
 }
 
+// Event#type
+// Event#Type
 VALUE rbEvent::Type(VALUE self)
 {
     return EventType(ToSFML(self)->Type);
 }
 
+// Event#info
 VALUE rbEvent::Info(VALUE self)
 {
     switch (ToSFML(self)->Type)
@@ -210,6 +216,8 @@ VALUE rbEvent::Info(VALUE self)
     }
 }
 
+// Event#size
+// Event#Size
 VALUE rbEvent::Size(VALUE self)
 {
     sf::Event::SizeEvent size_ev = ToSFML(self)->Size;
@@ -221,6 +229,8 @@ VALUE rbEvent::Size(VALUE self)
     return size;
 }
 
+// Event#key
+// Event#Key
 VALUE rbEvent::Key(VALUE self)
 {
     sf::Event::KeyEvent key_ev = ToSFML(self)->Key;
@@ -235,6 +245,8 @@ VALUE rbEvent::Key(VALUE self)
     return key;
 }
 
+// Event#text
+// Event#Text
 VALUE rbEvent::Text(VALUE self)
 {
     sf::Event::TextEvent text_ev = ToSFML(self)->Text;
@@ -245,6 +257,8 @@ VALUE rbEvent::Text(VALUE self)
     return text;
 }
 
+// Event#mouse_move
+// Event#MouseMove
 VALUE rbEvent::MouseMove(VALUE self)
 {
     sf::Event::MouseMoveEvent mouse_move_ev = ToSFML(self)->MouseMove;
@@ -256,6 +270,8 @@ VALUE rbEvent::MouseMove(VALUE self)
     return mouse_move;
 }
 
+// Event#mouse_button
+// Event#MouseButton
 VALUE rbEvent::MouseButton(VALUE self)
 {
     sf::Event::MouseButtonEvent mouse_button_ev = ToSFML(self)->MouseButton;
@@ -268,6 +284,8 @@ VALUE rbEvent::MouseButton(VALUE self)
     return mouse_button;
 }
 
+// Event#mouse_wheel
+// Event#MouseWheel
 VALUE rbEvent::MouseWheel(VALUE self)
 {
     sf::Event::MouseWheelEvent mouse_wheel_ev = ToSFML(self)->MouseWheel;
@@ -280,6 +298,8 @@ VALUE rbEvent::MouseWheel(VALUE self)
     return mouse_wheel;
 }
 
+// Event#joystick_move
+// Event#JoystickMove
 VALUE rbEvent::JoystickMove(VALUE self)
 {
     sf::Event::JoystickMoveEvent joystick_move_ev = ToSFML(self)->JoystickMove;
@@ -292,6 +312,8 @@ VALUE rbEvent::JoystickMove(VALUE self)
     return joystick_move;
 }
 
+// Event#joystick_button
+// Event#JoystickButton
 VALUE rbEvent::JoystickButton(VALUE self)
 {
     sf::Event::JoystickButtonEvent joystick_button_ev = ToSFML(self)->JoystickButton;
@@ -303,6 +325,8 @@ VALUE rbEvent::JoystickButton(VALUE self)
     return joystick_button;
 }
 
+// Event#joystick_connect
+// Event#JoystickConnect
 VALUE rbEvent::JoystickConnect(VALUE self)
 {
     sf::Event::JoystickConnectEvent joystick_connect_ev = ToSFML(self)->JoystickConnect;
@@ -313,6 +337,7 @@ VALUE rbEvent::JoystickConnect(VALUE self)
     return joystick_connect;
 }
 
+// Event#==(other)
 VALUE rbEvent::Equal(VALUE self, VALUE other)
 {
     if (CLASS_OF(other) != Event) return Qfalse;
@@ -321,6 +346,7 @@ VALUE rbEvent::Equal(VALUE self, VALUE other)
     return Qtrue;
 }
 
+// Event#inspect
 VALUE rbEvent::Inspect(VALUE self)
 {
     VALUE ret = rb_str_new2("Event(");
@@ -400,6 +426,7 @@ VALUE rbEvent::Inspect(VALUE self)
     return ret;
 }
 
+// Event#memory_usage
 VALUE rbEvent::GetMemoryUsage(VALUE self)
 {
     return INT2FIX(sizeof(sf::Event));

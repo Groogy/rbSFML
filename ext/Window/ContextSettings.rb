@@ -54,6 +54,26 @@ module SFML
     def initialize(depth=0, stencil=0, antialiasing=0, major=2, minor=0)  
     end
     
+    # This operator compares two context settings and checks if they are
+    # equal.
+    # @param [ContextSettings] other Context settings to be compared with.
+    # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
+    def ==(other)
+    end
+    alias eql? ==
+    alias equal? ==
+    
+    # Returns a formated string to represent the Context settings. 
+    # @return [String]
+    def inspect
+    end
+    alias to_s inspect
+    
+    # Returns how much memory was allocated by this object.
+    # @return [Fixnum]
+    def memory_usage
+    end
+    
   end
   
 end

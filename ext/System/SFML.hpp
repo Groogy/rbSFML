@@ -26,6 +26,7 @@
 #include <rbSFML.hpp>
 
 #include <iostream>
+#include <string>
 #include <sstream>
 
 #include <SFML/System/Err.hpp>
@@ -34,8 +35,10 @@ namespace rbSFML
 {
     
     static inline VALUE Module();
-    static inline void PrepareRaiseError();
-    static inline void RaiseError();
+    static inline void PrepareErrorStream();
+    static inline void Raise();
+    static inline void Warn();
+    static inline std::string Message();
     
 #if defined(RBSFML_SYSTEM)
     
@@ -70,7 +73,9 @@ VALUE rbSFML::Module()
 
 extern std::stringstream gErrorStream; // main.cpp
 
-void rbSFML::PrepareRaiseError()
+// Make sure there is no return keyword between the call to this function and
+// the call to Raise() or Warn().
+void rbSFML::PrepareErrorStream()
 {
     VALUE SFML = Module();
     VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
@@ -78,21 +83,34 @@ void rbSFML::PrepareRaiseError()
         sf::Err().rdbuf(gErrorStream.rdbuf());
 }
 
-void rbSFML::RaiseError()
+std::string rbSFML::Message()
 {
-    VALUE SFML = Module();
-    VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
-    if (RTEST(flag))
+    sf::Err().rdbuf(std::cerr.rdbuf());
+    if (RTEST(rb_cv_get(Module(), "@@raise_exceptions")))
     {
         std::string message = gErrorStream.str();
         if (!message.empty())
-        {
-            VALUE Error = rb_const_get(SFML, rb_intern("Error"));
-            rb_raise(Error, message.c_str());
-            sf::Err().rdbuf(std::cerr.rdbuf());
-            gErrorStream.str("");
-        }
+            message.erase(message.end() - 1); // Remove '\n' from end.
+        return message;
     }
+    return "";
+}
+
+void rbSFML::Raise()
+{
+    std::string message = Message();
+    if (!message.empty())
+    {
+        VALUE Error = rb_const_get(Module(), rb_intern("Error"));
+        rb_raise(Error, message.c_str());
+    }
+}
+
+void rbSFML::Warn()
+{
+    std::string message = Message();
+    if (!message.empty())
+        rb_warn(message.c_str());
 }
 
 #endif // SYSTEM_SFML_HPP
