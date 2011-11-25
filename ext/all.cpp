@@ -19,38 +19,13 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <Window.hpp>
-
-#if !defined(RBSFML_SFML)
-#include <sstream>
-std::stringstream gErrorStream;
-namespace rbVector2 { VALUE Vector2; }
-#endif
-
-static inline void InitDependencies(VALUE SFML)
-{
-#if !defined(RBSFML_SFML)
-    rbVector2::Vector2 = rb_const_get(SFML, rb_intern("Vector2"));
-#endif
-}
+#include <ruby.h>
 
 extern "C"
-void Init_window()
+void Init_all()
 {
-    VALUE SFML = rbSFML::Module();
-    
-    if (!rb_cvar_defined(SFML, rb_intern("@@system")))
-    {
-        rb_require("sfml/system");
-    }
-    
-    rb_cvar_set(SFML, rb_intern("@@window"), Qtrue);
-    
-    InitDependencies(SFML);
-    
-    rbContextSettings::Init(SFML);
-    rbEvent::Init(SFML);
-    rbStyle::Init(SFML);
-    rbVideoMode::Init(SFML);
-    rbWindow::Init(SFML);
+    rb_require("sfml/system");
+    rb_require("sfml/window");
+    //rb_require("sfml/graphics");
+    //rb_require("sfml/audio");
 }

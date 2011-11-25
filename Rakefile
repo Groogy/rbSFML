@@ -27,9 +27,8 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :graphics => FileList.new("#{EXT_DIR}/Graphics/*.cpp"),
         :window   => FileList.new("#{EXT_DIR}/Window/*.cpp"),
         :system   => FileList.new("#{EXT_DIR}/System/*.cpp"),
-        #:all      => FileList.new("#{EXT_DIR}/all.cpp"),
-        #:sfml     => FileList.new("#{EXT_DIR}/sfml.cpp"),
-        :shared   => FileList.new("#{EXT_DIR}/*.cpp")}
+        :all      => FileList.new("#{EXT_DIR}/all.cpp"),
+        :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
 LIBS = []
 OBJS = {}
 SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
@@ -50,7 +49,7 @@ def calc_md5
       OBJS[k] << "#{OBJ_DIR}/#{k}/#{File.basename(file)}.#{digest}#{s}.o"
     end
   end
-  #OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
+  OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
 end
 
 def compile_o(src)
@@ -60,6 +59,13 @@ def compile_o(src)
   mkdir_p dir
   s = "-DSFML_STATIC" if ARGV.include? "static"
   d = "-DRBSFML_#{src.to_s.upcase}"
+  if ARGV.include? "sfml"
+    d << " -DRBSFML_SYSTEM"
+    d << " -DRBSFML_WINDOW"
+    d << " -DRBSFML_GRAPHICS"
+    d << " -DRBSFML_AUDIO"
+    d << " -DRBSFML_SFML"
+  end
   unless File.exist?(SFML_INC)
     raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
   end
@@ -76,7 +82,6 @@ def create_so(src)
   mkdir_p SO_DIR
   puts "Creating #{src}.so"
   objs = OBJS[src].join(' ')
-  shared = OBJS[:shared].join(' ')
   s = "-s" if ARGV.include? "static"
   unless File.exist?(SFML_LIB)
     raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
@@ -88,7 +93,7 @@ def create_so(src)
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   end
-  exit unless system "#{LINK} -o #{so} #{objs} #{shared} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml_link}"
+  exit unless system "#{LINK} -o #{so} #{objs} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml_link}"
 end
 
 task :default => [:all]
@@ -102,42 +107,37 @@ task :static do
 end
 
 desc "Build the whole rbSFML."
-task :all => [:audio, :graphics, :window, :system] do
+task :all => [:system, :window, :graphics, :audio] do
   compile_o(:all)
   create_so(:all)
 end
 
 desc "Build only audio module (audio.so)."
 task :audio => [:system] do
-  compile_o(:shared)
   compile_o(:audio)
   create_so(:audio)
 end
 
 desc "Build only graphics module (graphics.so)."
-task :graphics => [:window, :system] do
-  compile_o(:shared)
+task :graphics => [:system, :window] do
   compile_o(:graphics)
   create_so(:graphics)
 end
 
 desc "Build only window module (window.so)."
 task :window => [:system] do
-  compile_o(:shared)
   compile_o(:window)
   create_so(:window)
 end
 
 desc "Build only system module (system.so)."
 task :system do
-  compile_o(:shared)
   compile_o(:system)
   create_so(:system)
 end
 
 desc "Build rbSFML as a single file (sfml.so)."
 task :sfml do
-  compile_o(:shared)
   compile_o(:system)
   compile_o(:window)
   compile_o(:graphics)
@@ -154,11 +154,7 @@ if ARGV.include? 'doc'
   # TODO: Find a way to remove '[View source]' from docs.
   YARD::Rake::YardocTask.new do |yard|
     yard.name = DOC_DIR
-    yard.files = FileList.new('ext/Audio/*.rb') +
-                 FileList.new('ext/Graphics/*.rb') +
-                 FileList.new('ext/Window/*.rb') +
-                 FileList.new('ext/System/*.rb') +
-                 FileList.new('ext/*.rb')
+    yard.files = FileList.new("ext/**/*.rb")
     yard.options << "--no-save" << "--no-cache"
     at_exit do
       uri = "file:///\"#{File.dirname(__FILE__)}/#{DOC_DIR}\"/frames.html"

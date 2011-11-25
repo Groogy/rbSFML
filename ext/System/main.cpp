@@ -19,10 +19,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <System.hpp>
+
+#if !defined(RBSFML_SFML)
 #include <sstream>
 std::stringstream gErrorStream;
-
-#include <System.hpp>
+#endif
 
 extern "C"
 void Init_system()
