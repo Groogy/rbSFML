@@ -46,7 +46,6 @@ module SFML
       def desktop_mode
       end
       alias GetDesktopMode desktop_mode
-      alias get_desktop_mode desktop_mode
       
       # Retrieves all the video modes supported in fullscreen mode. When
       # creating a fullscreen window, the video mode is restricted to be
@@ -59,7 +58,6 @@ module SFML
       def fullscreen_modes
       end
       alias GetFullscreenModes fullscreen_modes
-      alias get_fullscreen_modes fullscreen_modes
       
     end
     
@@ -120,7 +118,6 @@ module SFML
     def inspect
     end
     alias to_s inspect
-    alias to_str inspect
     
     # Returns how much memory was allocated by this object.
     # @return [Fixnum]

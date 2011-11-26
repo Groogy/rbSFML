@@ -50,10 +50,12 @@ namespace rbVideoMode
     
     void Init(VALUE SFML);
     
-    // VideoMode.desktop_mode
+    // VideoMode::desktop_mode
+    // VideoMode::GetDesktopMode
     static VALUE GetDesktopMode(VALUE self);
     
-    // VideoMode.fullscreen_modes
+    // VideoMode::fullscreen_modes
+    // VideoMode::GetFullscreenModes
     static VALUE GetFullscreenModes(VALUE self);
     
     // VideoMode#initialize
@@ -63,30 +65,42 @@ namespace rbVideoMode
     static VALUE InitializeCopy(VALUE self, VALUE video_mode);
     
     // VideoMode#valid?
+    // VideoMode#IsValid
     static VALUE IsValid(VALUE self);
     
     // VideoMode#width
+    // VideoMode#Width
     static VALUE GetWidth(VALUE self);
     
     // VideoMode#height
+    // VideoMode#Height
     static VALUE GetHeight(VALUE self);
     
+    // VideoMode#bpp
+    // VideoMode#BitsPerPixel
     // VideoMode#bits_per_pixel
+    // VideoMode#bits
     static VALUE GetBitsPerPixel(VALUE self);
     
     // VideoMode#width=(value)
+    // VideoMode#Width=(value)
     static VALUE SetWidth(VALUE self, VALUE value);
     
     // VideoMode#height=(value)
+    // VideoMode#Height=(value)
     static VALUE SetHeight(VALUE self, VALUE value);
     
+    // VideoMode#bpp=(value)
+    // VideoMode#BitsPerPixel=(value)
     // VideoMode#bits_per_pixel=(value)
+    // VideoMode#bits=(value)
     static VALUE SetBitsPerPixel(VALUE self, VALUE value);
     
     // VideoMode#<=>(other)
     static VALUE Compare(VALUE self, VALUE other);
     
     // VideoMode#inspect
+    // VideoMode#to_s
     static VALUE Inspect(VALUE self);
     
     // VideoMode#memory_usage

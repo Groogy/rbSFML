@@ -30,63 +30,75 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alloc_func(Window, Allocate);
     
     // Instance methods
-    rb_define_method(Window, "initialize",     Initialize,         -1);
-    rb_define_method(Window, "clone",          Clone,               0);
-    rb_define_method(Window, "dup",            Dup,                 0);
-    rb_define_method(Window, "create",         Create,             -1);
-    rb_define_method(Window, "close",          Close,               0);
-    rb_define_method(Window, "opened?",        IsOpened,            0);
-    rb_define_method(Window, "width",          GetWidth,            0);
-    rb_define_method(Window, "height",         GetHeight,           0);
-    rb_define_method(Window, "settings",       GetSettings,         0);
-    rb_define_method(Window, "poll_event",     PollEvent,          -1);
-    rb_define_method(Window, "wait_event",     WaitEvent,          -1);
-    rb_define_method(Window, "each_event",     EachEvent,           0);
-    rb_define_method(Window, "vertical_sync=", EnableVerticalSync,  1);
-    rb_define_method(Window, "mouse_cursor=",  ShowMouseCursor,     1);
-    rb_define_method(Window, "position",       SetPosition,         2);
-    rb_define_method(Window, "position=",      SetPosition2,        1);
-    rb_define_method(Window, "size",           SetSize,             2);
-    rb_define_method(Window, "size=",          SetSize2,            1);
-    rb_define_method(Window, "title=",         SetTitle,            1);
-    rb_define_method(Window, "show=",          Show,                1);
-    rb_define_method(Window, "key_repeat=",    EnableKeyRepeat,     1);
-    rb_define_method(Window, "icon",           SetIcon,             3);
-    rb_define_method(Window, "active=",        SetActive,           1);
-    rb_define_method(Window, "display",        Display,             0);
-    rb_define_method(Window, "framerate=",     SetFramerateLimit,   1);
+    rb_define_method(Window, "initialize",          Initialize,           -1);
+    rb_define_method(Window, "clone",               Clone,                 0);
+    rb_define_method(Window, "dup",                 Dup,                   0);
+    rb_define_method(Window, "create",              Create,               -1);
+    rb_define_method(Window, "close",               Close,                 0);
+    rb_define_method(Window, "opened?",             IsOpened,              0);
+    rb_define_method(Window, "width",               GetWidth,              0);
+    rb_define_method(Window, "height",              GetHeight,             0);
+    rb_define_method(Window, "settings",            GetSettings,           0);
+    rb_define_method(Window, "poll_event",          PollEvent,            -1);
+    rb_define_method(Window, "wait_event",          WaitEvent,            -1);
+    rb_define_method(Window, "each_event",          EachEvent,             0);
+    rb_define_method(Window, "vertical_sync=",      EnableVerticalSync,    1);
+    rb_define_method(Window, "mouse_cursor=",       ShowMouseCursor,       1);
+    rb_define_method(Window, "position",            SetPosition,           2);
+    rb_define_method(Window, "position=",           SetPosition2,          1);
+    rb_define_method(Window, "size",                SetSize,               2);
+    rb_define_method(Window, "size=",               SetSize2,              1);
+    rb_define_method(Window, "title=",              SetTitle,              1);
+    rb_define_method(Window, "show=",               Show,                  1);
+    rb_define_method(Window, "key_repeat=",         EnableKeyRepeat,       1);
+    rb_define_method(Window, "icon",                SetIcon,               3);
+    rb_define_method(Window, "active=",             SetActive,             1);
+    rb_define_method(Window, "display",             Display,               0);
+    rb_define_method(Window, "framerate=",          SetFramerateLimit,     1);
+    rb_define_method(Window, "frame_time",          GetFrameTime,          0);
+    rb_define_method(Window, "joystick_threshold=", SetJoystickThreshold,  1);
+    rb_define_method(Window, "system_handle",       GetSystemHandle,       0);
+    rb_define_method(Window, "inspect",             Inspect,               0);
+    rb_define_method(Window, "memory_usage",        GetMemoryUsage,        0);
     
     // Instance aliasses
-    rb_define_alias(Window, "Create",             "create"        );
-    rb_define_alias(Window, "Close",              "close"         );
-    rb_define_alias(Window, "IsOpened",           "opened?"       );
-    rb_define_alias(Window, "open?",              "opened?"       );
-    rb_define_alias(Window, "GetWidth",           "width"         );
-    rb_define_alias(Window, "GetHeight",          "height"        );
-    rb_define_alias(Window, "GetSettings",        "settings"      );
-    rb_define_alias(Window, "PollEvent",          "poll_event"    );
-    rb_define_alias(Window, "event",              "poll_event"    );
-    rb_define_alias(Window, "WaitEvent",          "wait_event"    );
-    rb_define_alias(Window, "EnableVerticalSync", "vertical_sync=");
-    rb_define_alias(Window, "vertical_sync",      "vertical_sync=");
-    rb_define_alias(Window, "ShowMouseCursor",    "mouse_cursor=" );
-    rb_define_alias(Window, "mouse_cursor",       "mouse_cursor=" );
-    rb_define_alias(Window, "SetPosition",        "position"      );
-    rb_define_alias(Window, "SetSize",            "size"          );
-    rb_define_alias(Window, "SetTitle",           "title="        );
-    rb_define_alias(Window, "title",              "title="        );
-    rb_define_alias(Window, "Show",               "show="         );
-    rb_define_alias(Window, "show",               "show="         );
-    rb_define_alias(Window, "EnableKeyRepeat",    "key_repeat="   );
-    rb_define_alias(Window, "key_repeat",         "key_repeat="   );
-    rb_define_alias(Window, "SetIcon",            "icon"          );
-    rb_define_alias(Window, "SetActive",          "active="       );
-    rb_define_alias(Window, "active",             "active="       );
-    rb_define_alias(Window, "Display",            "display"       );
-    rb_define_alias(Window, "SetFramerateLimit",  "framerate="    );
-    rb_define_alias(Window, "framerate",          "framerate="    );
-    rb_define_alias(Window, "framerate_limit=",   "framerate="    );
-    rb_define_alias(Window, "framerate_limit",    "framerate="    );
+    rb_define_alias(Window, "Create",               "create"             );
+    rb_define_alias(Window, "Close",                "close"              );
+    rb_define_alias(Window, "IsOpened",             "opened?"            );
+    rb_define_alias(Window, "open?",                "opened?"            );
+    rb_define_alias(Window, "GetWidth",             "width"              );
+    rb_define_alias(Window, "GetHeight",            "height"             );
+    rb_define_alias(Window, "GetSettings",          "settings"           );
+    rb_define_alias(Window, "PollEvent",            "poll_event"         );
+    rb_define_alias(Window, "event",                "poll_event"         );
+    rb_define_alias(Window, "WaitEvent",            "wait_event"         );
+    rb_define_alias(Window, "EnableVerticalSync",   "vertical_sync="     );
+    rb_define_alias(Window, "vertical_sync",        "vertical_sync="     );
+    rb_define_alias(Window, "ShowMouseCursor",      "mouse_cursor="      );
+    rb_define_alias(Window, "mouse_cursor",         "mouse_cursor="      );
+    rb_define_alias(Window, "SetPosition",          "position"           );
+    rb_define_alias(Window, "SetSize",              "size"               );
+    rb_define_alias(Window, "SetTitle",             "title="             );
+    rb_define_alias(Window, "title",                "title="             );
+    rb_define_alias(Window, "Show",                 "show="              );
+    rb_define_alias(Window, "show",                 "show="              );
+    rb_define_alias(Window, "EnableKeyRepeat",      "key_repeat="        );
+    rb_define_alias(Window, "key_repeat",           "key_repeat="        );
+    rb_define_alias(Window, "SetIcon",              "icon"               );
+    rb_define_alias(Window, "SetActive",            "active="            );
+    rb_define_alias(Window, "active",               "active="            );
+    rb_define_alias(Window, "Display",              "display"            );
+    rb_define_alias(Window, "SetFramerateLimit",    "framerate="         );
+    rb_define_alias(Window, "framerate",            "framerate="         );
+    rb_define_alias(Window, "framerate_limit=",     "framerate="         );
+    rb_define_alias(Window, "framerate_limit",      "framerate="         );
+    rb_define_alias(Window, "GetFrameTime",         "frame_time"         );
+    rb_define_alias(Window, "time",                 "frame_time"         );
+    rb_define_alias(Window, "SetJoystickThreshold", "joystick_threshold=");
+    rb_define_alias(Window, "joystick_threshold",   "joystick_threshold=");
+    rb_define_alias(Window, "GetSystemHandle",      "system_handle"      );
+    rb_define_alias(Window, "handle",               "system_handle"      );
+    rb_define_alias(Window, "to_s",                 "inspect"            );
 }
 
 // Window#initialize(...)
@@ -140,6 +152,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             else
             {
                 mode = *(rbVideoMode::ToSFML(argv[0]));
+                rb_iv_set(self, "@title", StringValue(argv[1]));
                 title = StringValueCStr(argv[1]);
             }
             break;
@@ -177,6 +190,7 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
 // Window#Close
 VALUE rbWindow::Close(VALUE self)
 {
+    rb_iv_set(self, "@title", Qnil);
     ToSFML(self)->Close();
     return Qnil;
 }
@@ -392,6 +406,7 @@ VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
 VALUE rbWindow::SetTitle(VALUE self, VALUE title)
 {
     rb_check_frozen(self);
+    rb_iv_set(self, "@title", StringValue(title));
     ToSFML(self)->SetTitle(StringValueCStr(title));
     return Qnil;
 }
@@ -473,4 +488,47 @@ VALUE rbWindow::SetFramerateLimit(VALUE self, VALUE limit)
     rb_check_frozen(self);
     ToSFML(self)->SetFramerateLimit(NUM2INT(limit));
     return Qnil;
+}
+
+// Window#frame_time
+// Window#GetFrameTime
+// Window#time
+VALUE rbWindow::GetFrameTime(VALUE self)
+{
+    return UINT2NUM(ToSFML(self)->GetFrameTime());
+}
+
+// Window#joystick_threshold=(threshold)
+// Window#SetJoystickThreshold(threshold)
+// Window#joystick_threshold(threshold)
+VALUE rbWindow::SetJoystickThreshold(VALUE self, VALUE threshold)
+{
+    rb_check_frozen(self);
+    ToSFML(self)->SetJoystickThreshold(NUM2DBL(threshold));
+    return Qnil;
+}
+
+// Window#system_handle
+// Window#GetSystemHandle
+// Window#handle
+VALUE rbWindow::GetSystemHandle(VALUE self)
+{
+    unsigned int handle = (unsigned int)ToSFML(self)->GetSystemHandle();
+    return UINT2NUM(handle);
+}
+
+// Window#inspect
+// Window#to_s
+VALUE rbWindow::Inspect(VALUE self)
+{
+    VALUE ret = rb_str_new2("Window(");
+    rb_str_append(ret, rb_inspect(rb_iv_get(self, "@title")));
+    rb_str_append(ret, rb_str_new2(")"));
+    return ret;
+}
+
+// Window#memory_usage
+VALUE rbWindow::GetMemoryUsage(VALUE self)
+{
+    return INT2FIX(sizeof(sf::Window));
 }

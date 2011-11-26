@@ -336,6 +336,46 @@ module SFML
     alias framerate_limit= framerate=
     alias framerate_limit framerate=
     
+    # Get the duration of the last frame. This function returns the time
+    # elapsed between the last two calls to <tt>#display</tt>. This can be
+    # useful for calculating the framerate, or for updating the application's
+    # objects.
+    # @return [Fixnum] Time elapsed in last frame, in milliseconds
+    def frame_time
+    end
+    alias GetFrameTime frame_time
+    alias time frame_time
+    
+    # Change the joystick threshold. The joystick threshold is the value below
+    # which no <tt>JoystickMoved</tt> event will be generated. The threshold
+    # value is 0.1 by default.
+    # @param [Float] threshold New threshold, in the range <tt>0..100</tt>
+    def joystick_threshold=(threshold)
+    end
+    alias SetFramerateLimit joystick_threshold=
+    alias SetJoystickThreshold joystick_threshold=
+    
+    # Get the OS-specific handle of the window. You shouldn't need to use this
+    # function, unless you have very specific stuff to implement that SFML
+    # doesn't support, or implement a temporary workaround until a bug is
+    # fixed.
+    # @return [Fixnum] System handle of the window
+    def system_handle
+    end
+    alias GetSystemHandle system_handle
+    alias handle system_handle
+    
+    # Returns a formated string to represent the window.
+    # @return [String]
+    def inspect
+    end
+    alias to_s inspect
+    
+    # Returns how much memory was allocated by this object.
+    # @return [Fixnum]
+    def memory_usage
+    end
+    
   end
   
 end

@@ -162,6 +162,28 @@ namespace rbWindow
     // Window#framerate_limit(limit)
     static VALUE SetFramerateLimit(VALUE self, VALUE limit);
     
+    // Window#frame_time
+    // Window#GetFrameTime
+    // Window#time
+    static VALUE GetFrameTime(VALUE self);
+    
+    // Window#joystick_threshold=(threshold)
+    // Window#SetJoystickThreshold(threshold)
+    // Window#joystick_threshold(threshold)
+    static VALUE SetJoystickThreshold(VALUE self, VALUE threshold);
+    
+    // Window#system_handle
+    // Window#GetSystemHandle
+    // Window#handle
+    static VALUE GetSystemHandle(VALUE self);
+    
+    // Window#inspect
+    // Window#to_s
+    static VALUE Inspect(VALUE self);
+
+    // Window#memory_usage
+    static VALUE GetMemoryUsage(VALUE self);
+    
 #endif
     
 }
