@@ -93,14 +93,10 @@ VALUE rbClock::Allocate(VALUE)
 VALUE rbClock::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, Clock))
-    {
         return other;
-    }
     else
-    {
         rb_raise(rb_eTypeError,
                  "can't convert %s into Clock", rb_obj_classname(other));
-    }
 }
 
 VALUE rbClock::ToRuby(sf::Clock* clock)

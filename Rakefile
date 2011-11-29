@@ -72,8 +72,8 @@ def compile_o(src)
   list.each_with_index do |file, i|
     obj = OBJS[src][i]
     next if File.exist?(obj)
-    puts "Compiling #{src}/#{File.basename(file)}"
-    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{d} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -Wpmf-conversions"
+    puts "Compiling #{src.capitalize}/#{File.basename(file)}"
+    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{d} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
   end
 end
 
@@ -201,4 +201,13 @@ end
 desc "Run tests."
 task :test do
   load "test/test.rb"
+end
+
+desc "Run samples."
+task :samples do
+  # TODO: Use SFML samples (pong...)
+  (Dir.entries("samples")-%w[. ..]).each do |sample|
+    puts "samples/#{sample}"
+    load "samples/#{sample}"
+  end
 end

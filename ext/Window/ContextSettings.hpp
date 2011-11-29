@@ -124,14 +124,10 @@ VALUE rbContextSettings::Allocate(VALUE)
 VALUE rbContextSettings::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, ContextSettings))
-    {
         return other;
-    }
     else
-    {
         rb_raise(rb_eTypeError,
                  "can't convert %s into ContextSettings", rb_obj_classname(other));
-    }
 }
 
 VALUE rbContextSettings::ToRuby(sf::ContextSettings* settings)

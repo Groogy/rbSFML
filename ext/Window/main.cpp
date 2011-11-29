@@ -40,16 +40,16 @@ void Init_window()
     VALUE SFML = rbSFML::Module();
     
     if (!rb_cvar_defined(SFML, rb_intern("@@system")))
-    {
         rb_require("sfml/system");
-    }
     
-    rb_cvar_set(SFML, rb_intern("@@window"), Qtrue);
+    rb_cv_set(SFML, "@@window", Qtrue);
     
     InitDependencies(SFML);
     
+    rbContext::Init(SFML);
     rbContextSettings::Init(SFML);
     rbEvent::Init(SFML);
+    rbMouse::Init(SFML);
     rbStyle::Init(SFML);
     rbVideoMode::Init(SFML);
     rbWindow::Init(SFML);

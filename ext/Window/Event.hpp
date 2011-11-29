@@ -145,14 +145,10 @@ VALUE rbEvent::Allocate(VALUE)
 VALUE rbEvent::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, Event))
-    {
         return other;
-    }
     else
-    {
         rb_raise(rb_eTypeError,
                  "can't convert %s into Event", rb_obj_classname(other));
-    }
 }
 
 VALUE rbEvent::ToRuby(sf::Event* event)

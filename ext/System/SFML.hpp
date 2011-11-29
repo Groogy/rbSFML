@@ -36,8 +36,10 @@ namespace rbSFML
     
     static inline VALUE Module();
     static inline void PrepareErrorStream();
-    static inline void Raise();
-    static inline void Warn();
+    static inline void Raise(std::string message);
+    static inline void Warn(std::string message);
+    static inline void CheckRaise();
+    static inline void CheckWarn();
     static inline std::string Message();
     
 #if defined(RBSFML_SYSTEM)
@@ -96,21 +98,27 @@ std::string rbSFML::Message()
     return "";
 }
 
-void rbSFML::Raise()
+void rbSFML::Raise(std::string message)
 {
-    std::string message = Message();
-    if (!message.empty())
-    {
-        VALUE Error = rb_const_get(Module(), rb_intern("Error"));
-        rb_raise(Error, message.c_str());
-    }
+    VALUE Error = rb_const_get(Module(), rb_intern("Error"));
+    rb_raise(Error, message.c_str());
 }
 
-void rbSFML::Warn()
+void rbSFML::Warn(std::string message)
+{
+    rb_warn(message.c_str());
+}
+
+void rbSFML::CheckRaise()
 {
     std::string message = Message();
-    if (!message.empty())
-        rb_warn(message.c_str());
+    if (!message.empty()) Raise(message);
+}
+
+void rbSFML::CheckWarn()
+{
+    std::string message = Message();
+    if (!message.empty()) Warn(message);
 }
 
 #endif // SYSTEM_SFML_HPP

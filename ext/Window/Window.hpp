@@ -203,14 +203,10 @@ VALUE rbWindow::Allocate(VALUE)
 VALUE rbWindow::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, Window))
-    {
         return other;
-    }
     else
-    {
         rb_raise(rb_eTypeError,
                  "can't convert %s into Window", rb_obj_classname(other));
-    }
 }
 
 VALUE rbWindow::ToRuby(sf::Window* window)

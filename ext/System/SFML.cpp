@@ -44,7 +44,7 @@ VALUE rbSFML::GetRaiseExceptions(VALUE self)
 {
     if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions")))
         return Qfalse;
-    return rb_cv_get(self, "@@raise_exceptions") ? Qtrue : Qfalse;
+    return rb_cv_get(self, "@@raise_exceptions");
 }
 
 // SFML.raise_exceptions=(flag)
@@ -62,26 +62,17 @@ VALUE rbSFML::SystemLoaded(VALUE self)
 // SFML.window?
 VALUE rbSFML::WindowLoaded(VALUE self)
 {
-    static ID id_window = rb_intern("@@window");
-    return rb_cvar_defined(self, id_window)
-        ? Qtrue
-        : Qfalse;
+    return RBOOL(rb_cvar_defined(self, rb_intern("@@window")));
 }
 
 // SFML.graphics?
 VALUE rbSFML::GraphicsLoaded(VALUE self)
 {
-    static ID id_graphics = rb_intern("@@graphics");
-    return rb_cvar_defined(self, id_graphics)
-        ? Qtrue
-        : Qfalse;
+    return RBOOL(rb_cvar_defined(self, rb_intern("@@graphics")));
 }
 
 // SFML.audio?
 VALUE rbSFML::AudioLoaded(VALUE self)
 {
-    static ID id_audio = rb_intern("@@audio");
-    return rb_cvar_defined(self, id_audio)
-        ? Qtrue
-        : Qfalse;
+    return RBOOL(rb_cvar_defined(self, rb_intern("@@audio")));
 }

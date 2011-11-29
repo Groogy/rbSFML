@@ -59,7 +59,7 @@ VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
 // Clock#time
 VALUE rbClock::GetElapsedTime(VALUE self)
 {
-    return INT2FIX(ToSFML(self)->GetElapsedTime());
+    return UINT2NUM(ToSFML(self)->GetElapsedTime());
 }
 
 // Clock#reset
@@ -78,9 +78,7 @@ VALUE rbClock::Equal(VALUE self, VALUE other)
     if (CLASS_OF(other) != Clock) return Qfalse;
     sf::Clock* left = ToSFML(self);
     sf::Clock* right = ToSFML(other);
-    return left->GetElapsedTime() == right->GetElapsedTime()
-        ? Qtrue
-        : Qfalse;
+    return RBOOL(left->GetElapsedTime() == right->GetElapsedTime());
 }
 
 // Clock#inspect

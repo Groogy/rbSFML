@@ -49,6 +49,11 @@ static inline VALUE MIN(VALUE a, VALUE b)
     return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? b : a;
 }
 
+static inline VALUE RBOOL(bool value)
+{
+    return value ? Qtrue : Qfalse;
+}
+
 typedef VALUE (*RubyFunctionPtr)(...);
 
 #define rb_define_module_function(klass, name, func, argc, ...) \

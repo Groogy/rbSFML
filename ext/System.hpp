@@ -25,6 +25,7 @@
 #include <ruby.h>
 
 #include <rbSFML.hpp>
+
 #include <System/SFML.hpp>
 #include <System/Clock.hpp>
 #include <System/Vector2.hpp>

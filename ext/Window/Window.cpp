@@ -105,9 +105,7 @@ void rbWindow::Init(VALUE SFML)
 VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
 {
     if (argc > 0)
-    {
         Create(argc, argv, self);
-    }
     
     return Qnil;
 }
@@ -116,14 +114,12 @@ VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
 VALUE rbWindow::Clone(VALUE self)
 {
     rb_raise(rb_eTypeError, "can't clone instance of Window");
-    return Qnil;
 }
 
 // Window#dup
 VALUE rbWindow::Dup(VALUE self)
 {
     rb_raise(rb_eTypeError, "can't dup instance of Window");
-    return Qnil;
 }
 
 // Window#create(...)
@@ -140,29 +136,33 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
     switch (argc)
     {
         case 1:
-            handle = sf::WindowHandle(NUM2INT(argv[0]));
+            handle = sf::WindowHandle(NUM2UINT(argv[0]));
             break;
-        case 3:
-            style = NUM2INT(argv[2]);
         case 2:
             if (FIXNUM_P(argv[0]))
             {
-                settings = *(rbContextSettings::ToSFML(argv[1]));
+                settings = *rbContextSettings::ToSFML(argv[1]);
             }
             else
             {
-                mode = *(rbVideoMode::ToSFML(argv[0]));
+                mode = *rbVideoMode::ToSFML(argv[0]);
                 rb_iv_set(self, "@title", StringValue(argv[1]));
                 title = StringValueCStr(argv[1]);
             }
             break;
         case 4:
-            settings = *(rbContextSettings::ToSFML(argv[3]));
+            settings = *rbContextSettings::ToSFML(argv[3]);
+        case 3:
+            mode = *rbVideoMode::ToSFML(argv[0]);
+            rb_iv_set(self, "@title", StringValue(argv[1]));
+            title = StringValueCStr(argv[1]);
+            style = NUM2INT(argv[2]);
             break;
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 1..4)", argc);
     }
+    
     rbSFML::PrepareErrorStream();
     switch (argc)
     {
@@ -182,7 +182,8 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             window->Create(mode, title, style, settings);
             break;
     }
-    rbSFML::Warn();
+    rbSFML::CheckWarn();
+    
     return Qnil;
 }
 
@@ -200,8 +201,7 @@ VALUE rbWindow::Close(VALUE self)
 // Window#open?
 VALUE rbWindow::IsOpened(VALUE self)
 {
-    return ToSFML(self)->IsOpened() ? Qtrue : Qfalse;
-    return Qnil;
+    return RBOOL(ToSFML(self)->IsOpened());
 }
 
 // Window#width
@@ -229,18 +229,18 @@ VALUE rbWindow::GetSettings(VALUE self)
 }
 
 // Internal
-static inline VALUE PollEvent(VALUE self, VALUE event)
+static inline bool PollEvent(VALUE self, VALUE event)
 {
     sf::Event ev;
     bool ret = rbWindow::ToSFML(self)->PollEvent(ev);
     if (ret)
     {
         *rbEvent::ToSFML(event) = ev;
-        return Qtrue;
+        return true;
     }
     else
     {
-        return Qfalse;
+        return false;
     }
 }
 
@@ -255,31 +255,29 @@ VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
         case 0:
         {
             VALUE event = rbEvent::Allocate(rbEvent::Event);
-            VALUE test = ::PollEvent(self, event);
-            return (test == Qtrue) ? event : Qnil;
+            return (::PollEvent(self, event)) ? event : Qnil;
         }
         case 1:
-            return ::PollEvent(self, argv[0]);
+            return RBOOL(::PollEvent(self, argv[0]));
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..1)", argc);
     }
-    return Qnil;
 }
 
 // Internal
-static inline VALUE WaitEvent(VALUE self, VALUE event)
+static inline bool WaitEvent(VALUE self, VALUE event)
 {
     sf::Event ev;
     bool ret = rbWindow::ToSFML(self)->WaitEvent(ev);
     if (ret)
     {
         *rbEvent::ToSFML(event) = ev;
-        return Qtrue;
+        return true;
     }
     else
     {
-        return Qfalse;
+        return false;
     }
 }
 
@@ -294,16 +292,14 @@ VALUE rbWindow::WaitEvent(int argc, VALUE argv[], VALUE self)
         case 0:
         {
             VALUE event = rbEvent::Allocate(rbEvent::Event);
-            VALUE test = ::WaitEvent(self, event);
-            return (test == Qtrue) ? event : Qnil;
+            return (::WaitEvent(self, event)) ? event : Qnil;
         }
         case 1:
-            return ::WaitEvent(self, argv[0]);
+            return RBOOL(::WaitEvent(self, argv[0]));
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..1)", argc);
     }
-    return Qnil;
 }
 
 // Window#each_event
@@ -317,7 +313,7 @@ VALUE rbWindow::EachEvent(VALUE self)
         *rbEvent::ToSFML(event) = ev;
         rb_yield(event);
     }
-    return Qnil;
+    return self;
 }
 
 // Window#vertical_sync=(enabled)
@@ -440,10 +436,7 @@ VALUE rbWindow::SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels)
     
     size_t size = _width * _height * 4;
     if (RARRAY_LEN(pixels) != size)
-    {
         rb_raise(rb_eTypeError, "expected array lenght to be %d", size);
-        return Qnil;
-    }
     
     sf::Uint8* _pixels = new(std::nothrow) sf::Uint8[size];
     if (_pixels == NULL) rb_memerror();
@@ -466,8 +459,8 @@ VALUE rbWindow::SetActive(VALUE self, VALUE active)
 {
     rbSFML::PrepareErrorStream();
     bool ret = ToSFML(self)->SetActive(RTEST(active));
-    rbSFML::Raise();
-    return ret ? Qtrue : Qfalse;
+    rbSFML::CheckRaise();
+    return RBOOL(ret);
 }
 
 // Window#display(active)

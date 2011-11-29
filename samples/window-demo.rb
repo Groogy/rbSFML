@@ -5,7 +5,7 @@ rescue LoadError
   require 'sfml/window'
 end
 
-window = SFML::Window.new([800, 600], "My Ruby SFML")
+window = SFML::Window.new([800, 600], "My rbSFML Window")
 window.framerate = 60
 window.position = [300, 300]
 

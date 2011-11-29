@@ -117,17 +117,16 @@ VALUE rbVector3::Negate(VALUE self)
     VALUE y = GetY(self);
     VALUE z = GetY(self);
     
-    static ID id_negate = rb_intern("-@");
-    x = rb_funcall(x, id_negate, 0);
-    y = rb_funcall(y, id_negate, 0);
-    z = rb_funcall(z, id_negate, 0);
+    x = rb_funcall(x, rb_intern("-@"), 0);
+    y = rb_funcall(y, rb_intern("-@"), 0);
+    z = rb_funcall(z, rb_intern("-@"), 0);
     
     VALUE argv[] = {x, y, z};
     return rb_class_new_instance(3, argv, Vector3);
 }
 
 // Internal
-static inline VALUE DoMath(VALUE left, ID op, VALUE right)
+static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
     VALUE x = rbVector3::GetX(left);
     VALUE y = rbVector3::GetY(left);
@@ -136,9 +135,9 @@ static inline VALUE DoMath(VALUE left, ID op, VALUE right)
     VALUE oy = rbVector3::GetY(right);
     VALUE oz = rbVector3::GetZ(right);
     
-    x = rb_funcall(x, op, 1, ox);
-    y = rb_funcall(y, op, 1, oy);
-    z = rb_funcall(z, op, 1, oz);
+    x = rb_funcall(x, rb_intern(op), 1, ox);
+    y = rb_funcall(y, rb_intern(op), 1, oy);
+    z = rb_funcall(z, rb_intern(op), 1, oz);
     
     VALUE argv[] = {x, y, z};
     return rb_class_new_instance(3, argv, rbVector3::Vector3);
@@ -147,38 +146,34 @@ static inline VALUE DoMath(VALUE left, ID op, VALUE right)
 // Vector3#+(other)
 VALUE rbVector3::Add(VALUE self, VALUE other)
 {
-    static ID id_add = rb_intern("+");
-    return DoMath(self, id_add, ToRuby(other));
+    return DoMath(self, "+", ToRuby(other));
 }
 
 // Vector3#-(other)
 VALUE rbVector3::Subtract(VALUE self, VALUE other)
 {
-    static ID id_subtract = rb_intern("-");
-    return DoMath(self, id_subtract, ToRuby(other));
+    return DoMath(self, "-", ToRuby(other));
 }
 
 // Vector3#*(other)
 VALUE rbVector3::Multiply(VALUE self, VALUE other)
 {
-    static ID id_multiply = rb_intern("*");
-    return DoMath(self, id_multiply, ToRuby(other));
+    return DoMath(self, "*", ToRuby(other));
 }
 
 // Vector3#/(other)
 VALUE rbVector3::Divide(VALUE self, VALUE other)
 {
-    static ID id_divide = rb_intern("/");
-    return DoMath(self, id_divide, ToRuby(other));
+    return DoMath(self, "/", ToRuby(other));
 }
 
 // Vector3#==(other)
 VALUE rbVector3::Equal(VALUE self, VALUE other)
 {
     if (CLASS_OF(other) != Vector3) return Qfalse;
-    if (!rb_equal(GetX(self), GetX(other))) return Qfalse;
-    if (!rb_equal(GetY(self), GetY(other))) return Qfalse;
-    if (!rb_equal(GetZ(self), GetZ(other))) return Qfalse;
+    if (!RTEST(rb_equal(GetX(self), GetX(other)))) return Qfalse;
+    if (!RTEST(rb_equal(GetY(self), GetY(other)))) return Qfalse;
+    if (!RTEST(rb_equal(GetZ(self), GetZ(other)))) return Qfalse;
     return Qtrue;
 }
 

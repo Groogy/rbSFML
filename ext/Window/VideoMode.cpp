@@ -1,23 +1,22 @@
-/* rbSFML - Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
- * This software is provided 'as-is', without any express or
- * implied warranty. In no event will the authors be held
- * liable for any damages arising from the use of this software.
+/* rbSFML
+ * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from
+ * the use of this software.
  *
  * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute
- * it freely, subject to the following restrictions:
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
  *
- * 1. The origin of this software must not be misrepresented;
- *    you must not claim that you wrote the original software.
- *    If you use this software in a product, an acknowledgment
- *    in the product documentation would be appreciated but
- *    is not required.
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software in
+ *    a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
  *
- * 2. Altered source versions must be plainly marked as such,
- *    and must not be misrepresented as being the original software.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
  *
- * 3. This notice may not be removed or altered from any
- *    source distribution.
+ * 3. This notice may not be removed or altered from any source distribution.
  */
 
 #define WINDOW_VIDEOMODE_CPP
@@ -97,7 +96,6 @@ VALUE rbVideoMode::GetFullscreenModes(VALUE)
 VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
 {
     sf::VideoMode *video_mode = ToSFML(self);
-    video_mode->BitsPerPixel = 32;
   
     switch(argc)
     {
@@ -109,11 +107,15 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
         case 1:
             InitializeCopy(self, ToRuby(argv[0]));
             break;
-        case 3:
-            video_mode->BitsPerPixel = NUM2INT(argv[2]);
         case 2:
-            video_mode->Width = NUM2INT(argv[0]);
-            video_mode->Height = NUM2INT(argv[1]);
+            video_mode->Width = NUM2UINT(argv[0]);
+            video_mode->Height = NUM2UINT(argv[1]);
+            video_mode->BitsPerPixel = 32;
+            break;
+        case 3:
+            video_mode->Width = NUM2UINT(argv[0]);
+            video_mode->Height = NUM2UINT(argv[1]);
+            video_mode->BitsPerPixel = NUM2UINT(argv[2]);
             break;
         default:
             rb_raise(rb_eArgError,
@@ -133,21 +135,21 @@ VALUE rbVideoMode::InitializeCopy(VALUE self, VALUE video_mode)
 // VideoMode#IsValid
 VALUE rbVideoMode::IsValid(VALUE self)
 {
-    return ToSFML(self)->IsValid() ? Qtrue : Qfalse;
+    return RBOOL(ToSFML(self)->IsValid());
 }
 
 // VideoMode#width
 // VideoMode#Width
 VALUE rbVideoMode::GetWidth(VALUE self)
 {
-    return INT2FIX(ToSFML(self)->Width);
+    return UINT2NUM(ToSFML(self)->Width);
 }
 
 // VideoMode#height
 // VideoMode#Height
 VALUE rbVideoMode::GetHeight(VALUE self)
 {
-    return INT2FIX(ToSFML(self)->Height);
+    return UINT2NUM(ToSFML(self)->Height);
 }
 
 // VideoMode#bpp
@@ -156,14 +158,14 @@ VALUE rbVideoMode::GetHeight(VALUE self)
 // VideoMode#bits
 VALUE rbVideoMode::GetBitsPerPixel(VALUE self)
 {
-    return INT2FIX(ToSFML(self)->BitsPerPixel);
+    return UINT2NUM(ToSFML(self)->BitsPerPixel);
 }
 
 // VideoMode#width=(value)
 // VideoMode#Width=(value)
 VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 {
-    ToSFML(self)->Width = NUM2INT(value);
+    ToSFML(self)->Width = NUM2UINT(value);
     return Qnil;
 }
 
@@ -171,7 +173,7 @@ VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 // VideoMode#Height=(value)
 VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 {
-    ToSFML(self)->Height = NUM2INT(value);
+    ToSFML(self)->Height = NUM2UINT(value);
     return Qnil;
 }
 
@@ -181,7 +183,7 @@ VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 // VideoMode#bits=(value)
 VALUE rbVideoMode::SetBitsPerPixel(VALUE self, VALUE value)
 {
-    ToSFML(self)->BitsPerPixel = NUM2INT(value);
+    ToSFML(self)->BitsPerPixel = NUM2UINT(value);
     return Qnil;
 }
 

@@ -170,7 +170,7 @@ VALUE rbEvent::EventTypeCaseEqual(VALUE self, VALUE other)
     other = ToRuby(other);
     VALUE id1 = rb_iv_get(self, "@id");
     VALUE id2 = rb_iv_get(Type(other), "@id");
-    return rb_equal(id1, id2);
+    return RBOOL(id1 == id2);
 }
 
 // Event#type
@@ -213,6 +213,8 @@ VALUE rbEvent::Info(VALUE self)
         case sf::Event::JoystickConnected:
         case sf::Event::JoystickDisconnected:
             return JoystickConnect(self);
+        default:
+            rb_bug("rbEvent::Info");
     }
 }
 
@@ -236,11 +238,11 @@ VALUE rbEvent::Key(VALUE self)
     sf::Event::KeyEvent key_ev = ToSFML(self)->Key;
     VALUE key = rb_obj_alloc(Event_Key);
     
-    rb_iv_set(key, "@code",    INT2FIX(key_ev.Code   ));
-    rb_iv_set(key, "@alt",     INT2FIX(key_ev.Alt    ));
-    rb_iv_set(key, "@control", INT2FIX(key_ev.Control));
-    rb_iv_set(key, "@shift",   INT2FIX(key_ev.Shift  ));
-    rb_iv_set(key, "@system",  INT2FIX(key_ev.System ));
+    rb_iv_set(key, "@code",    INT2FIX(key_ev.Code));
+    rb_iv_set(key, "@alt",     RBOOL(key_ev.Alt    ));
+    rb_iv_set(key, "@control", RBOOL(key_ev.Control));
+    rb_iv_set(key, "@shift",   RBOOL(key_ev.Shift  ));
+    rb_iv_set(key, "@system",  RBOOL(key_ev.System ));
     
     return key;
 }
@@ -252,7 +254,7 @@ VALUE rbEvent::Text(VALUE self)
     sf::Event::TextEvent text_ev = ToSFML(self)->Text;
     VALUE text = rb_obj_alloc(Event_Text);
     
-    rb_iv_set(text, "@unicode", INT2NUM(text_ev.Unicode));
+    rb_iv_set(text, "@unicode", UINT2NUM(text_ev.Unicode));
     
     return text;
 }
@@ -350,63 +352,67 @@ VALUE rbEvent::Equal(VALUE self, VALUE other)
 VALUE rbEvent::Inspect(VALUE self)
 {
     VALUE ret = rb_str_new2("Event(");
+    const char* event_name;
     switch (ToSFML(self)->Type)
     {
         case sf::Event::Closed:
-            rb_str_append(ret, rb_str_new2("Closed"));
+            event_name = "Closed";
             break;
         case sf::Event::LostFocus:
-            rb_str_append(ret, rb_str_new2("LostFocus"));
+            event_name = "LostFocus";
             break;
         case sf::Event::GainedFocus:
-            rb_str_append(ret, rb_str_new2("GainedFocus"));
+            event_name = "GainedFocus";
             break;
         case sf::Event::MouseEntered:
-            rb_str_append(ret, rb_str_new2("MouseEntered"));
+            event_name = "MouseEntered";
             break;
         case sf::Event::MouseLeft:
-            rb_str_append(ret, rb_str_new2("MouseLeft"));
+            event_name = "MouseLeft";
             break;
         case sf::Event::Resized:
-            rb_str_append(ret, rb_str_new2("Resized"));
+            event_name = "Resized";
             break;
         case sf::Event::KeyPressed:
-            rb_str_append(ret, rb_str_new2("KeyPressed"));
+            event_name = "KeyPressed";
             break;
         case sf::Event::KeyReleased:
-            rb_str_append(ret, rb_str_new2("KeyReleased"));
+            event_name = "KeyReleased";
             break;
         case sf::Event::TextEntered:
-            rb_str_append(ret, rb_str_new2("TextEntered"));
+            event_name = "TextEntered";
             break;
         case sf::Event::MouseMoved:
-            rb_str_append(ret, rb_str_new2("MouseMoved"));
+            event_name = "MouseMoved";
             break;
         case sf::Event::MouseButtonPressed:
-            rb_str_append(ret, rb_str_new2("MouseButtonPressed"));
+            event_name = "MouseButtonPressed";
             break;
         case sf::Event::MouseButtonReleased:
-            rb_str_append(ret, rb_str_new2("MouseButtonReleased"));
+            event_name = "MouseButtonReleased";
             break;
         case sf::Event::MouseWheelMoved:
-            rb_str_append(ret, rb_str_new2("MouseWheelMoved"));
+            event_name = "MouseWheelMoved";
             break;
         case sf::Event::JoystickMoved:
-            rb_str_append(ret, rb_str_new2("JoystickMoved"));
+            event_name = "JoystickMoved";
             break;
         case sf::Event::JoystickButtonPressed:
-            rb_str_append(ret, rb_str_new2("JoystickButtonPressed"));
+            event_name = "JoystickButtonPressed";
             break;
         case sf::Event::JoystickButtonReleased:
-            rb_str_append(ret, rb_str_new2("JoystickButtonReleased"));
+            event_name = "JoystickButtonReleased";
             break;
         case sf::Event::JoystickConnected:
-            rb_str_append(ret, rb_str_new2("JoystickConnected"));
+            event_name = "JoystickConnected";
             break;
         case sf::Event::JoystickDisconnected:
-            rb_str_append(ret, rb_str_new2("JoystickDisconnected"));
+            event_name = "JoystickDisconnected";
             break;
+        default:
+            rb_bug("rbEvent::Inspect");
     }
+    rb_str_append(ret, rb_str_new2(event_name));
     VALUE info = Info(self);
     if (info != Qnil)
     {
