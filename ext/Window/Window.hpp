@@ -147,10 +147,10 @@ namespace rbWindow
     // Window#SetIcon(width, height, pixels)
     static VALUE SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels);
     
-    // Window#active(active)
-    // Window#SetActive(active)
-    // Window#active=(active)
-    static VALUE SetActive(VALUE self, VALUE active);
+    // Window#active(active=true)
+    // Window#SetActive(active=true)
+    // Window#active=(active=true)
+    static VALUE SetActive(int argc, VALUE argv[], VALUE self);
     
     // Window#display(active)
     // Window#Display(active)

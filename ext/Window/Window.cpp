@@ -52,7 +52,7 @@ void rbWindow::Init(VALUE SFML)
     rb_define_method(Window, "show=",               Show,                  1);
     rb_define_method(Window, "key_repeat=",         EnableKeyRepeat,       1);
     rb_define_method(Window, "icon",                SetIcon,               3);
-    rb_define_method(Window, "active=",             SetActive,             1);
+    rb_define_method(Window, "active",              SetActive,            -1);
     rb_define_method(Window, "display",             Display,               0);
     rb_define_method(Window, "framerate=",          SetFramerateLimit,     1);
     rb_define_method(Window, "frame_time",          GetFrameTime,          0);
@@ -85,8 +85,8 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alias(Window, "EnableKeyRepeat",      "key_repeat="        );
     rb_define_alias(Window, "key_repeat",           "key_repeat="        );
     rb_define_alias(Window, "SetIcon",              "icon"               );
-    rb_define_alias(Window, "SetActive",            "active="            );
-    rb_define_alias(Window, "active",               "active="            );
+    rb_define_alias(Window, "SetActive",            "active"             );
+    rb_define_alias(Window, "active=",              "active"             );
     rb_define_alias(Window, "Display",              "display"            );
     rb_define_alias(Window, "SetFramerateLimit",    "framerate="         );
     rb_define_alias(Window, "framerate",            "framerate="         );
@@ -452,13 +452,25 @@ VALUE rbWindow::SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels)
     return Qnil;
 }
 
-// Window#active(active)
-// Window#SetActive(active)
-// Window#active=(active)
-VALUE rbWindow::SetActive(VALUE self, VALUE active)
+// Window#active(active=true)
+// Window#SetActive(active=true)
+// Window#active=(active=true)
+VALUE rbWindow::SetActive(int argc, VALUE argv[], VALUE self)
 {
+    bool ret;
     rbSFML::PrepareErrorStream();
-    bool ret = ToSFML(self)->SetActive(RTEST(active));
+    switch (argc)
+    {
+        case 0:
+            ret = ToSFML(self)->SetActive();
+            break;
+        case 1:
+            ret = ToSFML(self)->SetActive(RTEST(argv[0]));
+            break;
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 0..1)", argc);
+    }
     rbSFML::CheckRaise();
     return RBOOL(ret);
 }

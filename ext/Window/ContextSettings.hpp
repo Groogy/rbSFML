@@ -116,18 +116,56 @@ void rbContextSettings::Free(void* settings)
 
 VALUE rbContextSettings::Allocate(VALUE)
 {
-    sf::ContextSettings* video_mode = new(std::nothrow) sf::ContextSettings;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
+    sf::ContextSettings* settings = new(std::nothrow) sf::ContextSettings;
+    if (settings == NULL) rb_memerror();
+    return ToRuby(settings);
+}
+
+static int ToRubyHashIterator(VALUE key, VALUE value, VALUE extra)
+{
+    sf::ContextSettings* settings = (sf::ContextSettings*)extra;
+    
+    char* sym;
+    if (rb_type(key) == T_SYMBOL)
+        sym = RSTRING_PTR(rb_sym_to_s(key));
+    else
+        sym = RSTRING_PTR(StringValue(key));
+    
+    if (strcmp(sym, "depth_bits") or strcmp(sym, "DepthBits"))
+        settings->DepthBits = NUM2UINT(value);
+    else if (strcmp(sym, "stencil_bits") or strcmp(sym, "StencilBits"))
+        settings->StencilBits = NUM2UINT(value);
+    else if (strcmp(sym, "antialiasing_level") or strcmp(sym, "AntialiasingLevel"))
+        settings->AntialiasingLevel = NUM2UINT(value);
+    else if (strcmp(sym, "major_version") or strcmp(sym, "MajorVersion"))
+        settings->MajorVersion = NUM2UINT(value);
+    else if (strcmp(sym, "minor_version") or strcmp(sym, "MinorVersion"))
+        settings->MinorVersion = NUM2UINT(value);
+    else
+        rb_raise(rb_eArgError,
+                 "unknown attribute %s for ContextSettings", sym);
+                 
+    return ST_CONTINUE;
 }
 
 VALUE rbContextSettings::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, ContextSettings))
+    {
         return other;
+    }
+    else if (rb_type(other) == T_HASH)
+    {
+        sf::ContextSettings* settings = new(std::nothrow) sf::ContextSettings;
+        if (settings == NULL) rb_memerror();
+        rb_hash_foreach(other, (int(*)(...))ToRubyHashIterator, (VALUE)settings);  
+        return ToRuby(settings);
+    }
     else
+    {
         rb_raise(rb_eTypeError,
                  "can't convert %s into ContextSettings", rb_obj_classname(other));
+    }
 }
 
 VALUE rbContextSettings::ToRuby(sf::ContextSettings* settings)

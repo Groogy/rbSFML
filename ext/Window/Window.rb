@@ -311,10 +311,10 @@ module SFML
     # @param [Boolean] active True to activate, false to deactivate
     # @return [Boolean] <tt>true</tt> if operation was successful,
     #   <tt>false</tt> otherwise 
-    def active=(active)
+    def active(active=true)
     end
-    alias SetActive active=
-    alias active active=
+    alias SetActive active
+    alias active= active
     
     # Display on screen what has been rendered to the window so far. This
     # function is typically called after all OpenGL rendering has been done

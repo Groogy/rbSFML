@@ -18,6 +18,10 @@ module SFML
   # are not supported by the system; instead, SFML will try to find the
   # closest valid match. You can then retrieve the settings that the window
   # actually used to create its context, with <tt>Window#settings</tt>.
+  # You can represent a <tt>ContextSettings</tt> with a hash.
+  # @example
+  #   window = Window.new([640, 480], "rbSFML Window", Style::Default,
+  #                       {depth_bits: 32, major_version: 3})
   class ContextSettings
     
     # Bits of the depth buffer.
