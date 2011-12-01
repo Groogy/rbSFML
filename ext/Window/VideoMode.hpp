@@ -47,9 +47,10 @@ namespace rbVideoMode
 #endif
     
 #if defined(RBSFML_WINDOW)
-    
     void Init(VALUE SFML);
+#endif
     
+#if defined(WINDOW_VIDEOMODE_CPP)
     // VideoMode::desktop_mode
     // VideoMode::GetDesktopMode
     static VALUE GetDesktopMode(VALUE self);
@@ -105,7 +106,6 @@ namespace rbVideoMode
     
     // VideoMode#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
     
 }

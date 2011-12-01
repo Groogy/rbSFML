@@ -222,8 +222,10 @@ VALUE rbWindow::GetHeight(VALUE self)
 // Window#GetSettings
 VALUE rbWindow::GetSettings(VALUE self)
 {
-    VALUE settings = rbContextSettings::ToRuby(
-        const_cast<sf::ContextSettings*>(&(ToSFML(self)->GetSettings())));
+    const sf::ContextSettings set_c = ToSFML(self)->GetSettings();
+    sf::ContextSettings set = *const_cast<sf::ContextSettings*>(&set_c);
+    VALUE settings = rbContextSettings::Allocate(0);
+    *rbContextSettings::ToSFML(settings) = set;
     rb_obj_freeze(settings);
     return settings;
 }

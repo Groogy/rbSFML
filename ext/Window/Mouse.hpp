@@ -19,28 +19,49 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef WINDOW_STYLE_HPP
-#define WINDOW_STYLE_HPP
+#ifndef WINDOW_MOUSE_HPP
+#define WINDOW_MOUSE_HPP
 
 #include <ruby.h>
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
+#include <System/Vector2.hpp>
+#include <Window/Window.hpp>
 
-#include <SFML/Window/WindowStyle.hpp>
+#include <SFML/Window/Mouse.hpp>
 
-namespace rbStyle
+namespace rbMouse
 {
     
-#if defined(WINDOW_STYLE_CPP)
-    VALUE Style;
+#if defined(WINDOW_MOUSE_CPP)
+    VALUE Mouse;
 #else
-    extern VALUE Style;
+    extern VALUE Mouse;
 #endif
     
 #if defined(RBSFML_WINDOW)
     void Init(VALUE SFML);
 #endif
-  
-};
+    
+#if defined(WINDOW_MOUSE_CPP)
+    // Mouse::button_pressed?(button)
+    // Mouse::IsButtonPressed(button)
+    // Mouse::pressed?(button)
+    static VALUE IsButtonPressed(VALUE, VALUE button);
+    
+    // Mouse::position
+    // Mouse::GetPosition
+    // Mouse::position(relative_to)
+    // Mouse::GetPosition(relative_to)
+    // Mouse::position(position)
+    // Mouse::SetPosition(position)
+    // Mouse::position=(position)
+    // Mouse::position(position, relative_to)
+    // Mouse::SetPosition(position, relative_to)
+    // Mouse::position(x, y)
+    static VALUE Position(int argc, VALUE argv[], VALUE);
+#endif
+    
+}
 
-#endif // WINDOW_STYLE_HPP
+#endif // WINDOW_MOUSE_HPP

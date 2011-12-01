@@ -47,9 +47,10 @@ namespace rbContextSettings
 #endif
     
 #if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
-    
     void Init(VALUE SFML);
+#endif
     
+#if defined(WINDOW_CONTEXTSETTINGS_CPP)
     // ContextSettings#initialize(...)
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
@@ -104,7 +105,6 @@ namespace rbContextSettings
     
     // ContextSettings#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-
 #endif
     
 }

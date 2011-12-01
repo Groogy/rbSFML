@@ -54,9 +54,10 @@ namespace rbVector3
 #endif
     
 #if defined(RBSFML_SYSTEM)
-    
     void Init(VALUE SFML);
-    
+#endif
+
+#if defined(SYSTEM_VECTOR3_CPP)
     // Vector3#initialize(...)
     static VALUE Initialize(int argc, VALUE* args, VALUE self);
     
@@ -91,7 +92,6 @@ namespace rbVector3
     
     // Vector3#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
     
 }

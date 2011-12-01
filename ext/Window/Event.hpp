@@ -68,9 +68,10 @@ namespace rbEvent
 #endif
     
 #if defined(RBSFML_WINDOW)
-    
     void Init(VALUE SFML);
+#endif
     
+#if defined(WINDOW_EVENT_CPP)
     static VALUE EventType(int id);
     static VALUE EventTypeCaseEqual(VALUE self, VALUE other);
     
@@ -125,7 +126,6 @@ namespace rbEvent
     
     // Event#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
     
 }

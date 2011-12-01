@@ -42,9 +42,38 @@ Windows
 
 1.  You can run `rake test` to ensure everything is working and `rake doc` to build and open the documentation (at `doc/frames.html`).
 
-1.  To run samples you can also run `rake samples`. All samples are in `samples` folder.
+1.  To run samples run `rake samples`. All samples are in `samples` folder.
 
-Questions? [Open a issue](https://github.com/Groogy/rbSFML/issues/new).
+Linux
+-----
+
+1.  You must compile Ruby from source. If you didn't do it, download the most recent stable Ruby sources from [here](http://www.ruby-lang.org/pt/downloads/). Unpack them to a folder of your choice and navigate to this folder with a terminal. Run `./configure`, then `make` and finally `sudo make install`.
+
+1.  Navegate to a folder where you want to install rbSFML source files.
+
+1.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
+
+1.  Download, compile and install SFML2. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+
+1.  Copy the `include` and `lib` folders from SFML to the rbSFML folder.
+
+1.  Run one of the following commands in your terminal:
+
+  * `rake` - Build all SFML as shared libraries.
+  * `rake graphics` - Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it.
+
+1.  Run `sudo rake install`.
+
+1.  You can now use rbSFML in any ruby application.
+
+1.  You can run `rake test` to ensure everything is working and `rake doc` to build and open the documentation (at `doc/frames.html`).
+
+1.  To run samples run `rake samples`. All samples are in `samples` folder.
+
+Questions?
+==========
+
+[Open a issue](https://github.com/Groogy/rbSFML/issues/new).
 
 Contact
 =======

@@ -52,9 +52,10 @@ namespace rbVector2
 #endif
     
 #if defined(RBSFML_SYSTEM)
-    
     void Init(VALUE SFML);
-    
+#endif
+
+#if defined(SYSTEM_VECTOR2_CPP)
     // Vector2#initialize(...)
     static VALUE Initialize(int argc, VALUE* args, VALUE self);
     
@@ -89,7 +90,6 @@ namespace rbVector2
     
     // Vector2#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
     
 }

@@ -47,9 +47,10 @@ namespace rbClock
 #endif
     
 #if defined(RBSFML_SYSTEM)
-    
     void Init(VALUE SFML);
-    
+#endif
+
+#if defined(SYSTEM_CLOCK_CPP)
     // Clock#initialize_copy(other)
     static VALUE InitializeCopy(VALUE self, VALUE clock);
     
@@ -73,7 +74,6 @@ namespace rbClock
     
     // Clock#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
 
 };

@@ -86,6 +86,8 @@ VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0, 1, or 3)", argc);
     }
+    
+    return Qnil;
 }
 
 // Vector3#initialize_copy(vector3)
@@ -108,6 +110,8 @@ VALUE rbVector3::InitializeCopy(VALUE self, VALUE vector3)
             SetZ(self, rb_float_new(NUM2DBL(z)));
             break;
     }
+    
+    return self;
 }
 
 // Vector3#-@

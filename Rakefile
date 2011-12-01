@@ -200,7 +200,7 @@ end
 
 desc "Run tests."
 task :test do
-  load "test/test.rb"
+  ruby "test/test.rb"
 end
 
 desc "Run samples."
@@ -208,6 +208,6 @@ task :samples do
   # TODO: Use SFML samples (pong...)
   (Dir.entries("samples")-%w[. ..]).each do |sample|
     puts "samples/#{sample}"
-    load "samples/#{sample}"
+    ruby "samples/#{sample}"
   end
 end

@@ -43,9 +43,10 @@ namespace rbSFML
     static inline std::string Message();
     
 #if defined(RBSFML_SYSTEM)
-    
     void Init(VALUE rbSFML);
-    
+#endif
+
+#if defined(SYSTEM_SFML_CPP)
     // SFML.raise_exceptions
     static VALUE GetRaiseExceptions(VALUE self);
     
@@ -63,7 +64,6 @@ namespace rbSFML
     
     // SFML.audio?
     static VALUE AudioLoaded(VALUE self);
-    
 #endif
     
 };
@@ -101,12 +101,12 @@ std::string rbSFML::Message()
 void rbSFML::Raise(std::string message)
 {
     VALUE Error = rb_const_get(Module(), rb_intern("Error"));
-    rb_raise(Error, message.c_str());
+    rb_raise(Error, message.c_str(), "");
 }
 
 void rbSFML::Warn(std::string message)
 {
-    rb_warn(message.c_str());
+    rb_warn(message.c_str(), "");
 }
 
 void rbSFML::CheckRaise()

@@ -51,9 +51,10 @@ namespace rbWindow
 #endif
     
 #if defined(RBSFML_WINDOW)
-    
     void Init(VALUE SFML);
+#endif
     
+#if defined(WINDOW_WINDOW_CPP)
     // Window#initialize(...)
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
@@ -183,7 +184,6 @@ namespace rbWindow
 
     // Window#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
-    
 #endif
     
 }

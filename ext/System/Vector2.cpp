@@ -80,6 +80,8 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..2)", argc);
     }
+    
+    return Qnil;
 }
 
 // Vector2#initialize_copy(vector2)
@@ -99,6 +101,8 @@ VALUE rbVector2::InitializeCopy(VALUE self, VALUE vector2)
             SetY(self, rb_float_new(NUM2DBL(y)));
             break;
     }
+    
+    return self;
 }
 
 // Vector2#-@
