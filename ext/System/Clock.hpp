@@ -54,6 +54,9 @@ namespace rbClock
     // Clock#initialize_copy(other)
     static VALUE InitializeCopy(VALUE self, VALUE clock);
     
+    // Clock#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
     // Clock#elapsed_time
     // Clock#GetElapsedTime
     // Clock#time

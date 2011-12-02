@@ -64,6 +64,12 @@ namespace rbVector3
     // Vector3#initialize_copy(vector3)
     static VALUE InitializeCopy(VALUE self, VALUE vector3);
     
+    // Vector3#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // Vector3#marshal_load(data)
+    static VALUE MarshalLoad(VALUE self, VALUE data);
+    
     // Vector3#-@
     static VALUE Negate(VALUE self);
     
@@ -188,16 +194,19 @@ VALUE rbVector3::GetZ(VALUE vector3)
 
 void rbVector3::SetX(VALUE vector3, VALUE value)
 {
+    rb_check_frozen(vector3);
     rb_iv_set(vector3, "@x", value);
 }
 
 void rbVector3::SetY(VALUE vector3, VALUE value)
 {
+    rb_check_frozen(vector3);
     rb_iv_set(vector3, "@y", value);
 }
 
 void rbVector3::SetZ(VALUE vector3, VALUE value)
 {
+    rb_check_frozen(vector3);
     rb_iv_set(vector3, "@z", value);
 }
 

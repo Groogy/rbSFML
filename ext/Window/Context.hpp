@@ -56,6 +56,15 @@ namespace rbContext
     // Context#initialize(settings, width, height)
     static VALUE Initialize(int argc, VALUE argv[], VALUE self);
     
+    // Context#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // Context#clone
+    static VALUE Clone(VALUE self);
+    
+    // Context#dup
+    static VALUE Dup(VALUE self);
+    
     // Context#active=(active)
     // Context#SetActive(active)
     // Context#active(active)

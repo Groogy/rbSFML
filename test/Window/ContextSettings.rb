@@ -30,6 +30,20 @@ class TestContextSettings < Test::Unit::TestCase
     assert_instance_of(Fixnum, settings.minor_version)
   end
   
+  def test_initialization_from_hash
+    settings = ContextSettings.new(:depth_bits => 10, "MajorVersion" => 2.6, "stencil_bits" => Rational(30, 5))
+    assert_equal(10, settings.depth_bits)
+    assert_equal(6, settings.stencil_bits)
+    assert_equal(0, settings.antialiasing_level)
+    assert_equal(2, settings.major_version)
+    assert_equal(0, settings.minor_version)
+    assert_instance_of(Fixnum, settings.depth_bits)
+    assert_instance_of(Fixnum, settings.stencil_bits)
+    assert_instance_of(Fixnum, settings.antialiasing_level)
+    assert_instance_of(Fixnum, settings.major_version)
+    assert_instance_of(Fixnum, settings.minor_version)
+  end
+  
   def test_set_values
     settings = ContextSettings.new
     settings.depth_bits = 10

@@ -29,6 +29,8 @@ void rbVector3::Init(VALUE SFML)
     // Instance methods
     rb_define_method(Vector3, "initialize",      Initialize,     -1);
     rb_define_method(Vector3, "initialize_copy", InitializeCopy,  1);
+    rb_define_method(Vector3, "marshal_dump",    MarshalDump,     0);
+    rb_define_method(Vector3, "marshal_load",    MarshalLoad,     1);
     rb_define_method(Vector3, "-@",              Negate,          0);
     rb_define_method(Vector3, "+",               Add,             1);
     rb_define_method(Vector3, "-",               Subtract,        1);
@@ -112,6 +114,21 @@ VALUE rbVector3::InitializeCopy(VALUE self, VALUE vector3)
     }
     
     return self;
+}
+
+// Vector3#marshal_dump
+VALUE rbVector3::MarshalDump(VALUE self)
+{
+    return rb_ary_new3(3, GetX(self), GetY(self), GetZ(self));
+}
+
+// Vector3#marshal_load(data)
+VALUE rbVector3::MarshalLoad(VALUE self, VALUE data)
+{
+    SetX(self, rb_ary_entry(data, 0));
+    SetY(self, rb_ary_entry(data, 1));
+    SetZ(self, rb_ary_entry(data, 2));
+    return Qnil;
 }
 
 // Vector3#-@

@@ -31,6 +31,9 @@ void rbContext::Init(VALUE SFML)
     
     // Instance methods
     rb_define_method(Context, "initialize",   Initialize,     -1);
+    rb_define_method(Context, "marshal_dump", MarshalDump,     0);
+    rb_define_method(Context, "clone",        Clone,           0);
+    rb_define_method(Context, "dup",          Dup,             0);
     rb_define_method(Context, "active=",      SetActive,       1);
     rb_define_method(Context, "memory_usage", GetMemoryUsage,  0);
     
@@ -64,11 +67,34 @@ VALUE rbContext::Initialize(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
+// Context#marshal_dump
+VALUE rbContext::MarshalDump(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dump Context");
+    return Qnil;
+}
+
+// Context#clone
+VALUE rbContext::Clone(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't clone instance of Context");
+    return Qnil;
+}
+
+// Context#dup
+VALUE rbContext::Dup(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dup instance of Context");
+    return Qnil;
+}
+
+
 // Context#active=(active)
 // Context#SetActive(active)
 // Context#active(active)
 VALUE rbContext::SetActive(VALUE self, VALUE active)
 {
+    rb_check_frozen(self);
     bool ret = ToSFML(self)->SetActive(RTEST(active));
     if (!ret)
         rbSFML::Raise("");

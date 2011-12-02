@@ -26,6 +26,8 @@
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
 
+#include <string>
+
 #include <SFML/Window/ContextSettings.hpp>
 
 namespace rbContextSettings
@@ -52,7 +54,16 @@ namespace rbContextSettings
     
 #if defined(WINDOW_CONTEXTSETTINGS_CPP)
     // ContextSettings#initialize(...)
-    static VALUE Initialize(int argc, VALUE args[], VALUE self);
+    static VALUE Initialize(int argc, VALUE argv[], VALUE self);
+    
+    // ContextSettings#initialize_copy(settings)
+    static VALUE InitializeCopy(VALUE self, VALUE settings);
+    
+    // ContextSettings#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // ContextSettings#marshal_load(data)
+    static VALUE MarshalLoad(VALUE self, VALUE data);
     
     // ContextSettings#depth_bits
     // ContextSettings#DepthBits
@@ -125,25 +136,25 @@ static int ToRubyHashIterator(VALUE key, VALUE value, VALUE extra)
 {
     sf::ContextSettings* settings = (sf::ContextSettings*)extra;
     
-    char* sym;
+    std::string sym;
     if (rb_type(key) == T_SYMBOL)
-        sym = RSTRING_PTR(rb_sym_to_s(key));
+        sym = rb_id2name(SYM2ID(key));
     else
         sym = RSTRING_PTR(StringValue(key));
     
-    if (strcmp(sym, "depth_bits") or strcmp(sym, "DepthBits"))
+    if (sym == "depth_bits" or sym == "DepthBits")
         settings->DepthBits = NUM2UINT(value);
-    else if (strcmp(sym, "stencil_bits") or strcmp(sym, "StencilBits"))
+    else if (sym == "stencil_bits" or sym == "StencilBits")
         settings->StencilBits = NUM2UINT(value);
-    else if (strcmp(sym, "antialiasing_level") or strcmp(sym, "AntialiasingLevel"))
+    else if (sym == "antialiasing_level" or sym == "AntialiasingLevel")
         settings->AntialiasingLevel = NUM2UINT(value);
-    else if (strcmp(sym, "major_version") or strcmp(sym, "MajorVersion"))
+    else if (sym == "major_version" or sym == "MajorVersion")
         settings->MajorVersion = NUM2UINT(value);
-    else if (strcmp(sym, "minor_version") or strcmp(sym, "MinorVersion"))
+    else if (sym == "minor_version" or sym == "MinorVersion")
         settings->MinorVersion = NUM2UINT(value);
     else
         rb_raise(rb_eArgError,
-                 "unknown attribute %s for ContextSettings", sym);
+                 "unknown attribute %s for ContextSettings", sym.c_str());
                  
     return ST_CONTINUE;
 }

@@ -62,8 +62,14 @@ namespace rbVideoMode
     // VideoMode#initialize
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
-    // VideoMode#initialize_copy
+    // VideoMode#initialize_copy(video_mode)
     static VALUE InitializeCopy(VALUE self, VALUE video_mode);
+    
+    // VideoMode#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // VideoMode#marshal_load(data)
+    static VALUE MarshalLoad(VALUE self, VALUE data);
     
     // VideoMode#valid?
     // VideoMode#IsValid

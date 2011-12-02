@@ -62,6 +62,12 @@ namespace rbVector2
     // Vector2#initialize_copy(vector2)
     static VALUE InitializeCopy(VALUE self, VALUE vector2);
     
+    // Vector2#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // Vector2#marshal_load(data)
+    static VALUE MarshalLoad(VALUE self, VALUE data);
+    
     // Vector2#-@
     static VALUE Negate(VALUE self);
     
@@ -177,11 +183,13 @@ VALUE rbVector2::GetY(VALUE vector2)
 
 void rbVector2::SetX(VALUE vector2, VALUE value)
 {
+    rb_check_frozen(vector2);
     rb_iv_set(vector2, "@x", value);
 }
 
 void rbVector2::SetY(VALUE vector2, VALUE value)
 {
+    rb_check_frozen(vector2);
     rb_iv_set(vector2, "@y", value);
 }
 

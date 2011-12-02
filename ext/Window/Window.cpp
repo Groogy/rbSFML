@@ -31,6 +31,7 @@ void rbWindow::Init(VALUE SFML)
     
     // Instance methods
     rb_define_method(Window, "initialize",          Initialize,           -1);
+    rb_define_method(Window, "marshal_dump",        MarshalDump,           0);
     rb_define_method(Window, "clone",               Clone,                 0);
     rb_define_method(Window, "dup",                 Dup,                   0);
     rb_define_method(Window, "create",              Create,               -1);
@@ -110,16 +111,25 @@ VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
+// Window#marshal_dump
+VALUE rbWindow::MarshalDump(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dump Window");
+    return Qnil;
+}
+
 // Window#clone
 VALUE rbWindow::Clone(VALUE self)
 {
     rb_raise(rb_eTypeError, "can't clone instance of Window");
+    return Qnil;
 }
 
 // Window#dup
 VALUE rbWindow::Dup(VALUE self)
 {
     rb_raise(rb_eTypeError, "can't dup instance of Window");
+    return Qnil;
 }
 
 // Window#create(...)

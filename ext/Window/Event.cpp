@@ -125,6 +125,8 @@ void rbEvent::Init(VALUE SFML)
     rb_define_alloc_func(Event, Allocate);
     
     // Instance methods
+    rb_define_method(Event, "initialize_copy",  InitializeCopy,  1);
+    rb_define_method(Event, "marshal_dump",     MarshalDump,     0);
     rb_define_method(Event, "type",             Type,            0);
     rb_define_method(Event, "info",             Info,            0);
     rb_define_method(Event, "size",             Size,            0);
@@ -171,6 +173,20 @@ VALUE rbEvent::EventTypeCaseEqual(VALUE self, VALUE other)
     VALUE id1 = rb_iv_get(self, "@id");
     VALUE id2 = rb_iv_get(Type(other), "@id");
     return RBOOL(id1 == id2);
+}
+
+// Event#initialize_copy(event)
+VALUE rbEvent::InitializeCopy(VALUE self, VALUE event)
+{
+    *ToSFML(self) = *ToSFML(event);
+    return self;
+}
+
+// Event#marshal_dump
+VALUE rbEvent::MarshalDump(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dump Event"); // TODO
+    return Qnil;
 }
 
 // Event#type

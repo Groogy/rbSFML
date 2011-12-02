@@ -35,6 +35,8 @@ void rbVideoMode::Init(VALUE SFML)
     // Instance methods
     rb_define_method(VideoMode, "initialize",      Initialize,     -1);
     rb_define_method(VideoMode, "initialize_copy", InitializeCopy,  1);
+    rb_define_method(VideoMode, "marshal_dump",    MarshalDump,     0);
+    rb_define_method(VideoMode, "marshal_load",    MarshalLoad,     1);
     rb_define_method(VideoMode, "valid?",          IsValid,         0);
     rb_define_method(VideoMode, "width",           GetWidth,        0);
     rb_define_method(VideoMode, "height",          GetHeight,       0);
@@ -124,11 +126,34 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
-// VideoMode#initialize_copy
+// VideoMode#initialize_copy(video_mode)
 VALUE rbVideoMode::InitializeCopy(VALUE self, VALUE video_mode)
 {
     *ToSFML(self) = *ToSFML(video_mode);
     return self;
+}
+
+// VideoMode#marshal_dump
+VALUE rbVideoMode::MarshalDump(VALUE self)
+{
+    sf::VideoMode *video_mode = ToSFML(self);
+    
+    VALUE argv[] = {UINT2NUM(video_mode->Width),
+                    UINT2NUM(video_mode->Height),
+                    UINT2NUM(video_mode->BitsPerPixel)};
+    return rb_ary_new3(3, argv);
+}
+
+// VideoMode#marshal_load(data)
+VALUE rbVideoMode::MarshalLoad(VALUE self, VALUE data)
+{
+    sf::VideoMode *video_mode = ToSFML(self);
+    
+    video_mode->Width        = NUM2UINT(rb_ary_entry(data, 0));
+    video_mode->Height       = NUM2UINT(rb_ary_entry(data, 1));
+    video_mode->BitsPerPixel = NUM2UINT(rb_ary_entry(data, 2));
+    
+    return Qnil;
 }
 
 // VideoMode#valid?
@@ -165,6 +190,7 @@ VALUE rbVideoMode::GetBitsPerPixel(VALUE self)
 // VideoMode#Width=(value)
 VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 {
+    rb_check_frozen(self);
     ToSFML(self)->Width = NUM2UINT(value);
     return Qnil;
 }
@@ -173,6 +199,7 @@ VALUE rbVideoMode::SetWidth(VALUE self, VALUE value)
 // VideoMode#Height=(value)
 VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 {
+    rb_check_frozen(self);
     ToSFML(self)->Height = NUM2UINT(value);
     return Qnil;
 }
@@ -183,6 +210,7 @@ VALUE rbVideoMode::SetHeight(VALUE self, VALUE value)
 // VideoMode#bits=(value)
 VALUE rbVideoMode::SetBitsPerPixel(VALUE self, VALUE value)
 {
+    rb_check_frozen(self);
     ToSFML(self)->BitsPerPixel = NUM2UINT(value);
     return Qnil;
 }

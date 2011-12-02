@@ -58,6 +58,9 @@ namespace rbWindow
     // Window#initialize(...)
     static VALUE Initialize(int argc, VALUE args[], VALUE self);
     
+    // Window#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
     // Window#clone
     static VALUE Clone(VALUE self);
     

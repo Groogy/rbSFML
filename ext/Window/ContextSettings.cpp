@@ -31,6 +31,9 @@ void rbContextSettings::Init(VALUE SFML)
     
     // Instance methods
     rb_define_method(ContextSettings, "initialize",          Initialize,           -1);
+    rb_define_method(ContextSettings, "initialize_copy",     InitializeCopy,        1);
+    rb_define_method(ContextSettings, "marshal_dump",        MarshalDump,           0);
+    rb_define_method(ContextSettings, "marshal_load",        MarshalLoad,           1);
     rb_define_method(ContextSettings, "depth_bits",          GetDepthBits,          0);
     rb_define_method(ContextSettings, "stencil_bits",        GetStencilBits,        0);
     rb_define_method(ContextSettings, "antialiasing_level",  GetAntialiasingLevel,  0);
@@ -66,6 +69,13 @@ VALUE rbContextSettings::Initialize(int argc, VALUE argv[], VALUE self)
 {
     sf::ContextSettings* settings = ToSFML(self);
     
+    if (argc == 1 and rb_type(argv[0]) == T_HASH)
+    {
+        VALUE other = ToRuby(argv[0]);
+        InitializeCopy(self, other);
+        return Qnil;
+    }
+    
     switch (argc)
     {
         case 5:
@@ -84,6 +94,35 @@ VALUE rbContextSettings::Initialize(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..5)", argc);
     }
+    
+    return Qnil;
+}
+
+// ContextSettings#initialize_copy(settings)
+VALUE rbContextSettings::InitializeCopy(VALUE self, VALUE settings)
+{
+    *ToSFML(self) = *ToSFML(settings);
+    return self;
+}
+
+// ContextSettings#marshal_dump
+VALUE rbContextSettings::MarshalDump(VALUE self)
+{
+    return rb_ary_new3(5, GetDepthBits(self), GetStencilBits(self),
+                       GetAntialiasingLevel(self), GetMajorVersion(self),
+                       GetMinorVersion(self));
+}
+
+// ContextSettings#marshal_load(data)
+VALUE rbContextSettings::MarshalLoad(VALUE self, VALUE data)
+{
+    sf::ContextSettings* settings = ToSFML(self);
+    
+    settings->DepthBits         = NUM2UINT(rb_ary_entry(data, 0));
+    settings->StencilBits       = NUM2UINT(rb_ary_entry(data, 1));
+    settings->AntialiasingLevel = NUM2UINT(rb_ary_entry(data, 2));
+    settings->MajorVersion      = NUM2UINT(rb_ary_entry(data, 3));
+    settings->MinorVersion      = NUM2UINT(rb_ary_entry(data, 4));
     
     return Qnil;
 }

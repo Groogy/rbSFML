@@ -75,6 +75,12 @@ namespace rbEvent
     static VALUE EventType(int id);
     static VALUE EventTypeCaseEqual(VALUE self, VALUE other);
     
+    // Event#initialize_copy(event)
+    static VALUE InitializeCopy(VALUE self, VALUE event);
+    
+    // Event#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
     // Event#type
     // Event#Type
     static VALUE Type(VALUE self);

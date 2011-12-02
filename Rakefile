@@ -2,26 +2,34 @@ require 'rake'
 require 'rake/clean'
 require 'rbconfig'
 require 'digest/md5'
+require 'fileutils'
 include RbConfig
+include FileUtils
 
-SFML_INC = ENV['SFML_INCLUDE'] || 'include'
-SFML_LIB = ENV['SFML_LIB'] || 'lib'
-
-RUBY_INC = CONFIG['rubyhdrdir']
-RUBY_LIB = CONFIG['libdir']
-RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
-
-CC = CONFIG['CC']
-CFLAGS = CONFIG['CFLAGS']
-
-LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
-LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']}".sub("$(DEFFILE)", "")
+module FileUtils
+  def fu_output_message(msg)
+    puts msg if $verbose
+  end
+end
 
 OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
 EXT_DIR = 'ext'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
+
+SFML_INC = ENV['SFML_INCLUDE'] || "include"
+SFML_LIB = ENV['SFML_LIB'] || "lib"
+
+RUBY_INC = CONFIG['rubyhdrdir']
+RUBY_LIB = CONFIG['libdir']
+RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
+
+CXX = CONFIG['CXX']
+CXXFLAGS = "#{CONFIG['CXXFLAGS']} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} "
+
+LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
+LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']} -L#{SFML_LIB} -L#{RUBY_LIB} #{RUBY_LINK}".sub("$(DEFFILE)", "")
 
 SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :graphics => FileList.new("#{EXT_DIR}/Graphics/*.cpp"),
@@ -36,6 +44,33 @@ SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
 CLEAN.include(OBJ_DIR)
 CLOBBER.include(SO_DIR)
 CLOBBER.include(DOC_DIR)
+
+desc "turn on verbose mode"
+task :verbose do
+  $verbose = true
+  CXXFLAGS << " -Wall -Wextra "
+  puts RUBY_DESCRIPTION
+  puts ""
+  puts "OBJ_DIR    = #{OBJ_DIR.inspect}"
+  puts "SO_DIR     = #{SO_DIR.inspect}"
+  puts "DOC_DIR    = #{DOC_DIR.inspect}"
+  puts "EXT_DIR    = #{EXT_DIR.inspect}"
+  puts "INST_DIR   = #{INST_DIR.inspect} (#{"not " unless File.exist?(INST_DIR)}found)"
+  puts ""
+  puts "SFML_INC   = #{SFML_INC.inspect} (#{"not " unless File.exist?(SFML_INC)}found)"
+  puts "SFML_LIB   = #{SFML_LIB.inspect} (#{"not " unless File.exist?(SFML_LIB)}found)"
+  puts ""
+  puts "RUBY_INC   = #{RUBY_INC.inspect} (#{"not " unless File.exist?(RUBY_INC)}found)"
+  puts "RUBY_LIB   = #{RUBY_LIB.inspect} (#{"not " unless File.exist?(RUBY_LIB)}found)"
+  puts "RUBY_LINK  = #{RUBY_LINK.inspect}"
+  puts ""
+  puts "CXX        = #{CXX.inspect}"
+  puts "CXXFLAGS   = #{CXXFLAGS.inspect}"
+  puts ""
+  puts "LINK       = #{LINK.inspect}"
+  puts "LINK_FLAGS = #{LINK_FLAGS.inspect}"
+  puts ""
+end
 
 def calc_md5
   return if OBJS.size > 0
@@ -72,15 +107,15 @@ def compile_o(src)
   list.each_with_index do |file, i|
     obj = OBJS[src][i]
     next if File.exist?(obj)
-    puts "Compiling #{src.capitalize}/#{File.basename(file)}"
-    exit unless system "#{CC} #{CFLAGS} -c #{file} -o #{obj} #{s} #{d} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
+    puts "Compiling #{file}"
+    exit! unless system "#{CXX} #{CXXFLAGS} -c #{file} -o #{obj} #{s} #{d}"
   end
 end
 
 def create_so(src)
   so = "#{SO_DIR}/#{src}.so"
   mkdir_p SO_DIR
-  puts "Creating #{src}.so"
+  puts "Creating #{so}"
   objs = OBJS[src].join(' ')
   s = "-s" if ARGV.include? "static"
   unless File.exist?(SFML_LIB)
@@ -93,7 +128,7 @@ def create_so(src)
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   end
-  exit unless system "#{LINK} -o #{so} #{objs} -L. -L#{SFML_LIB} -L#{RUBY_LIB} #{LINK_FLAGS} #{RUBY_LINK} #{sfml_link}"
+  exit! unless system "#{LINK} #{objs} -o #{so} #{LINK_FLAGS} #{sfml_link}"
 end
 
 task :default => [:all]
@@ -200,14 +235,12 @@ end
 
 desc "Run tests."
 task :test do
-  ruby "test/test.rb"
+  load "test/test.rb"
 end
 
 desc "Run samples."
 task :samples do
-  # TODO: Use SFML samples (pong...)
   (Dir.entries("samples")-%w[. ..]).each do |sample|
-    puts "samples/#{sample}"
     ruby "samples/#{sample}"
   end
 end

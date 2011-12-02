@@ -31,6 +31,7 @@ void rbClock::Init(VALUE SFML)
     
     // Instance methods
     rb_define_method(Clock, "initialize_copy", InitializeCopy, 1);
+    rb_define_method(Clock, "marshal_dump",    MarshalDump,    0);
     rb_define_method(Clock, "elapsed_time",    GetElapsedTime, 0);
     rb_define_method(Clock, "reset",           Reset,          0);
     rb_define_method(Clock, "==",              Equal,          1);
@@ -54,6 +55,13 @@ VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
     return self;
 }
 
+// Clock#marshal_dump
+VALUE rbClock::MarshalDump(VALUE self)
+{
+    rb_raise(rb_eTypeError, "can't dump Clock");
+    return Qnil;
+}
+
 // Clock#elapsed_time
 // Clock#GetElapsedTime
 // Clock#time
@@ -66,6 +74,7 @@ VALUE rbClock::GetElapsedTime(VALUE self)
 // Clock#Reset
 VALUE rbClock::Reset(VALUE self)
 {
+    rb_check_frozen(self);
     ToSFML(self)->Reset();
     return Qnil;
 }
