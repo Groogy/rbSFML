@@ -231,11 +231,11 @@ VALUE rbVideoMode::Inspect(VALUE self)
 {
     VALUE result = rb_str_new2("VideoMode(");
     rb_str_append(result, rb_inspect(GetWidth(self)));
-    rb_str_append(result, rb_str_new2("x"));
+    rb_str_cat2(result, "x");
     rb_str_append(result, rb_inspect(GetHeight(self)));
-    rb_str_append(result, rb_str_new2(", "));
+    rb_str_cat2(result, ", ");
     rb_str_append(result, rb_inspect(GetBitsPerPixel(self)));
-    rb_str_append(result, rb_str_new2("bits)"));
+    rb_str_cat2(result, "bits)");
     return result;
 }
 

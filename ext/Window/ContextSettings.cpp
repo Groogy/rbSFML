@@ -232,18 +232,18 @@ VALUE rbContextSettings::Inspect(VALUE self)
     VALUE ret = rb_str_new2("ContextSettings(depth_bits: ");
     rb_str_append(ret, rb_inspect(GetDepthBits(self)));
     
-    rb_str_append(ret, rb_str_new2(", stencil_bits: "));
+    rb_str_cat2(ret, ", stencil_bits: ");
     rb_str_append(ret, rb_inspect(GetStencilBits(self)));
     
-    rb_str_append(ret, rb_str_new2(", antialiasing_level: "));
+    rb_str_cat2(ret, ", antialiasing_level: ");
     rb_str_append(ret, rb_inspect(GetAntialiasingLevel(self)));
     
-    rb_str_append(ret, rb_str_new2(", major_version: "));
+    rb_str_cat2(ret, ", major_version: ");
     rb_str_append(ret, rb_inspect(GetMajorVersion(self)));
     
-    rb_str_append(ret, rb_str_new2(", minor_version: "));
+    rb_str_cat2(ret, ", minor_version: ");
     rb_str_append(ret, rb_inspect(GetMinorVersion(self)));
-    rb_str_append(ret, rb_str_new2(")"));
+    rb_str_cat2(ret, ")");
     
     return ret;
 }

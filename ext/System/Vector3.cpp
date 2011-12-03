@@ -213,14 +213,14 @@ VALUE rbVector3::StrictEqual(VALUE self, VALUE other)
 // Vector3#to_s
 VALUE rbVector3::Inspect(VALUE self)
 {
-    VALUE result = rb_str_new2("Vector3(");
-    rb_str_append(result, rb_inspect(GetX(self)));
-    rb_str_append(result, rb_str_new2(", "));
-    rb_str_append(result, rb_inspect(GetY(self)));
-    rb_str_append(result, rb_str_new2(", "));
-    rb_str_append(result, rb_inspect(GetZ(self)));
-    rb_str_append(result, rb_str_new2(")"));
-    return result;
+    VALUE ret = rb_str_new2("Vector3(");
+    rb_str_append(ret, rb_inspect(GetX(self)));
+    rb_str_cat2(ret, ", ");
+    rb_str_append(ret, rb_inspect(GetY(self)));
+    rb_str_cat2(ret, ", ");
+    rb_str_append(ret, rb_inspect(GetZ(self)));
+    rb_str_cat2(ret, ")");
+    return ret;
 }
 
 // Vector3#memory_usage

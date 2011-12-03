@@ -96,7 +96,7 @@ VALUE rbClock::Inspect(VALUE self)
 {
     VALUE ret = rb_str_new2("Clock(");
     rb_str_append(ret, rb_inspect(GetElapsedTime(self)));
-    rb_str_append(ret, rb_str_new2(")"));
+    rb_str_cat2(ret, ")");
     return ret;
 }
 

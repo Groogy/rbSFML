@@ -196,12 +196,12 @@ VALUE rbVector2::StrictEqual(VALUE self, VALUE other)
 // Vector2#to_s
 VALUE rbVector2::Inspect(VALUE self)
 {
-    VALUE result = rb_str_new2("Vector2(");
-    rb_str_append(result, rb_inspect(GetX(self)));
-    rb_str_append(result, rb_str_new2(", "));
-    rb_str_append(result, rb_inspect(GetY(self)));
-    rb_str_append(result, rb_str_new2(")"));
-    return result;
+    VALUE ret = rb_str_new2("Vector2(");
+    rb_str_append(ret, rb_inspect(GetX(self)));
+    rb_str_cat2(ret, ", ");
+    rb_str_append(ret, rb_inspect(GetY(self)));
+    rb_str_cat2(ret, ")");
+    return ret;
 }
 
 // Vector2#memory_usage

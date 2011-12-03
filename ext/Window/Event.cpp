@@ -364,87 +364,73 @@ VALUE rbEvent::Equal(VALUE self, VALUE other)
     return Qtrue;
 }
 
+static inline const char* EventTypeName(int type)
+{
+    switch (type)
+    {
+        case sf::Event::Closed:
+            return "Closed";
+        case sf::Event::LostFocus:
+            return "LostFocus";
+        case sf::Event::GainedFocus:
+            return "GainedFocus";
+        case sf::Event::MouseEntered:
+            return "MouseEntered";
+        case sf::Event::MouseLeft:
+            return "MouseLeft";
+        case sf::Event::Resized:
+            return "Resized";
+        case sf::Event::KeyPressed:
+            return "KeyPressed";
+        case sf::Event::KeyReleased:
+            return "KeyReleased";
+        case sf::Event::TextEntered:
+            return "TextEntered";
+        case sf::Event::MouseMoved:
+            return "MouseMoved";
+        case sf::Event::MouseButtonPressed:
+            return "MouseButtonPressed";
+        case sf::Event::MouseButtonReleased:
+            return "MouseButtonReleased";
+        case sf::Event::MouseWheelMoved:
+            return "MouseWheelMoved";
+        case sf::Event::JoystickMoved:
+            return "JoystickMoved";
+        case sf::Event::JoystickButtonPressed:
+            return "JoystickButtonPressed";
+        case sf::Event::JoystickButtonReleased:
+            return "JoystickButtonReleased";
+        case sf::Event::JoystickConnected:
+            return "JoystickConnected";
+        case sf::Event::JoystickDisconnected:
+            return "JoystickDisconnected";
+        default:
+            rb_bug("rbEvent::Inspect");
+    }
+    return NULL;
+}
+
 // Event#inspect
 VALUE rbEvent::Inspect(VALUE self)
 {
     VALUE ret = rb_str_new2("Event(");
-    const char* event_name;
-    switch (ToSFML(self)->Type)
-    {
-        case sf::Event::Closed:
-            event_name = "Closed";
-            break;
-        case sf::Event::LostFocus:
-            event_name = "LostFocus";
-            break;
-        case sf::Event::GainedFocus:
-            event_name = "GainedFocus";
-            break;
-        case sf::Event::MouseEntered:
-            event_name = "MouseEntered";
-            break;
-        case sf::Event::MouseLeft:
-            event_name = "MouseLeft";
-            break;
-        case sf::Event::Resized:
-            event_name = "Resized";
-            break;
-        case sf::Event::KeyPressed:
-            event_name = "KeyPressed";
-            break;
-        case sf::Event::KeyReleased:
-            event_name = "KeyReleased";
-            break;
-        case sf::Event::TextEntered:
-            event_name = "TextEntered";
-            break;
-        case sf::Event::MouseMoved:
-            event_name = "MouseMoved";
-            break;
-        case sf::Event::MouseButtonPressed:
-            event_name = "MouseButtonPressed";
-            break;
-        case sf::Event::MouseButtonReleased:
-            event_name = "MouseButtonReleased";
-            break;
-        case sf::Event::MouseWheelMoved:
-            event_name = "MouseWheelMoved";
-            break;
-        case sf::Event::JoystickMoved:
-            event_name = "JoystickMoved";
-            break;
-        case sf::Event::JoystickButtonPressed:
-            event_name = "JoystickButtonPressed";
-            break;
-        case sf::Event::JoystickButtonReleased:
-            event_name = "JoystickButtonReleased";
-            break;
-        case sf::Event::JoystickConnected:
-            event_name = "JoystickConnected";
-            break;
-        case sf::Event::JoystickDisconnected:
-            event_name = "JoystickDisconnected";
-            break;
-        default:
-            rb_bug("rbEvent::Inspect");
-    }
-    rb_str_append(ret, rb_str_new2(event_name));
+    rb_str_cat2(ret, EventTypeName(ToSFML(self)->Type));
     VALUE info = Info(self);
     if (info != Qnil)
     {
-        rb_str_append(ret, rb_str_new2(": "));
+        rb_str_cat2(ret, ": ");
         VALUE ary = rb_obj_instance_variables(info);
         for (int i = 0; i < RARRAY_LEN(ary); ++i)
         {
             VALUE iv = RARRAY_PTR(ary)[i];
-            rb_str_append(ret, rb_sym_to_s(iv));
-            rb_str_append(ret, rb_str_new2("="));
+            rb_str_cat2(ret, rb_id2name(SYM2ID(iv)));
+            rb_str_cat2(ret, "=");
             rb_str_append(ret, rb_inspect(rb_ivar_get(info, rb_to_id(iv))));
             if (i+1 < RARRAY_LEN(ary))
-                rb_str_append(ret, rb_str_new2(", "));
+                rb_str_cat2(ret, ", ");
         }
     }
-    rb_str_append(ret, rb_str_new2(")"));
+    rb_str_cat2(ret, ")");
     return ret;
 }
 
