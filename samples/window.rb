@@ -1,5 +1,5 @@
 # Based on SFML example Window
-# https:#github.com/LaurentGomila/SFML/blob/master/examples/window/Window.cpp
+# https://github.com/LaurentGomila/SFML/blob/master/examples/window/Window.cpp
 
 begin
   require 'sfml/sfml'
@@ -13,9 +13,9 @@ require 'opengl' # from ruby-opengl gem
 include SFML
 
 # Create the main window
-window = Window.new([640, 480], "rbSFML Window", Style::Default, {depth_bits: 32})
+window = Window.new([640, 480], "rbSFML Window", Style::Default, depth_bits: 32)
 
-#/ Create a clock for measuring the time elapsed
+# Create a clock for measuring the time elapsed
 clock = Clock.new
 
 # Set the color and depth clear values
@@ -33,6 +33,7 @@ gluPerspective(90.0, 1.0, 1.0, 500.0)
 
 # Start the game loop
 while window.opened?
+  
   # Process events
   window.each_event do |event|
     case event

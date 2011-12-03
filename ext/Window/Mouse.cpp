@@ -32,14 +32,17 @@ void rbMouse::Init(VALUE SFML)
 	rb_define_const(Mouse, "XButton1",    INT2FIX(sf::Mouse::XButton1));
 	rb_define_const(Mouse, "XButton2",    INT2FIX(sf::Mouse::XButton2));
     
-    rb_define_module_function(Mouse, "button_pressed?", IsButtonPressed, 1);
-    rb_define_module_function(Mouse, "IsButtonPressed", IsButtonPressed, 1);
-    rb_define_module_function(Mouse, "pressed?",        IsButtonPressed, 1);
+    // Singleton methods
+    rb_define_singleton_method(Mouse, "button_pressed?", IsButtonPressed,  1);
+    rb_define_singleton_method(Mouse, "position",        Position,        -1);
     
-    rb_define_module_function(Mouse, "position",    Position, -1);
-    rb_define_module_function(Mouse, "GetPosition", Position, -1);
-    rb_define_module_function(Mouse, "SetPosition", Position, -1);
-    rb_define_module_function(Mouse, "position=",   Position, -1);
+    // Singleton aliasses
+    VALUE sMouse = rb_singleton_class(Mouse);
+    rb_define_alias(sMouse, "IsButtonPressed", "button_pressed?");
+    rb_define_alias(sMouse, "pressed?",        "button_pressed?");
+    rb_define_alias(sMouse, "GetPosition",     "position"       );
+    rb_define_alias(sMouse, "SetPosition",     "position"       );
+    rb_define_alias(sMouse, "position=",       "position"       );
 }
 
 // Mouse::button_pressed?(button)

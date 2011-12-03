@@ -93,6 +93,7 @@ void rbWindow::Init(VALUE SFML)
     rb_define_alias(Window, "framerate",            "framerate="         );
     rb_define_alias(Window, "framerate_limit=",     "framerate="         );
     rb_define_alias(Window, "framerate_limit",      "framerate="         );
+    rb_define_alias(Window, "fps=",                 "framerate="         );
     rb_define_alias(Window, "GetFrameTime",         "frame_time"         );
     rb_define_alias(Window, "time",                 "frame_time"         );
     rb_define_alias(Window, "SetJoystickThreshold", "joystick_threshold=");

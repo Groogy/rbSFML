@@ -135,7 +135,7 @@ task :default => [:all]
 
 desc "Link statically against SFML."
 task :static do
-  if ARGV == ["static"]
+  unless ARGV.any? {|arg| ["system", "window", "graphics", "audio", "all"].include? arg }
     ARGV << "sfml"
     Rake::Task["sfml"].invoke
   end

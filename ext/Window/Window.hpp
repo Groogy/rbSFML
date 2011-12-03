@@ -164,6 +164,7 @@ namespace rbWindow
     // Window#framerate(limit)
     // Window#framerate_limit=(limit)
     // Window#framerate_limit(limit)
+    // Window#fps=(limit)
     static VALUE SetFramerateLimit(VALUE self, VALUE limit);
     
     // Window#frame_time
