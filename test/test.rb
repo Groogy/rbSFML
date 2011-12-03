@@ -42,6 +42,7 @@ end
 if SFML.window?
   load "test/Window/Context.rb"
   load "test/Window/ContextSettings.rb"
+  load "test/Window/Joystick.rb"
   load "test/Window/Keyboard.rb"
   load "test/Window/Mouse.rb"
   load "test/Window/Style.rb"
