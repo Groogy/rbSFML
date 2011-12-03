@@ -19,22 +19,35 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <sstream>
-std::stringstream gErrorStream;
+#ifndef WINDOW_KEYBOARD_HPP
+#define WINDOW_KEYBOARD_HPP
 
-extern "C"
+#include <ruby.h>
+#include <rbSFML.hpp>
+#include <System/SFML.hpp>
+
+#include <SFML/Window/Keyboard.hpp>
+
+namespace rbKeyboard
 {
-
-    void Init_system();
-    void Init_window();
-    //void Init_graphics();
-    //void Init_audio();
     
-    void Init_sfml()
-    {
-        Init_system();
-        Init_window();
-        //Init_graphics();
-        //Init_audio();
-    }
+#if defined(WINDOW_KEYBOARD_CPP)
+    VALUE Keyboard;
+#else
+    extern VALUE Keyboard;
+#endif
+    
+#if defined(RBSFML_WINDOW)
+    void Init(VALUE SFML);
+#endif
+    
+#if defined(WINDOW_KEYBOARD_CPP)
+    // Keyboard::key_pressed?(button)
+    // Keyboard::IsKeyPressed(button)
+    // Keyboard::pressed?(button)
+    static VALUE IsKeyPressed(VALUE, VALUE key);
+#endif
+    
 }
+
+#endif // WINDOW_KEYBOARD_HPP

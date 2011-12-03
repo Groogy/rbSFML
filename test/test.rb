@@ -40,7 +40,10 @@ if SFML.system?
 end
 
 if SFML.window?
+  load "test/Window/Context.rb"
   load "test/Window/ContextSettings.rb"
+  load "test/Window/Keyboard.rb"
+  load "test/Window/Mouse.rb"
   load "test/Window/Style.rb"
   load "test/Window/VideoMode.rb"
   load "test/Window/Window.rb"

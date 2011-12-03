@@ -49,6 +49,7 @@ void Init_window()
     rbContext::Init(SFML);
     rbContextSettings::Init(SFML);
     rbEvent::Init(SFML);
+    rbKeyboard::Init(SFML);
     rbMouse::Init(SFML);
     rbStyle::Init(SFML);
     rbVideoMode::Init(SFML);

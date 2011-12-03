@@ -40,7 +40,7 @@ while window.opened?
     when Event::Closed # Close window : exit
       window.close
     when Event::KeyPressed # Escape key : exit
-      if false or event.key.code == Keyboard::Escape # TODO Keyboard
+      if event.key.code == Keyboard::Escape
         window.close
       end
     when Event::Resized # Resize event : adjust viewport
