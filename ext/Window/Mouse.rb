@@ -30,6 +30,21 @@ module SFML
   # @see Keyboard
   module Mouse
     
+    # The left mouse button.
+    Left = 0
+    
+    # The right mouse button.
+    Right = 1
+    
+    # The middle (wheel) mouse button.
+    Middle = 2
+    
+    # The first extra mouse button.
+    XButton1 = 3
+    
+    # The second extra mouse button.
+    XButton2 = 4
+    
     class << self
       
       # Check if a mouse button is pressed.
