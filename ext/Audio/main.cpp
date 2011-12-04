@@ -48,4 +48,5 @@ void Init_audio()
     
     rbSoundSource::Init(SFML);
     rbSound::Init(SFML);
+    rbSoundBuffer::Init(SFML);
 }

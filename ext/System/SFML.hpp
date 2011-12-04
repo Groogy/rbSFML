@@ -91,6 +91,7 @@ std::string rbSFML::Message()
     if (RTEST(rb_cv_get(Module(), "@@raise_exceptions")))
     {
         std::string message = gErrorStream.str();
+        gErrorStream.str("");
         if (!message.empty())
             message.erase(message.end() - 1); // Remove '\n' from end.
         return message;

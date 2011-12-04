@@ -85,7 +85,7 @@ VALUE rbVideoMode::GetFullscreenModes(VALUE)
 {
     std::vector<sf::VideoMode> modes = sf::VideoMode::GetFullscreenModes();
     VALUE ary = rb_ary_new2(modes.size());
-    for (size_t i = 0; i < modes.size(); ++i)
+    for (std::size_t i = 0; i < modes.size(); ++i)
     {
         VALUE video_mode = Allocate(VideoMode);
         *ToSFML(video_mode) = modes[i];
