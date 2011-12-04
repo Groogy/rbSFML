@@ -47,4 +47,5 @@ void Init_audio()
     InitDependencies(SFML);
     
     rbSoundSource::Init(SFML);
+    rbSound::Init(SFML);
 }

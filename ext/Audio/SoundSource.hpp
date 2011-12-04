@@ -46,6 +46,12 @@ namespace rbSoundSource
 #endif
     
 #if defined(AUDIO_SOUNDSOURCE_CPP)
+    // SoundSource#marshal_dump
+    static VALUE MarshalDump(VALUE self);
+    
+    // SoundSource#marshal_load
+    static VALUE MarshalLoad(VALUE self, VALUE data);
+    
     // SoundSource#pitch(pitch)
     // SoundSource#pitch=(pitch)
     // SoundSource#SetPitch(pitch)
@@ -97,7 +103,7 @@ namespace rbSoundSource
 
 VALUE rbSoundSource::Allocate(VALUE)
 {
-	rb_raise(rb_eNotImpError, "can't allocate instance of abstract class");
+	rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
     return Qnil;
 }
 

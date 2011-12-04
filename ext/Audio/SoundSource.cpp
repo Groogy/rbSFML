@@ -34,6 +34,8 @@ void rbSoundSource::Init(VALUE SFML)
     rb_define_alloc_func(SoundSource, Allocate);
     
     // Instance methods
+    rb_define_method(SoundSource, "marshal_dump",          MarshalDump,            0);
+    rb_define_method(SoundSource, "marshal_load",          MarshalLoad,            1);
     rb_define_method(SoundSource, "pitch",                 Pitch,                 -1);
     rb_define_method(SoundSource, "volume",                Volume,                -1);
     rb_define_method(SoundSource, "position",              Position,              -1);
@@ -61,6 +63,42 @@ void rbSoundSource::Init(VALUE SFML)
     rb_define_alias(SoundSource, "attenuation=",          "attenuation"          );
     rb_define_alias(SoundSource, "SetAttenuation",        "attenuation"          );
     rb_define_alias(SoundSource, "GetAttenuation",        "attenuation"          );
+}
+
+// SoundSource#marshal_dump
+VALUE rbSoundSource::MarshalDump(VALUE self)
+{
+    sf::SoundSource* sound_source = ToSFML(self);
+    sf::Vector3f position = sound_source->GetPosition();
+    
+    return rb_ary_new3(8,
+                       rb_float_new(sound_source->GetPitch()),
+                       rb_float_new(sound_source->GetVolume()),
+                       rb_float_new(position.x),
+                       rb_float_new(position.y),
+                       rb_float_new(position.z),
+                       RBOOL(sound_source->IsRelativeToListener()),
+                       rb_float_new(sound_source->GetMinDistance()),
+                       rb_float_new(sound_source->GetAttenuation()));
+}
+
+// SoundSource#marshal_load
+VALUE rbSoundSource::MarshalLoad(VALUE self, VALUE data)
+{
+    sf::SoundSource* sound_source = ToSFML(self);
+    sf::Vector3f position;
+    
+    sound_source->SetPitch(NUM2DBL(rb_ary_entry(data, 0)));
+    sound_source->SetVolume(NUM2DBL(rb_ary_entry(data, 1)));
+    position.x = NUM2DBL(rb_ary_entry(data, 2));
+    position.y = NUM2DBL(rb_ary_entry(data, 3));
+    position.z = NUM2DBL(rb_ary_entry(data, 4));
+    sound_source->SetPosition(position);
+    sound_source->SetRelativeToListener(RTEST(rb_ary_entry(data, 5)));
+    sound_source->SetMinDistance(NUM2DBL(rb_ary_entry(data, 6)));
+    sound_source->SetAttenuation(NUM2DBL(rb_ary_entry(data, 7)));
+    
+    return Qnil;
 }
 
 // SoundSource#pitch
