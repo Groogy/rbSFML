@@ -48,7 +48,7 @@ VALUE rbSound::InitializeCopy(VALUE self, VALUE sound)
 // Sound#marshal_dump
 VALUE rbSound::MarshalDump(VALUE self)
 {
-    sf::Sound* sound = ToSFML(self);
+    //sf::Sound* sound = ToSFML(self);
     
     return rb_ary_new3(1,
                        rb_call_super(0, NULL));
@@ -57,7 +57,7 @@ VALUE rbSound::MarshalDump(VALUE self)
 // Sound#marshal_load
 VALUE rbSound::MarshalLoad(VALUE self, VALUE data)
 {
-    sf::Sound* sound = ToSFML(self);
+    //sf::Sound* sound = ToSFML(self);
     
     rb_call_super(1, (VALUE[]){rb_ary_entry(data, 0)});
     

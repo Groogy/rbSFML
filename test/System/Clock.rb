@@ -19,7 +19,7 @@ class TestClock < Test::Unit::TestCase
   
   def test_inspect
     clock = Clock.new
-    assert(/Clock\(\d+\)/ =~ clock.inspect)
+    assert_match(/Clock\(\d+\)/, clock.inspect)
     assert_match(/ Clock\(\d+\) /, " #{clock} ")
   end
   

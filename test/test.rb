@@ -56,5 +56,5 @@ if SFML.graphics?
 end
 
 if SFML.audio?
-  
+  load "test/Audio/SoundBuffer.rb"
 end

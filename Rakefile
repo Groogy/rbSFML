@@ -37,6 +37,9 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :system   => FileList.new("#{EXT_DIR}/System/*.cpp"),
         :all      => FileList.new("#{EXT_DIR}/all.cpp"),
         :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
+
+SHARED = ["#{EXT_DIR}/InputStream.cpp"]
+
 LIBS = []
 OBJS = {}
 SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
@@ -81,7 +84,7 @@ def calc_md5
       code = File.read(file)
       digest = Digest::MD5.hexdigest(code)
       s = ".s" if ARGV.include? "static"
-      OBJS[k] << "#{OBJ_DIR}/#{k}/#{File.basename(file)}.#{digest}#{s}.o"
+      OBJS[k] << "#{OBJ_DIR}/#{File.basename(file)}.#{digest}#{s}.o"
     end
   end
   OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
@@ -149,30 +152,35 @@ end
 
 desc "Build only audio module (audio.so)."
 task :audio => [:system] do
+  SRCS[:audio] += SHARED
   compile_o(:audio)
   create_so(:audio)
 end
 
 desc "Build only graphics module (graphics.so)."
 task :graphics => [:system, :window] do
+  SRCS[:graphics] += SHARED
   compile_o(:graphics)
   create_so(:graphics)
 end
 
 desc "Build only window module (window.so)."
 task :window => [:system] do
+  SRCS[:window] += SHARED
   compile_o(:window)
   create_so(:window)
 end
 
 desc "Build only system module (system.so)."
 task :system do
+  SRCS[:system] += SHARED
   compile_o(:system)
   create_so(:system)
 end
 
 desc "Build rbSFML as a single file (sfml.so)."
 task :sfml do
+  SRCS[:sfml] += SHARED
   compile_o(:system)
   compile_o(:window)
   compile_o(:graphics)

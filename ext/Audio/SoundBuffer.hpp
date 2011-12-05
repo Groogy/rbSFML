@@ -25,6 +25,7 @@
 #include <ruby.h>
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
+#include <InputStream.hpp>
 
 #include <SFML/Audio/SoundBuffer.hpp>
 
@@ -62,11 +63,33 @@ namespace rbSoundBuffer
     
     // SoundBuffer#load_from_file(filename)
     // SoundBuffer#LoadFromFile(filename)
+    // SoundBuffer#load_file(filename)
+    // SoundBuffer#load(filename)
     static VALUE LoadFromFile(VALUE self, VALUE filename);
     
     // SoundBuffer#load_from_memory(filename)
     // SoundBuffer#LoadFromMemory(filename)
+    // SoundBuffer#load_memory(filename)
     static VALUE LoadFromMemory(VALUE self, VALUE data);
+    
+    // SoundBuffer#load_from_stream(stream)
+    // SoundBuffer#LoadFromStream(stream)
+    // SoundBuffer#load_stream(stream)
+    static VALUE LoadFromStream(VALUE self, VALUE stream);
+    
+    // SoundBuffer#load_from_samples(samples, channels_count, sample_rate)
+    // SoundBuffer#LoadFromSamples(samples, channels_count, sample_rate)
+    // SoundBuffer#load_samples(samples, channels_count, sample_rate)
+    // SoundBuffer#load_from_samples(samples, samples_count, channels_count, sample_rate)
+    // SoundBuffer#LoadFromSamples(samples, samples_count, channels_count, sample_rate)
+    // SoundBuffer#load_samples(samples, samples_count, channels_count, sample_rate)
+    static VALUE LoadFromSamples(int argc, VALUE* argv, VALUE self);
+    
+    // SoundBuffer#save_to_file(filename)
+    // SoundBuffer#SaveToFile(filename)
+    // SoundBuffer#save_file(filename)
+    // SoundBuffer#save(filename)
+    static VALUE SaveToFile(VALUE self, VALUE filename);
     
     // SoundBuffer#samples
     // SoundBuffer#GetSamples
@@ -87,6 +110,11 @@ namespace rbSoundBuffer
     // SoundBuffer#duration
     // SoundBuffer#GetDuration
     static VALUE GetDuration(VALUE self);
+    
+    // SoundBuffer#==(other)
+    // SoundBuffer#eql?(other)
+    // SoundBuffer#equal?(other)
+    static VALUE Equal(VALUE self, VALUE other);
     
     // SoundBuffer#memory_usage
     static VALUE GetMemoryUsage(VALUE self);

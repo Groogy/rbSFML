@@ -537,9 +537,18 @@ VALUE rbWindow::GetSystemHandle(VALUE self)
 // Window#to_s
 VALUE rbWindow::Inspect(VALUE self)
 {
-    VALUE ret = rb_sprintf("Window(%p:", (void*)self);
-    rb_str_append(ret, rb_inspect(rb_iv_get(self, "@title")));
-    rb_str_cat2(ret, ")");
+    VALUE title = rb_iv_get(self, "@title");
+    VALUE ret;
+    if (NIL_P(title)) // Closed
+    {
+        ret = rb_sprintf("Window(%p)", (void*)self);
+    }
+    else
+    {
+        ret = rb_sprintf("Window(%p: ", (void*)self);
+        rb_str_append(ret, rb_inspect(title));
+        rb_str_cat2(ret, ")");
+    }
     return ret;
 }
 
