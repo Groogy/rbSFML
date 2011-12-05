@@ -248,7 +248,8 @@ end
 
 desc "Run samples."
 task :samples do
-  (Dir.entries("samples")-%w[. ..]).each do |sample|
-    ruby "samples/#{sample}"
+  cd "samples"
+  Dir.entries(".").select{|e| e =~ /\.rb$/ }.each do |sample|
+    ruby "#{sample}"
   end
 end

@@ -26,6 +26,7 @@
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
 #include <Audio/SoundSource.hpp>
+#include <Audio/SoundBuffer.hpp>
 
 #include <SFML/Audio/Sound.hpp>
 
@@ -52,14 +53,57 @@ namespace rbSound
 #endif
 
 #if defined(AUDIO_SOUND_CPP)
+    // Sound#initialize
+    // Sound#initialize(sound_buffer)
+    static VALUE Initialize(int argc, VALUE* argv, VALUE self);
+    
     // Sound#initialize_copy(other)
     static VALUE InitializeCopy(VALUE self, VALUE sound);
     
     // Sound#marshal_dump
     static VALUE MarshalDump(VALUE self);
     
-    // Sound#marshal_load
-    static VALUE MarshalLoad(VALUE self, VALUE data);
+    // Sound#play
+    // Sound#Play
+    static VALUE Play(VALUE self);
+    
+    // Sound#pause
+    // Sound#Pause
+    static VALUE Pause(VALUE self);
+    
+    // Sound#stop
+    // Sound#Stop
+    static VALUE Stop(VALUE self);
+    
+    // Sound#buffer=(buffer)
+    // Sound#SetBuffer(buffer)
+    static VALUE SetBuffer(VALUE self, VALUE buffer);
+    
+    // Sound#loop=(loop)
+    // Sound#SetLoop(loop)
+    static VALUE SetLoop(VALUE self, VALUE loop);
+    
+    // Sound#playing_offset=(offset)
+    // Sound#SetPlayingOffset(offset)
+    // Sound#offset=(offset)
+    static VALUE SetPlayingOffset(VALUE self, VALUE offset);
+    
+    // Sound#buffer
+    // Sound#GetBuffer
+    static VALUE GetBuffer(VALUE self);
+    
+    // Sound#loop
+    // Sound#GetLoop
+    static VALUE GetLoop(VALUE self);
+    
+    // Sound#playing_offset
+    // Sound#GetPlayingOffset
+    // Sound#offset
+    static VALUE GetPlayingOffset(VALUE self);
+    
+    // Sound#status
+    // Sound#GetStatus
+    static VALUE GetStatus(VALUE self);
     
     // Sound#memory_usage
     static VALUE GetMemoryUsage(VALUE self);

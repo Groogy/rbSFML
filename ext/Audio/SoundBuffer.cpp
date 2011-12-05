@@ -63,6 +63,7 @@ void rbSoundBuffer::Init(VALUE SFML)
     rb_define_alias(SoundBuffer, "GetSamplesCount",  "samples_count"    );
     rb_define_alias(SoundBuffer, "GetSampleRate",    "sample_rate"      );
     rb_define_alias(SoundBuffer, "GetChannelsCount", "channels_count"   );
+    rb_define_alias(SoundBuffer, "channels",         "channels_count"   );
     rb_define_alias(SoundBuffer, "GetDuration",      "duration"         );
     rb_define_alias(SoundBuffer, "eql?",             "=="               );
     rb_define_alias(SoundBuffer, "equal?",           "=="               );
@@ -230,6 +231,7 @@ VALUE rbSoundBuffer::GetSampleRate(VALUE self)
 
 // SoundBuffer#channels_count
 // SoundBuffer#GetChannelsCount
+// SoundBuffer#channels
 VALUE rbSoundBuffer::GetChannelsCount(VALUE self)
 {
     return UINT2NUM(ToSFML(self)->GetChannelsCount());

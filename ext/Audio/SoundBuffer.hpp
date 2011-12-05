@@ -105,6 +105,7 @@ namespace rbSoundBuffer
     
     // SoundBuffer#channels_count
     // SoundBuffer#GetChannelsCount
+    // SoundBuffer#channels
     static VALUE GetChannelsCount(VALUE self);
     
     // SoundBuffer#duration
