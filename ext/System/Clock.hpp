@@ -32,13 +32,13 @@ namespace rbClock
 {
     
     static inline void Free(void* clock);
+    static inline VALUE Allocate();
+    static inline VALUE Allocate(VALUE);
     
     static inline VALUE ToRuby(VALUE other);
     static inline VALUE ToRuby(sf::Clock* clock);
     static inline VALUE ToRuby(sf::Clock& clock);
     static inline sf::Clock* ToSFML(VALUE clock);
-    
-    static inline VALUE Allocate(VALUE);
     
 #if defined(SYSTEM_CLOCK_CPP)
     VALUE Clock;
@@ -86,11 +86,16 @@ void rbClock::Free(void* clock)
     delete (sf::Clock*)clock;
 }
 
-VALUE rbClock::Allocate(VALUE)
+VALUE rbClock::Allocate()
 {
     sf::Clock* clock = new(std::nothrow) sf::Clock;
     if (clock == NULL) rb_memerror();
     return ToRuby(clock);
+}
+
+VALUE rbClock::Allocate(VALUE)
+{
+    return Allocate();
 }
 
 VALUE rbClock::ToRuby(VALUE other)
@@ -109,7 +114,7 @@ VALUE rbClock::ToRuby(sf::Clock* clock)
 
 VALUE rbClock::ToRuby(sf::Clock& clock)
 {
-    return rb_data_object_alloc(Clock, &clock, NULL, NULL);
+    return ToRuby(&clock);
 }
 
 sf::Clock* rbClock::ToSFML(VALUE clock)

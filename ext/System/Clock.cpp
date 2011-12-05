@@ -94,10 +94,9 @@ VALUE rbClock::Equal(VALUE self, VALUE other)
 // Clock#to_s
 VALUE rbClock::Inspect(VALUE self)
 {
-    VALUE ret = rb_str_new2("Clock(");
-    rb_str_append(ret, rb_inspect(GetElapsedTime(self)));
-    rb_str_cat2(ret, ")");
-    return ret;
+    sf::Clock* clock = ToSFML(self);
+    return rb_sprintf("Clock(%i)",
+                      clock->GetElapsedTime());
 }
 
 // Clock#memory_usage

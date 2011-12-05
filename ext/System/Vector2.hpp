@@ -40,6 +40,8 @@ namespace rbVector2
     static inline sf::Vector2i ToSFMLi(VALUE vector2);
     static inline sf::Vector2f ToSFMLf(VALUE vector2);
     
+    static inline VALUE Allocate();
+    
     static inline VALUE GetX(VALUE vector2);
     static inline VALUE GetY(VALUE vector2);
     static inline void SetX(VALUE vector2, VALUE value);
@@ -56,7 +58,9 @@ namespace rbVector2
 #endif
 
 #if defined(SYSTEM_VECTOR2_CPP)
-    // Vector2#initialize(...)
+    // Vector2#initialize
+    // Vector2#initialize(vector2)
+    // Vector2#initialize(x, y)
     static VALUE Initialize(int argc, VALUE* args, VALUE self);
     
     // Vector2#initialize_copy(vector2)
@@ -100,6 +104,11 @@ namespace rbVector2
     
 }
 
+VALUE rbVector2::Allocate()
+{
+    return rb_obj_alloc(Vector2);
+}
+
 int rbVector2::Type(VALUE vector2)
 {
     // T_FIXNUM or T_FLOAT
@@ -109,32 +118,25 @@ int rbVector2::Type(VALUE vector2)
 VALUE rbVector2::ToRuby(VALUE other)
 {
     if (rb_obj_is_instance_of(other, Vector2))
-    {
         return other;
-    }
-    else if (rb_obj_is_kind_of(other, rb_cNumeric))
-    {
-        VALUE argv[] = {other, other};
-        return rb_class_new_instance(2, argv, Vector2);
-    }
-    else if (rb_type(other) == T_ARRAY)
-    {
-        VALUE* argv = RARRAY_PTR(other);
-        return rb_class_new_instance(RARRAY_LEN(other), argv, Vector2);
-    }
-    else
-    {
-        rb_raise(rb_eTypeError,
+    
+    if (rb_obj_is_kind_of(other, rb_cNumeric))
+        return rb_class_new_instance(2, (VALUE[]){other, other}, Vector2);
+    
+    if (rb_type(other) == T_ARRAY)
+        return rb_class_new_instance(RARRAY_LEN(other), RARRAY_PTR(other),
+                                     Vector2);
+    
+    rb_raise(rb_eTypeError,
                  "can't convert %s into Vector2", rb_obj_classname(other));
-    }
 }
 
 VALUE rbVector2::ToRuby(sf::Vector2i* vector2)
 {
-    VALUE x = INT2FIX(vector2->x);
-    VALUE y = INT2FIX(vector2->y);
-    VALUE argv[] = {x, y};
-    return rb_class_new_instance(2, argv, Vector2);
+    VALUE obj = Allocate();
+    SetX(obj, INT2FIX(vector2->x));
+    SetY(obj, INT2FIX(vector2->y));
+    return obj;
 }
 
 VALUE rbVector2::ToRuby(sf::Vector2i& vector2)
@@ -144,10 +146,10 @@ VALUE rbVector2::ToRuby(sf::Vector2i& vector2)
 
 VALUE rbVector2::ToRuby(sf::Vector2f* vector2)
 {
-    VALUE x = rb_float_new(vector2->x);
-    VALUE y = rb_float_new(vector2->y);
-    VALUE argv[] = {x, y};
-    return rb_class_new_instance(2, argv, Vector2);
+    VALUE obj = Allocate();
+    SetX(obj, rb_float_new(vector2->x));
+    SetY(obj, rb_float_new(vector2->y));
+    return obj;
 }
 
 VALUE rbVector2::ToRuby(sf::Vector2f& vector2)

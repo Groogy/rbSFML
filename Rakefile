@@ -48,7 +48,7 @@ CLEAN.include(OBJ_DIR)
 CLOBBER.include(SO_DIR)
 CLOBBER.include(DOC_DIR)
 
-desc "turn on verbose mode"
+desc "Turn on verbose mode."
 task :verbose do
   $verbose = true
   CXXFLAGS << " -Wall -Wextra "
@@ -144,41 +144,41 @@ task :static do
   end
 end
 
-desc "Build the whole rbSFML."
+desc "Build all modules."
 task :all => [:system, :window, :graphics, :audio] do
   compile_o(:all)
   create_so(:all)
 end
 
-desc "Build only audio module (audio.so)."
+desc "Build audio module (audio.so)."
 task :audio => [:system] do
   SRCS[:audio] += SHARED
   compile_o(:audio)
   create_so(:audio)
 end
 
-desc "Build only graphics module (graphics.so)."
+desc "Build graphics module (graphics.so)."
 task :graphics => [:system, :window] do
   SRCS[:graphics] += SHARED
   compile_o(:graphics)
   create_so(:graphics)
 end
 
-desc "Build only window module (window.so)."
+desc "Build window module (window.so)."
 task :window => [:system] do
   SRCS[:window] += SHARED
   compile_o(:window)
   create_so(:window)
 end
 
-desc "Build only system module (system.so)."
+desc "Build system module (system.so)."
 task :system do
   SRCS[:system] += SHARED
   compile_o(:system)
   create_so(:system)
 end
 
-desc "Build rbSFML as a single file (sfml.so)."
+desc "Build all modules as a single file (sfml.so)."
 task :sfml do
   SRCS[:sfml] += SHARED
   compile_o(:system)

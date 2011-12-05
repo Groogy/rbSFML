@@ -47,6 +47,7 @@ class TestVector3 < Test::Unit::TestCase
     assert_equal(v1, v2 - 10)
     assert_equal(v1, v2 / 3)
     assert_equal(v1, v3 - Vector3.new(2.5, 5, 7.5))
+    assert_equal(v1, v3 + -Vector3.new(2.5, 5, 7.5))
     assert_equal(v1, v3 / Vector3.new(1.5, 2, 2.5))
     assert_equal(v1, -v4)
     assert_equal(v4, -v1)
@@ -56,9 +57,9 @@ class TestVector3 < Test::Unit::TestCase
     vector1 = Vector3.new(10, 15, 20)
     vector2 = Vector3.new(10, 15.5, 20)
     assert_equal("Vector3(10, 15, 20)", vector1.inspect)
-    assert_equal("Vector3(10.0, 15.5, 20.0)", vector2.inspect)
-    assert_equal(" Vector3(10, 15, 20) ", " #{vector1} ")
-    assert_equal(" Vector3(10.0, 15.5, 20.0) ", " #{vector2} ")
+    assert_equal("Vector3(10, 15.5, 20)", vector2.inspect)
+    assert_equal(" #{vector1.inspect} ", " #{vector1} ")
+    assert_equal(" #{vector2.inspect} ", " #{vector2} ")
   end
   
   def test_exceptions

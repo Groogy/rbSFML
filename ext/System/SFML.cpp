@@ -51,7 +51,7 @@ VALUE rbSFML::GetRaiseExceptions(VALUE self)
 VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
 {
     rb_cv_set(self, "@@raise_exceptions", flag);
-    return flag;
+    return Qnil;
 }
 
 // SFML.system?

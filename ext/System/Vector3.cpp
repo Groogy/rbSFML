@@ -57,7 +57,9 @@ void rbVector3::Init(VALUE SFML)
     rb_define_alias(Vector3, "Z=",     "z="     );
 }
 
-// Vector3#initialize(...)
+// Vector3#initialize
+// Vector3#initialize(vector3)
+// Vector3#initialize(x, y, z)
 VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -119,49 +121,43 @@ VALUE rbVector3::InitializeCopy(VALUE self, VALUE vector3)
 // Vector3#marshal_dump
 VALUE rbVector3::MarshalDump(VALUE self)
 {
-    return rb_ary_new3(3, GetX(self), GetY(self), GetZ(self));
+    VALUE ptr[3];
+    ptr[0] = GetX(self);
+    ptr[1] = GetY(self);
+    ptr[2] = GetZ(self);
+    return rb_ary_new4(3, ptr);
 }
 
 // Vector3#marshal_load(data)
 VALUE rbVector3::MarshalLoad(VALUE self, VALUE data)
 {
-    SetX(self, rb_ary_entry(data, 0));
-    SetY(self, rb_ary_entry(data, 1));
-    SetZ(self, rb_ary_entry(data, 2));
+    VALUE* ptr = RARRAY_PTR(data);
+    SetX(self, ptr[0]);
+    SetY(self, ptr[1]);
+    SetZ(self, ptr[2]);
     return Qnil;
 }
 
 // Vector3#-@
 VALUE rbVector3::Negate(VALUE self)
 {
-    VALUE x = GetX(self);
-    VALUE y = GetY(self);
-    VALUE z = GetY(self);
-    
-    x = rb_funcall(x, rb_intern("-@"), 0);
-    y = rb_funcall(y, rb_intern("-@"), 0);
-    z = rb_funcall(z, rb_intern("-@"), 0);
-    
-    VALUE argv[] = {x, y, z};
-    return rb_class_new_instance(3, argv, Vector3);
+    VALUE vector3 = Allocate();
+    SetX(vector3, rb_funcall(GetX(self), rb_intern("-@"), 0));
+    SetY(vector3, rb_funcall(GetY(self), rb_intern("-@"), 0));
+    SetZ(vector3, rb_funcall(GetZ(self), rb_intern("-@"), 0));
+    return vector3;
 }
 
 // Internal
 static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
-    VALUE x = rbVector3::GetX(left);
-    VALUE y = rbVector3::GetY(left);
-    VALUE z = rbVector3::GetZ(left);
-    VALUE ox = rbVector3::GetX(right);
-    VALUE oy = rbVector3::GetY(right);
-    VALUE oz = rbVector3::GetZ(right);
+    using namespace rbVector3;
     
-    x = rb_funcall(x, rb_intern(op), 1, ox);
-    y = rb_funcall(y, rb_intern(op), 1, oy);
-    z = rb_funcall(z, rb_intern(op), 1, oz);
-    
-    VALUE argv[] = {x, y, z};
-    return rb_class_new_instance(3, argv, rbVector3::Vector3);
+    VALUE vector3 = Allocate();
+    SetX(vector3, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
+    SetY(vector3, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
+    SetZ(vector3, rb_funcall(GetZ(left), rb_intern(op), 1, GetZ(right)));
+    return vector3;
 }
 
 // Vector3#+(other)
@@ -202,25 +198,27 @@ VALUE rbVector3::Equal(VALUE self, VALUE other)
 // Vector3#equal?(other)
 VALUE rbVector3::StrictEqual(VALUE self, VALUE other)
 {
-    if (CLASS_OF(other) != Vector3) return Qfalse;
-    if (!rb_eql(GetX(self), GetX(other))) return Qfalse;
-    if (!rb_eql(GetY(self), GetY(other))) return Qfalse;
-    if (!rb_eql(GetZ(self), GetZ(other))) return Qfalse;
-    return Qtrue;
+    if (Type(self) != Type(other)) return Qfalse;
+    return Equal(self, other);
 }
 
 // Vector3#inspect
 // Vector3#to_s
 VALUE rbVector3::Inspect(VALUE self)
 {
-    VALUE ret = rb_str_new2("Vector3(");
-    rb_str_append(ret, rb_inspect(GetX(self)));
-    rb_str_cat2(ret, ", ");
-    rb_str_append(ret, rb_inspect(GetY(self)));
-    rb_str_cat2(ret, ", ");
-    rb_str_append(ret, rb_inspect(GetZ(self)));
-    rb_str_cat2(ret, ")");
-    return ret;
+    switch(Type(self))
+    {
+        case T_FIXNUM:
+            return rb_sprintf("Vector3(%i, %i, %i)",
+                              FIX2INT(GetX(self)),
+                              FIX2INT(GetY(self)),
+                              FIX2INT(GetZ(self)));
+        case T_FLOAT:
+            return rb_sprintf("Vector3(%lg, %lg, %lg)",
+                              NUM2DBL(GetX(self)),
+                              NUM2DBL(GetY(self)),
+                              NUM2DBL(GetZ(self)));
+    }
 }
 
 // Vector3#memory_usage

@@ -54,7 +54,9 @@ void rbVector2::Init(VALUE SFML)
     rb_define_alias(Vector2, "Y=",     "y="     );
 }
 
-// Vector2#initialize(...)
+// Vector2#initialize
+// Vector2#initialize(vector2)
+// Vector2#initialize(x, y)
 VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
@@ -110,43 +112,39 @@ VALUE rbVector2::InitializeCopy(VALUE self, VALUE vector2)
 // Vector2#marshal_dump
 VALUE rbVector2::MarshalDump(VALUE self)
 {
-    return rb_ary_new3(2, GetX(self), GetY(self));
+    VALUE ptr[2];
+    ptr[0] = GetX(self);
+    ptr[1] = GetY(self);
+    return rb_ary_new4(2, ptr);
 }
 
 // Vector2#marshal_load(data)
 VALUE rbVector2::MarshalLoad(VALUE self, VALUE data)
 {
-    SetX(self, rb_ary_entry(data, 0));
-    SetY(self, rb_ary_entry(data, 1));
+    VALUE* ptr = RARRAY_PTR(data);
+    SetX(self, ptr[0]);
+    SetY(self, ptr[1]);
     return Qnil;
 }
 
 // Vector2#-@
 VALUE rbVector2::Negate(VALUE self)
 {
-    VALUE x = GetX(self);
-    VALUE y = GetY(self);
-    
-    x = rb_funcall(x, rb_intern("-@"), 0);
-    y = rb_funcall(y, rb_intern("-@"), 0);
-    
-    VALUE argv[] = {x, y};
-    return rb_class_new_instance(2, argv, Vector2);
+    VALUE vector2 = Allocate();
+    SetX(vector2, rb_funcall(GetX(self), rb_intern("-@"), 0));
+    SetY(vector2, rb_funcall(GetY(self), rb_intern("-@"), 0));
+    return vector2;
 }
 
 // Internal
 static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
-    VALUE x = rbVector2::GetX(left);
-    VALUE y = rbVector2::GetY(left);
-    VALUE ox = rbVector2::GetX(right);
-    VALUE oy = rbVector2::GetY(right);
+    using namespace rbVector2;
     
-    x = rb_funcall(x, rb_intern(op), 1, ox);
-    y = rb_funcall(y, rb_intern(op), 1, oy);
-    
-    VALUE argv[] = {x, y};
-    return rb_class_new_instance(2, argv, rbVector2::Vector2);
+    VALUE vector2 = Allocate();
+    SetX(vector2, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
+    SetY(vector2, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
+    return vector2;
 }
 
 // Vector2#+(other)
@@ -186,22 +184,25 @@ VALUE rbVector2::Equal(VALUE self, VALUE other)
 // Vector2#equal?(other)
 VALUE rbVector2::StrictEqual(VALUE self, VALUE other)
 {
-    if (CLASS_OF(other) != Vector2) return Qfalse;
-    if (!rb_eql(GetX(self), GetX(other))) return Qfalse;
-    if (!rb_eql(GetY(self), GetY(other))) return Qfalse;
-    return Qtrue;
+    if (Type(self) != Type(other)) return Qfalse;
+    return Equal(self, other);
 }
 
 // Vector2#inspect
 // Vector2#to_s
 VALUE rbVector2::Inspect(VALUE self)
 {
-    VALUE ret = rb_str_new2("Vector2(");
-    rb_str_append(ret, rb_inspect(GetX(self)));
-    rb_str_cat2(ret, ", ");
-    rb_str_append(ret, rb_inspect(GetY(self)));
-    rb_str_cat2(ret, ")");
-    return ret;
+    switch(Type(self))
+    {
+        case T_FIXNUM:
+            return rb_sprintf("Vector2(%i, %i)",
+                              FIX2INT(GetX(self)),
+                              FIX2INT(GetY(self)));
+        case T_FLOAT:
+            return rb_sprintf("Vector2(%lg, %lg)",
+                              NUM2DBL(GetX(self)),
+                              NUM2DBL(GetY(self)));
+    }
 }
 
 // Vector2#memory_usage
