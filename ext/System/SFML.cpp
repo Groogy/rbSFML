@@ -37,6 +37,7 @@ void rbSFML::Init(VALUE SFML)
     rb_define_module_function(SFML, "window?",           WindowLoaded,       0);
     rb_define_module_function(SFML, "graphics?",         GraphicsLoaded,     0);
     rb_define_module_function(SFML, "audio?",            AudioLoaded,        0);
+    rb_define_module_function(SFML, "memory_usage",      GetMemoryUsage,     0);
 }
 
 // SFML.raise_exceptions
@@ -76,4 +77,50 @@ VALUE rbSFML::GraphicsLoaded(VALUE self)
 VALUE rbSFML::AudioLoaded(VALUE self)
 {
     return RBOOL(rb_cvar_defined(self, rb_intern("@@audio")));
+}
+
+// Internal
+struct GetMemoryUsageStruct
+{
+    size_t mem_usage;
+    VALUE* list_ptr;
+    size_t list_len;
+};
+
+// Internal
+static VALUE GetMemoryUsageIterator(VALUE obj, VALUE data)
+{
+    GetMemoryUsageStruct* info = (GetMemoryUsageStruct*)data;
+    for (size_t i = 0; i < info->list_len; ++i)
+    {
+        if (CLASS_OF(obj) == info->list_ptr[i])
+        {
+            VALUE usage = rb_funcall(obj, rb_intern("memory_usage"), 0);
+            info->mem_usage += NUM2SIZET(usage);
+            return Qnil;
+        }
+    }
+    
+    return Qnil;
+}
+
+// SFML.memory_usage
+VALUE rbSFML::GetMemoryUsage(VALUE self)
+{
+    void* tbl = rb_mod_const_at(self, 0);
+    VALUE list = rb_const_list(tbl);
+    
+    GetMemoryUsageStruct info;
+    info.mem_usage = 0;
+    info.list_ptr = RARRAY_PTR(list);
+    info.list_len = RARRAY_LEN(list);
+    
+    for (size_t i = 0; i < info.list_len; ++i)
+        info.list_ptr[i] = rb_const_get(self, SYM2ID(info.list_ptr[i]));
+    
+    VALUE rb_mObjSpace = rb_const_get(rb_cObject, rb_intern("ObjectSpace"));
+    rb_block_call(rb_mObjSpace, rb_intern("each_object"), 0, NULL,
+                  (VALUE(*)(...))GetMemoryUsageIterator, (VALUE)&info);
+    
+    return SIZET2NUM(info.mem_usage);
 }

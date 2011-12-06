@@ -150,7 +150,7 @@ VALUE rbSoundBuffer::LoadFromStream(VALUE self, VALUE stream)
 // SoundBuffer#load_from_samples(samples, samples_count, channels_count, sample_rate)
 // SoundBuffer#LoadFromSamples(samples, samples_count, channels_count, sample_rate)
 // SoundBuffer#load_samples(samples, samples_count, channels_count, sample_rate)
-VALUE rbSoundBuffer::LoadFromSamples(int argc, VALUE* argv, VALUE self)
+VALUE rbSoundBuffer::LoadFromSamples(int argc, VALUE argv[], VALUE self)
 {
     unsigned int channels_count;
     unsigned int sample_rate;
@@ -245,8 +245,6 @@ VALUE rbSoundBuffer::GetDuration(VALUE self)
 }
 
 // SoundBuffer#==(other)
-// SoundBuffer#eql?(other)
-// SoundBuffer#equal?(other)
 VALUE rbSoundBuffer::Equal(VALUE self, VALUE other)
 {
     if (CLASS_OF(self) != CLASS_OF(other)) return Qfalse;
@@ -266,6 +264,13 @@ VALUE rbSoundBuffer::Equal(VALUE self, VALUE other)
     }
     
     return Qtrue;
+}
+
+// SoundBuffer#eql?(other)
+// SoundBuffer#equal?(other)
+VALUE rbSoundBuffer::StrictEqual(VALUE self, VALUE other)
+{
+    return RBOOL(self == other);
 }
 
 // SoundBuffer#memory_usage

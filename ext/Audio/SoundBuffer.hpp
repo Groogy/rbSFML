@@ -83,7 +83,7 @@ namespace rbSoundBuffer
     // SoundBuffer#load_from_samples(samples, samples_count, channels_count, sample_rate)
     // SoundBuffer#LoadFromSamples(samples, samples_count, channels_count, sample_rate)
     // SoundBuffer#load_samples(samples, samples_count, channels_count, sample_rate)
-    static VALUE LoadFromSamples(int argc, VALUE* argv, VALUE self);
+    static VALUE LoadFromSamples(int argc, VALUE argv[], VALUE self);
     
     // SoundBuffer#save_to_file(filename)
     // SoundBuffer#SaveToFile(filename)
@@ -113,9 +113,11 @@ namespace rbSoundBuffer
     static VALUE GetDuration(VALUE self);
     
     // SoundBuffer#==(other)
+    static VALUE Equal(VALUE self, VALUE other);
+    
     // SoundBuffer#eql?(other)
     // SoundBuffer#equal?(other)
-    static VALUE Equal(VALUE self, VALUE other);
+    static VALUE StrictEqual(VALUE self, VALUE other);
     
     // SoundBuffer#memory_usage
     static VALUE GetMemoryUsage(VALUE self);

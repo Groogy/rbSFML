@@ -64,6 +64,9 @@ namespace rbSFML
     
     // SFML.audio?
     static VALUE AudioLoaded(VALUE self);
+    
+    // SFML.memory_usage
+    static VALUE GetMemoryUsage(VALUE self);
 #endif
     
 };

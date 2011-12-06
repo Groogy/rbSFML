@@ -95,12 +95,12 @@ VALUE rbClock::Equal(VALUE self, VALUE other)
 VALUE rbClock::Inspect(VALUE self)
 {
     sf::Clock* clock = ToSFML(self);
-    return rb_sprintf("Clock(%i)",
+    return rb_sprintf("Clock(%ims)",
                       clock->GetElapsedTime());
 }
 
 // Clock#memory_usage
 VALUE rbClock::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::Clock));
+    return SIZET2NUM(sizeof(sf::Clock));
 }

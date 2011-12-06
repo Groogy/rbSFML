@@ -55,7 +55,7 @@ namespace rbSound
 #if defined(AUDIO_SOUND_CPP)
     // Sound#initialize
     // Sound#initialize(sound_buffer)
-    static VALUE Initialize(int argc, VALUE* argv, VALUE self);
+    static VALUE Initialize(int argc, VALUE argv[], VALUE self);
     
     // Sound#initialize_copy(other)
     static VALUE InitializeCopy(VALUE self, VALUE sound);

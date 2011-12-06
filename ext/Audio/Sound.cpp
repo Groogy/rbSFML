@@ -62,7 +62,7 @@ void rbSound::Init(VALUE SFML)
 
 // Sound#initialize
 // Sound#initialize(sound_buffer)
-VALUE rbSound::Initialize(int argc, VALUE* argv, VALUE self)
+VALUE rbSound::Initialize(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
     {
