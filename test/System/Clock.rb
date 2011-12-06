@@ -41,6 +41,20 @@ class TestClock < Test::Unit::TestCase
     assert_in_delta(clock.time, 10, 10)
   end
   
+  def test_compare
+    clock1 = Clock.new
+    sleep(0.010)
+    clock2 = Clock.new
+    assert_operator(clock1, :>, clock2)
+    refute_operator(clock1, :<=, clock2)
+    sleep(0.010)
+    assert_operator(clock1, :>, clock2)
+    refute_operator(clock1, :<=, clock2)
+    clock1.reset
+    assert_operator(clock1, :<=, clock2)
+    refute_operator(clock1, :>, clock2)
+  end
+  
   class MyClock < Clock
   end
   

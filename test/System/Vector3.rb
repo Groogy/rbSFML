@@ -73,11 +73,13 @@ class TestVector3 < Test::Unit::TestCase
   
   def test_subclass
     my_vector3 = MyVector3.new(10, 15, 20)
+    
     vector3 = Vector3.new(my_vector3)
     assert_equal(my_vector3, vector3)
     my_vector3 = MyVector3.new(vector3)
     assert_equal(my_vector3, vector3)
-    assert_equal(vector3.class, vector3.dup.class)
+    
+    assert_equal(my_vector3.class, my_vector3.dup.class)
     
     assert_equal("TestVector3::MyVector3(10, 15, 20)", my_vector3.inspect)
   end
