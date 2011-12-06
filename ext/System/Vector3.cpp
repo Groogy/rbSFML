@@ -141,11 +141,10 @@ VALUE rbVector3::MarshalLoad(VALUE self, VALUE data)
 // Vector3#-@
 VALUE rbVector3::Negate(VALUE self)
 {
-    VALUE vector3 = Allocate(CLASS_OF(self));
-    SetX(vector3, rb_funcall(GetX(self), rb_intern("-@"), 0));
-    SetY(vector3, rb_funcall(GetY(self), rb_intern("-@"), 0));
-    SetZ(vector3, rb_funcall(GetZ(self), rb_intern("-@"), 0));
-    return vector3;
+    VALUE x = rb_funcall(GetX(self), rb_intern("-@"), 0);
+    VALUE y = rb_funcall(GetY(self), rb_intern("-@"), 0);
+    VALUE z = rb_funcall(GetZ(self), rb_intern("-@"), 0);
+    return rb_class_new_instance(3, (VALUE[]){x, y, z}, CLASS_OF(self));
 }
 
 // Internal
@@ -153,11 +152,10 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
     using namespace rbVector3;
     
-    VALUE vector3 = Allocate(CLASS_OF(left));
-    SetX(vector3, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
-    SetY(vector3, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
-    SetZ(vector3, rb_funcall(GetZ(left), rb_intern(op), 1, GetZ(right)));
-    return vector3;
+    VALUE x = rb_funcall(GetX(left), rb_intern(op), 1, GetX(right));
+    VALUE y = rb_funcall(GetY(left), rb_intern(op), 1, GetY(right));
+    VALUE z = rb_funcall(GetZ(left), rb_intern(op), 1, GetZ(right));
+    return rb_class_new_instance(3, (VALUE[]){x, y, z}, CLASS_OF(left));
 }
 
 // Vector3#+(other)

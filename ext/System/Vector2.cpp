@@ -130,10 +130,9 @@ VALUE rbVector2::MarshalLoad(VALUE self, VALUE data)
 // Vector2#-@
 VALUE rbVector2::Negate(VALUE self)
 {
-    VALUE vector2 = Allocate(CLASS_OF(self));
-    SetX(vector2, rb_funcall(GetX(self), rb_intern("-@"), 0));
-    SetY(vector2, rb_funcall(GetY(self), rb_intern("-@"), 0));
-    return vector2;
+    VALUE x = rb_funcall(GetX(self), rb_intern("-@"), 0);
+    VALUE y = rb_funcall(GetY(self), rb_intern("-@"), 0);
+    return rb_class_new_instance(2, (VALUE[]){x, y}, CLASS_OF(self));
 }
 
 // Internal
@@ -141,10 +140,9 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
     using namespace rbVector2;
     
-    VALUE vector2 = Allocate(CLASS_OF(left));
-    SetX(vector2, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
-    SetY(vector2, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
-    return vector2;
+    VALUE x = rb_funcall(GetX(left), rb_intern(op), 1, GetX(right));
+    VALUE y = rb_funcall(GetY(left), rb_intern(op), 1, GetY(right));
+    return rb_class_new_instance(2, (VALUE[]){x, y}, CLASS_OF(left));
 }
 
 // Vector2#+(other)

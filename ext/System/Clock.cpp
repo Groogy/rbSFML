@@ -50,14 +50,14 @@ void rbClock::Init(VALUE SFML)
 // Clock#initialize_copy(clock)
 VALUE rbClock::InitializeCopy(VALUE self, VALUE clock)
 {
-    *ToSFML(self) = *ToSFML(clock, CLASS_OF(self));
+    *ToSFML(self) = *ToSFML(clock);
     return self;
 }
 
 // Clock#marshal_dump
 VALUE rbClock::MarshalDump(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dump Clock");
+    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
     return Qnil;
 }
 
@@ -81,10 +81,16 @@ VALUE rbClock::Reset(VALUE self)
 // Clock#<=>(other)
 VALUE rbClock::Compare(VALUE self, VALUE other)
 {
-    sf::Clock* c1 = ToSFML(self);
-    sf::Clock* c2 = ToSFML(other);
-    if (c1->GetElapsedTime() == c2->GetElapsedTime()) return INT2FIX(0);
-    if (c1->GetElapsedTime() > c2->GetElapsedTime()) return INT2FIX(1);
+    unsigned int time1 = ToSFML(self)->GetElapsedTime();
+    unsigned int time2;
+    
+    if (rb_obj_is_kind_of(other, rb_cNumeric))
+        time2 = NUM2UINT(other);
+    else
+        time2 = ToSFML(other)->GetElapsedTime();
+    
+    if (time1 == time2) return INT2FIX(0);
+    if (time1 > time2) return INT2FIX(1);
     return INT2FIX(-1);
 }
 

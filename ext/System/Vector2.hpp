@@ -32,9 +32,9 @@ namespace rbVector2
 {
     
     static inline int Type(VALUE vector2);
-    static inline VALUE ToRuby(VALUE other, VALUE klass);
-    static inline VALUE ToRuby(sf::Vector2i* vector2, VALUE klass);
-    static inline VALUE ToRuby(sf::Vector2f* vector2, VALUE klass);
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector2i* vector2, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector2f* vector2, VALUE klass=false);
     static inline sf::Vector2i ToSFMLi(VALUE vector2, VALUE klass=false);
     static inline sf::Vector2f ToSFMLf(VALUE vector2, VALUE klass=false);
     
@@ -115,6 +115,9 @@ int rbVector2::Type(VALUE vector2)
 
 VALUE rbVector2::ToRuby(VALUE other, VALUE klass)
 {
+    if (!klass)
+        klass = Vector2;
+    
     if (rb_obj_is_kind_of(other, Vector2))
         return other;
     
@@ -131,23 +134,27 @@ VALUE rbVector2::ToRuby(VALUE other, VALUE klass)
 
 VALUE rbVector2::ToRuby(sf::Vector2i* vector2, VALUE klass)
 {
-    VALUE obj = Allocate(klass);
-    SetX(obj, INT2FIX(vector2->x));
-    SetY(obj, INT2FIX(vector2->y));
-    return obj;
+    if (!klass)
+        klass = Vector2;
+    
+    VALUE x = INT2FIX(vector2->x);
+    VALUE y = INT2FIX(vector2->y);
+    return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
 }
 
 VALUE rbVector2::ToRuby(sf::Vector2f* vector2, VALUE klass)
 {
-    VALUE obj = Allocate(klass);
-    SetX(obj, rb_float_new(vector2->x));
-    SetY(obj, rb_float_new(vector2->y));
-    return obj;
+    if (!klass)
+        klass = Vector2;
+    
+    VALUE x = rb_float_new(vector2->x);
+    VALUE y = rb_float_new(vector2->y);
+    return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
 }
 
 sf::Vector2i rbVector2::ToSFMLi(VALUE vector2, VALUE klass)
 {
-    if (klass) vector2 = ToRuby(vector2, klass);
+    vector2 = ToRuby(vector2, klass);
     int x = NUM2INT(GetX(vector2));
     int y = NUM2INT(GetY(vector2));
     return sf::Vector2i(x, y);
@@ -155,7 +162,7 @@ sf::Vector2i rbVector2::ToSFMLi(VALUE vector2, VALUE klass)
 
 sf::Vector2f rbVector2::ToSFMLf(VALUE vector2, VALUE klass)
 {
-    if (klass) vector2 = ToRuby(vector2, klass);
+    vector2 = ToRuby(vector2, klass);
     float x = NUM2DBL(GetX(vector2));
     float y = NUM2DBL(GetY(vector2));
     return sf::Vector2f(x, y);

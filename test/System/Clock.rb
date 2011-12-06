@@ -53,6 +53,7 @@ class TestClock < Test::Unit::TestCase
     clock1.reset
     assert_operator(clock1, :<=, clock2)
     refute_operator(clock1, :>, clock2)
+    assert_operator(clock2, :>, clock1.time)
   end
   
   class MyClock < Clock

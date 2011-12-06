@@ -32,11 +32,11 @@ namespace rbVector3
 {
     
     static inline int Type(VALUE vector3);
-    static inline VALUE ToRuby(VALUE other, VALUE klass);
-    static inline VALUE ToRuby(sf::Vector3i* vector3, VALUE klass);
-    static inline VALUE ToRuby(sf::Vector3f* vector3, VALUE klass);
-    static inline sf::Vector3i ToSFMLi(VALUE vector3, VALUE klass);
-    static inline sf::Vector3f ToSFMLf(VALUE vector3, VALUE klass);
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector3i* vector3, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector3f* vector3, VALUE klass=false);
+    static inline sf::Vector3i ToSFMLi(VALUE vector3, VALUE klass=false);
+    static inline sf::Vector3f ToSFMLf(VALUE vector3, VALUE klass=false);
     
     static inline VALUE Allocate(VALUE self);
     
@@ -117,6 +117,9 @@ int rbVector3::Type(VALUE vector3)
 
 VALUE rbVector3::ToRuby(VALUE other, VALUE klass)
 {
+    if (!klass)
+        klass = Vector3;
+    
     if (rb_obj_is_kind_of(other, Vector3))
         return other;
     
@@ -134,20 +137,24 @@ VALUE rbVector3::ToRuby(VALUE other, VALUE klass)
 
 VALUE rbVector3::ToRuby(sf::Vector3i* vector3, VALUE klass)
 {
-    VALUE obj = Allocate(klass);
-    SetX(obj, INT2FIX(vector3->x));
-    SetY(obj, INT2FIX(vector3->y));
-    SetZ(obj, INT2FIX(vector3->z));
-    return obj;
+    if (!klass)
+        klass = Vector3;
+    
+    VALUE x = INT2FIX(vector3->x);
+    VALUE y = INT2FIX(vector3->y);
+    VALUE z = INT2FIX(vector3->z);
+    return rb_class_new_instance(3, (VALUE[]){x, y, z}, klass);
 }
 
 VALUE rbVector3::ToRuby(sf::Vector3f* vector3, VALUE klass)
 {
-    VALUE obj = Allocate(klass);
-    SetX(obj, rb_float_new(vector3->x));
-    SetY(obj, rb_float_new(vector3->y));
-    SetZ(obj, rb_float_new(vector3->z));
-    return obj;
+    if (!klass)
+        klass = Vector3;
+    
+    VALUE x = rb_float_new(vector3->x);
+    VALUE y = rb_float_new(vector3->y);
+    VALUE z = rb_float_new(vector3->z);
+    return rb_class_new_instance(3, (VALUE[]){x, y, z}, klass);
 }
 
 sf::Vector3i rbVector3::ToSFMLi(VALUE vector3, VALUE klass)
