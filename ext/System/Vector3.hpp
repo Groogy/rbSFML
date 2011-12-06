@@ -32,15 +32,13 @@ namespace rbVector3
 {
     
     static inline int Type(VALUE vector3);
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Vector3i* vector3);
-    static inline VALUE ToRuby(sf::Vector3i& vector3);
-    static inline VALUE ToRuby(sf::Vector3f* vector3);
-    static inline VALUE ToRuby(sf::Vector3f& vector3);
-    static inline sf::Vector3i ToSFMLi(VALUE vector3);
-    static inline sf::Vector3f ToSFMLf(VALUE vector3);
+    static inline VALUE ToRuby(VALUE other, VALUE klass);
+    static inline VALUE ToRuby(sf::Vector3i* vector3, VALUE klass);
+    static inline VALUE ToRuby(sf::Vector3f* vector3, VALUE klass);
+    static inline sf::Vector3i ToSFMLi(VALUE vector3, VALUE klass);
+    static inline sf::Vector3f ToSFMLf(VALUE vector3, VALUE klass);
     
-    static inline VALUE Allocate();
+    static inline VALUE Allocate(VALUE self);
     
     static inline VALUE GetX(VALUE vector3);
     static inline VALUE GetY(VALUE vector3);
@@ -106,9 +104,9 @@ namespace rbVector3
     
 }
 
-VALUE rbVector3::Allocate()
+VALUE rbVector3::Allocate(VALUE self)
 {
-    return rb_obj_alloc(Vector3);
+    return rb_obj_alloc(self);
 }
 
 int rbVector3::Type(VALUE vector3)
@@ -117,63 +115,53 @@ int rbVector3::Type(VALUE vector3)
     return rb_type(GetX(vector3));
 }
 
-VALUE rbVector3::ToRuby(VALUE other)
+VALUE rbVector3::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, Vector3))
+    if (rb_obj_is_kind_of(other, Vector3))
         return other;
     
     if (rb_obj_is_kind_of(other, rb_cNumeric))
         return rb_class_new_instance(3, (VALUE[]){other, other, other},
-                                     Vector3);
+                                     klass);
     
     if (rb_type(other) == T_ARRAY)
         return rb_class_new_instance(RARRAY_LEN(other), RARRAY_PTR(other),
-                                     Vector3);
+                                     klass);
     
-    rb_raise(rb_eTypeError,
-                 "can't convert %s into Vector3", rb_obj_classname(other));
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbVector3::ToRuby(sf::Vector3i* vector3)
+VALUE rbVector3::ToRuby(sf::Vector3i* vector3, VALUE klass)
 {
-    VALUE obj = Allocate();
+    VALUE obj = Allocate(klass);
     SetX(obj, INT2FIX(vector3->x));
     SetY(obj, INT2FIX(vector3->y));
     SetZ(obj, INT2FIX(vector3->z));
     return obj;
 }
 
-VALUE rbVector3::ToRuby(sf::Vector3i& vector3)
+VALUE rbVector3::ToRuby(sf::Vector3f* vector3, VALUE klass)
 {
-    return ToRuby(&vector3);
-}
-
-VALUE rbVector3::ToRuby(sf::Vector3f* vector3)
-{
-    VALUE obj = Allocate();
+    VALUE obj = Allocate(klass);
     SetX(obj, rb_float_new(vector3->x));
     SetY(obj, rb_float_new(vector3->y));
     SetZ(obj, rb_float_new(vector3->z));
     return obj;
 }
 
-VALUE rbVector3::ToRuby(sf::Vector3f& vector3)
+sf::Vector3i rbVector3::ToSFMLi(VALUE vector3, VALUE klass)
 {
-    return ToRuby(&vector3);
-}
-
-sf::Vector3i rbVector3::ToSFMLi(VALUE vector3)
-{
-    vector3 = ToRuby(vector3);
+    vector3 = ToRuby(vector3, klass);
     int x = NUM2INT(GetX(vector3));
     int y = NUM2INT(GetY(vector3));
     int z = NUM2INT(GetZ(vector3));
     return sf::Vector3i(x, y, z);
 }
 
-sf::Vector3f rbVector3::ToSFMLf(VALUE vector3)
+sf::Vector3f rbVector3::ToSFMLf(VALUE vector3, VALUE klass)
 {
-    vector3 = ToRuby(vector3);
+    vector3 = ToRuby(vector3, klass);
     float x = NUM2DBL(GetX(vector3));
     float y = NUM2DBL(GetY(vector3));
     float z = NUM2DBL(GetZ(vector3));

@@ -66,7 +66,7 @@ VALUE rbVector2::Initialize(int argc, VALUE argv[], VALUE self)
             SetY(self, INT2FIX(0));
             break;
         case 1:
-            InitializeCopy(self, ToRuby(argv[0]));
+            InitializeCopy(self, ToRuby(argv[0], CLASS_OF(self)));
             break;
         case 2:
             if (FIXNUM_P(argv[0]) and FIXNUM_P(argv[1]))
@@ -130,7 +130,7 @@ VALUE rbVector2::MarshalLoad(VALUE self, VALUE data)
 // Vector2#-@
 VALUE rbVector2::Negate(VALUE self)
 {
-    VALUE vector2 = Allocate();
+    VALUE vector2 = Allocate(CLASS_OF(self));
     SetX(vector2, rb_funcall(GetX(self), rb_intern("-@"), 0));
     SetY(vector2, rb_funcall(GetY(self), rb_intern("-@"), 0));
     return vector2;
@@ -141,7 +141,7 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
     using namespace rbVector2;
     
-    VALUE vector2 = Allocate();
+    VALUE vector2 = Allocate(CLASS_OF(left));
     SetX(vector2, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
     SetY(vector2, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
     return vector2;
@@ -150,31 +150,31 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 // Vector2#+(other)
 VALUE rbVector2::Add(VALUE self, VALUE other)
 {
-    return DoMath(self, "+", ToRuby(other));
+    return DoMath(self, "+", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector2#-(other)
 VALUE rbVector2::Subtract(VALUE self, VALUE other)
 {
-    return DoMath(self, "-", ToRuby(other));
+    return DoMath(self, "-", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector2#*(other)
 VALUE rbVector2::Multiply(VALUE self, VALUE other)
 {
-    return DoMath(self, "*", ToRuby(other));
+    return DoMath(self, "*", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector2#/(other)
 VALUE rbVector2::Divide(VALUE self, VALUE other)
 {
-    return DoMath(self, "/", ToRuby(other));
+    return DoMath(self, "/", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector2#==(other)
 VALUE rbVector2::Equal(VALUE self, VALUE other)
 {
-    if (CLASS_OF(other) != Vector2) return Qfalse;
+    if (!rb_obj_is_kind_of(other, Vector2)) return Qfalse;
     if (!RTEST(rb_equal(GetX(self), GetX(other)))) return Qfalse;
     if (!RTEST(rb_equal(GetY(self), GetY(other)))) return Qfalse;
     return Qtrue;
@@ -195,11 +195,13 @@ VALUE rbVector2::Inspect(VALUE self)
     switch(Type(self))
     {
         case T_FIXNUM:
-            return rb_sprintf("Vector2(%i, %i)",
+            return rb_sprintf("%s(%i, %i)",
+                              rb_obj_classname(self),
                               FIX2INT(GetX(self)),
                               FIX2INT(GetY(self)));
         case T_FLOAT:
-            return rb_sprintf("Vector2(%lg, %lg)",
+            return rb_sprintf("%s(%lg, %lg)",
+                              rb_obj_classname(self),
                               NUM2DBL(GetX(self)),
                               NUM2DBL(GetY(self)));
     }

@@ -56,8 +56,8 @@ class TestVector3 < Test::Unit::TestCase
   def test_inspect
     vector1 = Vector3.new(10, 15, 20)
     vector2 = Vector3.new(10, 15.5, 20)
-    assert_equal("Vector3(10, 15, 20)", vector1.inspect)
-    assert_equal("Vector3(10, 15.5, 20)", vector2.inspect)
+    assert_equal("SFML::Vector3(10, 15, 20)", vector1.inspect)
+    assert_equal("SFML::Vector3(10, 15.5, 20)", vector2.inspect)
     assert_equal(" #{vector1.inspect} ", " #{vector1} ")
     assert_equal(" #{vector2.inspect} ", " #{vector2} ")
   end
@@ -66,6 +66,20 @@ class TestVector3 < Test::Unit::TestCase
     assert_raise(TypeError)     { Vector3.new("aaa") }
     assert_raise(TypeError)     { Vector3.new("aaa", "bbb", "ccc") }
     assert_raise(ArgumentError) { Vector3.new(1, 2) }
+  end
+  
+  class MyVector3 < Vector3
+  end
+  
+  def test_subclass
+    my_vector3 = MyVector3.new(10, 15, 20)
+    vector3 = Vector3.new(my_vector3)
+    assert_equal(my_vector3, vector3)
+    my_vector3 = MyVector3.new(vector3)
+    assert_equal(my_vector3, vector3)
+    assert_equal(vector3.class, vector3.dup.class)
+    
+    assert_equal("TestVector3::MyVector3(10, 15, 20)", my_vector3.inspect)
   end
   
 end

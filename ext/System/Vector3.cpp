@@ -70,7 +70,7 @@ VALUE rbVector3::Initialize(int argc, VALUE argv[], VALUE self)
             SetZ(self, INT2FIX(0));
             break;
         case 1:
-            InitializeCopy(self, ToRuby(argv[0]));
+            InitializeCopy(self, ToRuby(argv[0], CLASS_OF(self)));
             break;
         case 3:
             if (FIXNUM_P(argv[0]) and FIXNUM_P(argv[1]) and FIXNUM_P(argv[2]))
@@ -141,7 +141,7 @@ VALUE rbVector3::MarshalLoad(VALUE self, VALUE data)
 // Vector3#-@
 VALUE rbVector3::Negate(VALUE self)
 {
-    VALUE vector3 = Allocate();
+    VALUE vector3 = Allocate(CLASS_OF(self));
     SetX(vector3, rb_funcall(GetX(self), rb_intern("-@"), 0));
     SetY(vector3, rb_funcall(GetY(self), rb_intern("-@"), 0));
     SetZ(vector3, rb_funcall(GetZ(self), rb_intern("-@"), 0));
@@ -153,7 +153,7 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 {
     using namespace rbVector3;
     
-    VALUE vector3 = Allocate();
+    VALUE vector3 = Allocate(CLASS_OF(left));
     SetX(vector3, rb_funcall(GetX(left), rb_intern(op), 1, GetX(right)));
     SetY(vector3, rb_funcall(GetY(left), rb_intern(op), 1, GetY(right)));
     SetZ(vector3, rb_funcall(GetZ(left), rb_intern(op), 1, GetZ(right)));
@@ -163,31 +163,31 @@ static inline VALUE DoMath(VALUE left, const char* op, VALUE right)
 // Vector3#+(other)
 VALUE rbVector3::Add(VALUE self, VALUE other)
 {
-    return DoMath(self, "+", ToRuby(other));
+    return DoMath(self, "+", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector3#-(other)
 VALUE rbVector3::Subtract(VALUE self, VALUE other)
 {
-    return DoMath(self, "-", ToRuby(other));
+    return DoMath(self, "-", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector3#*(other)
 VALUE rbVector3::Multiply(VALUE self, VALUE other)
 {
-    return DoMath(self, "*", ToRuby(other));
+    return DoMath(self, "*", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector3#/(other)
 VALUE rbVector3::Divide(VALUE self, VALUE other)
 {
-    return DoMath(self, "/", ToRuby(other));
+    return DoMath(self, "/", ToRuby(other, CLASS_OF(self)));
 }
 
 // Vector3#==(other)
 VALUE rbVector3::Equal(VALUE self, VALUE other)
 {
-    if (CLASS_OF(other) != Vector3) return Qfalse;
+    if (!rb_obj_is_kind_of(other, Vector3)) return Qfalse;
     if (!RTEST(rb_equal(GetX(self), GetX(other)))) return Qfalse;
     if (!RTEST(rb_equal(GetY(self), GetY(other)))) return Qfalse;
     if (!RTEST(rb_equal(GetZ(self), GetZ(other)))) return Qfalse;
@@ -209,12 +209,14 @@ VALUE rbVector3::Inspect(VALUE self)
     switch(Type(self))
     {
         case T_FIXNUM:
-            return rb_sprintf("Vector3(%i, %i, %i)",
+            return rb_sprintf("%s(%i, %i, %i)",
+                              rb_obj_classname(self),
                               FIX2INT(GetX(self)),
                               FIX2INT(GetY(self)),
                               FIX2INT(GetZ(self)));
         case T_FLOAT:
-            return rb_sprintf("Vector3(%lg, %lg, %lg)",
+            return rb_sprintf("%s(%lg, %lg, %lg)",
+                              rb_obj_classname(self),
                               NUM2DBL(GetX(self)),
                               NUM2DBL(GetY(self)),
                               NUM2DBL(GetZ(self)));

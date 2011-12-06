@@ -80,7 +80,7 @@ VALUE rbSFML::AudioLoaded(VALUE self)
 }
 
 // Internal
-struct GetMemoryUsageStruct
+struct GetMemoryUsageInfo
 {
     size_t mem_usage;
     VALUE* list_ptr;
@@ -90,7 +90,7 @@ struct GetMemoryUsageStruct
 // Internal
 static VALUE GetMemoryUsageIterator(VALUE obj, VALUE data)
 {
-    GetMemoryUsageStruct* info = (GetMemoryUsageStruct*)data;
+    GetMemoryUsageInfo* info = (GetMemoryUsageInfo*)data;
     for (size_t i = 0; i < info->list_len; ++i)
     {
         if (CLASS_OF(obj) == info->list_ptr[i])
@@ -110,7 +110,7 @@ VALUE rbSFML::GetMemoryUsage(VALUE self)
     void* tbl = rb_mod_const_at(self, 0);
     VALUE list = rb_const_list(tbl);
     
-    GetMemoryUsageStruct info;
+    GetMemoryUsageInfo info;
     info.mem_usage = 0;
     info.list_ptr = RARRAY_PTR(list);
     info.list_len = RARRAY_LEN(list);

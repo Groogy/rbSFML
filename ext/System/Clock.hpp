@@ -32,13 +32,12 @@ namespace rbClock
 {
     
     static inline void Free(void* clock);
-    static inline VALUE Allocate();
-    static inline VALUE Allocate(VALUE);
+    static inline VALUE Allocate(VALUE self);
     
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Clock* clock);
-    static inline VALUE ToRuby(sf::Clock& clock);
-    static inline sf::Clock* ToSFML(VALUE clock);
+    static inline VALUE ToRuby(VALUE other, VALUE klass);
+    static inline VALUE ToRuby(sf::Clock* clock, VALUE klass);
+    static inline VALUE ToRuby(sf::Clock& clock, VALUE klass);
+    static inline sf::Clock* ToSFML(VALUE clock, VALUE klass=false);
     
 #if defined(SYSTEM_CLOCK_CPP)
     VALUE Clock;
@@ -66,10 +65,8 @@ namespace rbClock
     // Clock#Reset
     static VALUE Reset(VALUE self);
     
-    // Clock#==(other)
-    // Clock#eql?(other)
-    // Clock#equal?(other)
-    static VALUE Equal(VALUE self, VALUE other);
+    // Clock#<=>(other)
+    static VALUE Compare(VALUE self, VALUE other);
     
     // Clock#inspect
     // Clock#to_s
@@ -86,40 +83,30 @@ void rbClock::Free(void* clock)
     delete (sf::Clock*)clock;
 }
 
-VALUE rbClock::Allocate()
+VALUE rbClock::Allocate(VALUE self)
 {
     sf::Clock* clock = new(std::nothrow) sf::Clock;
     if (clock == NULL) rb_memerror();
-    return ToRuby(clock);
+    return ToRuby(clock, self);
 }
 
-VALUE rbClock::Allocate(VALUE)
+VALUE rbClock::ToRuby(VALUE other, VALUE klass)
 {
-    return Allocate();
-}
-
-VALUE rbClock::ToRuby(VALUE other)
-{
-    if (rb_obj_is_instance_of(other, Clock))
+    if (rb_obj_is_kind_of(other, Clock))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into Clock", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbClock::ToRuby(sf::Clock* clock)
+VALUE rbClock::ToRuby(sf::Clock* clock, VALUE klass)
 {
-    return rb_data_object_alloc(Clock, clock, NULL, Free);
+    return rb_data_object_alloc(klass, clock, NULL, Free);
 }
 
-VALUE rbClock::ToRuby(sf::Clock& clock)
+sf::Clock* rbClock::ToSFML(VALUE clock, VALUE klass)
 {
-    return ToRuby(&clock);
-}
-
-sf::Clock* rbClock::ToSFML(VALUE clock)
-{
-    clock = ToRuby(clock);
+    if (klass) clock = ToRuby(clock, klass);
     return (sf::Clock*)DATA_PTR(clock);
 }
 
