@@ -12,6 +12,8 @@ module FileUtils
   end
 end
 
+RakeFileUtils.verbose_flag = false
+
 OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
@@ -75,35 +77,37 @@ task :verbose do
   puts ""
 end
 
-def calc_md5
-  return if OBJS.size > 0
-  puts "Calculating MD5 checksum"
-  SRCS.each do |k, list|
-    OBJS[k] = []
-    list.each do |file|
-      code = File.read(file)
-      digest = Digest::MD5.hexdigest(code)
-      s = ".s" if ARGV.include? "static"
-      OBJS[k] << "#{OBJ_DIR}/#{File.basename(file)}.#{digest}#{s}.o"
-    end
+def calc_md5(src)
+  list = SRCS[src]
+  OBJS[src] = []
+  list.each do |file|
+    code = File.read(file)
+    digest = Digest::MD5.hexdigest(code)
+    s = ".s" if ARGV.include? "static"
+    OBJS[src] << "#{OBJ_DIR}/#{File.basename(file)}.#{digest}#{s}.o"
   end
-  OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
+  if src == :sfml
+    OBJS[:sfml] += OBJS[:audio] + OBJS[:graphics] + OBJS[:window] + OBJS[:system]
+  end
 end
 
 def compile_o(src)
-  calc_md5
+  calc_md5(src)
   list = SRCS[src]
   dir = "#{OBJ_DIR}/#{src}"
   mkdir_p dir
-  s = "-DSFML_STATIC" if ARGV.include? "static"
-  d = "-DRBSFML_#{src.to_s.upcase}"
+  defines = []
+  defines << "SFML_STATIC" if ARGV.include? "static"
   if ARGV.include? "sfml"
-    d << " -DRBSFML_SYSTEM"
-    d << " -DRBSFML_WINDOW"
-    d << " -DRBSFML_GRAPHICS"
-    d << " -DRBSFML_AUDIO"
-    d << " -DRBSFML_SFML"
+    defines << "RBSFML_SYSTEM"
+    defines << "RBSFML_WINDOW"
+    defines << "RBSFML_GRAPHICS"
+    defines << "RBSFML_AUDIO"
+    defines << "RBSFML_SFML"
+  else
+    defines << "RBSFML_#{src.to_s.upcase}"
   end
+  d = defines.map{|m|"-D#{m}"}.join(" ")
   unless File.exist?(SFML_INC)
     raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
   end
@@ -111,7 +115,7 @@ def compile_o(src)
     obj = OBJS[src][i]
     next if File.exist?(obj)
     puts "Compiling #{file}"
-    exit! unless system "#{CXX} #{CXXFLAGS} -c #{file} -o #{obj} #{s} #{d}"
+    sh "#{CXX} #{CXXFLAGS} -c #{file} -o #{obj} #{d}"
   end
 end
 
@@ -119,7 +123,7 @@ def create_so(src)
   so = "#{SO_DIR}/#{src}.so"
   mkdir_p SO_DIR
   puts "Creating #{so}"
-  objs = OBJS[src].join(' ')
+  objs = OBJS[src].join(" ")
   s = "-s" if ARGV.include? "static"
   unless File.exist?(SFML_LIB)
     raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
@@ -131,7 +135,7 @@ def create_so(src)
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
   end
-  exit! unless system "#{LINK} #{objs} -o #{so} #{LINK_FLAGS} #{sfml_link}"
+  sh "#{LINK} #{objs} -o #{so} #{LINK_FLAGS} #{sfml_link}"
 end
 
 task :default => [:all]
@@ -243,6 +247,11 @@ end
 
 desc "Run tests."
 task :test do
+  ARGV.replace []
+  if $verbose
+    ARGV << "-v"
+  end
+  
   load "test/test.rb"
 end
 

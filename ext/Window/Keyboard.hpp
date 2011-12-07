@@ -45,7 +45,7 @@ namespace rbKeyboard
     // Keyboard::key_pressed?(button)
     // Keyboard::IsKeyPressed(button)
     // Keyboard::pressed?(button)
-    static VALUE IsKeyPressed(VALUE, VALUE key);
+    static VALUE IsKeyPressed(VALUE self, VALUE key);
 #endif
     
 }

@@ -185,7 +185,7 @@ VALUE rbEvent::InitializeCopy(VALUE self, VALUE event)
 // Event#marshal_dump
 VALUE rbEvent::MarshalDump(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dump Event"); // TODO
+    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self)); // TODO
     return Qnil;
 }
 
@@ -229,8 +229,6 @@ VALUE rbEvent::Info(VALUE self)
         case sf::Event::JoystickConnected:
         case sf::Event::JoystickDisconnected:
             return JoystickConnect(self);
-        default:
-            rb_bug("rbEvent::Info");
     }
 }
 
@@ -404,17 +402,15 @@ static inline const char* EventTypeName(int type)
             return "JoystickConnected";
         case sf::Event::JoystickDisconnected:
             return "JoystickDisconnected";
-        default:
-            rb_bug("rbEvent::Inspect");
     }
-    return NULL;
 }
 
 // Event#inspect
 VALUE rbEvent::Inspect(VALUE self)
 {
-    VALUE ret = rb_str_new2("Event(");
-    rb_str_cat2(ret, EventTypeName(ToSFML(self)->Type));
+    VALUE ret = rb_sprintf("%s(%s",
+                      rb_obj_classname(self),
+                      EventTypeName(ToSFML(self)->Type));
     VALUE info = Info(self);
     if (info != Qnil)
     {
@@ -437,5 +433,5 @@ VALUE rbEvent::Inspect(VALUE self)
 // Event#memory_usage
 VALUE rbEvent::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::Event));
+    return SIZET2NUM(sizeof(sf::Event));
 }

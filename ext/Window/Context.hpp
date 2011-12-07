@@ -33,11 +33,11 @@ namespace rbContext
 {
     
     static inline void Free(void* context);
+    static inline VALUE Allocate(VALUE);
     
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Context* context);
-    static inline VALUE ToRuby(sf::Context& context);
-    static inline sf::Context* ToSFML(VALUE context);
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Context* context, VALUE klass=false);
+    static inline sf::Context* ToSFML(VALUE context, VALUE klass=false);
     
     static inline VALUE Allocate(VALUE);
     
@@ -81,35 +81,36 @@ void rbContext::Free(void* context)
     delete (sf::Context*)context;
 }
 
-VALUE rbContext::Allocate(VALUE)
+VALUE rbContext::Allocate(VALUE self)
 {
     sf::Context* context = new(std::nothrow) sf::Context;
     if (context == NULL) rb_memerror();
-    return ToRuby(context);
+    return ToRuby(context, self);
 }
 
-VALUE rbContext::ToRuby(VALUE other)
+VALUE rbContext::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, Context))
+    if (!klass)
+        klass = Context;
+    
+    if (rb_obj_is_kind_of(other, Context))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into Context", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbContext::ToRuby(sf::Context* context)
+VALUE rbContext::ToRuby(sf::Context* context, VALUE klass)
 {
-    return rb_data_object_alloc(Context, context, NULL, Free);
+    if (!klass)
+        klass = Context;
+    
+    return rb_data_object_alloc(klass, context, NULL, Free);
 }
 
-VALUE rbContext::ToRuby(sf::Context& context)
+sf::Context* rbContext::ToSFML(VALUE context, VALUE klass)
 {
-    return rb_data_object_alloc(Context, &context, NULL, NULL);
-}
-
-sf::Context* rbContext::ToSFML(VALUE context)
-{
-    context = ToRuby(context);
+    context = ToRuby(context, klass);
     return (sf::Context*)DATA_PTR(context);
 }
 

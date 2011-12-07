@@ -32,13 +32,11 @@ namespace rbVideoMode
 {
     
     static inline void Free(void* video_mode);
+    static inline VALUE Allocate(VALUE self);
     
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::VideoMode* video_mode);
-    static inline VALUE ToRuby(sf::VideoMode& video_mode);
-    static inline sf::VideoMode* ToSFML(VALUE video_mode);
-    
-    static inline VALUE Allocate(VALUE);
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::VideoMode* video_mode, VALUE klass=false);
+    static inline sf::VideoMode* ToSFML(VALUE video_mode, VALUE klass=false);
     
 #if defined(WINDOW_VIDEOMODE_CPP)
     VALUE VideoMode;
@@ -121,44 +119,40 @@ void rbVideoMode::Free(void* video_mode)
     delete (sf::VideoMode*)video_mode;
 }
 
-VALUE rbVideoMode::Allocate(VALUE)
+VALUE rbVideoMode::Allocate(VALUE self)
 {
     sf::VideoMode* video_mode = new(std::nothrow) sf::VideoMode;
     if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
-}
+    return ToRuby(video_mode, self);
+} 
 
-VALUE rbVideoMode::ToRuby(VALUE other)
+VALUE rbVideoMode::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, VideoMode))
-    {
+    if (!klass)
+        klass = VideoMode;
+    
+    if (rb_obj_is_kind_of(other, VideoMode))
         return other;
-    }
-    else if (rb_type(other) == T_ARRAY)
-    {
-        VALUE* argv = RARRAY_PTR(other);
-        return rb_class_new_instance(RARRAY_LEN(other), argv, VideoMode);
-    }
-    else
-    {
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into VideoMode", rb_obj_classname(other));
-    }
+    
+    if (rb_type(other) == T_ARRAY)
+        return rb_class_new_instance(RARRAY_LEN(other), RARRAY_PTR(other),
+                                     klass);
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbVideoMode::ToRuby(sf::VideoMode* video_mode)
+VALUE rbVideoMode::ToRuby(sf::VideoMode* video_mode, VALUE klass)
 {
-    return rb_data_object_alloc(VideoMode, video_mode, NULL, Free);
+    if (!klass)
+        klass = VideoMode;
+    
+    return rb_data_object_alloc(klass, video_mode, NULL, Free);
 }
 
-VALUE rbVideoMode::ToRuby(sf::VideoMode& video_mode)
+sf::VideoMode* rbVideoMode::ToSFML(VALUE video_mode, VALUE klass)
 {
-    return rb_data_object_alloc(VideoMode, &video_mode, NULL, NULL);
-}
-
-sf::VideoMode* rbVideoMode::ToSFML(VALUE video_mode)
-{
-    video_mode = ToRuby(video_mode);
+    video_mode = ToRuby(video_mode, klass);
     return (sf::VideoMode*)DATA_PTR(video_mode);
 }
 

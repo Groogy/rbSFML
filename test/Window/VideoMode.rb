@@ -70,16 +70,37 @@ class TestVideoMode < Test::Unit::TestCase
   def test_inspect
     video_mode1 = VideoMode.new(800, 600)
     video_mode2 = VideoMode.new(640, 480, 8)
-    assert_equal("VideoMode(800x600, 32bits)", video_mode1.inspect)
-    assert_equal("VideoMode(640x480, 8bits)", video_mode2.inspect)
-    assert_equal(" VideoMode(800x600, 32bits) ", " #{video_mode1} ")
-    assert_equal(" VideoMode(640x480, 8bits) ", " #{video_mode2} ")
+    assert_equal("SFML::VideoMode(800x600, 32-bits)", video_mode1.inspect)
+    assert_equal("SFML::VideoMode(640x480, 8-bits)", video_mode2.inspect)
+    assert_equal(" #{video_mode1.inspect} ", " #{video_mode1} ")
+    assert_equal(" #{video_mode2.inspect} ", " #{video_mode2} ")
   end
   
   def test_exceptions
     assert_raise(TypeError)     { VideoMode.new(1000) }
     assert_raise(TypeError)     { VideoMode.new("aaa", "bbb") }
     assert_raise(ArgumentError) { VideoMode.new(0, 0, 0, 0) }
+  end
+  
+  class MyVideoMode < VideoMode
+  end
+  
+  def test_subclass
+    my_video_mode = MyVideoMode.new(800, 600)
+    
+    video_mode = VideoMode.new(my_video_mode)
+    assert_equal(my_video_mode, video_mode)
+    my_video_mode = MyVideoMode.new(video_mode)
+    assert_equal(my_video_mode, video_mode)
+    
+    assert_equal(my_video_mode.class, my_video_mode.dup.class)
+    
+    assert_equal("TestVideoMode::MyVideoMode(800x600, 32-bits)", my_video_mode.inspect)
+        
+    assert_instance_of(MyVideoMode, MyVideoMode.desktop_mode)
+    MyVideoMode.fullscreen_modes.each do |mode|
+      assert_instance_of(MyVideoMode, mode)
+    end
   end
   
 end

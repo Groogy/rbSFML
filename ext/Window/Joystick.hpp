@@ -46,29 +46,29 @@ namespace rbJoystick
 #if defined(WINDOW_JOYSTICK_CPP)
     // Joystick::connected?(id)
     // Joystick::IsConnected(id)
-    static VALUE IsConnected(VALUE, VALUE id);
+    static VALUE IsConnected(VALUE self, VALUE id);
     
     // Joystick::button_count(id)
     // Joystick::GetButtonCount(id)
-    static VALUE GetButtonCount(VALUE, VALUE id);
+    static VALUE GetButtonCount(VALUE self, VALUE id);
     
     // Joystick::axis?(id, axis)
     // Joystick::HasAxis(id, axis)
     // Joystick::has_axis(id, axis)
-    static VALUE HasAxis(VALUE, VALUE id, VALUE axis);
+    static VALUE HasAxis(VALUE self, VALUE id, VALUE axis);
     
     // Joystick::button_pressed?(id, button)
     // Joystick::IsButtonPressed(id, button)
     // Joystick::pressed?(id, button)
-    static VALUE IsButtonPressed(VALUE, VALUE id, VALUE button);
+    static VALUE IsButtonPressed(VALUE self, VALUE id, VALUE button);
     
     // Joystick::axis_position(id, axis)
     // Joystick::GetAxisPosition(id, axis)
-    static VALUE GetAxisPosition(VALUE, VALUE id, VALUE axis);
+    static VALUE GetAxisPosition(VALUE self, VALUE id, VALUE axis);
     
     // Joystick::update
     // Joystick::Update
-    static VALUE Update(VALUE);
+    static VALUE Update(VALUE self);
 #endif
     
 }

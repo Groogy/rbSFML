@@ -140,7 +140,7 @@ void rbKeyboard::Init(VALUE SFML)
 // Keyboard::key_pressed?(button)
 // Keyboard::IsKeyPressed(button)
 // Keyboard::pressed?(button)
-VALUE rbKeyboard::IsKeyPressed(VALUE, VALUE key)
+VALUE rbKeyboard::IsKeyPressed(VALUE self, VALUE key)
 {
     sf::Keyboard::Key k = static_cast<sf::Keyboard::Key>(NUM2INT(key));
     return RBOOL(sf::Keyboard::IsKeyPressed(k));

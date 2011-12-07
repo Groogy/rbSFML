@@ -115,21 +115,23 @@ VALUE rbWindow::Initialize(int argc, VALUE argv[], VALUE self)
 // Window#marshal_dump
 VALUE rbWindow::MarshalDump(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dump Window");
+    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
     return Qnil;
 }
 
 // Window#clone
 VALUE rbWindow::Clone(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't clone instance of Window");
+    rb_raise(rb_eTypeError, "can't clone instance of %s",
+             rb_obj_classname(self));
     return Qnil;
 }
 
 // Window#dup
 VALUE rbWindow::Dup(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dup instance of Window");
+    rb_raise(rb_eTypeError, "can't dup instance of %s",
+             rb_obj_classname(self));
     return Qnil;
 }
 
@@ -139,10 +141,10 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
 {
     sf::Window* window = ToSFML(self);
     sf::WindowHandle handle = 0;
-    sf::VideoMode mode;
+    sf::VideoMode* mode = NULL;
     std::string title;
     sf::Uint32 style = 0;
-    sf::ContextSettings settings;
+    sf::ContextSettings* settings = NULL;
     
     switch (argc)
     {
@@ -152,19 +154,19 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
         case 2:
             if (FIXNUM_P(argv[0]))
             {
-                settings = *rbContextSettings::ToSFML(argv[1]);
+                settings = rbContextSettings::ToSFML(argv[1]);
             }
             else
             {
-                mode = *rbVideoMode::ToSFML(argv[0]);
+                mode = rbVideoMode::ToSFML(argv[0]);
                 rb_iv_set(self, "@title", StringValue(argv[1]));
                 title = StringValueCStr(argv[1]);
             }
             break;
         case 4:
-            settings = *rbContextSettings::ToSFML(argv[3]);
+            settings = rbContextSettings::ToSFML(argv[3]);
         case 3:
-            mode = *rbVideoMode::ToSFML(argv[0]);
+            mode = rbVideoMode::ToSFML(argv[0]);
             rb_iv_set(self, "@title", StringValue(argv[1]));
             title = StringValueCStr(argv[1]);
             style = NUM2INT(argv[2]);
@@ -182,15 +184,15 @@ VALUE rbWindow::Create(int argc, VALUE argv[], VALUE self)
             break;
         case 2:
             if (handle == 0)
-                window->Create(mode, title);
+                window->Create(*mode, title);
             else
-                window->Create(handle, settings);
+                window->Create(handle, *settings);
             break;
         case 3:
-            window->Create(mode, title, style);
+            window->Create(*mode, title, style);
             break;
         case 4:
-            window->Create(mode, title, style, settings);
+            window->Create(*mode, title, style, *settings);
             break;
     }
     rbSFML::CheckWarn();
@@ -233,7 +235,7 @@ VALUE rbWindow::GetHeight(VALUE self)
 // Window#GetSettings
 VALUE rbWindow::GetSettings(VALUE self)
 {
-    VALUE settings = rbContextSettings::Allocate(0);
+    VALUE settings = rbContextSettings::Allocate(rbContextSettings::ContextSettings);
     *rbContextSettings::ToSFML(settings) = ToSFML(self)->GetSettings();
     rb_obj_freeze(settings);
     return settings;
@@ -242,17 +244,14 @@ VALUE rbWindow::GetSettings(VALUE self)
 // Internal
 static inline bool PollEvent(VALUE self, VALUE event)
 {
+    using namespace rbWindow;
+    
     sf::Event ev;
-    bool ret = rbWindow::ToSFML(self)->PollEvent(ev);
+    bool ret = ToSFML(self)->PollEvent(ev);
     if (ret)
-    {
         *rbEvent::ToSFML(event) = ev;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    
+    return ret;
 }
 
 // Window#poll_event
@@ -279,17 +278,14 @@ VALUE rbWindow::PollEvent(int argc, VALUE argv[], VALUE self)
 // Internal
 static inline bool WaitEvent(VALUE self, VALUE event)
 {
+    using namespace rbWindow;
+    
     sf::Event ev;
-    bool ret = rbWindow::ToSFML(self)->WaitEvent(ev);
+    bool ret = ToSFML(self)->WaitEvent(ev);
     if (ret)
-    {
         *rbEvent::ToSFML(event) = ev;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    
+    return ret;
 }
 
 // Window#wait_event
@@ -363,16 +359,7 @@ VALUE rbWindow::SetPosition2(VALUE self, VALUE vector2)
     vector2 = rbVector2::ToRuby(vector2);
     VALUE x = rbVector2::GetX(vector2);
     VALUE y = rbVector2::GetY(vector2);
-    
-    switch (rbVector2::Type(vector2))
-    {
-        case T_FIXNUM:
-            ToSFML(self)->SetPosition(FIX2INT(x), FIX2INT(y));
-            break;
-        case T_FLOAT:
-            ToSFML(self)->SetPosition(NUM2DBL(x), NUM2DBL(y));
-            break;
-    }
+    SetPosition(self, x, y);
     
     return Qnil;
 }
@@ -393,16 +380,7 @@ VALUE rbWindow::SetSize2(VALUE self, VALUE vector2)
     vector2 = rbVector2::ToRuby(vector2);
     VALUE width  = rbVector2::GetX(vector2);
     VALUE height = rbVector2::GetY(vector2);
-    
-    switch (rbVector2::Type(vector2))
-    {
-        case T_FIXNUM:
-            ToSFML(self)->SetSize(FIX2INT(width), FIX2INT(height));
-            break;
-        case T_FLOAT:
-            ToSFML(self)->SetSize(NUM2DBL(width), NUM2DBL(height));
-            break;
-    }
+    SetSize(self, width, height);
     
     return Qnil;
 }
@@ -468,6 +446,15 @@ VALUE rbWindow::SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels)
 // Window#active=(active=true)
 VALUE rbWindow::SetActive(int argc, VALUE argv[], VALUE self)
 {
+    switch (argc)
+    {
+        case 0:
+        case 1:
+            break;
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 0..1)", argc);
+    }
     bool ret;
     rbSFML::PrepareErrorStream();
     switch (argc)
@@ -478,9 +465,6 @@ VALUE rbWindow::SetActive(int argc, VALUE argv[], VALUE self)
         case 1:
             ret = ToSFML(self)->SetActive(RTEST(argv[0]));
             break;
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 0..1)", argc);
     }
     rbSFML::CheckRaise();
     return RBOOL(ret);
@@ -529,8 +513,7 @@ VALUE rbWindow::SetJoystickThreshold(VALUE self, VALUE threshold)
 // Window#handle
 VALUE rbWindow::GetSystemHandle(VALUE self)
 {
-    unsigned int handle = (unsigned int)ToSFML(self)->GetSystemHandle();
-    return UINT2NUM(handle);
+    return UINT2NUM((unsigned int)ToSFML(self)->GetSystemHandle());
 }
 
 // Window#inspect
@@ -538,22 +521,19 @@ VALUE rbWindow::GetSystemHandle(VALUE self)
 VALUE rbWindow::Inspect(VALUE self)
 {
     VALUE title = rb_iv_get(self, "@title");
-    VALUE ret;
     if (NIL_P(title)) // Closed
-    {
-        ret = rb_sprintf("Window(%p)", (void*)self);
-    }
+        return rb_sprintf("%s(%p)",
+                          rb_obj_classname(self),
+                          (void*)self);
     else
-    {
-        ret = rb_sprintf("Window(%p: ", (void*)self);
-        rb_str_append(ret, rb_inspect(title));
-        rb_str_cat2(ret, ")");
-    }
-    return ret;
+        return rb_sprintf("%s(%p: \"%s\")",
+                          rb_obj_classname(self),
+                          (void*)self,
+                          StringValueCStr(title));
 }
 
 // Window#memory_usage
 VALUE rbWindow::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::Window));
+    return SIZET2NUM(sizeof(sf::Window));
 }

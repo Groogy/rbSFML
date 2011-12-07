@@ -65,10 +65,10 @@ class TestContextSettings < Test::Unit::TestCase
   def test_inspect
     settings1 = ContextSettings.new
     settings2 = ContextSettings.new(10, Rational(30, 5), 2.6, 9)
-    assert_equal("ContextSettings(depth_bits: 0, stencil_bits: 0, antialiasing_level: 0, major_version: 2, minor_version: 0)", settings1.inspect)
-    assert_equal("ContextSettings(depth_bits: 10, stencil_bits: 6, antialiasing_level: 2, major_version: 9, minor_version: 0)", settings2.inspect)
-    assert_equal(" ContextSettings(depth_bits: 0, stencil_bits: 0, antialiasing_level: 0, major_version: 2, minor_version: 0) ", " #{settings1} ")
-    assert_equal(" ContextSettings(depth_bits: 10, stencil_bits: 6, antialiasing_level: 2, major_version: 9, minor_version: 0) ", " #{settings2} ")
+    assert_equal("SFML::ContextSettings(depth_bits: 0, stencil_bits: 0, antialiasing_level: 0, major_version: 2, minor_version: 0)", settings1.inspect)
+    assert_equal("SFML::ContextSettings(depth_bits: 10, stencil_bits: 6, antialiasing_level: 2, major_version: 9, minor_version: 0)", settings2.inspect)
+    assert_equal(" #{settings1.inspect} ", " #{settings1} ")
+    assert_equal(" #{settings2.inspect} ", " #{settings2} ")
   end
   
   def test_exceptions

@@ -33,13 +33,11 @@ namespace rbEvent
 {
     
     static inline void Free(void* event);
-    
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Event* event);
-    static inline VALUE ToRuby(sf::Event& event);
-    static inline sf::Event* ToSFML(VALUE event);
-    
     static inline VALUE Allocate(VALUE);
+    
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Event* event, VALUE klass=false);
+    static inline sf::Event* ToSFML(VALUE event, VALUE klass=false);
     
 #if defined(WINDOW_EVENT_CPP)
     VALUE Event;
@@ -141,33 +139,34 @@ void rbEvent::Free(void* event)
     delete (sf::Event*)event;
 }
 
-VALUE rbEvent::Allocate(VALUE)
+VALUE rbEvent::Allocate(VALUE self)
 {
-    sf::Event* video_mode = new(std::nothrow) sf::Event;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode);
+    sf::Event* event = new(std::nothrow) sf::Event;
+    if (event == NULL) rb_memerror();
+    return ToRuby(event, self);
 }
 
-VALUE rbEvent::ToRuby(VALUE other)
+VALUE rbEvent::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, Event))
+    if (!klass)
+        klass = Event;
+    
+    if (rb_obj_is_kind_of(other, Event))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into Event", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbEvent::ToRuby(sf::Event* event)
+VALUE rbEvent::ToRuby(sf::Event* event, VALUE klass)
 {
+    if (!klass)
+        klass = Event;
+    
     return rb_data_object_alloc(Event, event, NULL, Free);
 }
 
-VALUE rbEvent::ToRuby(sf::Event& event)
-{
-    return rb_data_object_alloc(Event, &event, NULL, NULL);
-}
-
-sf::Event* rbEvent::ToSFML(VALUE event)
+sf::Event* rbEvent::ToSFML(VALUE event, VALUE klass)
 {
     event = ToRuby(event);
     return (sf::Event*)DATA_PTR(event);

@@ -8,12 +8,12 @@ class TestWindow < Test::Unit::TestCase
     # Initialize without opening
     w = Window.new
     refute(w.opened?)
-    assert_match(/Window\([0-9a-fx]+\)/, w.inspect)
-    assert_match(/ Window\([0-9a-fx]+\) /, " #{w} ")
+    assert_match(/SFML::Window\([0-9a-fx]+\)/, w.inspect)
+    assert_match(/ SFML::Window\([0-9a-fx]+\) /, " #{w} ")
     # Create window
     w.create([100, 100], "test1")
-    assert_match(/Window\([0-9a-fx]+: "test1"\)/, w.inspect)
-    assert_match(/ Window\([0-9a-fx]+: "test1"\) /, " #{w} ")
+    assert_match(/SFML::Window\([0-9a-fx]+: "test1"\)/, w.inspect)
+    assert_match(/ SFML::Window\([0-9a-fx]+: "test1"\) /, " #{w} ")
     assert(w.opened?)
     # Check methods (ensure there's no segfalt)
     assert_instance_of(ContextSettings, w.settings)
@@ -21,8 +21,8 @@ class TestWindow < Test::Unit::TestCase
     w.mouse_cursor = false
     w.title = "==TEST1=="
     w.position = [100, 100]
-    assert_match(/Window\([0-9a-fx]+: "==TEST1=="\)/, w.inspect)
-    assert_match(/ Window\([0-9a-fx]+: "==TEST1=="\) /, " #{w} ")
+    assert_match(/SFML::Window\([0-9a-fx]+: "==TEST1=="\)/, w.inspect)
+    assert_match(/ SFML::Window\([0-9a-fx]+: "==TEST1=="\) /, " #{w} ")
     w.show(false)
     assert(w.opened?)
     w.close

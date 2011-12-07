@@ -51,14 +51,10 @@ VALUE rbContext::Initialize(int argc, VALUE argv[], VALUE self)
         case 0:
             break;
         case 3:
-        {
-            sf::ContextSettings* settings;
-            settings = rbContextSettings::ToSFML(argv[0]);
-            unsigned int width = UINT2NUM(argv[1]);
-            unsigned int height = UINT2NUM(argv[1]);
-            new(ToSFML(self)) sf::Context(*settings, width, height);
+            new(ToSFML(self)) sf::Context(*rbContextSettings::ToSFML(argv[0]),
+                                          UINT2NUM(argv[1]),
+                                          UINT2NUM(argv[2]));
             break;
-        }
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0 or 3)", argc);
@@ -70,24 +66,25 @@ VALUE rbContext::Initialize(int argc, VALUE argv[], VALUE self)
 // Context#marshal_dump
 VALUE rbContext::MarshalDump(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dump Context");
+    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
     return Qnil;
 }
 
 // Context#clone
 VALUE rbContext::Clone(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't clone instance of Context");
+    rb_raise(rb_eTypeError, "can't clone instance of %s",
+             rb_obj_classname(self));
     return Qnil;
 }
 
 // Context#dup
 VALUE rbContext::Dup(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dup instance of Context");
+    rb_raise(rb_eTypeError, "can't dup instance of %s",
+             rb_obj_classname(self));
     return Qnil;
 }
-
 
 // Context#active=(active)
 // Context#SetActive(active)

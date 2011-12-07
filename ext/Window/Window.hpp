@@ -36,13 +36,12 @@ namespace rbWindow
 {
     
     static inline void Free(void* window);
+    static inline VALUE Allocate(VALUE self);
     
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Window* window);
-    static inline VALUE ToRuby(sf::Window& window);
-    static inline sf::Window* ToSFML(VALUE window);
-    
-    static inline VALUE Allocate(VALUE);
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Window* window, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Window& window, VALUE klass=false);
+    static inline sf::Window* ToSFML(VALUE window, VALUE klass=false);
     
 #if defined(WINDOW_WINDOW_CPP)
     VALUE Window;
@@ -197,35 +196,36 @@ void rbWindow::Free(void* window)
     delete (sf::Window*)window;
 }
 
-VALUE rbWindow::Allocate(VALUE)
+VALUE rbWindow::Allocate(VALUE self)
 {
     sf::Window* window = new(std::nothrow) sf::Window;
     if (window == NULL) rb_memerror();
-    return ToRuby(window);
+    return ToRuby(window, self);
 }
 
-VALUE rbWindow::ToRuby(VALUE other)
+VALUE rbWindow::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, Window))
+    if (!klass)
+        klass = Window;
+    
+    if (rb_obj_is_kind_of(other, Window))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into Window", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbWindow::ToRuby(sf::Window* window)
+VALUE rbWindow::ToRuby(sf::Window* window, VALUE klass)
 {
-    return rb_data_object_alloc(Window, window, NULL, Free);
+    if (!klass)
+        klass = Window;
+    
+    return rb_data_object_alloc(klass, window, NULL, Free);
 }
 
-VALUE rbWindow::ToRuby(sf::Window& window)
+sf::Window* rbWindow::ToSFML(VALUE window, VALUE klass)
 {
-    return rb_data_object_alloc(Window, &window, NULL, NULL);
-}
-
-sf::Window* rbWindow::ToSFML(VALUE window)
-{
-    window = ToRuby(window);
+    window = ToRuby(window, klass);
     return (sf::Window*)DATA_PTR(window);
 }
 

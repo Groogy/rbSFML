@@ -47,7 +47,7 @@ namespace rbMouse
     // Mouse::button_pressed?(button)
     // Mouse::IsButtonPressed(button)
     // Mouse::pressed?(button)
-    static VALUE IsButtonPressed(VALUE, VALUE button);
+    static VALUE IsButtonPressed(VALUE self, VALUE button);
     
     // Mouse::position
     // Mouse::GetPosition
@@ -59,7 +59,7 @@ namespace rbMouse
     // Mouse::position(position, relative_to)
     // Mouse::SetPosition(position, relative_to)
     // Mouse::position(x, y)
-    static VALUE Position(int argc, VALUE argv[], VALUE);
+    static VALUE Position(int argc, VALUE argv[], VALUE self);
 #endif
     
 }

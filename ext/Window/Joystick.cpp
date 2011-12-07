@@ -60,14 +60,14 @@ void rbJoystick::Init(VALUE SFML)
 
 // Joystick::connected?(id)
 // Joystick::IsConnected(id)
-VALUE rbJoystick::IsConnected(VALUE, VALUE id)
+VALUE rbJoystick::IsConnected(VALUE self, VALUE id)
 {
     return RBOOL(sf::Joystick::IsConnected(NUM2INT(id)));
 }
 
 // Joystick::button_count(id)
 // Joystick::GetButtonCount(id)
-VALUE rbJoystick::GetButtonCount(VALUE, VALUE id)
+VALUE rbJoystick::GetButtonCount(VALUE self, VALUE id)
 {
     return INT2FIX(sf::Joystick::GetButtonCount(NUM2INT(id)));
 }
@@ -75,7 +75,7 @@ VALUE rbJoystick::GetButtonCount(VALUE, VALUE id)
 // Joystick::axis?(id, axis)
 // Joystick::HasAxis(id, axis)
 // Joystick::has_axis(id, axis)
-VALUE rbJoystick::HasAxis(VALUE, VALUE id, VALUE axis)
+VALUE rbJoystick::HasAxis(VALUE self, VALUE id, VALUE axis)
 {
     sf::Joystick::Axis a = static_cast<sf::Joystick::Axis>(NUM2INT(axis));
     return RBOOL(sf::Joystick::HasAxis(NUM2INT(id), a));
@@ -84,14 +84,14 @@ VALUE rbJoystick::HasAxis(VALUE, VALUE id, VALUE axis)
 // Joystick::button_pressed?(id, button)
 // Joystick::IsButtonPressed(id, button)
 // Joystick::pressed?(id, button)
-VALUE rbJoystick::IsButtonPressed(VALUE, VALUE id, VALUE button)
+VALUE rbJoystick::IsButtonPressed(VALUE self, VALUE id, VALUE button)
 {
     return RBOOL(sf::Joystick::IsButtonPressed(NUM2INT(id), NUM2INT(button)));
 }
 
 // Joystick::axis_position(id, axis)
 // Joystick::GetAxisPosition(id, axis)
-VALUE rbJoystick::GetAxisPosition(VALUE, VALUE id, VALUE axis)
+VALUE rbJoystick::GetAxisPosition(VALUE self, VALUE id, VALUE axis)
 {
     sf::Joystick::Axis a = static_cast<sf::Joystick::Axis>(NUM2INT(axis));
     return rb_float_new(sf::Joystick::GetAxisPosition(NUM2INT(id), a));
@@ -99,7 +99,7 @@ VALUE rbJoystick::GetAxisPosition(VALUE, VALUE id, VALUE axis)
 
 // Joystick::update
 // Joystick::Update
-VALUE rbJoystick::Update(VALUE)
+VALUE rbJoystick::Update(VALUE self)
 {
     sf::Joystick::Update();
     return Qnil;

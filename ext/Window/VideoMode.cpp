@@ -72,22 +72,22 @@ void rbVideoMode::Init(VALUE SFML)
 
 // VideoMode::desktop_mode
 // VideoMode::GetDesktopMode
-VALUE rbVideoMode::GetDesktopMode(VALUE)
+VALUE rbVideoMode::GetDesktopMode(VALUE self)
 {
-    VALUE video_mode = Allocate(VideoMode);
+    VALUE video_mode = Allocate(self);
     *ToSFML(video_mode) = sf::VideoMode::GetDesktopMode();
     return video_mode;
 }
 
 // VideoMode::fullscreen_modes
 // VideoMode::GetFullscreenModes
-VALUE rbVideoMode::GetFullscreenModes(VALUE)
+VALUE rbVideoMode::GetFullscreenModes(VALUE self)
 {
     std::vector<sf::VideoMode> modes = sf::VideoMode::GetFullscreenModes();
     VALUE ary = rb_ary_new2(modes.size());
     for (std::size_t i = 0; i < modes.size(); ++i)
     {
-        VALUE video_mode = Allocate(VideoMode);
+        VALUE video_mode = Allocate(self);
         *ToSFML(video_mode) = modes[i];
         rb_ary_push(ary, video_mode);
     }
@@ -97,7 +97,7 @@ VALUE rbVideoMode::GetFullscreenModes(VALUE)
 // VideoMode#initialize
 VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
 {
-    sf::VideoMode *video_mode = ToSFML(self);
+    sf::VideoMode* video_mode = ToSFML(self);
   
     switch(argc)
     {
@@ -123,6 +123,7 @@ VALUE rbVideoMode::Initialize(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..3)", argc);
     }
+    
     return Qnil;
 }
 
@@ -136,23 +137,24 @@ VALUE rbVideoMode::InitializeCopy(VALUE self, VALUE video_mode)
 // VideoMode#marshal_dump
 VALUE rbVideoMode::MarshalDump(VALUE self)
 {
-    sf::VideoMode *video_mode = ToSFML(self);
+    sf::VideoMode* video_mode = ToSFML(self);
     
-    VALUE argv[] = {UINT2NUM(video_mode->Width),
-                    UINT2NUM(video_mode->Height),
-                    UINT2NUM(video_mode->BitsPerPixel)};
-    return rb_ary_new3(3, argv);
+    VALUE ptr[3];
+    ptr[0] = UINT2NUM(video_mode->Width);
+    ptr[1] = UINT2NUM(video_mode->Height);
+    ptr[2] = UINT2NUM(video_mode->BitsPerPixel);
+    return rb_ary_new4(3, ptr);
 }
 
 // VideoMode#marshal_load(data)
 VALUE rbVideoMode::MarshalLoad(VALUE self, VALUE data)
 {
-    sf::VideoMode *video_mode = ToSFML(self);
+    sf::VideoMode* video_mode = ToSFML(self);
     
-    video_mode->Width        = NUM2UINT(rb_ary_entry(data, 0));
-    video_mode->Height       = NUM2UINT(rb_ary_entry(data, 1));
-    video_mode->BitsPerPixel = NUM2UINT(rb_ary_entry(data, 2));
-    
+    VALUE* ptr = RARRAY_PTR(data);
+    video_mode->Width        = NUM2UINT(ptr[0]);
+    video_mode->Height       = NUM2UINT(ptr[1]);
+    video_mode->BitsPerPixel = NUM2UINT(ptr[2]);
     return Qnil;
 }
 
@@ -219,7 +221,7 @@ VALUE rbVideoMode::SetBitsPerPixel(VALUE self, VALUE value)
 VALUE rbVideoMode::Compare(VALUE self, VALUE other)
 {
     sf::VideoMode* vm1 = ToSFML(self);
-    sf::VideoMode* vm2 = ToSFML(other);
+    sf::VideoMode* vm2 = ToSFML(other, CLASS_OF(self));
     if (*vm1 == *vm2) return INT2FIX(0);
     if (*vm1 > *vm2) return INT2FIX(1);
     return INT2FIX(-1);
@@ -229,18 +231,16 @@ VALUE rbVideoMode::Compare(VALUE self, VALUE other)
 // VideoMode#to_s
 VALUE rbVideoMode::Inspect(VALUE self)
 {
-    VALUE result = rb_str_new2("VideoMode(");
-    rb_str_append(result, rb_inspect(GetWidth(self)));
-    rb_str_cat2(result, "x");
-    rb_str_append(result, rb_inspect(GetHeight(self)));
-    rb_str_cat2(result, ", ");
-    rb_str_append(result, rb_inspect(GetBitsPerPixel(self)));
-    rb_str_cat2(result, "bits)");
-    return result;
+    sf::VideoMode* video_mode = ToSFML(self);
+    return rb_sprintf("%s(%ux%u, %u-bits)",
+                      rb_obj_classname(self),
+                      video_mode->Width,
+                      video_mode->Height,
+                      video_mode->BitsPerPixel);
 }
 
 // VideoMode#memory_usage
 VALUE rbVideoMode::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::VideoMode));
+    return SIZET2NUM(sizeof(sf::VideoMode));
 }

@@ -48,7 +48,7 @@ void rbMouse::Init(VALUE SFML)
 // Mouse::button_pressed?(button)
 // Mouse::IsButtonPressed(button)
 // Mouse::pressed?(button)
-VALUE rbMouse::IsButtonPressed(VALUE, VALUE button)
+VALUE rbMouse::IsButtonPressed(VALUE self, VALUE button)
 {
     sf::Mouse::Button btn = static_cast<sf::Mouse::Button>(NUM2INT(button));
     return RBOOL(sf::Mouse::IsButtonPressed(btn));
@@ -64,40 +64,40 @@ VALUE rbMouse::IsButtonPressed(VALUE, VALUE button)
 // Mouse::position(position, relative_to)
 // Mouse::SetPosition(position, relative_to)
 // Mouse::position(x, y)
-VALUE rbMouse::Position(int argc, VALUE argv[], VALUE)
+VALUE rbMouse::Position(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
     {
         case 0:
         {
             sf::Vector2i pos = sf::Mouse::GetPosition();
-            return rbVector2::ToRuby(pos);
+            return rbVector2::ToRuby(&pos);
         }
         case 1:
             if (rb_obj_is_instance_of(argv[0], rbWindow::Window))
             {
                 sf::Window* window = rbWindow::ToSFML(argv[0]);
                 sf::Vector2i pos = sf::Mouse::GetPosition(*window);
-                return rbVector2::ToRuby(pos);
+                return rbVector2::ToRuby(&pos);
             }
             else
             {
-                sf::Vector2i vector2 = rbVector2::ToSFMLi(argv[0]);
-                sf::Mouse::SetPosition(vector2);
+                sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
+                sf::Mouse::SetPosition(pos);
             }
             break;
         case 2:
-            if (rb_obj_is_instance_of(argv[1], rbWindow::Window))
+            if (rb_obj_is_kind_of(argv[1], rbWindow::Window))
             {
-                sf::Vector2i vector2 = rbVector2::ToSFMLi(argv[0]);
+                sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
                 sf::Window* window = rbWindow::ToSFML(argv[1]);
-                sf::Mouse::SetPosition(vector2, *window);
+                sf::Mouse::SetPosition(pos, *window);
             }
             else
             {
                 VALUE ary = rb_ary_new4(argc, argv);
-                sf::Vector2i vector2 = rbVector2::ToSFMLi(ary);
-                sf::Mouse::SetPosition(vector2);
+                sf::Vector2i pos = rbVector2::ToSFMLi(ary);
+                sf::Mouse::SetPosition(pos);
             }
             break;
         default:

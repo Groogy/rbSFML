@@ -71,7 +71,7 @@ VALUE rbContextSettings::Initialize(int argc, VALUE argv[], VALUE self)
     
     if (argc == 1 and rb_type(argv[0]) == T_HASH)
     {
-        VALUE other = ToRuby(argv[0]);
+        VALUE other = ToRuby(argv[0], CLASS_OF(self));
         InitializeCopy(self, other);
         return Qnil;
     }
@@ -108,9 +108,15 @@ VALUE rbContextSettings::InitializeCopy(VALUE self, VALUE settings)
 // ContextSettings#marshal_dump
 VALUE rbContextSettings::MarshalDump(VALUE self)
 {
-    return rb_ary_new3(5, GetDepthBits(self), GetStencilBits(self),
-                       GetAntialiasingLevel(self), GetMajorVersion(self),
-                       GetMinorVersion(self));
+    sf::ContextSettings* settings = ToSFML(self);
+    
+    VALUE ptr[5];
+    ptr[0] = UINT2NUM(settings->DepthBits);
+    ptr[1] = UINT2NUM(settings->StencilBits);
+    ptr[2] = UINT2NUM(settings->AntialiasingLevel);
+    ptr[3] = UINT2NUM(settings->MajorVersion);
+    ptr[4] = UINT2NUM(settings->MinorVersion);
+    return rb_ary_new4(5, ptr);
 }
 
 // ContextSettings#marshal_load(data)
@@ -118,12 +124,12 @@ VALUE rbContextSettings::MarshalLoad(VALUE self, VALUE data)
 {
     sf::ContextSettings* settings = ToSFML(self);
     
-    settings->DepthBits         = NUM2UINT(rb_ary_entry(data, 0));
-    settings->StencilBits       = NUM2UINT(rb_ary_entry(data, 1));
-    settings->AntialiasingLevel = NUM2UINT(rb_ary_entry(data, 2));
-    settings->MajorVersion      = NUM2UINT(rb_ary_entry(data, 3));
-    settings->MinorVersion      = NUM2UINT(rb_ary_entry(data, 4));
-    
+    VALUE* ptr = RARRAY_PTR(data);
+    settings->DepthBits         = NUM2UINT(ptr[0]);
+    settings->StencilBits       = NUM2UINT(ptr[1]);
+    settings->AntialiasingLevel = NUM2UINT(ptr[2]);
+    settings->MajorVersion      = NUM2UINT(ptr[3]);
+    settings->MinorVersion      = NUM2UINT(ptr[4]);
     return Qnil;
 }
 
@@ -212,9 +218,9 @@ VALUE rbContextSettings::SetMinorVersion(VALUE self, VALUE value)
 // ContextSettings#equal?(other)
 VALUE rbContextSettings::Equal(VALUE self, VALUE other)
 {
-    if (CLASS_OF(other) != ContextSettings) return Qfalse;
+    if (CLASS_OF(self) != CLASS_OF(other)) return Qfalse;
     sf::ContextSettings* left = ToSFML(self);
-    sf::ContextSettings* right = ToSFML(other);
+    sf::ContextSettings* right = ToSFML(other, CLASS_OF(self));
     
     if (left->DepthBits         != right->DepthBits        ) return Qfalse;
     if (left->StencilBits       != right->StencilBits      ) return Qfalse;
@@ -229,27 +235,20 @@ VALUE rbContextSettings::Equal(VALUE self, VALUE other)
 // ContextSettings#to_s
 VALUE rbContextSettings::Inspect(VALUE self)
 {
-    VALUE ret = rb_str_new2("ContextSettings(depth_bits: ");
-    rb_str_append(ret, rb_inspect(GetDepthBits(self)));
-    
-    rb_str_cat2(ret, ", stencil_bits: ");
-    rb_str_append(ret, rb_inspect(GetStencilBits(self)));
-    
-    rb_str_cat2(ret, ", antialiasing_level: ");
-    rb_str_append(ret, rb_inspect(GetAntialiasingLevel(self)));
-    
-    rb_str_cat2(ret, ", major_version: ");
-    rb_str_append(ret, rb_inspect(GetMajorVersion(self)));
-    
-    rb_str_cat2(ret, ", minor_version: ");
-    rb_str_append(ret, rb_inspect(GetMinorVersion(self)));
-    rb_str_cat2(ret, ")");
-    
-    return ret;
+    sf::ContextSettings* settings = ToSFML(self);
+    return rb_sprintf("%s(depth_bits: %u, stencil_bits: %u, "
+                      "antialiasing_level: %u, major_version: %u, "
+                      "minor_version: %u)",
+                      rb_obj_classname(self),
+                      settings->DepthBits,
+                      settings->StencilBits,
+                      settings->AntialiasingLevel,
+                      settings->MajorVersion,
+                      settings->MinorVersion);
 }
 
 // ContextSettings#memory_usage
 VALUE rbContextSettings::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::ContextSettings));
+    return SIZET2NUM(sizeof(sf::ContextSettings));
 }

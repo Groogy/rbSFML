@@ -34,13 +34,11 @@ namespace rbContextSettings
 {
     
     static inline void Free(void* settings);
-    
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::ContextSettings* settings);
-    static inline VALUE ToRuby(sf::ContextSettings& settings);
-    static inline sf::ContextSettings* ToSFML(VALUE settings);
-    
     static inline VALUE Allocate(VALUE);
+    
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::ContextSettings* settings, VALUE klass=false);
+    static inline sf::ContextSettings* ToSFML(VALUE settings, VALUE klass=false);
     
 #if defined(WINDOW_CONTEXTSETTINGS_CPP)
     VALUE ContextSettings;
@@ -125,73 +123,81 @@ void rbContextSettings::Free(void* settings)
     delete (sf::ContextSettings*)settings;
 }
 
-VALUE rbContextSettings::Allocate(VALUE)
+VALUE rbContextSettings::Allocate(VALUE self)
 {
     sf::ContextSettings* settings = new(std::nothrow) sf::ContextSettings;
     if (settings == NULL) rb_memerror();
-    return ToRuby(settings);
+    return ToRuby(settings, self);
 }
 
+// Internal
+struct ToRubyHashInfo
+{
+    sf::ContextSettings* set;
+    const char* klass;
+};
+
+// Internal
 static int ToRubyHashIterator(VALUE key, VALUE value, VALUE extra)
 {
-    sf::ContextSettings* settings = (sf::ContextSettings*)extra;
+    ToRubyHashInfo* info = (ToRubyHashInfo*)extra;
     
     std::string sym;
     if (rb_type(key) == T_SYMBOL)
         sym = rb_id2name(SYM2ID(key));
     else
-        sym = RSTRING_PTR(StringValue(key));
+        sym = StringValueCStr(key);
     
     if (sym == "depth_bits" or sym == "DepthBits")
-        settings->DepthBits = NUM2UINT(value);
+        info->set->DepthBits = NUM2UINT(value);
     else if (sym == "stencil_bits" or sym == "StencilBits")
-        settings->StencilBits = NUM2UINT(value);
+        info->set->StencilBits = NUM2UINT(value);
     else if (sym == "antialiasing_level" or sym == "AntialiasingLevel")
-        settings->AntialiasingLevel = NUM2UINT(value);
+        info->set->AntialiasingLevel = NUM2UINT(value);
     else if (sym == "major_version" or sym == "MajorVersion")
-        settings->MajorVersion = NUM2UINT(value);
+        info->set->MajorVersion = NUM2UINT(value);
     else if (sym == "minor_version" or sym == "MinorVersion")
-        settings->MinorVersion = NUM2UINT(value);
+        info->set->MinorVersion = NUM2UINT(value);
     else
         rb_raise(rb_eArgError,
-                 "unknown attribute %s for ContextSettings", sym.c_str());
+                 "unknown attribute %s for %s", sym.c_str(), info->klass);
                  
     return ST_CONTINUE;
 }
 
-VALUE rbContextSettings::ToRuby(VALUE other)
+VALUE rbContextSettings::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, ContextSettings))
-    {
+    if (!klass)
+        klass = ContextSettings;
+    
+    if (rb_obj_is_kind_of(other, ContextSettings))
         return other;
-    }
-    else if (rb_type(other) == T_HASH)
+    
+    if (rb_type(other) == T_HASH)
     {
-        sf::ContextSettings* settings = new(std::nothrow) sf::ContextSettings;
-        if (settings == NULL) rb_memerror();
-        rb_hash_foreach(other, (int(*)(...))ToRubyHashIterator, (VALUE)settings);  
-        return ToRuby(settings);
+        ToRubyHashInfo info;
+        info.set = new(std::nothrow) sf::ContextSettings;
+        if (info.set == NULL) rb_memerror();
+        info.klass = rb_class2name(klass);
+        rb_hash_foreach(other, (int(*)(...))ToRubyHashIterator, (VALUE)&info);  
+        return ToRuby(info.set, klass);
     }
-    else
-    {
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into ContextSettings", rb_obj_classname(other));
-    }
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbContextSettings::ToRuby(sf::ContextSettings* settings)
+VALUE rbContextSettings::ToRuby(sf::ContextSettings* settings, VALUE klass)
 {
+    if (!klass)
+        klass = ContextSettings;
+    
     return rb_data_object_alloc(ContextSettings, settings, NULL, Free);
 }
 
-VALUE rbContextSettings::ToRuby(sf::ContextSettings& settings)
+sf::ContextSettings* rbContextSettings::ToSFML(VALUE settings, VALUE klass)
 {
-    return rb_data_object_alloc(ContextSettings, &settings, NULL, NULL);
-}
-
-sf::ContextSettings* rbContextSettings::ToSFML(VALUE settings)
-{
-    settings = ToRuby(settings);
+    settings = ToRuby(settings, klass);
     return (sf::ContextSettings*)DATA_PTR(settings);
 }
 

@@ -87,7 +87,7 @@ VALUE rbClock::Compare(VALUE self, VALUE other)
     if (rb_obj_is_kind_of(other, rb_cNumeric))
         time2 = NUM2UINT(other);
     else
-        time2 = ToSFML(other)->GetElapsedTime();
+        time2 = ToSFML(other, CLASS_OF(self))->GetElapsedTime();
     
     if (time1 == time2) return INT2FIX(0);
     if (time1 > time2) return INT2FIX(1);
