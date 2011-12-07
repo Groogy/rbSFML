@@ -44,6 +44,7 @@ void rbSoundBuffer::Init(VALUE SFML)
     rb_define_method(SoundBuffer, "channels_count",    GetChannelsCount, 0);
     rb_define_method(SoundBuffer, "duration",          GetDuration,      0);
     rb_define_method(SoundBuffer, "==",                Equal,            1);
+    rb_define_method(SoundBuffer, "eql?",              StrictEqual,      1);
     rb_define_method(SoundBuffer, "memory_usage",      GetMemoryUsage,   0);
     
     // Instance aliasses
@@ -65,8 +66,7 @@ void rbSoundBuffer::Init(VALUE SFML)
     rb_define_alias(SoundBuffer, "GetChannelsCount", "channels_count"   );
     rb_define_alias(SoundBuffer, "channels",         "channels_count"   );
     rb_define_alias(SoundBuffer, "GetDuration",      "duration"         );
-    rb_define_alias(SoundBuffer, "eql?",             "=="               );
-    rb_define_alias(SoundBuffer, "equal?",           "=="               );
+    rb_define_alias(SoundBuffer, "equal?",           "eql?"             );
 }
 
 // SoundBuffer#initialize_copy(sound_buffer)
@@ -81,13 +81,12 @@ VALUE rbSoundBuffer::MarshalDump(VALUE self)
 {
     sf::SoundBuffer* sound_buffer = ToSFML(self);
     
-    const sf::Int16* samples_ary = sound_buffer->GetSamples();
-    std::size_t samples_count = sound_buffer->GetSamplesCount();
-    VALUE samples_str = rb_str_new((char*)samples_ary, samples_count * 2);
-    
-    return rb_ary_new3(3, samples_str,
-                       UINT2NUM(sound_buffer->GetChannelsCount()),
-                       UINT2NUM(sound_buffer->GetSampleRate()));
+    VALUE ptr[3];
+    ptr[0] = rb_str_new((const char*)sound_buffer->GetSamples(),
+                        sound_buffer->GetSamplesCount() * 2);
+    ptr[1] = UINT2NUM(sound_buffer->GetChannelsCount());
+    ptr[2] = UINT2NUM(sound_buffer->GetSampleRate());
+    return rb_ary_new4(3, ptr);
 }
 
 // SoundBuffer#marshal_load
@@ -95,15 +94,14 @@ VALUE rbSoundBuffer::MarshalLoad(VALUE self, VALUE data)
 {
     sf::SoundBuffer* sound_buffer = ToSFML(self);
     
-    VALUE samples_str = rb_ary_entry(data, 0);
-    const sf::Int16* samples = (sf::Int16*)RSTRING_PTR(samples_str);
-    std::size_t samples_count = RSTRING_LEN(samples_str) / 2;
-    unsigned int channels_count = NUM2UINT(rb_ary_entry(data, 1));
-    unsigned int sample_rate = NUM2UINT(rb_ary_entry(data, 2));
+    VALUE* ptr = RARRAY_PTR(data);
+    const sf::Int16* samples    = (const sf::Int16*)RSTRING_PTR(ptr[0]);
+    std::size_t samples_count   = RSTRING_LEN(ptr[0]) / 2;
+    unsigned int channels_count = NUM2UINT(ptr[1]);
+    unsigned int sample_rate    = NUM2UINT(ptr[2]);
     
     sound_buffer->LoadFromSamples(samples, samples_count, channels_count,
                                   sample_rate);
-    
     return Qnil;
 }
 
@@ -277,5 +275,5 @@ VALUE rbSoundBuffer::StrictEqual(VALUE self, VALUE other)
 VALUE rbSoundBuffer::GetMemoryUsage(VALUE self)
 {
     std::size_t samples_count = ToSFML(self)->GetSamplesCount();
-    return INT2FIX(sizeof(sf::SoundBuffer) + samples_count * 2);
+    return SIZET2NUM(sizeof(sf::SoundBuffer) + samples_count * 2);
 }

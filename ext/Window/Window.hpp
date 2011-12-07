@@ -40,7 +40,6 @@ namespace rbWindow
     
     static inline VALUE ToRuby(VALUE other, VALUE klass=false);
     static inline VALUE ToRuby(sf::Window* window, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Window& window, VALUE klass=false);
     static inline sf::Window* ToSFML(VALUE window, VALUE klass=false);
     
 #if defined(WINDOW_WINDOW_CPP)

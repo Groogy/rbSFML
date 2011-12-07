@@ -71,15 +71,16 @@ VALUE rbSoundSource::MarshalDump(VALUE self)
     sf::SoundSource* sound_source = ToSFML(self);
     sf::Vector3f position = sound_source->GetPosition();
     
-    return rb_ary_new3(8,
-                       rb_float_new(sound_source->GetPitch()),
-                       rb_float_new(sound_source->GetVolume()),
-                       rb_float_new(position.x),
-                       rb_float_new(position.y),
-                       rb_float_new(position.z),
-                       RBOOL(sound_source->IsRelativeToListener()),
-                       rb_float_new(sound_source->GetMinDistance()),
-                       rb_float_new(sound_source->GetAttenuation()));
+    VALUE ptr[8];
+    ptr[0] = rb_float_new(sound_source->GetPitch());
+    ptr[1] = rb_float_new(sound_source->GetVolume());
+    ptr[2] = rb_float_new(position.x);
+    ptr[3] = rb_float_new(position.y);
+    ptr[4] = rb_float_new(position.z);
+    ptr[5] = RBOOL(sound_source->IsRelativeToListener());
+    ptr[6] = rb_float_new(sound_source->GetMinDistance());
+    ptr[7] = rb_float_new(sound_source->GetAttenuation());
+    return rb_ary_new4(8, ptr);
 }
 
 // SoundSource#marshal_load
@@ -88,16 +89,16 @@ VALUE rbSoundSource::MarshalLoad(VALUE self, VALUE data)
     sf::SoundSource* sound_source = ToSFML(self);
     sf::Vector3f position;
     
-    sound_source->SetPitch(NUM2DBL(rb_ary_entry(data, 0)));
-    sound_source->SetVolume(NUM2DBL(rb_ary_entry(data, 1)));
-    position.x = NUM2DBL(rb_ary_entry(data, 2));
-    position.y = NUM2DBL(rb_ary_entry(data, 3));
-    position.z = NUM2DBL(rb_ary_entry(data, 4));
+    VALUE* ptr = RARRAY_PTR(data);
+    sound_source->SetPitch(NUM2DBL(ptr[0]));
+    sound_source->SetVolume(NUM2DBL(ptr[1]));
+    position.x = NUM2DBL(ptr[2]);
+    position.y = NUM2DBL(ptr[3]);
+    position.z = NUM2DBL(ptr[4]);
     sound_source->SetPosition(position);
-    sound_source->SetRelativeToListener(RTEST(rb_ary_entry(data, 5)));
-    sound_source->SetMinDistance(NUM2DBL(rb_ary_entry(data, 6)));
-    sound_source->SetAttenuation(NUM2DBL(rb_ary_entry(data, 7)));
-    
+    sound_source->SetRelativeToListener(RTEST(ptr[5]));
+    sound_source->SetMinDistance(NUM2DBL(ptr[6]));
+    sound_source->SetAttenuation(NUM2DBL(ptr[7]));
     return Qnil;
 }
 
@@ -159,7 +160,7 @@ VALUE rbSoundSource::Position(int argc, VALUE argv[], VALUE self)
         case 0:
         {
             sf::Vector3f pos = ToSFML(self)->GetPosition();
-            return rbVector3::ToRuby(pos);
+            return rbVector3::ToRuby(&pos);
         }
         case 1:
         {

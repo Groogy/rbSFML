@@ -31,9 +31,8 @@
 
 namespace rbSoundSource
 {
-    static inline sf::SoundSource* ToSFML(VALUE sound_source);
-    
     static inline VALUE Allocate(VALUE);
+    static inline sf::SoundSource* ToSFML(VALUE sound_source);
     
 #if defined(AUDIO_SOUNDSOURCE_CPP)
     VALUE SoundSource;
@@ -101,9 +100,9 @@ namespace rbSoundSource
     
 }
 
-VALUE rbSoundSource::Allocate(VALUE)
+VALUE rbSoundSource::Allocate(VALUE self)
 {
-	rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
+    rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
     return Qnil;
 }
 

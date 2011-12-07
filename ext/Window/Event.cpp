@@ -229,6 +229,8 @@ VALUE rbEvent::Info(VALUE self)
         case sf::Event::JoystickConnected:
         case sf::Event::JoystickDisconnected:
             return JoystickConnect(self);
+        default:
+            return Qnil;
     }
 }
 
@@ -402,6 +404,8 @@ static inline const char* EventTypeName(int type)
             return "JoystickConnected";
         case sf::Event::JoystickDisconnected:
             return "JoystickDisconnected";
+        default:
+            return "";
     }
 }
 

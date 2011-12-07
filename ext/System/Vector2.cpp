@@ -203,6 +203,7 @@ VALUE rbVector2::Inspect(VALUE self)
                               NUM2DBL(GetX(self)),
                               NUM2DBL(GetY(self)));
     }
+    return Qnil;
 }
 
 // Vector2#memory_usage

@@ -90,7 +90,7 @@ VALUE rbSound::InitializeCopy(VALUE self, VALUE sound)
 // Sound#marshal_dump
 VALUE rbSound::MarshalDump(VALUE self)
 {
-    rb_raise(rb_eTypeError, "can't dump Sound");
+    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
     return Qnil;
 }
 
@@ -176,5 +176,5 @@ VALUE rbSound::GetStatus(VALUE self)
 // Sound#memory_usage
 VALUE rbSound::GetMemoryUsage(VALUE self)
 {
-    return INT2FIX(sizeof(sf::Sound));
+    return SIZET2NUM(sizeof(sf::Sound));
 }

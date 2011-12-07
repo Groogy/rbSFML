@@ -92,10 +92,10 @@ def calc_md5(src)
 end
 
 def compile_o(src)
+  unless File.exist?(SFML_INC)
+    raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
+  end
   calc_md5(src)
-  list = SRCS[src]
-  dir = "#{OBJ_DIR}/#{src}"
-  mkdir_p dir
   defines = []
   defines << "SFML_STATIC" if ARGV.include? "static"
   if ARGV.include? "sfml"
@@ -108,10 +108,7 @@ def compile_o(src)
     defines << "RBSFML_#{src.to_s.upcase}"
   end
   d = defines.map{|m|"-D#{m}"}.join(" ")
-  unless File.exist?(SFML_INC)
-    raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
-  end
-  list.each_with_index do |file, i|
+  SRCS[src].each_with_index do |file, i|
     obj = OBJS[src][i]
     next if File.exist?(obj)
     puts "Compiling #{file}"
@@ -120,14 +117,14 @@ def compile_o(src)
 end
 
 def create_so(src)
+  unless File.exist?(SFML_LIB)
+    raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
+  end
   so = "#{SO_DIR}/#{src}.so"
   mkdir_p SO_DIR
   puts "Creating #{so}"
   objs = OBJS[src].join(" ")
   s = "-s" if ARGV.include? "static"
-  unless File.exist?(SFML_LIB)
-    raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
-  end
   sfml_link = case src
   when :audio;    "-lsfml-audio#{s} -lsfml-system#{s}"
   when :graphics; "-lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
@@ -259,6 +256,6 @@ desc "Run samples."
 task :samples do
   cd "samples"
   Dir.entries(".").select{|e| e =~ /\.rb$/ }.each do |sample|
-    ruby "#{sample}"
+    ruby("#{sample}", verbose: true) { }
   end
 end

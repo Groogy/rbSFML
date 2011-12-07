@@ -34,13 +34,11 @@ namespace rbSound
 {
     
     static inline void Free(void* sound);
-    
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::Sound* sound);
-    static inline VALUE ToRuby(sf::Sound& sound);
-    static inline sf::Sound* ToSFML(VALUE sound);
-    
     static inline VALUE Allocate(VALUE);
+    
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Sound* sound, VALUE klass=false);
+    static inline sf::Sound* ToSFML(VALUE sound, VALUE klass=false);
     
 #if defined(AUDIO_SOUND_CPP)
     VALUE Sound;
@@ -116,35 +114,36 @@ void rbSound::Free(void* sound)
     delete (sf::Sound*)sound;
 }
 
-VALUE rbSound::Allocate(VALUE)
+VALUE rbSound::Allocate(VALUE self)
 {
     sf::Sound* sound = new(std::nothrow) sf::Sound;
     if (sound == NULL) rb_memerror();
-    return ToRuby(sound);
+    return ToRuby(sound, self);
 }
 
-VALUE rbSound::ToRuby(VALUE other)
+VALUE rbSound::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, Sound))
+    if (!klass)
+        klass = Sound;
+    
+    if (rb_obj_is_kind_of(other, Sound))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into Sound", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbSound::ToRuby(sf::Sound* sound)
+VALUE rbSound::ToRuby(sf::Sound* sound, VALUE klass)
 {
-    return rb_data_object_alloc(Sound, sound, NULL, Free);
+    if (!klass)
+        klass = Sound;
+    
+    return rb_data_object_alloc(klass, sound, NULL, Free);
 }
 
-VALUE rbSound::ToRuby(sf::Sound& sound)
+sf::Sound* rbSound::ToSFML(VALUE sound, VALUE klass)
 {
-    return rb_data_object_alloc(Sound, &sound, NULL, NULL);
-}
-
-sf::Sound* rbSound::ToSFML(VALUE sound)
-{
-    sound = ToRuby(sound);
+    sound = ToRuby(sound, klass);
     return (sf::Sound*)DATA_PTR(sound);
 }
 

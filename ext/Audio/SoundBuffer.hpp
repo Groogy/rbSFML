@@ -33,13 +33,11 @@ namespace rbSoundBuffer
 {
     
     static inline void Free(void* sound_buffer);
-    
-    static inline VALUE ToRuby(VALUE other);
-    static inline VALUE ToRuby(sf::SoundBuffer* sound_buffer);
-    static inline VALUE ToRuby(sf::SoundBuffer& sound_buffer);
-    static inline sf::SoundBuffer* ToSFML(VALUE sound_buffer);
-    
     static inline VALUE Allocate(VALUE);
+    
+    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
+    static inline VALUE ToRuby(sf::SoundBuffer* sound_buffer, VALUE klass=false);
+    static inline sf::SoundBuffer* ToSFML(VALUE sound_buffer, VALUE klass=false);
     
 #if defined(AUDIO_SOUNDBUFFER_CPP)
     VALUE SoundBuffer;
@@ -130,35 +128,36 @@ void rbSoundBuffer::Free(void* sound_buffer)
     delete (sf::SoundBuffer*)sound_buffer;
 }
 
-VALUE rbSoundBuffer::Allocate(VALUE)
+VALUE rbSoundBuffer::Allocate(VALUE self)
 {
     sf::SoundBuffer* sound_buffer = new(std::nothrow) sf::SoundBuffer;
     if (sound_buffer == NULL) rb_memerror();
-    return ToRuby(sound_buffer);
+    return ToRuby(sound_buffer, self);
 }
 
-VALUE rbSoundBuffer::ToRuby(VALUE other)
+VALUE rbSoundBuffer::ToRuby(VALUE other, VALUE klass)
 {
-    if (rb_obj_is_instance_of(other, SoundBuffer))
+    if (!klass)
+        klass = SoundBuffer;
+    
+    if (rb_obj_is_kind_of(other, SoundBuffer))
         return other;
-    else
-        rb_raise(rb_eTypeError,
-                 "can't convert %s into SoundBuffer", rb_obj_classname(other));
+    
+    rb_raise(rb_eTypeError, "can't convert %s into %s",
+             rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbSoundBuffer::ToRuby(sf::SoundBuffer* sound_buffer)
+VALUE rbSoundBuffer::ToRuby(sf::SoundBuffer* sound_buffer, VALUE klass)
 {
+    if (!klass)
+        klass = SoundBuffer;
+    
     return rb_data_object_alloc(SoundBuffer, sound_buffer, NULL, Free);
 }
 
-VALUE rbSoundBuffer::ToRuby(sf::SoundBuffer& sound_buffer)
+sf::SoundBuffer* rbSoundBuffer::ToSFML(VALUE sound_buffer, VALUE klass)
 {
-    return rb_data_object_alloc(SoundBuffer, &sound_buffer, NULL, NULL);
-}
-
-sf::SoundBuffer* rbSoundBuffer::ToSFML(VALUE sound_buffer)
-{
-    sound_buffer = ToRuby(sound_buffer);
+    sound_buffer = ToRuby(sound_buffer, klass);
     return (sf::SoundBuffer*)DATA_PTR(sound_buffer);
 }
 
