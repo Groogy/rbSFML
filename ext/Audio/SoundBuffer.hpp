@@ -113,9 +113,9 @@ namespace rbSoundBuffer
     // SoundBuffer#==(other)
     static VALUE Equal(VALUE self, VALUE other);
     
-    // SoundBuffer#eql?(other)
-    // SoundBuffer#equal?(other)
-    static VALUE StrictEqual(VALUE self, VALUE other);
+    // SoundBuffer#inspect
+    // SoundBuffer#to_s
+    static VALUE Inspect(VALUE self);
     
     // SoundBuffer#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
@@ -152,7 +152,7 @@ VALUE rbSoundBuffer::ToRuby(sf::SoundBuffer* sound_buffer, VALUE klass)
     if (!klass)
         klass = SoundBuffer;
     
-    return rb_data_object_alloc(SoundBuffer, sound_buffer, NULL, Free);
+    return rb_data_object_alloc(klass, sound_buffer, NULL, Free);
 }
 
 sf::SoundBuffer* rbSoundBuffer::ToSFML(VALUE sound_buffer, VALUE klass)

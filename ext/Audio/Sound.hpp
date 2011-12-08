@@ -103,6 +103,9 @@ namespace rbSound
     // Sound#GetStatus
     static VALUE GetStatus(VALUE self);
     
+    // Sound#inspect
+    static VALUE Inspect(VALUE self);
+    
     // Sound#memory_usage
     static VALUE GetMemoryUsage(VALUE self);
 #endif

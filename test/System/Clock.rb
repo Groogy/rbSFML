@@ -8,8 +8,9 @@ class TestClock < Test::Unit::TestCase
   
   def test_equal
     clock1 = Clock.new
+    sleep(0.100)
     clock2 = clock1.dup
-    sleep(0.010)
+    sleep(0.100)
     clock3 = Clock.new
     assert_equal(clock1, clock2)
     refute_equal(clock1, clock3)
@@ -25,29 +26,29 @@ class TestClock < Test::Unit::TestCase
   
   def test_elapsed_time
     clock = Clock.new
-    sleep(0.010)
-    assert_in_delta(clock.time, 10, 10)
+    sleep(0.100)
+    assert_in_delta(clock.time, 100, 40)
   end
   
   def test_reset
     clock = Clock.new
-    assert_in_delta(clock.time, 0, 10)
-    sleep(0.010)
-    assert_in_delta(clock.time, 10, 10)
+    assert_in_delta(clock.time, 0, 40)
+    sleep(0.100)
+    assert_in_delta(clock.time, 100, 40)
     
     clock.reset
-    assert_in_delta(clock.time, 0, 10)
-    sleep(0.010)
-    assert_in_delta(clock.time, 10, 10)
+    assert_in_delta(clock.time, 0, 40)
+    sleep(0.100)
+    assert_in_delta(clock.time, 100, 40)
   end
   
   def test_compare
     clock1 = Clock.new
-    sleep(0.010)
+    sleep(0.100)
     clock2 = Clock.new
     assert_operator(clock1, :>, clock2)
     refute_operator(clock1, :<=, clock2)
-    sleep(0.010)
+    sleep(0.100)
     assert_operator(clock1, :>, clock2)
     refute_operator(clock1, :<=, clock2)
     clock1.reset

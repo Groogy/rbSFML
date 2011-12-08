@@ -44,7 +44,7 @@ void rbSoundBuffer::Init(VALUE SFML)
     rb_define_method(SoundBuffer, "channels_count",    GetChannelsCount, 0);
     rb_define_method(SoundBuffer, "duration",          GetDuration,      0);
     rb_define_method(SoundBuffer, "==",                Equal,            1);
-    rb_define_method(SoundBuffer, "eql?",              StrictEqual,      1);
+    rb_define_method(SoundBuffer, "inspect",           Inspect,          0);
     rb_define_method(SoundBuffer, "memory_usage",      GetMemoryUsage,   0);
     
     // Instance aliasses
@@ -66,7 +66,7 @@ void rbSoundBuffer::Init(VALUE SFML)
     rb_define_alias(SoundBuffer, "GetChannelsCount", "channels_count"   );
     rb_define_alias(SoundBuffer, "channels",         "channels_count"   );
     rb_define_alias(SoundBuffer, "GetDuration",      "duration"         );
-    rb_define_alias(SoundBuffer, "equal?",           "eql?"             );
+    rb_define_alias(SoundBuffer, "to_s",             "inspect"          );
 }
 
 // SoundBuffer#initialize_copy(sound_buffer)
@@ -245,7 +245,7 @@ VALUE rbSoundBuffer::GetDuration(VALUE self)
 // SoundBuffer#==(other)
 VALUE rbSoundBuffer::Equal(VALUE self, VALUE other)
 {
-    if (CLASS_OF(self) != CLASS_OF(other)) return Qfalse;
+    if (!rb_obj_is_kind_of(other, SoundBuffer)) return Qfalse;
     sf::SoundBuffer* left = ToSFML(self);
     sf::SoundBuffer* right = ToSFML(other);
     
@@ -264,11 +264,14 @@ VALUE rbSoundBuffer::Equal(VALUE self, VALUE other)
     return Qtrue;
 }
 
-// SoundBuffer#eql?(other)
-// SoundBuffer#equal?(other)
-VALUE rbSoundBuffer::StrictEqual(VALUE self, VALUE other)
+// SoundBuffer#inspect
+// SoundBuffer#to_s
+VALUE rbSoundBuffer::Inspect(VALUE self)
 {
-    return RBOOL(self == other);
+    return rb_sprintf("%s(%p: %i samples)",
+                      rb_obj_classname(self),
+                      (void*)self,
+                      ToSFML(self)->GetSamplesCount());
 }
 
 // SoundBuffer#memory_usage

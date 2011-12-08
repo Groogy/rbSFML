@@ -43,6 +43,7 @@ void rbSound::Init(VALUE SFML)
     rb_define_method(Sound, "loop",            GetLoop,           0);
     rb_define_method(Sound, "playing_offset",  GetPlayingOffset,  0);
     rb_define_method(Sound, "status",          GetStatus,         0);
+    rb_define_method(Sound, "inspect",         Inspect,           0);
     rb_define_method(Sound, "memory_usage",    GetMemoryUsage,    0);
     
     // Instance aliasses
@@ -58,6 +59,7 @@ void rbSound::Init(VALUE SFML)
     rb_define_alias(Sound, "GetPlayingOffset", "playing_offset" );
     rb_define_alias(Sound, "offset",           "playing_offset" );
     rb_define_alias(Sound, "GetStatus",        "status"         );
+    rb_define_alias(Sound, "to_s",             "inspect"        );
 }
 
 // Sound#initialize
@@ -171,6 +173,15 @@ VALUE rbSound::GetPlayingOffset(VALUE self)
 VALUE rbSound::GetStatus(VALUE self)
 {
     return INT2FIX(ToSFML(self)->GetStatus());
+}
+
+// Sound#inspect
+// Sound#to_s
+VALUE rbSound::Inspect(VALUE self)
+{
+    return rb_sprintf("%s(%p)",
+                      rb_obj_classname(self),
+                      (void*)self);
 }
 
 // Sound#memory_usage

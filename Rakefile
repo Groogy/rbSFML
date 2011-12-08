@@ -96,6 +96,7 @@ def compile_o(src)
     raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
   end
   calc_md5(src)
+  mkdir_p OBJ_DIR
   defines = []
   defines << "SFML_STATIC" if ARGV.include? "static"
   if ARGV.include? "sfml"
