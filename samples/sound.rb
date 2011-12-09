@@ -27,16 +27,38 @@ def play_sound
   
   # Loop while the sound is playing
   while sound.status == Sound::Playing
-    # Leave some CPU time for other processes
-    sleep(0.1)
-    
     # Display the playing position
     print "\rPlaying... #{"%.2f" % (sound.offset / 1000.0)} sec"
+    
+    # Leave some CPU time for other processes
+    sleep(0.1)
   end
   print "\n\n"
 end
 
 def play_music
+  # Load an ogg music file
+  music = Music.new
+  music.open("resources/orchestral.ogg")
+  
+  # Display music informations
+  puts "orchestral.ogg:"
+  puts "  #{music.duration / 1000.0} seconds"
+  puts "  #{music.sample_rate} samples / sec"
+  puts "  #{music.channels} channels"
+
+  # Play it
+  music.play
+  
+  # Loop while the music is playing
+  while music.status == Music::Playing
+    # Display the playing position
+    print "\rPlaying... #{"%.2f" % (music.offset / 1000.0)} sec"
+    
+    # Leave some CPU time for other processes
+    sleep(0.1)
+  end
+  print "\n\n"
 end
 
 # Play a sound

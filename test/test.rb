@@ -59,4 +59,5 @@ if SFML.audio?
   load "test/Audio/Sound.rb"
   load "test/Audio/SoundBuffer.rb"
   load "test/Audio/SoundSource.rb"
+  load "test/Audio/SoundStream.rb"
 end

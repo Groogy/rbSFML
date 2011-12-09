@@ -117,9 +117,9 @@ VALUE rbSoundBuffer::LoadFromFile(VALUE self, VALUE filename)
     return RBOOL(ret);
 }
 
-// SoundBuffer#load_from_memory(filename)
-// SoundBuffer#LoadFromMemory(filename)
-// SoundBuffer#load_memory(filename)
+// SoundBuffer#load_from_memory(data)
+// SoundBuffer#LoadFromMemory(data)
+// SoundBuffer#load_memory(data)
 VALUE rbSoundBuffer::LoadFromMemory(VALUE self, VALUE data)
 {
     StringValue(data);
@@ -268,10 +268,10 @@ VALUE rbSoundBuffer::Equal(VALUE self, VALUE other)
 // SoundBuffer#to_s
 VALUE rbSoundBuffer::Inspect(VALUE self)
 {
-    return rb_sprintf("%s(%p: %i samples)",
+    return rb_sprintf("%s(%p: %ims)",
                       rb_obj_classname(self),
                       (void*)self,
-                      ToSFML(self)->GetSamplesCount());
+                      ToSFML(self)->GetDuration());
 }
 
 // SoundBuffer#memory_usage

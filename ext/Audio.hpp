@@ -32,5 +32,7 @@
 #include <Audio/SoundSource.hpp>
 #include <Audio/Sound.hpp>
 #include <Audio/SoundBuffer.hpp>
+#include <Audio/SoundStream.hpp>
+#include <Audio/Music.hpp>
 
 #endif // AUDIO_HPP

@@ -66,8 +66,8 @@ class TestSoundBuffer < Test::Unit::TestCase
   def test_inspect
     sound_buffer = SoundBuffer.new
     sound_buffer.load("test/canary.wav")
-    assert_match(/SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ samples\)/, sound_buffer.inspect)
-    assert_match(/ SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ samples\) /, " #{sound_buffer} ")
+    assert_match(/SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\)/, sound_buffer.inspect)
+    assert_match(/ SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\) /, " #{sound_buffer} ")
   end
   
   class MySoundBuffer < SoundBuffer

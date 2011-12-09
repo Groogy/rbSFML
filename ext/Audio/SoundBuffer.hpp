@@ -65,9 +65,9 @@ namespace rbSoundBuffer
     // SoundBuffer#load(filename)
     static VALUE LoadFromFile(VALUE self, VALUE filename);
     
-    // SoundBuffer#load_from_memory(filename)
-    // SoundBuffer#LoadFromMemory(filename)
-    // SoundBuffer#load_memory(filename)
+    // SoundBuffer#load_from_memory(data)
+    // SoundBuffer#LoadFromMemory(data)
+    // SoundBuffer#load_memory(data)
     static VALUE LoadFromMemory(VALUE self, VALUE data);
     
     // SoundBuffer#load_from_stream(stream)
