@@ -37,32 +37,32 @@ void rbSoundSource::Init(VALUE SFML)
     rb_define_method(SoundSource, "marshal_dump",          MarshalDump,            0);
     rb_define_method(SoundSource, "marshal_load",          MarshalLoad,            1);
     rb_define_method(SoundSource, "pitch",                 Pitch,                 -1);
+    rb_define_method(SoundSource, "GetPitch",              GetPitch,               0);
+    rb_define_method(SoundSource, "SetPitch",              SetPitch,               1);
     rb_define_method(SoundSource, "volume",                Volume,                -1);
+    rb_define_method(SoundSource, "GetVolume",             GetVolume,              0);
+    rb_define_method(SoundSource, "SetVolume",             SetVolume,              1);
     rb_define_method(SoundSource, "position",              Position,              -1);
+    rb_define_method(SoundSource, "GetPosition",           GetPosition,            0);
+    rb_define_method(SoundSource, "SetPosition",           SetPosition,           -1);
     rb_define_method(SoundSource, "relative_to_listener=", SetRelativeToListener,  1);
     rb_define_method(SoundSource, "relative_to_listener?", IsRelativeToListener,   0);
     rb_define_method(SoundSource, "min_distance",          MinDistance,           -1);
+    rb_define_method(SoundSource, "GetMinDistance",        GetMinDistance,         0);
+    rb_define_method(SoundSource, "SetMinDistance",        SetMinDistance,         1);
     rb_define_method(SoundSource, "attenuation",           Attenuation,           -1);
+    rb_define_method(SoundSource, "GetAttenuation",        GetAttenuation,         0);
+    rb_define_method(SoundSource, "SetAttenuation",        SetAttenuation,         1);
     
     // Instance aliasses
     rb_define_alias(SoundSource, "pitch=",                "pitch"                );
-    rb_define_alias(SoundSource, "SetPitch",              "pitch"                );
-    rb_define_alias(SoundSource, "GetPitch",              "pitch"                );
     rb_define_alias(SoundSource, "volume=",               "volume"               );
-    rb_define_alias(SoundSource, "SetVolume",             "volume"               );
-    rb_define_alias(SoundSource, "GetVolume",             "volume"               );
     rb_define_alias(SoundSource, "position=",             "position"             );
-    rb_define_alias(SoundSource, "SetPosition",           "position"             );
-    rb_define_alias(SoundSource, "GetPosition",           "position"             );
     rb_define_alias(SoundSource, "SetRelativeToListener", "relative_to_listener=");
     rb_define_alias(SoundSource, "relative_to_listener",  "relative_to_listener=");
     rb_define_alias(SoundSource, "IsRelativeToListener",  "relative_to_listener?");
     rb_define_alias(SoundSource, "min_distance=",         "min_distance"         );
-    rb_define_alias(SoundSource, "SetMinDistance",        "min_distance"         );
-    rb_define_alias(SoundSource, "GetMinDistance",        "min_distance"         );
     rb_define_alias(SoundSource, "attenuation=",          "attenuation"          );
-    rb_define_alias(SoundSource, "SetAttenuation",        "attenuation"          );
-    rb_define_alias(SoundSource, "GetAttenuation",        "attenuation"          );
 }
 
 // SoundSource#marshal_dump
@@ -87,15 +87,14 @@ VALUE rbSoundSource::MarshalDump(VALUE self)
 VALUE rbSoundSource::MarshalLoad(VALUE self, VALUE data)
 {
     sf::SoundSource* sound_source = ToSFML(self);
-    sf::Vector3f position;
     
     VALUE* ptr = RARRAY_PTR(data);
     sound_source->SetPitch(NUM2DBL(ptr[0]));
     sound_source->SetVolume(NUM2DBL(ptr[1]));
-    position.x = NUM2DBL(ptr[2]);
-    position.y = NUM2DBL(ptr[3]);
-    position.z = NUM2DBL(ptr[4]);
-    sound_source->SetPosition(position);
+    float x = NUM2DBL(ptr[2]);
+    float y = NUM2DBL(ptr[3]);
+    float z = NUM2DBL(ptr[4]);
+    sound_source->SetPosition(x, y, z);
     sound_source->SetRelativeToListener(RTEST(ptr[5]));
     sound_source->SetMinDistance(NUM2DBL(ptr[6]));
     sound_source->SetAttenuation(NUM2DBL(ptr[7]));
@@ -103,75 +102,80 @@ VALUE rbSoundSource::MarshalLoad(VALUE self, VALUE data)
 }
 
 // SoundSource#pitch
-// SoundSource#pitch=(pitch)
-// SoundSource#SetPitch(pitch)
-// SoundSource#GetPitch
 // SoundSource#pitch(pitch)
+// SoundSource#pitch=(pitch)
 VALUE rbSoundSource::Pitch(int argc, VALUE argv[], VALUE self)
 {
     switch(argc)
     {
         case 0:
-            return rb_float_new(ToSFML(self)->GetPitch());
+            return GetPitch(self);
         case 1:
-            ToSFML(self)->SetPitch(NUM2DBL(argv[0]));
-            break;
+            return SetPitch(self, argv[0]);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments (%i for 0..1)", argc);
     }
-    
     return Qnil;
 }
 
+// SoundSource#GetPitch
+VALUE rbSoundSource::GetPitch(VALUE self)
+{
+    return rb_float_new(ToSFML(self)->GetPitch());
+}
+
+// SoundSource#SetPitch(pitch)
+VALUE rbSoundSource::SetPitch(VALUE self, VALUE pitch)
+{
+    ToSFML(self)->SetPitch(NUM2DBL(pitch));
+    return Qnil;
+}
+
+// SoundSource#volume
 // SoundSource#volume(volume)
 // SoundSource#volume=(volume)
-// SoundSource#SetVolume(volume)
-// SoundSource#GetVolume
-// SoundSource#volume
 VALUE rbSoundSource::Volume(int argc, VALUE argv[], VALUE self)
 {
     switch(argc)
     {
         case 0:
-            return rb_float_new(ToSFML(self)->GetVolume());
+            return GetVolume(self);
         case 1:
-            ToSFML(self)->SetVolume(NUM2DBL(argv[0]));
-            break;
+            return SetVolume(self, argv[0]);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments (%i for 0..1)", argc);
     }
-    
     return Qnil;
 }
 
-// SoundSource#position(position)
-// SoundSource#position=(v)
-// SoundSource#SetPosition(position)
-// SoundSource#SetPosition(x, y, z)
-// SoundSource#GetPosition
-// SoundSource#position(x, y, z)
+// SoundSource#GetVolume
+VALUE rbSoundSource::GetVolume(VALUE self)
+{
+    return rb_float_new(ToSFML(self)->GetVolume());
+}
+
+// SoundSource#SetVolume(volume)
+VALUE rbSoundSource::SetVolume(VALUE self, VALUE volume)
+{
+    ToSFML(self)->SetVolume(NUM2DBL(volume));
+    return Qnil;
+}
+
 // SoundSource#position
+// SoundSource#position(position)
+// SoundSource#position=(position)
+// SoundSource#position(x, y, z)
 VALUE rbSoundSource::Position(int argc, VALUE argv[], VALUE self)
 {
     switch(argc)
     {
         case 0:
-        {
-            sf::Vector3f pos = ToSFML(self)->GetPosition();
-            return rbVector3::ToRuby(&pos);
-        }
+            return GetPosition(self);
         case 1:
-        {
-            sf::Vector3f pos = rbVector3::ToSFMLf(argv[0]);
-            ToSFML(self)->SetPosition(pos);
-            break;
-        }
         case 3:
-            ToSFML(self)->SetPosition(NUM2DBL(argv[0]), NUM2DBL(argv[1]),
-                                      NUM2DBL(argv[2]));
-            break;
+            return SetPosition(argc, argv, self);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments (%i for 0, 1, or 3)", argc);
@@ -180,36 +184,67 @@ VALUE rbSoundSource::Position(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
+// SoundSource#GetPosition
+VALUE rbSoundSource::GetPosition(VALUE self)
+{
+    sf::Vector3f pos = ToSFML(self)->GetPosition();
+    return rbVector3::ToRuby(&pos);
+}
+
+// SoundSource#SetPosition(position)
+// SoundSource#SetPosition(x, y, z)
+VALUE rbSoundSource::SetPosition(int argc, VALUE argv[], VALUE self)
+{
+    switch (argc)
+    {
+        case 1:
+        {
+            sf::Vector3f pos = rbVector3::ToSFMLf(argv[0]);
+            ToSFML(self)->SetPosition(pos);
+            break;
+        }
+        case 3:
+        {
+            float x = NUM2DBL(argv[0]);
+            float y = NUM2DBL(argv[1]);
+            float z = NUM2DBL(argv[2]);
+            ToSFML(self)->SetPosition(x, y, z);
+            break;
+        }
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 1 or 3)", argc);
+    }
+    return Qnil;
+}
+
+// SoundSource#relative_to_listener(relative)
 // SoundSource#relative_to_listener=(relative)
 // SoundSource#SetRelativeToListener(relative)
-// SoundSource#relative_to_listener(relative)
 VALUE rbSoundSource::SetRelativeToListener(VALUE self, VALUE relative)
 {
     ToSFML(self)->SetRelativeToListener(RTEST(relative));
     return Qnil;
 }
 
-// SoundSource#IsRelativeToListener
 // SoundSource#relative_to_listener?
+// SoundSource#IsRelativeToListener
 VALUE rbSoundSource::IsRelativeToListener(VALUE self)
 {
     return RBOOL(ToSFML(self)->IsRelativeToListener());
 }
 
+// SoundSource#min_distance
 // SoundSource#min_distance(distance)
 // SoundSource#min_distance=(distance)
-// SoundSource#SetMinDistance(distance)
-// SoundSource#GetMinDistance
-// SoundSource#min_distance
 VALUE rbSoundSource::MinDistance(int argc, VALUE argv[], VALUE self)
 {
     switch(argc)
     {
         case 0:
-            return rb_float_new(ToSFML(self)->GetMinDistance());
+            return GetMinDistance(self);
         case 1:
-            ToSFML(self)->SetMinDistance(NUM2DBL(argv[0]));
-            break;
+            return SetMinDistance(self, argv[0]);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments (%i for 0..1)", argc);
@@ -218,24 +253,46 @@ VALUE rbSoundSource::MinDistance(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
+// SoundSource#GetMinDistance
+VALUE rbSoundSource::GetMinDistance(VALUE self)
+{
+    return rb_float_new(ToSFML(self)->GetMinDistance());
+}
+
+// SoundSource#SetMinDistance(attenuation)
+VALUE rbSoundSource::SetMinDistance(VALUE self, VALUE attenuation)
+{
+    ToSFML(self)->SetMinDistance(NUM2DBL(attenuation));
+    return Qnil;
+}
+
+// SoundSource#attenuation
 // SoundSource#attenuation(attenuation)
 // SoundSource#attenuation=(attenuation)
-// SoundSource#SetAttenuation(attenuation)
-// SoundSource#GetAttenuation
-// SoundSource#attenuation
 VALUE rbSoundSource::Attenuation(int argc, VALUE argv[], VALUE self)
 {
     switch(argc)
     {
         case 0:
-            return rb_float_new(ToSFML(self)->GetAttenuation());
+            return GetAttenuation(self);
         case 1:
-            ToSFML(self)->SetAttenuation(NUM2DBL(argv[0]));
-            break;
+            return SetAttenuation(self, argv[0]);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments (%i for 0..1)", argc);
     }
-    
+    return Qnil;
+}
+
+// SoundSource#GetAttenuation
+VALUE rbSoundSource::GetAttenuation(VALUE self)
+{
+    return rb_float_new(ToSFML(self)->GetAttenuation());
+}
+
+// SoundSource#SetAttenuation(attenuation)
+VALUE rbSoundSource::SetAttenuation(VALUE self, VALUE attenuation)
+{
+    ToSFML(self)->SetAttenuation(NUM2DBL(attenuation));
     return Qnil;
 }

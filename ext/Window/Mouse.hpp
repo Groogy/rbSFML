@@ -50,16 +50,19 @@ namespace rbMouse
     static VALUE IsButtonPressed(VALUE self, VALUE button);
     
     // Mouse::position
-    // Mouse::GetPosition
     // Mouse::position(relative_to)
-    // Mouse::GetPosition(relative_to)
     // Mouse::position(position)
-    // Mouse::SetPosition(position)
     // Mouse::position=(position)
     // Mouse::position(position, relative_to)
-    // Mouse::SetPosition(position, relative_to)
-    // Mouse::position(x, y)
     static VALUE Position(int argc, VALUE argv[], VALUE self);
+    
+    // Mouse::GetPosition
+    // Mouse::GetPosition(relative_to)
+    static VALUE GetPosition(int argc, VALUE argv[], VALUE self);
+    
+    // Mouse::SetPosition(position, relative_to)
+    // Mouse::SetPosition(position)
+    static VALUE SetPosition(int argc, VALUE argv[], VALUE self);
 #endif
     
 }

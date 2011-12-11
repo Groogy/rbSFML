@@ -51,51 +51,71 @@ namespace rbSoundSource
     // SoundSource#marshal_load
     static VALUE MarshalLoad(VALUE self, VALUE data);
     
+    // SoundSource#pitch
     // SoundSource#pitch(pitch)
     // SoundSource#pitch=(pitch)
-    // SoundSource#SetPitch(pitch)
-    // SoundSource#GetPitch
-    // SoundSource#pitch
     static VALUE Pitch(int argc, VALUE argv[], VALUE self);
     
+    // SoundSource#GetPitch
+    static VALUE GetPitch(VALUE self);
+    
+    // SoundSource#SetPitch(pitch)
+    static VALUE SetPitch(VALUE self, VALUE pitch);
+    
+    // SoundSource#volume
     // SoundSource#volume(volume)
     // SoundSource#volume=(volume)
-    // SoundSource#SetVolume(volume)
-    // SoundSource#GetVolume
-    // SoundSource#volume
     static VALUE Volume(int argc, VALUE argv[], VALUE self);
     
-    // SoundSource#position(position)
-    // SoundSource#position=(v)
-    // SoundSource#SetPosition(position)
-    // SoundSource#SetPosition(x, y, z)
-    // SoundSource#GetPosition
-    // SoundSource#position(x, y, z)
+    // SoundSource#GetVolume
+    static VALUE GetVolume(VALUE self);
+    
+    // SoundSource#SetVolume(volume)
+    static VALUE SetVolume(VALUE self, VALUE volume);
+    
     // SoundSource#position
+    // SoundSource#position(position)
+    // SoundSource#position=(position)
+    // SoundSource#position(x, y, z)
     static VALUE Position(int argc, VALUE argv[], VALUE self);
     
+    // SoundSource#GetPosition
+    static VALUE GetPosition(VALUE self);
+    
+    // SoundSource#SetPosition(position)
+    // SoundSource#SetPosition(x, y, z)
+    static VALUE SetPosition(int argc, VALUE argv[], VALUE self);
+    
+    // SoundSource#relative_to_listener(relative)
     // SoundSource#relative_to_listener=(relative)
     // SoundSource#SetRelativeToListener(relative)
-    // SoundSource#relative_to_listener(relative)
     static VALUE SetRelativeToListener(VALUE self, VALUE relative);
     
-    // SoundSource#IsRelativeToListener
     // SoundSource#relative_to_listener?
+    // SoundSource#IsRelativeToListener
     static VALUE IsRelativeToListener(VALUE self);
     
+    // SoundSource#min_distance
     // SoundSource#min_distance(distance)
     // SoundSource#min_distance=(distance)
-    // SoundSource#SetMinDistance(distance)
-    // SoundSource#GetMinDistance
-    // SoundSource#min_distance
     static VALUE MinDistance(int argc, VALUE argv[], VALUE self);
     
+    // SoundSource#GetMinDistance
+    static VALUE GetMinDistance(VALUE self);
+    
+    // SoundSource#SetMinDistance(distance)
+    static VALUE SetMinDistance(VALUE self, VALUE distance);
+    
+    // SoundSource#attenuation
     // SoundSource#attenuation(attenuation)
     // SoundSource#attenuation=(attenuation)
-    // SoundSource#SetAttenuation(attenuation)
-    // SoundSource#GetAttenuation
-    // SoundSource#attenuation
     static VALUE Attenuation(int argc, VALUE argv[], VALUE self);
+    
+    // SoundSource#GetAttenuation
+    static VALUE GetAttenuation(VALUE self);
+    
+    // SoundSource#SetAttenuation(attenuation)
+    static VALUE SetAttenuation(VALUE self, VALUE attenuation);
 #endif
     
 }

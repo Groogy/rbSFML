@@ -26,22 +26,22 @@ void rbMouse::Init(VALUE SFML)
 {
     Mouse = rb_define_module_under(SFML, "Mouse");
     
-	rb_define_const(Mouse, "Left",        INT2FIX(sf::Mouse::Left    ));
-	rb_define_const(Mouse, "Right",       INT2FIX(sf::Mouse::Right   ));
-	rb_define_const(Mouse, "Middle",      INT2FIX(sf::Mouse::Middle  ));
-	rb_define_const(Mouse, "XButton1",    INT2FIX(sf::Mouse::XButton1));
-	rb_define_const(Mouse, "XButton2",    INT2FIX(sf::Mouse::XButton2));
+    rb_define_const(Mouse, "Left",        INT2FIX(sf::Mouse::Left    ));
+    rb_define_const(Mouse, "Right",       INT2FIX(sf::Mouse::Right   ));
+    rb_define_const(Mouse, "Middle",      INT2FIX(sf::Mouse::Middle  ));
+    rb_define_const(Mouse, "XButton1",    INT2FIX(sf::Mouse::XButton1));
+    rb_define_const(Mouse, "XButton2",    INT2FIX(sf::Mouse::XButton2));
     
     // Singleton methods
     rb_define_singleton_method(Mouse, "button_pressed?", IsButtonPressed,  1);
     rb_define_singleton_method(Mouse, "position",        Position,        -1);
+    rb_define_singleton_method(Mouse, "GetPosition",     GetPosition,     -1);
+    rb_define_singleton_method(Mouse, "SetPosition",     SetPosition,     -1);
     
     // Singleton aliasses
     VALUE sMouse = rb_singleton_class(Mouse);
     rb_define_alias(sMouse, "IsButtonPressed", "button_pressed?");
     rb_define_alias(sMouse, "pressed?",        "button_pressed?");
-    rb_define_alias(sMouse, "GetPosition",     "position"       );
-    rb_define_alias(sMouse, "SetPosition",     "position"       );
     rb_define_alias(sMouse, "position=",       "position"       );
 }
 
@@ -55,55 +55,70 @@ VALUE rbMouse::IsButtonPressed(VALUE self, VALUE button)
 }
 
 // Mouse::position
-// Mouse::GetPosition
 // Mouse::position(relative_to)
-// Mouse::GetPosition(relative_to)
 // Mouse::position(position)
-// Mouse::SetPosition(position)
 // Mouse::position=(position)
 // Mouse::position(position, relative_to)
-// Mouse::SetPosition(position, relative_to)
-// Mouse::position(x, y)
 VALUE rbMouse::Position(int argc, VALUE argv[], VALUE self)
 {
     switch (argc)
     {
         case 0:
-        {
-            sf::Vector2i pos = sf::Mouse::GetPosition();
-            return rbVector2::ToRuby(&pos);
-        }
+            return GetPosition(argc, argv, self);
         case 1:
-            if (rb_obj_is_instance_of(argv[0], rbWindow::Window))
-            {
-                sf::Window* window = rbWindow::ToSFML(argv[0]);
-                sf::Vector2i pos = sf::Mouse::GetPosition(*window);
-                return rbVector2::ToRuby(&pos);
-            }
+            if (rb_obj_is_kind_of(argv[0], rbWindow::Window))
+                return GetPosition(argc, argv, self);
             else
-            {
-                sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
-                sf::Mouse::SetPosition(pos);
-            }
-            break;
+                return SetPosition(argc, argv, self);
         case 2:
-            if (rb_obj_is_kind_of(argv[1], rbWindow::Window))
-            {
-                sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
-                sf::Window* window = rbWindow::ToSFML(argv[1]);
-                sf::Mouse::SetPosition(pos, *window);
-            }
-            else
-            {
-                VALUE ary = rb_ary_new4(argc, argv);
-                sf::Vector2i pos = rbVector2::ToSFMLi(ary);
-                sf::Mouse::SetPosition(pos);
-            }
-            break;
+            return SetPosition(argc, argv, self);
         default:
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..2)", argc);
     }
-    
+    return Qnil;
+}
+
+// Mouse::GetPosition
+// Mouse::GetPosition(relative_to)
+VALUE rbMouse::GetPosition(int argc, VALUE argv[], VALUE self)
+{
+    sf::Vector2i pos;
+    switch (argc)
+    {
+        case 0:
+            pos = sf::Mouse::GetPosition();
+        case 1:
+            pos = sf::Mouse::GetPosition(*rbWindow::ToSFML(argv[0]));
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 0..1)", argc);
+    }
+    return rbVector2::ToRuby(&pos);
+}
+
+// Mouse::SetPosition(position)
+// Mouse::SetPosition(position, relative_to)
+VALUE rbMouse::SetPosition(int argc, VALUE argv[], VALUE self)
+{
+    switch (argc)
+    {
+        case 1:
+        {
+            sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
+            sf::Mouse::SetPosition(pos);
+            break;
+        }
+        case 2:
+        {
+            sf::Vector2i pos = rbVector2::ToSFMLi(argv[0]);
+            sf::Window* window = rbWindow::ToSFML(argv[1]);
+            sf::Mouse::SetPosition(pos, *window);
+            break;
+        }
+        default:
+            rb_raise(rb_eArgError,
+                     "wrong number of arguments(%i for 1..2)", argc);
+    }
     return Qnil;
 }

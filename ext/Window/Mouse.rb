@@ -57,9 +57,27 @@ module SFML
       alias button_pressed button_pressed?
       
       # @overload position
-      # @overload position=(vector2)
-      # @overload position(window)
-      # @overload position(vector2, window)
+      #   Get the current position of the mouse in desktop coordinates. This
+      #   function returns the global position of the mouse cursor on the
+      #   desktop.
+      #   @return [Vector2] Current position of the mouse
+      # @overload position(relative_to)
+      #   Get the current position of the mouse in window coordinates. This
+      #   function returns the current position of the mouse cursor, relative
+      #   to the given window.
+      #   @param [Window] relativeTo Reference window
+      #   @return [Vector2] Current position of the mouse
+      # @overload position=(position)
+      #   Set the current position of the mouse in desktop coordinates. This
+      #   function sets the global position of the mouse cursor on the
+      #   desktop.
+      #   @param [Vector2] position New position of the mouse
+      # @overload position(position, relative_to)
+      #   Set the current position of the mouse in window coordinates. This
+      #   function sets the current position of the mouse cursor, relative to
+      #   the given window.
+      #   @param [Vector2] position New position of the mouse
+      #   @param [Window] relativeTo Reference window
       def position
       end
       alias position= position

@@ -1,4 +1,4 @@
-This is the Ruby bindings of the [SFML2 library](https://github.com/LaurentGomila/SFML) developed and maintained by Groogy, Trickster and LBg. 
+This is the Ruby bindings of the [SFML library](https://github.com/LaurentGomila/SFML) developed and maintained by Groogy, Trickster and LBg. 
 
 I hope you enjoy using rbSFML. If you make anything in it then we are very interested in hearing about it.  
 We can always be reached at http://www.sfml-dev.org/forum for support, ideas or just have a nice chat.
@@ -6,11 +6,11 @@ We can always be reached at http://www.sfml-dev.org/forum for support, ideas or 
 Dependencies
 ============
 
-Of course this means this library depends on SFML2 so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
+Of course this means this library depends on SFML so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
 Recommended is this setup: (lowers or highers versions might work too)
 
-- [SFML2 - commit 92f14fa853](https://github.com/LaurentGomila/SFML/tree/92f14fa8538fd8c1db93e4dcfb130a60dbafd651)
+- [SFML - commit 92f14fa853](https://github.com/LaurentGomila/SFML/tree/92f14fa8538fd8c1db93e4dcfb130a60dbafd651)
 - [Ruby 1.9.3p0](http://www.ruby-lang.org/en/downloads/)
 - [Rake 0.9.2.2](https://rubygems.org/gems/rake)
 - [Yard 0.7.3](https://rubygems.org/gems/yard)
@@ -26,7 +26,7 @@ Windows
 
 1.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-1.  Download and compile SFML2. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+1.  Download and compile SFML. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
 
 1.  Copy the `include` and `lib` folders from SFML to the rbSFML folder. If you built SFML as a shared library, move all `.dll` files from `lib` to your `ruby\bin` directory.
 
@@ -53,7 +53,7 @@ Linux
 
 1.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-1.  Download, compile and install SFML2. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+1.  Download, compile and install SFML. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
 
 1.  Copy the `include` and `lib` folders from SFML to the rbSFML folder.
 
