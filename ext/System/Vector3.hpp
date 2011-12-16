@@ -30,15 +30,14 @@
 
 namespace rbVector3
 {
+    static inline VALUE Allocate(VALUE self);
     
     static inline int Type(VALUE vector3);
     static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector3i* vector3, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector3f* vector3, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector3i& vector3, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector3f& vector3, VALUE klass=false);
     static inline sf::Vector3i ToSFMLi(VALUE vector3, VALUE klass=false);
     static inline sf::Vector3f ToSFMLf(VALUE vector3, VALUE klass=false);
-    
-    static inline VALUE Allocate(VALUE self);
     
     static inline VALUE GetX(VALUE vector3);
     static inline VALUE GetY(VALUE vector3);
@@ -71,6 +70,9 @@ namespace rbVector3
     
     // Vector3#marshal_load(data)
     static VALUE MarshalLoad(VALUE self, VALUE data);
+    
+    // Vector3#coerce(other)
+    static VALUE Coerce(VALUE self, VALUE other);
     
     // Vector3#-@
     static VALUE Negate(VALUE self);
@@ -135,25 +137,25 @@ VALUE rbVector3::ToRuby(VALUE other, VALUE klass)
              rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbVector3::ToRuby(sf::Vector3i* vector3, VALUE klass)
+VALUE rbVector3::ToRuby(sf::Vector3i& vector3, VALUE klass)
 {
     if (!klass)
         klass = Vector3;
     
-    VALUE x = INT2FIX(vector3->x);
-    VALUE y = INT2FIX(vector3->y);
-    VALUE z = INT2FIX(vector3->z);
+    VALUE x = INT2FIX(vector3.x);
+    VALUE y = INT2FIX(vector3.y);
+    VALUE z = INT2FIX(vector3.z);
     return rb_class_new_instance(3, (VALUE[]){x, y, z}, klass);
 }
 
-VALUE rbVector3::ToRuby(sf::Vector3f* vector3, VALUE klass)
+VALUE rbVector3::ToRuby(sf::Vector3f& vector3, VALUE klass)
 {
     if (!klass)
         klass = Vector3;
     
-    VALUE x = rb_float_new(vector3->x);
-    VALUE y = rb_float_new(vector3->y);
-    VALUE z = rb_float_new(vector3->z);
+    VALUE x = rb_float_new(vector3.x);
+    VALUE y = rb_float_new(vector3.y);
+    VALUE z = rb_float_new(vector3.z);
     return rb_class_new_instance(3, (VALUE[]){x, y, z}, klass);
 }
 

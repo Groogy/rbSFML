@@ -31,6 +31,7 @@ void rbVector2::Init(VALUE SFML)
     rb_define_method(Vector2, "initialize_copy", InitializeCopy,  1);
     rb_define_method(Vector2, "marshal_dump",    MarshalDump,     0);
     rb_define_method(Vector2, "marshal_load",    MarshalLoad,     1);
+    rb_define_method(Vector2, "coerce",          Coerce,          1);
     rb_define_method(Vector2, "-@",              Negate,          0);
     rb_define_method(Vector2, "+",               Add,             1);
     rb_define_method(Vector2, "-",               Subtract,        1);
@@ -125,6 +126,13 @@ VALUE rbVector2::MarshalLoad(VALUE self, VALUE data)
     SetX(self, ptr[0]);
     SetY(self, ptr[1]);
     return Qnil;
+}
+
+// Vector2#coerce(other)
+VALUE rbVector2::Coerce(VALUE self, VALUE other)
+{
+    VALUE ary[] = {ToRuby(other, CLASS_OF(self)), self};
+    return rb_ary_new4(2, ary);
 }
 
 // Vector2#-@

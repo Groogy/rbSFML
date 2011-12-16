@@ -188,7 +188,7 @@ VALUE rbSoundSource::Position(int argc, VALUE argv[], VALUE self)
 VALUE rbSoundSource::GetPosition(VALUE self)
 {
     sf::Vector3f pos = ToSFML(self)->GetPosition();
-    return rbVector3::ToRuby(&pos);
+    return rbVector3::ToRuby(pos);
 }
 
 // SoundSource#SetPosition(position)

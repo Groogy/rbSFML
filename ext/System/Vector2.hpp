@@ -30,15 +30,14 @@
 
 namespace rbVector2
 {
+    static inline VALUE Allocate(VALUE self);
     
     static inline int Type(VALUE vector2);
     static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector2i* vector2, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector2f* vector2, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector2i& vector2, VALUE klass=false);
+    static inline VALUE ToRuby(sf::Vector2f& vector2, VALUE klass=false);
     static inline sf::Vector2i ToSFMLi(VALUE vector2, VALUE klass=false);
     static inline sf::Vector2f ToSFMLf(VALUE vector2, VALUE klass=false);
-    
-    static inline VALUE Allocate(VALUE self);
     
     static inline VALUE GetX(VALUE vector2);
     static inline VALUE GetY(VALUE vector2);
@@ -69,6 +68,9 @@ namespace rbVector2
     
     // Vector2#marshal_load(data)
     static VALUE MarshalLoad(VALUE self, VALUE data);
+    
+    // Vector2#coerce(other)
+    static VALUE Coerce(VALUE self, VALUE other);
     
     // Vector2#-@
     static VALUE Negate(VALUE self);
@@ -132,23 +134,23 @@ VALUE rbVector2::ToRuby(VALUE other, VALUE klass)
              rb_obj_classname(other), rb_class2name(klass));
 }
 
-VALUE rbVector2::ToRuby(sf::Vector2i* vector2, VALUE klass)
+VALUE rbVector2::ToRuby(sf::Vector2i& vector2, VALUE klass)
 {
     if (!klass)
         klass = Vector2;
     
-    VALUE x = INT2FIX(vector2->x);
-    VALUE y = INT2FIX(vector2->y);
+    VALUE x = INT2FIX(vector2.x);
+    VALUE y = INT2FIX(vector2.y);
     return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
 }
 
-VALUE rbVector2::ToRuby(sf::Vector2f* vector2, VALUE klass)
+VALUE rbVector2::ToRuby(sf::Vector2f& vector2, VALUE klass)
 {
     if (!klass)
         klass = Vector2;
     
-    VALUE x = rb_float_new(vector2->x);
-    VALUE y = rb_float_new(vector2->y);
+    VALUE x = rb_float_new(vector2.x);
+    VALUE y = rb_float_new(vector2.y);
     return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
 }
 

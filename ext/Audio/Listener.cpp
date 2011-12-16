@@ -99,7 +99,7 @@ VALUE rbListener::Position(int argc, VALUE argv[], VALUE self)
 VALUE rbListener::GetPosition(VALUE self)
 {
     sf::Vector3f pos = sf::Listener::GetPosition();
-    return rbVector3::ToRuby(&pos);
+    return rbVector3::ToRuby(pos);
 }
 
 // Listener::SetPosition(position)
@@ -153,7 +153,7 @@ VALUE rbListener::Direction(int argc, VALUE argv[], VALUE self)
 VALUE rbListener::GetDirection(VALUE self)
 {
     sf::Vector3f pos = sf::Listener::GetDirection();
-    return rbVector3::ToRuby(&pos);
+    return rbVector3::ToRuby(pos);
 }
 
 // Listener::SetDirection(direction)

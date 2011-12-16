@@ -94,7 +94,7 @@ VALUE rbMouse::GetPosition(int argc, VALUE argv[], VALUE self)
             rb_raise(rb_eArgError,
                      "wrong number of arguments(%i for 0..1)", argc);
     }
-    return rbVector2::ToRuby(&pos);
+    return rbVector2::ToRuby(pos);
 }
 
 // Mouse::SetPosition(position)
