@@ -34,5 +34,7 @@
 #include <Audio/SoundBuffer.hpp>
 #include <Audio/SoundStream.hpp>
 #include <Audio/Music.hpp>
+#include <Audio/SoundRecorder.hpp>
+#include <Audio/SoundBufferRecorder.hpp>
 
 #endif // AUDIO_HPP
