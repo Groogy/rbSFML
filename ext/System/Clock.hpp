@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -29,90 +29,40 @@
 #include <SFML/System/Clock.hpp>
 
 namespace rbClock
-{
-    
-    static inline void Free(void* clock);
-    static inline VALUE Allocate(VALUE self);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Clock* clock, VALUE klass=false);
-    static inline sf::Clock* ToSFML(VALUE clock, VALUE klass=false);
-    
+{	
 #if defined(SYSTEM_CLOCK_CPP)
-    VALUE Clock;
+    VALUE Class;
 #else
-    extern VALUE Clock;
+    extern VALUE Class;
 #endif
     
 #if defined(RBSFML_SYSTEM)
-    void Init(VALUE SFML);
+    void Init( VALUE SFML );
 #endif
 
 #if defined(SYSTEM_CLOCK_CPP)
     // Clock#initialize_copy(other)
-    static VALUE InitializeCopy(VALUE self, VALUE clock);
+    static VALUE InitializeCopy( VALUE aSelf, VALUE aClock );
     
     // Clock#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // Clock#elapsed_time
-    // Clock#GetElapsedTime
+    // Clock#getElapsedTime
     // Clock#time
-    static VALUE GetElapsedTime(VALUE self);
+    static VALUE GetElapsedTime( VALUE aSelf );
     
-    // Clock#reset
-    // Clock#Reset
-    static VALUE Reset(VALUE self);
-    
-    // Clock#<=>(other)
-    static VALUE Compare(VALUE self, VALUE other);
+    // Clock#restart
+    static VALUE Restart( VALUE aSelf );
     
     // Clock#inspect
     // Clock#to_s
-    static VALUE Inspect(VALUE self);
+    static VALUE Inspect( VALUE aSelf );
     
     // Clock#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 };
-
-void rbClock::Free(void* clock)
-{
-    delete (sf::Clock*)clock;
-}
-
-VALUE rbClock::Allocate(VALUE self)
-{
-    sf::Clock* clock = new(std::nothrow) sf::Clock;
-    if (clock == NULL) rb_memerror();
-    return ToRuby(clock, self);
-}
-
-VALUE rbClock::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = Clock;
-    
-    if (rb_obj_is_kind_of(other, Clock))
-        return other;
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
-}
-
-VALUE rbClock::ToRuby(sf::Clock* clock, VALUE klass)
-{
-    if (!klass)
-        klass = Clock;
-    
-    return rb_data_object_alloc(klass, clock, NULL, Free);
-}
-
-sf::Clock* rbClock::ToSFML(VALUE clock, VALUE klass)
-{
-    clock = ToRuby(clock, klass);
-    return (sf::Clock*)DATA_PTR(clock);
-}
 
 #endif // SYSTEM_CLOCK_HPP
