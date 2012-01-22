@@ -48,7 +48,9 @@ namespace rbClock
     static VALUE MarshalDump( VALUE aSelf );
     
     // Clock#elapsed_time
+	// Clock#elapsedTime
     // Clock#getElapsedTime
+	// Clock#get_elapsed_time
     // Clock#time
     static VALUE GetElapsedTime( VALUE aSelf );
     

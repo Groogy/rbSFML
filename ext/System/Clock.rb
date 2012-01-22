@@ -6,32 +6,24 @@ module SFML
   #   clock = Clock.new
   #   # ...
   #   puts clock.elapsed_time
-  #   clock.reset
+  #   clock.restart
   #   # ...
   #   puts clock.elapsed_time
   class Clock
     
-    # Returns the time elapsed since the last call to <tt>reset</tt> (or the construction of the instance if <tt>reset</tt> has not been called).
-    # @return [Fixnum] Time elapsed, in milliseconds
+    # Returns the time elapsed since the last call to <tt>restart</tt> (or the construction of the instance if <tt>restart</tt> has not been called).
+    # @return [Time] The elapsed Time
     def elapsed_time
     end
-    alias ElapsedTime elapsed_time
+    alias elapsedTime elapsed_time
+    alias getElapsedTime elapsed_time
     alias get_elapsed_time elapsed_time
     alias time elapsed_time
     
     # Restarts the timer putting the time counter back to zero. 
-    # @return [NilClass]
-    def reset
+    # @return [Time] The elapsed Time
+    def restart
     end
-    alias Reset reset
-    
-    # This operator compares two clocks and checks if they are equal.
-    # @param [Clock] other Clock to be compared with.
-    # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
-    def ==(other)
-    end
-    alias eql? ==
-    alias equal? ==
     
     # Returns a formated string to represent the clock. 
     # @return [String]
@@ -39,11 +31,9 @@ module SFML
     end
     alias to_s inspect
     
-    # Returns how much memory was allocated by this object.
+    # Returns how much memory in bytes was allocated by this object.
     # @return [Fixnum]
     def memory_usage
     end
-    
   end
-  
 end

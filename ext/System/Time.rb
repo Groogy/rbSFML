@@ -51,10 +51,50 @@ module SFML
     alias toMicroseconds as_microseconds
     alias to_microseconds as_microseconds
     
+    # Negate the time value
+    # @return [Time] The negated version of this time.
+    def -@
+    end
+    
+    # Add two time values together.
+    # @param [Time] right Time value to be added with.
+    # @return [Time] the sum of the Time addition.
+    def +( right )
+    end
+    
+    # Subtract two time values from eachother.
+    # @param [Time] right Time value to subtract with.
+    # @return [Time] The difference of the Time values.
+    def -( right )
+    
+    # Multiply the time value with a factor.
+    # @overload *( right )
+    #   Multiply the time with an integer as microseconds.
+    #   @param [Fixnum] right The integer of microseconds.
+    #   @return [Time] The resulting time of the operation.
+    # @overload *( right )
+    #   Multiply the time with an float as seconds.
+    #   @param [Float] right The float of seconds.
+    #   @return [Time] The resulting time of the operation.
+    def *( right )
+    end
+    
+    # Divide the time value with a factor.
+    # @overload /( right )
+    #   Divide the time with an integer as microseconds.
+    #   @param [Fixnum] right The integer of microseconds.
+    #   @return [Time] The resulting time of the operation.
+    # @overload /( right )
+    #   Divide the time with an float as seconds.
+    #   @param [Float] right The float of seconds.
+    #   @return [Time] The resulting time of the operation.
+    def /( right )
+    end
+    
     # Overload of == operator to compare two time values. 
     # @param [Time] other Time to be compared with.
     # @return [Boolean] <tt>true</tt> if they are equal, <tt>false</tt>
-    def ==(other)
+    def ==( other )
     end
     alias eql? ==
     alias equal? ==
@@ -65,7 +105,7 @@ module SFML
     end
     alias to_s inspect
     
-    # Returns how much memory was allocated by this object.
+    # Returns how much memory in bytes was allocated by this object.
     # @return [Fixnum]
     def memory_usage
     end
