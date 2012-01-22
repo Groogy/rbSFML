@@ -65,8 +65,7 @@ VALUE rbClock::MarshalDump( VALUE aSelf )
 VALUE rbClock::GetElapsedTime( VALUE aSelf )
 {
 	sf::Time *time = new sf::Time( ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime() );
-	
-    return rbTime::ToRuby( time );
+    return ToRuby( time, rbTime::Class );
 }
 
 // Clock#restart
@@ -74,7 +73,7 @@ VALUE rbClock::Restart( VALUE aSelf )
 {
     rb_check_frozen( aSelf );
     sf::Time *time = new sf::Time( ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart() );
-    return rbTime::ToRuby( time );
+    return ToRuby( time, rbClock::Class );
 }
 
 // Clock#inspect

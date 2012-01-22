@@ -23,7 +23,7 @@
 #define RBSFML_HPP
 
 #include <ruby.h>
-#include <memory>
+#include <new>
 
 #define SFML_VERSION    "2.0"
 #define BINDING_VERSION "development-unstable"
