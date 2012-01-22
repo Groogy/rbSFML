@@ -30,7 +30,7 @@ extern "C"
 void Init_system()
 {
     VALUE SFML = rbSFML::Module();
-    rb_cvar_set(SFML, rb_intern("@@system"), Qtrue);
+	rb_define_const( SFML, "System", Qtrue );
     
     rbSFML::Init(SFML);
     rbClock::Init(SFML);
