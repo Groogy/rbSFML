@@ -23,46 +23,101 @@
 #define RBSFML_HPP
 
 #include <ruby.h>
+#include <memory>
 
 #define SFML_VERSION    "2.0"
 #define BINDING_VERSION "development-unstable"
 
-template<typename T>
-static inline T MAX(T a, T b)
+template< typename T >
+static inline void FREE( void *anObject )
+{
+	delete static_cast< T* >( anObject );
+}
+
+template< typename T >
+static inline VALUE ALLOCATE( VALUE aKlass )
+{
+	T* object = new( std::nothrow ) T;
+    if( object == NULL ) rb_memerror();
+    return ToRuby( object, aKlass );
+}
+
+template< typename T >
+static inline T MAX( T a, T b )
 {
     return a > b ? a : b;
 }
 
-template<typename T>
-static inline T MIN(T a, T b)
+template< typename T >
+static inline T MIN( T a, T b )
 {
     return a > b ? b : a;
 }
 
-static inline VALUE MAX(VALUE a, VALUE b)
+static inline VALUE MAX( VALUE a, VALUE b )
 {
-    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? a : b;
+    return rb_funcall( a, rb_intern( ">" ), 1, b ) == Qtrue ? a : b;
 }
 
-static inline VALUE MIN(VALUE a, VALUE b)
+static inline VALUE MIN( VALUE a, VALUE b )
 {
-    return rb_funcall(a, rb_intern(">"), 1, b) == Qtrue ? b : a;
+    return rb_funcall( a, rb_intern( ">" ), 1, b ) == Qtrue ? b : a;
 }
 
-static inline VALUE RBOOL(bool value)
+static inline VALUE RBOOL( bool value )
 {
     return value ? Qtrue : Qfalse;
 }
 
-typedef VALUE (*RubyFunctionPtr)(...);
+static inline VALUE ToRuby( VALUE anOther, VALUE aKlass )
+{    
+    if( rb_obj_is_kind_of( anOther, aKlass ) )
+        return anOther;
+    
+    rb_raise( rb_eTypeError, "can't convert %s into %s",
+              rb_obj_classname( anOther ), rb_class2name( aKlass ) );
+}
 
-#define rb_define_module_function(klass, name, func, argc, ...) \
-        rb_define_module_function(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
-        
-#define rb_define_singleton_method(klass, name, func, argc, ...) \
-        rb_define_singleton_method(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
-        
-#define rb_define_method(klass, name, func, argc, ...) \
-        rb_define_method(klass, name, reinterpret_cast<RubyFunctionPtr>(func), argc, ##__VA_ARGS__)
+template< typename T >
+static inline VALUE ToRuby( T* anObject, VALUE aKlass )
+{    
+    return rb_data_object_alloc( aKlass, anObject, NULL, FREE< T > );
+}
 
+template< typename T >
+static inline VALUE ToConstRuby( const T* anObject, VALUE aKlass )
+{
+	static ID freezeSymbol = rb_intern( "freeze" );
+	VALUE constObj = rb_data_object_alloc( aKlass, const_cast< T* >( anObject ), NULL, NULL );
+	rb_funcall( constObj, freezeSymbol, 0 );
+	return constObj;
+}
+
+template< typename T >
+static inline T* ToSFML( VALUE anObject, VALUE aKlass )
+{
+    anObject = ToRuby( anObject, aKlass );
+    return static_cast< T* >( DATA_PTR( anObject ) );
+}
+
+typedef VALUE ( *RubyFunctionPtr )( ... );
+
+#define rb_define_module_function( klass, name, func, argc, ... ) \
+        rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
+        
+#define rb_define_singleton_method( klass, name, func, argc, ... ) \
+        rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
+        
+#define rb_define_class_method( klass, name, func, argc, ... ) \
+		rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ ) 
+		
+#define rb_define_method( klass, name, func, argc, ... ) \
+        rb_define_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
+		
+#define INVALID_EXPECTED_TYPE( type ) \
+		rb_raise( rb_eTypeError, "Did not receive expected type '%s'", rb_class2name( type ) );
+		
+#define INVALID_EXPECTED_TYPES( type1, type2 ) \
+		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ) );
+		
 #endif // RBSFML_HPP
