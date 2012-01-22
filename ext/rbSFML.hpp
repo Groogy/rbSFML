@@ -29,16 +29,19 @@
 #define BINDING_VERSION "development-unstable"
 
 template< typename T >
-static inline void FREE( void *anObject )
+static inline void FREE( void *someMemory )
 {
-	delete static_cast< T* >( anObject );
+	T* object = static_cast< T* >( someMemory );
+	object->~T();
+	xfree( someMemory );
 }
 
 template< typename T >
 static inline VALUE ALLOCATE( VALUE aKlass )
 {
-	T* object = new( std::nothrow ) T;
-    if( object == NULL ) rb_memerror();
+	void* memory = xmalloc( sizeof( T ) );
+	if( memory == NULL ) rb_memerror();
+	T* object = new( memory ) T;
     return ToRuby( object, aKlass );
 }
 
