@@ -27,6 +27,8 @@
 #include <rbSFML.hpp>
 
 #include <System/SFML.hpp>
+#include <System/NonCopyable.hpp>
+#include <System/Time.hpp>
 #include <System/Clock.hpp>
 #include <System/Vector2.hpp>
 #include <System/Vector3.hpp>

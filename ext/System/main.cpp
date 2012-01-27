@@ -32,8 +32,10 @@ void Init_system()
     VALUE SFML = rbSFML::Module();
 	rb_define_const( SFML, "System", Qtrue );
 
-    rbSFML::Init(SFML);
-    rbClock::Init(SFML);
-    rbVector2::Init(SFML);
-    rbVector3::Init(SFML);
+    rbSFML::Init( SFML );
+    rbNonCopyable::Init( SFML );
+    rbTime::Init( SFML );
+    rbClock::Init( SFML );
+    rbVector2::Init( SFML );
+    rbVector3::Init( SFML );
 }
