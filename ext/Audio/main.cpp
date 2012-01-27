@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -21,16 +21,16 @@
 
 #include <Audio.hpp>
 
-#if !defined(RBSFML_SFML)
+#if !defined( RBSFML_SFML )
 #include <sstream>
 std::stringstream gErrorStream;
-namespace rbVector3 { VALUE Vector3; }
+namespace rbVector3 { VALUE Class; }
 #endif
 
-static inline void InitDependencies(VALUE SFML)
+static inline void InitDependencies( VALUE SFML )
 {
-#if !defined(RBSFML_SFML)
-    rbVector3::Vector3 = rb_const_get(SFML, rb_intern("Vector3"));
+#if !defined( RBSFML_SFML )
+    rbVector3::CLASS = rb_const_get( SFML, rb_intern( "Vector3" ) );
 #endif
 }
 
@@ -38,19 +38,19 @@ extern "C"
 void Init_audio()
 {
     VALUE SFML = rbSFML::Module();
-    
-    if (!rb_cvar_defined(SFML, rb_intern("@@system")))
-        rb_require("sfml/system");
-    
-    rb_cv_set(SFML, "@@audio", Qtrue);
-    
-    InitDependencies(SFML);
-    
-    rbSoundSource::Init(SFML);
-    rbSound::Init(SFML);
-    rbSoundBuffer::Init(SFML);
-    rbSoundStream::Init(SFML);
-    rbMusic::Init(SFML);
-    rbSoundRecorder::Init(SFML);
-    rbSoundBufferRecorder::Init(SFML);
+
+    if( !rb_const_get( SFML, rb_intern( "System" ) ) )
+        rb_require( "sfml/system" );
+
+    rb_const_define( SFML, "Audio", Qtrue );
+
+    InitDependencies( SFML );
+
+    rbSoundSource::Init( SFML );
+    rbSound::Init( SFML );
+    rbSoundBuffer::Init( SFML );
+    rbSoundStream::Init( SFML );
+    rbMusic::Init( SFML );
+    rbSoundRecorder::Init( SFML );
+    rbSoundBufferRecorder::Init( SFML );
 }

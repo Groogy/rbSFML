@@ -74,7 +74,7 @@ VALUE rbClock::Restart( VALUE aSelf )
 {
     rb_check_frozen( aSelf );
     sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart() );
-    return rbMacros::ToRuby( time, rbClock::Class );
+    return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Clock#inspect
@@ -82,9 +82,9 @@ VALUE rbClock::Restart( VALUE aSelf )
 VALUE rbClock::Inspect( VALUE aSelf )
 {
     sf::Clock* clock = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class );
-    return rb_sprintf( "%s(%ims)",
+    return rb_sprintf( "%s(%fs)",
                        rb_obj_classname( aSelf ),
-                       clock->GetElapsedTime() );
+                       clock->GetElapsedTime().AsSeconds() );
 }
 
 // Clock#memory_usage

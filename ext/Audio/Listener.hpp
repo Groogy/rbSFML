@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -31,56 +31,56 @@
 
 namespace rbListener
 {
-    
-#if defined(AUDIO_LISTENER_CPP)
-    VALUE Listener;
+
+#if defined( AUDIO_LISTENER_CPP )
+    VALUE Class;
 #else
-    extern VALUE Listener;
+    extern VALUE Class;
 #endif
-    
-#if defined(RBSFML_AUDIO)
+
+#if defined( RBSFML_AUDIO )
     void Init(VALUE SFML);
 #endif
-    
-#if defined(AUDIO_LISTENER_CPP)
+
+#if defined( AUDIO_LISTENER_CPP )
     // Listener::global_volume
     // Listener::global_volume(volume)
     // Listener::global_volume=(volume)
     static VALUE GlobalVolume(int argc, VALUE argv[], VALUE self);
-    
+
     // Listener::GetGlobalVolume
     static VALUE GetGlobalVolume(VALUE self);
-    
+
     // Listener::SetGlobalVolume(volume)
     static VALUE SetGlobalVolume(VALUE self, VALUE volume);
-    
+
     // Listener::position
     // Listener::position(position)
     // Listener::position=(position)
     // Listener::position(x, y, z)
     static VALUE Position(int argc, VALUE argv[], VALUE self);
-    
+
     // Listener::GetPosition
     static VALUE GetPosition(VALUE self);
-    
+
     // Listener::SetPosition(position)
     // Listener::SetPosition(x, y, z)
     static VALUE SetPosition(int argc, VALUE argv[], VALUE self);
-    
+
     // Listener::direction
     // Listener::direction(direction)
     // Listener::direction=(direction)
     // Listener::direction(x, y, z)
     static VALUE Direction(int argc, VALUE argv[], VALUE self);
-    
+
     // Listener::GetDirection
     static VALUE GetDirection(VALUE self);
-    
+
     // Listener::SetDirection(direction)
     // Listener::SetDirection(x, y, z)
     static VALUE SetDirection(int argc, VALUE argv[], VALUE self);
 #endif
-    
+
 }
 
 #endif // AUDIO_LISTENER_HPP
