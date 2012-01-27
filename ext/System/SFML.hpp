@@ -33,50 +33,50 @@
 
 namespace rbSFML
 {
-    
+
     static inline VALUE Module();
     static inline void PrepareErrorStream();
-    static inline void Raise(std::string message);
-    static inline void Warn(std::string message);
+    static inline void Raise( const std::string &aMessage );
+    static inline void Warn( const std::string &aMessage);
     static inline void CheckRaise();
     static inline void CheckWarn();
     static inline std::string Message();
-    
+
 #if defined(RBSFML_SYSTEM)
     void Init(VALUE rbSFML);
 #endif
 
 #if defined(SYSTEM_SFML_CPP)
     // SFML.raise_exceptions
-    static VALUE GetRaiseExceptions(VALUE self);
-    
+    static VALUE GetRaiseExceptions( VALUE aSelf );
+
     // SFML.raise_exceptions=(flag)
-    static VALUE SetRaiseExceptions(VALUE self, VALUE flag);
-    
+    static VALUE SetRaiseExceptions( VALUE aSelf, VALUE aFlag );
+
     // SFML.system?
-    static VALUE SystemLoaded(VALUE self);
-    
+    static VALUE SystemLoaded( VALUE aSelf );
+
     // SFML.window?
-    static VALUE WindowLoaded(VALUE self);
-    
+    static VALUE WindowLoaded( VALUE aSelf );
+
     // SFML.graphics?
-    static VALUE GraphicsLoaded(VALUE self);
-    
+    static VALUE GraphicsLoaded( VALUE aSelf );
+
     // SFML.audio?
-    static VALUE AudioLoaded(VALUE self);
-    
+    static VALUE AudioLoaded( VALUE aSelf );
+
     // SFML.memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
-    
+
 };
 
 VALUE rbSFML::Module()
 {
-    return rb_define_module("SFML");
+    return rb_define_module( "SFML" );
 }
 
-extern std::stringstream gErrorStream; // main.cpp
+extern std::stringstream globalErrorStream; // main.cpp
 
 // Make sure there is no return keyword between the call to this function and
 // the call to Raise() or Warn().
@@ -84,45 +84,45 @@ void rbSFML::PrepareErrorStream()
 {
     VALUE SFML = Module();
     VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
-    if (RTEST(flag))
-        sf::Err().rdbuf(gErrorStream.rdbuf());
+    if( RTEST( flag ) )
+        sf::Err().rdbuf( globalErrorStream.rdbuf() );
 }
 
 std::string rbSFML::Message()
 {
-    sf::Err().rdbuf(std::cerr.rdbuf());
-    if (RTEST(rb_cv_get(Module(), "@@raise_exceptions")))
+    sf::Err().rdbuf( std::cerr.rdbuf() );
+    if( RTEST( rb_cv_get( Module(), "@@raise_exceptions" ) ) )
     {
-        std::string message = gErrorStream.str();
-        gErrorStream.str("");
-        if (!message.empty())
-            message.erase(message.end() - 1); // Remove '\n' from end.
+        std::string message = globalErrorStream.str();
+        globalErrorStream.str( "" );
+        if( !message.empty() )
+            message.erase( message.end() - 1 ); // Remove '\n' from end.
         return message;
     }
     return "";
 }
 
-void rbSFML::Raise(std::string message)
+void rbSFML::Raise( const std::string &aMessage )
 {
-    VALUE Error = rb_const_get(Module(), rb_intern("Error"));
-    rb_raise(Error, message.c_str(), "");
+    VALUE error = rb_const_get( Module(), rb_intern( "Error" ) );
+    rb_raise( error, aMessage.c_str(), "" );
 }
 
-void rbSFML::Warn(std::string message)
+void rbSFML::Warn( const std::string &aMessage )
 {
-    rb_warn(message.c_str(), "");
+    rb_warn( aMessage.c_str(), "" );
 }
 
 void rbSFML::CheckRaise()
 {
     std::string message = Message();
-    if (!message.empty()) Raise(message);
+    if( !message.empty() ) Raise( message );
 }
 
 void rbSFML::CheckWarn()
 {
     std::string message = Message();
-    if (!message.empty()) Warn(message);
+    if( !message.empty() ) Warn( message );
 }
 
 #endif // SYSTEM_SFML_HPP

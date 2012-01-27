@@ -23,14 +23,18 @@
 
 #if !defined( RBSFML_SFML )
 #include <sstream>
-std::stringstream gErrorStream;
+std::stringstream globalErrorStream;
 namespace rbVector3 { VALUE Class; }
+namespace rbNonCopyable { VALUE Module; }
+namespace rbTime { VALUE Class; }
 #endif
 
 static inline void InitDependencies( VALUE SFML )
 {
 #if !defined( RBSFML_SFML )
-    rbVector3::Class = rb_const_get( SFML, rb_intern( "Vector3" ) );
+    rbVector3::Class        = rb_const_get( SFML, rb_intern( "Vector3" ) );
+    rbNonCopyable::Module   = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
+    rbTime::Class           = rb_const_get( SFML, rb_intern( "rbTime" ) );
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -20,58 +20,42 @@
  */
 
 #define AUDIO_MUSIC_CPP
+
 #include "Music.hpp"
 
-void rbMusic::Init(VALUE SFML)
+void rbMusic::Init( VALUE SFML )
 {
-    Music = rb_define_class_under(SFML, "Music", rbSoundStream::SoundStream);
-    
+    rbMusic::Class = rb_define_class_under( SFML, "Music", rbSoundStream::SoundStream );
+    rb_include_module( rbMusic::Class, rbNonCopyable::Module );
+
     // Class methods
-    rb_define_alloc_func(Music, Allocate);
-    
+    rb_define_alloc_func( rbMusic::Class, rbMacros::Allocate< sf::Music > );
+
     // Instance methods
-    rb_define_method(Music, "marshal_dump",      MarshalDump,      0);
-    rb_define_method(Music, "clone",             Clone,            0);
-    rb_define_method(Music, "dup",               Dup,              0);
-    rb_define_method(Music, "open_from_file",    OpenFromFile,     1);
-    rb_define_method(Music, "open_from_memory",  OpenFromMemory,   1);
-    rb_define_method(Music, "open_from_stream",  OpenFromStream,   1);
-    rb_define_method(Music, "duration",          GetDuration,      0);
-    rb_define_method(Music, "inspect",           Inspect,          0);
-    rb_define_method(Music, "memory_usage",      GetMemoryUsage,   0);
-    
+    rb_define_method( rbMusic::Class, "marshal_dump",      rbMusic::MarshalDump,      0 );
+    rb_define_method( rbMusic::Class, "open_from_file",    rbMusic::OpenFromFile,     1 );
+    rb_define_method( rbMusic::Class, "open_from_memory",  rbMusic::OpenFromMemory,   1 );
+    rb_define_method( rbMusic::Class, "open_from_stream",  rbMusic::OpenFromStream,   1 );
+    rb_define_method( rbMusic::Class, "duration",          rbMusic::GetDuration,      0 );
+    rb_define_method( rbMusic::Class, "inspect",           rbMusic::Inspect,          0 );
+    rb_define_method( rbMusic::Class, "memory_usage",      rbMusic::GetMemoryUsage,   0 );
+
     // Instance aliasses
-    rb_define_alias(Music, "OpenFromFile",     "open_from_file"   );
-    rb_define_alias(Music, "open_file",        "open_from_file"   );
-    rb_define_alias(Music, "open",             "open_from_file"   );
-    rb_define_alias(Music, "OpenFromMemory",   "open_from_memory" );
-    rb_define_alias(Music, "open_memory",      "open_from_memory" );
-    rb_define_alias(Music, "OpenFromStream",   "open_from_stream" );
-    rb_define_alias(Music, "open_stream",      "open_from_stream" );
-    rb_define_alias(Music, "GetDuration",      "duration"         );
-    rb_define_alias(Music, "to_s",             "inspect"          );
+    rb_define_alias( rbMusic::Class, "openFromFile",     "open_from_file"   );
+    rb_define_alias( rbMusic::Class, "open_file",        "open_from_file"   );
+    rb_define_alias( rbMusic::Class, "open",             "open_from_file"   );
+    rb_define_alias( rbMusic::Class, "openFromMemory",   "open_from_memory" );
+    rb_define_alias( rbMusic::Class, "open_memory",      "open_from_memory" );
+    rb_define_alias( rbMusic::Class, "openFromStream",   "open_from_stream" );
+    rb_define_alias( rbMusic::Class, "open_stream",      "open_from_stream" );
+    rb_define_alias( rbMusic::Class, "getDuration",      "duration"         );
+    rb_define_alias( rbMusic::Class, "to_s",             "inspect"          );
 }
 
 // Music#marshal_dump
-VALUE rbMusic::MarshalDump(VALUE self)
+VALUE rbMusic::MarshalDump( VALUE aSelf )
 {
-    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
-    return Qnil;
-}
-
-// Music#clone
-VALUE rbMusic::Clone(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't clone instance of %s",
-             rb_obj_classname(self));
-    return Qnil;
-}
-
-// Music#dup
-VALUE rbMusic::Dup(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't dup instance of %s",
-             rb_obj_classname(self));
+    rb_raise( rb_eTypeError, "can't dump %s", rb_obj_classname( aSelf ) );
     return Qnil;
 }
 
@@ -79,58 +63,59 @@ VALUE rbMusic::Dup(VALUE self)
 // Music#OpenFromFile(filename)
 // Music#open_file(filename)
 // Music#open(filename)
-VALUE rbMusic::OpenFromFile(VALUE self, VALUE filename)
+VALUE rbMusic::OpenFromFile( VALUE aSelf, VALUE aFilename )
 {
     rbSFML::PrepareErrorStream();
-    bool ret = ToSFML(self)->OpenFromFile(StringValueCStr(filename));
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromFile( StringValueCStr( aFilename ) );
     rbSFML::CheckRaise();
-    return RBOOL(ret);
+    return RBOOL( ret );
 }
 
 // Music#open_from_memory(data)
 // Music#OpenFromMemory(data)
 // Music#open_memory(data)
-VALUE rbMusic::OpenFromMemory(VALUE self, VALUE data)
+VALUE rbMusic::OpenFromMemory( VALUE aSelf, VALUE aData )
 {
-    StringValue(data);
+    StringValue( aData );
     rbSFML::PrepareErrorStream();
-    bool ret = ToSFML(self)->OpenFromMemory(RSTRING_PTR(data),
-                                            RSTRING_LEN(data));
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromMemory( RSTRING_PTR( aData ),
+                                                             RSTRING_LEN( aData ) );
     rbSFML::CheckRaise();
-    return RBOOL(ret);
+    return RBOOL( ret );
 }
 
 // Music#open_from_stream(stream)
 // Music#OpenFromStream(stream)
 // Music#open_stream(stream)
-VALUE rbMusic::OpenFromStream(VALUE self, VALUE stream)
+VALUE rbMusic::OpenFromStream( VALUE aSelf, VALUE aStream )
 {
-    rbInputStream input_stream(stream);
+    rbInputStream stream( aStream );
     rbSFML::PrepareErrorStream();
-    bool ret = ToSFML(self)->OpenFromStream(input_stream);
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromStream( stream );
     rbSFML::CheckRaise();
-    return RBOOL(ret);
+    return RBOOL( ret );
 }
 
 // Music#duration
 // Music#GetDuration
-VALUE rbMusic::GetDuration(VALUE self)
+VALUE rbMusic::GetDuration( VALUE aSelf )
 {
-    return UINT2NUM(ToSFML(self)->GetDuration());
+    sf::Time* time = new sf::Time( rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration() );
+    return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Music#inspect
 // Music#to_s
-VALUE rbMusic::Inspect(VALUE self)
+VALUE rbMusic::Inspect( VALUE aSelf )
 {
-    return rb_sprintf("%s(%p: %ims)",
-                      rb_obj_classname(self),
-                      (void*)self,
-                      ToSFML(self)->GetDuration());
+    return rb_sprintf( "%s(%p: %fs)",
+                      rb_obj_classname( aSelf ),
+                      (void*)aSelf,
+                      rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration() );
 }
 
 // Music#memory_usage
-VALUE rbMusic::GetMemoryUsage(VALUE self)
+VALUE rbMusic::GetMemoryUsage( VALUE aSelf )
 {
-    return SIZET2NUM(sizeof(sf::Music));
+    return SIZET2NUM( sizeof( sf::Music ) );
 }
