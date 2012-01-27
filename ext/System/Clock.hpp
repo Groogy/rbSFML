@@ -29,38 +29,38 @@
 #include <SFML/System/Clock.hpp>
 
 namespace rbClock
-{	
-#if defined(SYSTEM_CLOCK_CPP)
+{
+#if defined( SYSTEM_CLOCK_CPP )
     VALUE Class;
 #else
     extern VALUE Class;
 #endif
-    
-#if defined(RBSFML_SYSTEM)
+
+#if defined( RBSFML_SYSTEM )
     void Init( VALUE SFML );
 #endif
 
-#if defined(SYSTEM_CLOCK_CPP)
+#if defined( SYSTEM_CLOCK_CPP )
     // Clock#initialize_copy(other)
     static VALUE InitializeCopy( VALUE aSelf, VALUE aClock );
-    
+
     // Clock#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
-    
+
     // Clock#elapsed_time
 	// Clock#elapsedTime
     // Clock#getElapsedTime
 	// Clock#get_elapsed_time
     // Clock#time
     static VALUE GetElapsedTime( VALUE aSelf );
-    
+
     // Clock#restart
     static VALUE Restart( VALUE aSelf );
-    
+
     // Clock#inspect
     // Clock#to_s
     static VALUE Inspect( VALUE aSelf );
-    
+
     // Clock#memory_usage
     static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
