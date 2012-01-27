@@ -33,52 +33,44 @@ namespace rbListener
 {
 
 #if defined( AUDIO_LISTENER_CPP )
-    VALUE Class;
+    VALUE Module;
 #else
-    extern VALUE Class;
+    extern VALUE Module;
 #endif
 
 #if defined( RBSFML_AUDIO )
-    void Init(VALUE SFML);
+    void Init( VALUE SFML );
 #endif
 
 #if defined( AUDIO_LISTENER_CPP )
+    // Listener::get_global_volume
     // Listener::global_volume
-    // Listener::global_volume(volume)
-    // Listener::global_volume=(volume)
-    static VALUE GlobalVolume(int argc, VALUE argv[], VALUE self);
+    static VALUE GetGlobalVolume( VALUE aSelf );
 
-    // Listener::GetGlobalVolume
-    static VALUE GetGlobalVolume(VALUE self);
+    // Listener::set_global_volume( volume )
+    // Listener::global_volume=( volume )
+    static VALUE SetGlobalVolume( VALUE aSelf, VALUE aVolume );
 
-    // Listener::SetGlobalVolume(volume)
-    static VALUE SetGlobalVolume(VALUE self, VALUE volume);
-
+    // Listener::get_position
     // Listener::position
-    // Listener::position(position)
+    static VALUE GetPosition( VALUE aSelf );
+
+    // Listener::set_position(position)
+    // Listener::set_position(x, y, z)
     // Listener::position=(position)
-    // Listener::position(x, y, z)
-    static VALUE Position(int argc, VALUE argv[], VALUE self);
+    // Listener::position=(x, y, z)
+    static VALUE SetPosition( int argc, VALUE argv[], VALUE aSelf );
 
-    // Listener::GetPosition
-    static VALUE GetPosition(VALUE self);
-
-    // Listener::SetPosition(position)
-    // Listener::SetPosition(x, y, z)
-    static VALUE SetPosition(int argc, VALUE argv[], VALUE self);
-
+    // Listener::get_direction
     // Listener::direction
-    // Listener::direction(direction)
+    static VALUE GetDirection( VALUE aSelf );
+
+    // Listener::set_direction(direction)
+    // Listener::set_direction(x, y, z)
     // Listener::direction=(direction)
-    // Listener::direction(x, y, z)
-    static VALUE Direction(int argc, VALUE argv[], VALUE self);
+    // Listener::direction=(x, y, z)
+    static VALUE SetDirection( int argc, VALUE argv[], VALUE aSelf );
 
-    // Listener::GetDirection
-    static VALUE GetDirection(VALUE self);
-
-    // Listener::SetDirection(direction)
-    // Listener::SetDirection(x, y, z)
-    static VALUE SetDirection(int argc, VALUE argv[], VALUE self);
 #endif
 
 }

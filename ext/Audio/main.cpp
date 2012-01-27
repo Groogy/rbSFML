@@ -30,7 +30,7 @@ namespace rbVector3 { VALUE Class; }
 static inline void InitDependencies( VALUE SFML )
 {
 #if !defined( RBSFML_SFML )
-    rbVector3::CLASS = rb_const_get( SFML, rb_intern( "Vector3" ) );
+    rbVector3::Class = rb_const_get( SFML, rb_intern( "Vector3" ) );
 #endif
 }
 
@@ -42,7 +42,7 @@ void Init_audio()
     if( !rb_const_get( SFML, rb_intern( "System" ) ) )
         rb_require( "sfml/system" );
 
-    rb_const_define( SFML, "Audio", Qtrue );
+    rb_define_const( SFML, "Audio", Qtrue );
 
     InitDependencies( SFML );
 
