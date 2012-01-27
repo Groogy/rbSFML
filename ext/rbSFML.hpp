@@ -131,6 +131,6 @@ typedef VALUE ( *RubyFunctionPtr )( ... );
 #define INVALID_EXPECTED_TYPES( type1, type2 ) \
 		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ) );
 
-#define FLOAT_P( value ) rb_obj_is_kind_of( value, rb_cFloat )
+#define ISFLOAT( value ) rb_obj_is_kind_of( value, rb_cFloat )
 
 #endif // RBSFML_HPP

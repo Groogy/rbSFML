@@ -72,7 +72,7 @@ VALUE rbVector2::Initialize( int argc, VALUE argv[], VALUE aSelf )
                 SetX( aSelf, argv[ 0 ] );
                 SetY( aSelf, argv[ 1 ] );
             }
-            else if( FLOAT_P( argv[ 0 ] ) and FLOAT_P( argv[ 1 ] ) )
+            else if( ISFLOAT( argv[ 0 ] ) and ISFLOAT( argv[ 1 ] ) )
             {
                 SetX( aSelf, rb_to_float( argv[ 0 ] ) );
                 SetY( aSelf, rb_to_float( argv[ 1 ] ) );
