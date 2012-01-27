@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -20,107 +20,111 @@
  */
 
 #define SYSTEM_SFML_CPP
+
 #include <System/SFML.hpp>
 
-void rbSFML::Init(VALUE SFML)
+void rbSFML::Init( VALUE SFML )
 {
-    rb_define_class_under(SFML, "Error", rb_eRuntimeError);
-    
-    rb_define_const(SFML, "SFML_VERSION",    rb_str_new2(SFML_VERSION   ));
-    rb_define_const(SFML, "BINDING_VERSION", rb_str_new2(BINDING_VERSION));
-    
-    SetRaiseExceptions(SFML, Qtrue);
-    
-    rb_define_module_function(SFML, "raise_exceptions",  GetRaiseExceptions, 0);
-    rb_define_module_function(SFML, "raise_exceptions=", SetRaiseExceptions, 1);
-    rb_define_module_function(SFML, "system?",           SystemLoaded,       0);
-    rb_define_module_function(SFML, "window?",           WindowLoaded,       0);
-    rb_define_module_function(SFML, "graphics?",         GraphicsLoaded,     0);
-    rb_define_module_function(SFML, "audio?",            AudioLoaded,        0);
-    rb_define_module_function(SFML, "memory_usage",      GetMemoryUsage,     0);
+    rb_define_class_under( SFML, "Error", rb_eRuntimeError );
+
+    rb_define_const( SFML, "SFML_VERSION",    rb_str_new2( SFML_VERSION   ) );
+    rb_define_const( SFML, "BINDING_VERSION", rb_str_new2( BINDING_VERSION ) );
+
+    SetRaiseExceptions( SFML, Qtrue );
+
+    rb_define_module_function( SFML, "raise_exceptions",  GetRaiseExceptions, 0 );
+    rb_define_module_function( SFML, "raise_exceptions=", SetRaiseExceptions, 1 );
+    rb_define_module_function( SFML, "system?",           SystemLoaded,       0 );
+    rb_define_module_function( SFML, "window?",           WindowLoaded,       0 );
+    rb_define_module_function( SFML, "graphics?",         GraphicsLoaded,     0 );
+    rb_define_module_function( SFML, "audio?",            AudioLoaded,        0 );
+    rb_define_module_function( SFML, "memory_usage",      GetMemoryUsage,     0 );
 }
 
 // SFML.raise_exceptions
-VALUE rbSFML::GetRaiseExceptions(VALUE self)
+VALUE rbSFML::GetRaiseExceptions( VALUE aSelf )
 {
-    if (!rb_cvar_defined(self, rb_intern("@@raise_exceptions")))
+    if( !rb_cvar_defined( aSelf, rb_intern( "@@raise_exceptions" ) ) )
         return Qfalse;
-    return rb_cv_get(self, "@@raise_exceptions");
+
+    return rb_cv_get( aSelf, "@@raise_exceptions" );
 }
 
 // SFML.raise_exceptions=(flag)
-VALUE rbSFML::SetRaiseExceptions(VALUE self, VALUE flag)
+VALUE rbSFML::SetRaiseExceptions( VALUE aSelf, VALUE aFlag )
 {
-    rb_cv_set(self, "@@raise_exceptions", flag);
+    rb_cv_set( aSelf, "@@raise_exceptions", aFlag );
     return Qnil;
 }
 
 // SFML.system?
-VALUE rbSFML::SystemLoaded(VALUE self)
+VALUE rbSFML::SystemLoaded( VALUE aSelf )
 {
     return Qtrue; // You can't call this method without system.
 }
 
 // SFML.window?
-VALUE rbSFML::WindowLoaded(VALUE self)
+VALUE rbSFML::WindowLoaded( VALUE aSelf )
 {
-    return RBOOL(rb_cvar_defined(self, rb_intern("@@window")));
+    return RBOOL( rb_const_get( aSelf, rb_intern( "Window" ) ) );
 }
 
 // SFML.graphics?
-VALUE rbSFML::GraphicsLoaded(VALUE self)
+VALUE rbSFML::GraphicsLoaded( VALUE aSelf )
 {
-    return RBOOL(rb_cvar_defined(self, rb_intern("@@graphics")));
+    return RBOOL( rb_const_get( aSelf, rb_intern( "Graphics" ) ) );
 }
 
 // SFML.audio?
-VALUE rbSFML::AudioLoaded(VALUE self)
+VALUE rbSFML::AudioLoaded( VALUE aSelf )
 {
-    return RBOOL(rb_cvar_defined(self, rb_intern("@@audio")));
+    return RBOOL( rb_const_get( aSelf, rb_intern( "Audio" ) ) );
 }
 
 // Internal
 struct GetMemoryUsageInfo
 {
-    size_t mem_usage;
-    VALUE* list_ptr;
-    size_t list_len;
+    size_t memoryUsage;
+    VALUE* listPointer;
+    size_t listLength;
 };
 
 // Internal
-static VALUE GetMemoryUsageIterator(VALUE obj, VALUE data)
+static VALUE GetMemoryUsageIterator( VALUE anObject, VALUE aData )
 {
-    GetMemoryUsageInfo* info = (GetMemoryUsageInfo*)data;
-    for (size_t i = 0; i < info->list_len; ++i)
+    GetMemoryUsageInfo* info = (GetMemoryUsageInfo*)aData;
+    for( size_t index = 0; index < info->listLength; index++ )
     {
-        if (CLASS_OF(obj) == info->list_ptr[i])
+        if( CLASS_OF( anObject ) == info->listPointer[ index ] )
         {
-            VALUE usage = rb_funcall(obj, rb_intern("memory_usage"), 0);
-            info->mem_usage += NUM2SIZET(usage);
+            VALUE usage = rb_funcall( anObject, rb_intern( "memory_usage" ), 0 );
+            info->memoryUsage += NUM2SIZET( usage );
             return Qnil;
         }
     }
-    
+
     return Qnil;
 }
 
 // SFML.memory_usage
-VALUE rbSFML::GetMemoryUsage(VALUE self)
+VALUE rbSFML::GetMemoryUsage( VALUE aSelf )
 {
-    void* tbl = rb_mod_const_at(self, 0);
-    VALUE list = rb_const_list(tbl);
-    
+    void* table = rb_mod_const_at( aSelf, 0 );
+    VALUE list = rb_const_list( table );
+
     GetMemoryUsageInfo info;
-    info.mem_usage = 0;
-    info.list_ptr = RARRAY_PTR(list);
-    info.list_len = RARRAY_LEN(list);
-    
-    for (size_t i = 0; i < info.list_len; ++i)
-        info.list_ptr[i] = rb_const_get(self, SYM2ID(info.list_ptr[i]));
-    
-    VALUE rb_mObjSpace = rb_const_get(rb_cObject, rb_intern("ObjectSpace"));
-    rb_block_call(rb_mObjSpace, rb_intern("each_object"), 0, NULL,
-                  (VALUE(*)(...))GetMemoryUsageIterator, (VALUE)&info);
-    
-    return SIZET2NUM(info.mem_usage);
+    info.memoryUsage = 0;
+    info.listPointer = RARRAY_PTR( list );
+    info.listLength  = RARRAY_LEN( list );
+
+    for( size_t index = 0; index < info.listLength; index++ )
+    {
+        info.listPointer[ index ] = rb_const_get( aSelf, SYM2ID( info.listPointer[ index ] ) );
+    }
+
+    VALUE ObjectSpaceModule = rb_const_get( rb_cObject, rb_intern( "ObjectSpace" ) );
+    rb_block_call( ObjectSpaceModule, rb_intern( "each_object" ), 0, NULL,
+                   ( VALUE( * )( ... ) )GetMemoryUsageIterator, ( VALUE )&info );
+
+    return SIZET2NUM( info.memoryUsage );
 }
