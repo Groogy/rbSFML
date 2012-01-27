@@ -18,7 +18,7 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  */
- 
+
 #ifndef RBSFML_HPP
 #define RBSFML_HPP
 
@@ -29,7 +29,7 @@
 #define BINDING_VERSION "development-unstable"
 
 template< typename T >
-static inline void FREE( void *someMemory )
+static inline void Free( void *someMemory )
 {
 	T* object = static_cast< T* >( someMemory );
 	object->~T();
@@ -37,12 +37,18 @@ static inline void FREE( void *someMemory )
 }
 
 template< typename T >
-static inline VALUE ALLOCATE( VALUE aKlass )
+static inline VALUE Allocate( VALUE aKlass )
 {
 	void* memory = xmalloc( sizeof( T ) );
 	if( memory == NULL ) rb_memerror();
 	T* object = new( memory ) T;
     return ToRuby( object, aKlass );
+}
+
+template< typename T >
+static inline VALUE RubyAllocate( VALUE aKlass )
+{
+    return rb_obj_alloc( aKlass );
 }
 
 template< typename T >
@@ -73,18 +79,18 @@ static inline VALUE RBOOL( bool value )
 }
 
 static inline VALUE ToRuby( VALUE anOther, VALUE aKlass )
-{    
+{
     if( rb_obj_is_kind_of( anOther, aKlass ) )
         return anOther;
-    
+
     rb_raise( rb_eTypeError, "can't convert %s into %s",
               rb_obj_classname( anOther ), rb_class2name( aKlass ) );
 }
 
 template< typename T >
 static inline VALUE ToRuby( T* anObject, VALUE aKlass )
-{    
-    return rb_data_object_alloc( aKlass, anObject, NULL, FREE< T > );
+{
+    return rb_data_object_alloc( aKlass, anObject, NULL, Free< T > );
 }
 
 template< typename T >
@@ -107,20 +113,20 @@ typedef VALUE ( *RubyFunctionPtr )( ... );
 
 #define rb_define_module_function( klass, name, func, argc, ... ) \
         rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
-        
+
 #define rb_define_singleton_method( klass, name, func, argc, ... ) \
         rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
-        
+
 #define rb_define_class_method( klass, name, func, argc, ... ) \
-		rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ ) 
-		
+		rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
+
 #define rb_define_method( klass, name, func, argc, ... ) \
         rb_define_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
-		
+
 #define INVALID_EXPECTED_TYPE( type ) \
 		rb_raise( rb_eTypeError, "Did not receive expected type '%s'", rb_class2name( type ) );
-		
+
 #define INVALID_EXPECTED_TYPES( type1, type2 ) \
 		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ) );
-		
+
 #endif // RBSFML_HPP

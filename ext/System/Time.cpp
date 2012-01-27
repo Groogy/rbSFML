@@ -20,16 +20,17 @@
  */
 
 #define SYSTEM_TIME_CPP
+
 #include "Time.hpp"
 
 void rbTime::Init( VALUE SFML )
 {
     rbTime::Class = rb_define_class_under(SFML, "Time", rb_cObject );
     rb_include_module( rbTime::Class, rb_mComparable );
-	
+
     // Class methods
-    rb_define_alloc_func( rbTime::Class, ALLOCATE< sf::Time > );
-    
+    rb_define_alloc_func( rbTime::Class, Allocate< sf::Time > );
+
     // Instance methods
     rb_define_method( rbTime::Class, "initialize_copy", rbTime::InitializeCopy, 1 );
 	rb_define_method( rbTime::Class, "as_seconds",      rbTime::AsSeconds,      0 );
@@ -44,10 +45,10 @@ void rbTime::Init( VALUE SFML )
     rb_define_method( rbTime::Class, "<=>",             rbTime::Compare,        1 );
     rb_define_method( rbTime::Class, "inspect",         rbTime::Inspect,        0 );
 	rb_define_method( rbTime::Class, "memory_usage",    rbTime::GetMemoryUsage, 0 );
-	
-	// Class attributes	
+
+	// Class attributes
 	rb_define_const( rbTime::Class, "Zero", ToConstRuby( &sf::Time::Zero, rbTime::Class ) );
-    
+
     // Instance aliasses
     rb_define_alias( rbTime::Class, "to_s",             "inspect"      );
 }
@@ -89,7 +90,7 @@ VALUE rbTime::Compare( VALUE aSelf, VALUE anOther )
 {
     sf::Uint64 time1 = ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds();
     sf::Uint64 time2 = ToSFML< sf::Time >( anOther, rbTime::Class )->AsMicroseconds();
-    
+
     if( time1 == time2 ) return INT2FIX( 0 );
     if( time1 > time2 ) return INT2FIX( 1 );
     return INT2FIX( -1 );
@@ -121,7 +122,7 @@ VALUE rbTime::Subtract( VALUE aSelf, VALUE anOther )
 VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 {
 	sf::Time *time = NULL;
-	
+
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
 		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
@@ -136,7 +137,7 @@ VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 	{
 		INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
 	}
-	
+
 	return ToRuby( time, rbTime::Class );
 }
 
@@ -144,7 +145,7 @@ VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 VALUE rbTime::Divide( VALUE aSelf, VALUE anOther )
 {
 	sf::Time *time = NULL;
-	
+
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
 		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
@@ -159,7 +160,7 @@ VALUE rbTime::Divide( VALUE aSelf, VALUE anOther )
 	{
 		INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
 	}
-	
+
 	return ToRuby( time, rbTime::Class );
 }
 

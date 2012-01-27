@@ -20,16 +20,17 @@
  */
 
 #define SYSTEM_CLOCK_CPP
+
 #include "Clock.hpp"
 #include "Time.hpp"
 
 void rbClock::Init( VALUE SFML )
 {
     rbClock::Class = rb_define_class_under( SFML, "Clock", rb_cObject );
-    
+
     // Class methods
-    rb_define_alloc_func( rbClock::Class, ALLOCATE< sf::Clock > );
-    
+    rb_define_alloc_func( rbClock::Class, Allocate< sf::Clock > );
+
     // Instance methods
     rb_define_method( rbClock::Class, "initialize_copy", rbClock::InitializeCopy, 1 );
     rb_define_method( rbClock::Class, "marshal_dump",    rbClock::MarshalDump,    0 );
@@ -37,7 +38,7 @@ void rbClock::Init( VALUE SFML )
     rb_define_method( rbClock::Class, "restart",         rbClock::Restart,        0 );
     rb_define_method( rbClock::Class, "inspect",         rbClock::Inspect,        0 );
     rb_define_method( rbClock::Class, "memory_usage",    rbClock::GetMemoryUsage, 0 );
-    
+
     // Instance aliasses
     rb_define_alias( rbClock::Class, "getElapsedTime",   "elapsed_time" );
     rb_define_alias( rbClock::Class, "get_elapsed_time", "elapsed_time" );

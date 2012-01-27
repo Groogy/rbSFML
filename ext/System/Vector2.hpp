@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -30,166 +30,150 @@
 
 namespace rbVector2
 {
-    static inline VALUE Allocate(VALUE self);
-    
-    static inline int Type(VALUE vector2);
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector2i& vector2, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Vector2f& vector2, VALUE klass=false);
-    static inline sf::Vector2i ToSFMLi(VALUE vector2, VALUE klass=false);
-    static inline sf::Vector2f ToSFMLf(VALUE vector2, VALUE klass=false);
-    
-    static inline VALUE GetX(VALUE vector2);
-    static inline VALUE GetY(VALUE vector2);
-    static inline void SetX(VALUE vector2, VALUE value);
-    static inline void SetY(VALUE vector2, VALUE value);
-    
-#if defined(SYSTEM_VECTOR2_CPP)
-    VALUE Vector2;
+    static inline int Type( VALUE aVector2 );
+    static inline VALUE ToRuby( VALUE anOther );
+    static inline VALUE ToRuby( sf::Vector2i& aVector2 );
+    static inline VALUE ToRuby( sf::Vector2f& aVector2 );
+    static inline sf::Vector2i ToSFMLi( VALUE aVector2 );
+    static inline sf::Vector2f ToSFMLf( VALUE aVector2 );
+
+    static inline VALUE GetX( VALUE aVector2 );
+    static inline VALUE GetY( VALUE aVector2 );
+    static inline void SetX( VALUE aVector2, VALUE aValue );
+    static inline void SetY( VALUE aVector2, VALUE aValue );
+
+#if defined( SYSTEM_VECTOR2_CPP )
+    VALUE Class;
 #else
-    extern VALUE Vector2;
-#endif
-    
-#if defined(RBSFML_SYSTEM)
-    void Init(VALUE SFML);
+    extern VALUE Class;
 #endif
 
-#if defined(SYSTEM_VECTOR2_CPP)
+#if defined( RBSFML_SYSTEM )
+    void Init( VALUE SFML );
+#endif
+
+#if defined( SYSTEM_VECTOR2_CPP )
     // Vector2#initialize
-    // Vector2#initialize(vector2)
-    // Vector2#initialize(x, y)
-    static VALUE Initialize(int argc, VALUE* args, VALUE self);
-    
-    // Vector2#initialize_copy(vector2)
-    static VALUE InitializeCopy(VALUE self, VALUE vector2);
-    
+    // Vector2#initialize( vector2 )
+    // Vector2#initialize( x, y )
+    static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
+
+    // Vector2#initialize_copy( vector2 )
+    static VALUE InitializeCopy( VALUE aSelf, VALUE aVector2 );
+
     // Vector2#marshal_dump
-    static VALUE MarshalDump(VALUE self);
-    
-    // Vector2#marshal_load(data)
-    static VALUE MarshalLoad(VALUE self, VALUE data);
-    
-    // Vector2#coerce(other)
-    static VALUE Coerce(VALUE self, VALUE other);
-    
+    static VALUE MarshalDump( VALUE aSelf );
+
+    // Vector2#marshal_load( data )
+    static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
+
+    // Vector2#coerce( other )
+    static VALUE Coerce( VALUE aSelf, VALUE anOther );
+
     // Vector2#-@
-    static VALUE Negate(VALUE self);
-    
+    static VALUE Negate( VALUE aSelf );
+
     // Vector2#+(other)
-    static VALUE Add(VALUE self, VALUE other);
-    
+    static VALUE Add( VALUE aSelf, VALUE anOther );
+
     // Vector2#-(other)
-    static VALUE Subtract(VALUE self, VALUE other);
-    
+    static VALUE Subtract( VALUE aSelf, VALUE anOther );
+
     // Vector2#*(other)
-    static VALUE Multiply(VALUE self, VALUE other);
-    
+    static VALUE Multiply( VALUE aSelf, VALUE anOther );
+
     // Vector2#/(other)
-    static VALUE Divide(VALUE self, VALUE other);
-    
+    static VALUE Divide( VALUE aSelf, VALUE anOther );
+
     // Vector2#==(other)
-    static VALUE Equal(VALUE self, VALUE other);
-    
+    static VALUE Equal( VALUE aSelf, VALUE anOther );
+
     // Vector2#eql?(other)
     // Vector2#equal?(other)
-    static VALUE StrictEqual(VALUE self, VALUE other);
-    
+    static VALUE StrictEqual( VALUE aSelf, VALUE anOther );
+
     // Vector2#inspect
     // Vector2#to_s
-    static VALUE Inspect(VALUE self);
-    
+    static VALUE Inspect( VALUE aSelf );
+
     // Vector2#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
-    
+
 }
 
-VALUE rbVector2::Allocate(VALUE self)
-{
-    return rb_obj_alloc(self);
-}
-
-int rbVector2::Type(VALUE vector2)
+int rbVector2::Type( VALUE aVector2 )
 {
     // T_FIXNUM or T_FLOAT
-    return rb_type(GetX(vector2));
+    return rb_type( GetX( aVector2 ) );
 }
 
-VALUE rbVector2::ToRuby(VALUE other, VALUE klass)
+VALUE rbVector2::ToRuby( VALUE anOther )
 {
-    if (!klass)
-        klass = Vector2;
-    
-    if (rb_obj_is_kind_of(other, Vector2))
-        return other;
-    
-    if (rb_obj_is_kind_of(other, rb_cNumeric))
-        return rb_class_new_instance(2, (VALUE[]){other, other}, klass);
-    
-    if (rb_type(other) == T_ARRAY)
-        return rb_class_new_instance(RARRAY_LEN(other), RARRAY_PTR(other),
-                                     klass);
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
+    if( rb_obj_is_kind_of( anOther, rbVector2::Class ) )
+        return anOther;
+
+    if( rb_obj_is_kind_of( anOther, rb_cNumeric ) )
+        return rb_class_new_instance( 2, ( VALUE[] ){ anOther, anOther }, rbVector2::Class );
+
+    if(rb_type( anOther ) == T_ARRAY)
+        return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
+                                      rbVector2::Class );
+
+    rb_raise( rb_eTypeError, "can't convert %s into %s",
+              rb_obj_classname( anOther ), rb_class2name( rbVector2::Class ) );
 }
 
-VALUE rbVector2::ToRuby(sf::Vector2i& vector2, VALUE klass)
+VALUE rbVector2::ToRuby( sf::Vector2i& aVector2 )
 {
-    if (!klass)
-        klass = Vector2;
-    
-    VALUE x = INT2FIX(vector2.x);
-    VALUE y = INT2FIX(vector2.y);
-    return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
+    VALUE x = INT2FIX( aVector2.x );
+    VALUE y = INT2FIX( aVector2.y );
+    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
 }
 
-VALUE rbVector2::ToRuby(sf::Vector2f& vector2, VALUE klass)
+VALUE rbVector2::ToRuby( sf::Vector2f& aVector2 )
 {
-    if (!klass)
-        klass = Vector2;
-    
-    VALUE x = rb_float_new(vector2.x);
-    VALUE y = rb_float_new(vector2.y);
-    return rb_class_new_instance(2, (VALUE[]){x, y}, klass);
+    VALUE x = rb_float_new( aVector2.x );
+    VALUE y = rb_float_new( aVector2.y );
+    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
 }
 
-sf::Vector2i rbVector2::ToSFMLi(VALUE vector2, VALUE klass)
+sf::Vector2i rbVector2::ToSFMLi( VALUE aVector2 )
 {
-    vector2 = ToRuby(vector2, klass);
-    int x = NUM2INT(GetX(vector2));
-    int y = NUM2INT(GetY(vector2));
-    return sf::Vector2i(x, y);
+    aVector2 = ToRuby( aVector2 );
+    int x = NUM2INT( GetX( aVector2 ) );
+    int y = NUM2INT( GetY( aVector2 ) );
+    return sf::Vector2i( x, y );
 }
 
-sf::Vector2f rbVector2::ToSFMLf(VALUE vector2, VALUE klass)
+sf::Vector2f rbVector2::ToSFMLf( VALUE aVector2 )
 {
-    vector2 = ToRuby(vector2, klass);
-    float x = NUM2DBL(GetX(vector2));
-    float y = NUM2DBL(GetY(vector2));
-    return sf::Vector2f(x, y);
+    aVector2 = ToRuby( aVector2 );
+    float x = NUM2DBL( GetX( aVector2 ) );
+    float y = NUM2DBL( GetY( aVector2 ) );
+    return sf::Vector2f( x, y );
 }
 
-VALUE rbVector2::GetX(VALUE vector2)
+VALUE rbVector2::GetX( VALUE aVector2 )
 {
-    return rb_iv_get(vector2, "@x");
+    return rb_iv_get( aVector2, "@x" );
 }
 
-VALUE rbVector2::GetY(VALUE vector2)
+VALUE rbVector2::GetY( VALUE aVector2 )
 {
-    return rb_iv_get(vector2, "@y");
+    return rb_iv_get( aVector2, "@y" );
 }
 
-void rbVector2::SetX(VALUE vector2, VALUE value)
+void rbVector2::SetX(VALUE aVector2, VALUE aValue )
 {
-    rb_check_frozen(vector2);
-    rb_iv_set(vector2, "@x", value);
+    rb_check_frozen( aVector2 );
+    rb_iv_set( aVector2, "@x", aValue );
 }
 
-void rbVector2::SetY(VALUE vector2, VALUE value)
+void rbVector2::SetY( VALUE aVector2, VALUE aValue )
 {
-    rb_check_frozen(vector2);
-    rb_iv_set(vector2, "@y", value);
+    rb_check_frozen( aVector2 );
+    rb_iv_set( aVector2, "@y", aValue );
 }
 
 #endif // SYSTEM_VECTOR2_HPP

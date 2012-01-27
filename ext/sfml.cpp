@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -20,7 +20,7 @@
  */
 
 #include <sstream>
-std::stringstream gErrorStream;
+std::stringstream globalErrorStream;
 
 extern "C"
 {
@@ -29,7 +29,7 @@ extern "C"
     void Init_window();
     //void Init_graphics();
     void Init_audio();
-    
+
     void Init_sfml()
     {
         Init_system();

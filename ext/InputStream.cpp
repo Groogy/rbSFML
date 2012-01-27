@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -23,35 +23,35 @@
 
 // TODO: Work with bignums. Now it's limited to Int32.
 
-rbInputStream::rbInputStream(VALUE io)
+rbInputStream::rbInputStream( VALUE anInputObject )
 {
-    self = io;
+    self = anInputObject;
 }
 
-sf::Int64 rbInputStream::Read(char* buffer, sf::Int64 size)
+sf::Int64 rbInputStream::Read( char* aBuffer, sf::Int64 aSize )
 {
-    VALUE str = rb_funcall(self, rb_intern("read"), 1, INT2NUM(size));
-    memcpy(buffer, RSTRING_PTR(str), RSTRING_LEN(str));
-    return RSTRING_LEN(str);
+    VALUE str = rb_funcall( self, rb_intern( "read" ), 1, INT2NUM( aSize ) );
+    memcpy( aBuffer, RSTRING_PTR( str ), RSTRING_LEN( str ) );
+    return RSTRING_LEN( str );
 }
 
-sf::Int64 rbInputStream::Seek(sf::Int64 position)
+sf::Int64 rbInputStream::Seek( sf::Int64 aPosition )
 {
-    rb_funcall(self, rb_intern("seek"), 1, INT2NUM(position));
-    return position;
+    VALUE returnValue = rb_funcall( self, rb_intern( "seek" ), 1, INT2NUM( aPosition ) );
+    return NUM2INT( returnValue );
 }
 
 sf::Int64 rbInputStream::Tell()
 {
-    return NUM2INT(rb_funcall(self, rb_intern("tell"), 0));
+    return NUM2INT( rb_funcall( self, rb_intern( "tell" ), 0 ) );
 }
 
 sf::Int64 rbInputStream::GetSize()
 {
-    static VALUE cSEEK_END = rb_const_get(rb_cIO, rb_intern("SEEK_END"));
-    VALUE pos = rb_funcall(self, rb_intern("tell"), 0);
-    rb_funcall(self, rb_intern("seek"), 2, INT2FIX(0), cSEEK_END);
-    VALUE size = rb_funcall(self, rb_intern("tell"), 0);
-    rb_funcall(self, rb_intern("seek"), 1, pos);
-    return NUM2INT(size);
+    static VALUE cSEEK_END = rb_const_get( rb_cIO, rb_intern( "SEEK_END" ) );
+    VALUE pos = rb_funcall( self, rb_intern( "tell" ), 0 );
+    rb_funcall( self, rb_intern( "seek" ), 2, INT2FIX( 0 ), cSEEK_END );
+    VALUE size = rb_funcall( self, rb_intern( "tell" ), 0 );
+    rb_funcall( self, rb_intern( "seek" ), 1, pos );
+    return NUM2INT( size );
 }

@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -21,9 +21,9 @@
 
 #include <System.hpp>
 
-#if !defined(RBSFML_SFML)
+#if !defined( RBSFML_SFML )
 #include <sstream>
-std::stringstream gErrorStream;
+std::stringstream globalErrorStream;
 #endif
 
 extern "C"
@@ -31,7 +31,7 @@ void Init_system()
 {
     VALUE SFML = rbSFML::Module();
 	rb_define_const( SFML, "System", Qtrue );
-    
+
     rbSFML::Init(SFML);
     rbClock::Init(SFML);
     rbVector2::Init(SFML);

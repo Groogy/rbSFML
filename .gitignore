@@ -2,3 +2,4 @@ include/*
 lib/*
 obj/*
 sfml/*
+*.cbp
