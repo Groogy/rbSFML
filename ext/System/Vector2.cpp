@@ -67,15 +67,19 @@ VALUE rbVector2::Initialize( int argc, VALUE argv[], VALUE aSelf )
             InitializeCopy( aSelf, ToRuby( argv[ 0 ] ) );
             break;
         case 2:
-            if(FIXNUM_P( argv[ 0 ] ) and FIXNUM_P( argv[ 1 ] ) )
+            if( FIXNUM_P( argv[ 0 ] ) and FIXNUM_P( argv[ 1 ] ) )
             {
                 SetX( aSelf, argv[ 0 ] );
                 SetY( aSelf, argv[ 1 ] );
             }
-            else
+            else if( FLOAT_P( argv[ 0 ] ) and FLOAT_P( argv[ 1 ] ) )
             {
                 SetX( aSelf, rb_to_float( argv[ 0 ] ) );
                 SetY( aSelf, rb_to_float( argv[ 1 ] ) );
+            }
+            else
+            {
+                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
             }
             break;
         default:
@@ -101,6 +105,9 @@ VALUE rbVector2::InitializeCopy( VALUE aSelf, VALUE aVector2 )
         case T_FLOAT:
             SetX( aSelf, rb_float_new( NUM2DBL(x) ) );
             SetY( aSelf, rb_float_new( NUM2DBL(y) ) );
+            break;
+        default:
+            INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
             break;
     }
 

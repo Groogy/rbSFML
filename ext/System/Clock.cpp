@@ -29,7 +29,7 @@ void rbClock::Init( VALUE SFML )
     rbClock::Class = rb_define_class_under( SFML, "Clock", rb_cObject );
 
     // Class methods
-    rb_define_alloc_func( rbClock::Class, Allocate< sf::Clock > );
+    rb_define_alloc_func( rbClock::Class, rbMacros::Allocate< sf::Clock > );
 
     // Instance methods
     rb_define_method( rbClock::Class, "initialize_copy", rbClock::InitializeCopy, 1 );
@@ -49,7 +49,7 @@ void rbClock::Init( VALUE SFML )
 // Clock#initialize_copy(clock)
 VALUE rbClock::InitializeCopy( VALUE aSelf, VALUE aClock )
 {
-    *ToSFML< sf::Clock >( aSelf, rbClock::Class ) = *ToSFML< sf::Clock >( aClock, rbClock::Class );
+    *rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class ) = *rbMacros::ToSFML< sf::Clock >( aClock, rbClock::Class );
     return aSelf;
 }
 
@@ -65,23 +65,23 @@ VALUE rbClock::MarshalDump( VALUE aSelf )
 // Clock#time
 VALUE rbClock::GetElapsedTime( VALUE aSelf )
 {
-	sf::Time *time = new sf::Time( ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime() );
-    return ToRuby( time, rbTime::Class );
+	sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime() );
+    return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Clock#restart
 VALUE rbClock::Restart( VALUE aSelf )
 {
     rb_check_frozen( aSelf );
-    sf::Time *time = new sf::Time( ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart() );
-    return ToRuby( time, rbClock::Class );
+    sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart() );
+    return rbMacros::ToRuby( time, rbClock::Class );
 }
 
 // Clock#inspect
 // Clock#to_s
 VALUE rbClock::Inspect( VALUE aSelf )
 {
-    sf::Clock* clock = ToSFML< sf::Clock >( aSelf, rbClock::Class );
+    sf::Clock* clock = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class );
     return rb_sprintf( "%s(%ims)",
                        rb_obj_classname( aSelf ),
                        clock->GetElapsedTime() );

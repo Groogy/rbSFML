@@ -29,7 +29,7 @@ void rbTime::Init( VALUE SFML )
     rb_include_module( rbTime::Class, rb_mComparable );
 
     // Class methods
-    rb_define_alloc_func( rbTime::Class, Allocate< sf::Time > );
+    rb_define_alloc_func( rbTime::Class, rbMacros::Allocate< sf::Time > );
 
     // Instance methods
     rb_define_method( rbTime::Class, "initialize_copy", rbTime::InitializeCopy, 1 );
@@ -47,35 +47,35 @@ void rbTime::Init( VALUE SFML )
 	rb_define_method( rbTime::Class, "memory_usage",    rbTime::GetMemoryUsage, 0 );
 
 	// Class attributes
-	rb_define_const( rbTime::Class, "Zero", ToConstRuby( &sf::Time::Zero, rbTime::Class ) );
+	rb_define_const( rbTime::Class, "Zero", rbMacros::ToConstRuby( &sf::Time::Zero, rbTime::Class ) );
 
     // Instance aliasses
-    rb_define_alias( rbTime::Class, "to_s",             "inspect"      );
+    rb_define_alias( rbTime::Class, "to_s", "inspect" );
 }
 
 // Time#initialize_copy( time )
 VALUE rbTime::InitializeCopy( VALUE aSelf, VALUE aTime )
 {
-    *ToSFML< sf::Time >( aSelf, rbTime::Class ) = *ToSFML< sf::Time >( aTime, rbTime::Class );
+    *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) = *rbMacros::ToSFML< sf::Time >( aTime, rbTime::Class );
     return aSelf;
 }
 
 // Time#as_seconds
 VALUE rbTime::AsSeconds( VALUE aSelf )
 {
-	return rb_float_new( ToSFML< sf::Time >( aSelf, rbTime::Class )->AsSeconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsSeconds() );
 }
 
 // Time#as_milliseconds
 VALUE rbTime::AsMilliseconds( VALUE aSelf )
 {
-	return rb_float_new( ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMilliseconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMilliseconds() );
 }
 
 // Time#as_microseconds
 VALUE rbTime::AsMicroseconds( VALUE aSelf )
 {
-	return rb_float_new( ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds() );
 }
 
 // Time#marshal_dump
@@ -88,8 +88,8 @@ VALUE rbTime::MarshalDump( VALUE aSelf )
 // Time#<=>( other )
 VALUE rbTime::Compare( VALUE aSelf, VALUE anOther )
 {
-    sf::Uint64 time1 = ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds();
-    sf::Uint64 time2 = ToSFML< sf::Time >( anOther, rbTime::Class )->AsMicroseconds();
+    sf::Uint64 time1 = rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds();
+    sf::Uint64 time2 = rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class )->AsMicroseconds();
 
     if( time1 == time2 ) return INT2FIX( 0 );
     if( time1 > time2 ) return INT2FIX( 1 );
@@ -99,23 +99,23 @@ VALUE rbTime::Compare( VALUE aSelf, VALUE anOther )
 // Time#-@
 VALUE rbTime::Negate( VALUE aSelf )
 {
-	return ToRuby( new sf::Time( -( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) ), rbTime::Class );
+	return rbMacros::ToRuby( new sf::Time( -( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) ), rbTime::Class );
 }
 
 // Time#+( other )
 VALUE rbTime::Addition( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) +
-								   ( *ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
-	return ToRuby( time, rbTime::Class );
+	sf::Time *time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) +
+								   ( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
+	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#-( other )
 VALUE rbTime::Subtract( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) -
-								   ( *ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
-	return ToRuby( time, rbTime::Class );
+	sf::Time *time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) -
+								   ( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
+	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#*( other )
@@ -125,12 +125,12 @@ VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
-		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
+		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
 							 static_cast< sf::Int64 >( FIX2LONG( anOther ) ) );
 	}
 	else if( rb_obj_is_kind_of( anOther, rb_cFloat ) )
 	{
-		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
+		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
 							 static_cast< float >( NUM2DBL( anOther ) ) );
 	}
 	else
@@ -138,7 +138,7 @@ VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 		INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
 	}
 
-	return ToRuby( time, rbTime::Class );
+	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#/( other )
@@ -148,12 +148,12 @@ VALUE rbTime::Divide( VALUE aSelf, VALUE anOther )
 
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
-		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
+		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
 							 static_cast< sf::Int64 >( FIX2LONG( anOther ) ) );
 	}
 	else if( rb_obj_is_kind_of( anOther, rb_cFloat ) )
 	{
-		time = new sf::Time( ( *ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
+		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
 							 static_cast< float >( NUM2DBL( anOther ) ) );
 	}
 	else
@@ -161,14 +161,14 @@ VALUE rbTime::Divide( VALUE aSelf, VALUE anOther )
 		INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
 	}
 
-	return ToRuby( time, rbTime::Class );
+	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#inspect
 // Timne#to_s
 VALUE rbTime::Inspect( VALUE aSelf )
 {
-    sf::Time* time = ToSFML< sf::Time >( aSelf, rbTime::Class );
+    sf::Time* time = rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class );
     return rb_sprintf( "%s(%fs)",
                        rb_obj_classname( aSelf ),
                        time->AsSeconds() );

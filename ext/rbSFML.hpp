@@ -28,29 +28,62 @@
 #define SFML_VERSION    "2.0"
 #define BINDING_VERSION "development-unstable"
 
-template< typename T >
-static inline void Free( void *someMemory )
+namespace rbMacros
 {
-	T* object = static_cast< T* >( someMemory );
-	object->~T();
-	xfree( someMemory );
-}
+    template< typename T >
+    static inline void Free( void *someMemory )
+    {
+        T* object = static_cast< T* >( someMemory );
+        object->~T();
+        xfree( someMemory );
+    }
 
-template< typename T >
-static inline VALUE Allocate( VALUE aKlass )
-{
-	void* memory = xmalloc( sizeof( T ) );
-	if( memory == NULL ) rb_memerror();
-	T* object = new( memory ) T;
-    return ToRuby( object, aKlass );
-}
+    template< typename T >
+    static inline VALUE Allocate( VALUE aKlass )
+    {
+        void* memory = xmalloc( sizeof( T ) );
+        if( memory == NULL ) rb_memerror();
+        T* object = new( memory ) T;
+        return ToRuby( object, aKlass );
+    }
 
-template< typename T >
-static inline VALUE RubyAllocate( VALUE aKlass )
-{
-    return rb_obj_alloc( aKlass );
-}
+    template< typename T >
+    static inline VALUE RubyAllocate( VALUE aKlass )
+    {
+        return rb_obj_alloc( aKlass );
+    }
 
+    static inline VALUE ToRuby( VALUE anOther, VALUE aKlass )
+    {
+        if( rb_obj_is_kind_of( anOther, aKlass ) )
+            return anOther;
+
+        rb_raise( rb_eTypeError, "can't convert %s into %s",
+                  rb_obj_classname( anOther ), rb_class2name( aKlass ) );
+    }
+
+    template< typename T >
+    static inline VALUE ToRuby( T* anObject, VALUE aKlass )
+    {
+        return rb_data_object_alloc( aKlass, anObject, NULL, rbMacros::Free< T > );
+    }
+
+    template< typename T >
+    static inline VALUE ToConstRuby( const T* anObject, VALUE aKlass )
+    {
+        static ID freezeSymbol = rb_intern( "freeze" );
+        VALUE constObj = rb_data_object_alloc( aKlass, const_cast< T* >( anObject ), NULL, NULL );
+        rb_funcall( constObj, freezeSymbol, 0 );
+        return constObj;
+    }
+
+    template< typename T >
+    static inline T* ToSFML( VALUE anObject, VALUE aKlass )
+    {
+        anObject = ToRuby( anObject, aKlass );
+        return static_cast< T* >( DATA_PTR( anObject ) );
+    }
+}
 template< typename T >
 static inline T MAX( T a, T b )
 {
@@ -78,37 +111,6 @@ static inline VALUE RBOOL( bool value )
     return value ? Qtrue : Qfalse;
 }
 
-static inline VALUE ToRuby( VALUE anOther, VALUE aKlass )
-{
-    if( rb_obj_is_kind_of( anOther, aKlass ) )
-        return anOther;
-
-    rb_raise( rb_eTypeError, "can't convert %s into %s",
-              rb_obj_classname( anOther ), rb_class2name( aKlass ) );
-}
-
-template< typename T >
-static inline VALUE ToRuby( T* anObject, VALUE aKlass )
-{
-    return rb_data_object_alloc( aKlass, anObject, NULL, Free< T > );
-}
-
-template< typename T >
-static inline VALUE ToConstRuby( const T* anObject, VALUE aKlass )
-{
-	static ID freezeSymbol = rb_intern( "freeze" );
-	VALUE constObj = rb_data_object_alloc( aKlass, const_cast< T* >( anObject ), NULL, NULL );
-	rb_funcall( constObj, freezeSymbol, 0 );
-	return constObj;
-}
-
-template< typename T >
-static inline T* ToSFML( VALUE anObject, VALUE aKlass )
-{
-    anObject = ToRuby( anObject, aKlass );
-    return static_cast< T* >( DATA_PTR( anObject ) );
-}
-
 typedef VALUE ( *RubyFunctionPtr )( ... );
 
 #define rb_define_module_function( klass, name, func, argc, ... ) \
@@ -128,5 +130,7 @@ typedef VALUE ( *RubyFunctionPtr )( ... );
 
 #define INVALID_EXPECTED_TYPES( type1, type2 ) \
 		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ) );
+
+#define FLOAT_P( value ) rb_obj_is_kind_of( value, rb_cFloat )
 
 #endif // RBSFML_HPP
