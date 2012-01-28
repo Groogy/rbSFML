@@ -3,3 +3,4 @@ lib/*
 obj/*
 sfml/*
 *.cbp
+rbSFML.layout
