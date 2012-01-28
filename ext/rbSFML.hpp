@@ -47,10 +47,15 @@ namespace rbMacros
         return ToRuby( object, aKlass );
     }
 
-    template< typename T >
     static inline VALUE RubyAllocate( VALUE aKlass )
     {
         return rb_obj_alloc( aKlass );
+    }
+
+    static inline VALUE AbstractAllocate( VALUE aKlass )
+    {
+        rb_raise( rb_eRuntimeError, "can't allocate instance of abstract class %s", rb_class2name( aKlass ) );
+        return Qnil;
     }
 
     static inline VALUE ToRuby( VALUE anOther, VALUE aKlass )

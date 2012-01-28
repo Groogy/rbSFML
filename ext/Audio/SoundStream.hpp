@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -31,75 +31,62 @@
 
 namespace rbSoundStream
 {
-    static inline VALUE Allocate(VALUE);
-    static inline sf::SoundStream* ToSFML(VALUE sound_stream);
-    
-#if defined(AUDIO_SOUNDSTREAM_CPP)
-    VALUE SoundStream;
+#if defined( AUDIO_SOUNDSTREAM_CPP )
+    VALUE Class;
 #else
-    extern VALUE SoundStream;
+    extern VALUE Class;
 #endif
-    
-#if defined(RBSFML_AUDIO)
-    void Init(VALUE SFML); 
+
+#if defined( RBSFML_AUDIO )
+    void Init( VALUE SFML );
 #endif
-    
-#if defined(AUDIO_SOUNDSTREAM_CPP)
+
+#if defined( AUDIO_SOUNDSTREAM_CPP )
     // SoundStream#play
     // SoundStream#Play
-    static VALUE Play(VALUE self);
-    
+    static VALUE Play( VALUE aSelf );
+
     // SoundStream#pause
     // SoundStream#Pause
-    static VALUE Pause(VALUE self);
-    
+    static VALUE Pause( VALUE aSelf );
+
     // SoundStream#stop
     // SoundStream#Stop
-    static VALUE Stop(VALUE self);
-    
+    static VALUE Stop( VALUE aSelf );
+
     // SoundStream#loop=(loop)
     // SoundStream#SetLoop(loop)
-    static VALUE SetLoop(VALUE self, VALUE loop);
-    
+    static VALUE SetLoop( VALUE aSelf, VALUE aLoop );
+
     // SoundStream#playing_offset=(offset)
     // SoundStream#SetPlayingOffset(offset)
     // SoundStream#offset=(offset)
-    static VALUE SetPlayingOffset(VALUE self, VALUE offset);
-    
+    static VALUE SetPlayingOffset( VALUE aSelf, VALUE anOffset );
+
     // SoundStream#loop
     // SoundStream#GetLoop
-    static VALUE GetLoop(VALUE self);
-    
+    static VALUE GetLoop( VALUE aSelf );
+
     // SoundStream#playing_offset
     // SoundStream#GetPlayingOffset
     // SoundStream#offset
-    static VALUE GetPlayingOffset(VALUE self);
-    
+    static VALUE GetPlayingOffset( VALUE aSelf );
+
     // SoundStream#sample_rate
     // SoundStream#GetSampleRate
-    static VALUE GetSampleRate(VALUE self);
-    
+    static VALUE GetSampleRate( VALUE aSelf );
+
     // SoundStream#channels_count
     // SoundStream#GetChannelsCount
     // SoundStream#channels
-    static VALUE GetChannelsCount(VALUE self);
-    
+    static VALUE GetChannelsCount( VALUE aSelf );
+
     // SoundStream#status
     // SoundStream#GetStatus
-    static VALUE GetStatus(VALUE self);
+    static VALUE GetStatus( VALUE aSelf );
+
 #endif
-    
-}
 
-VALUE rbSoundStream::Allocate(VALUE self)
-{
-    rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
-    return Qnil;
-}
-
-sf::SoundStream* rbSoundStream::ToSFML(VALUE sound_stream)
-{
-    return (sf::SoundStream*)DATA_PTR(sound_stream);
 }
 
 #endif // AUDIO_SOUNDSTREAM_HPP

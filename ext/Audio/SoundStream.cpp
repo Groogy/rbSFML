@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -22,115 +22,115 @@
 #define AUDIO_SOUNDSTREAM_CPP
 #include "SoundStream.hpp"
 
-void rbSoundStream::Init(VALUE SFML)
+void rbSoundStream::Init( VALUE SFML )
 {
-    SoundStream = rb_define_class_under(SFML, "SoundStream", rbSoundSource::SoundSource);
-    
+    rbSoundStream::Class = rb_define_class_under( SFML, "SoundStream", rbSoundSource::SoundSource );
+
     // Class methods
-    rb_define_alloc_func(SoundStream, Allocate);
-    
+    rb_define_alloc_func(rbSoundStream::Class, Allocate);
+
     // Instance methods
-    rb_define_method(SoundStream, "play",            Play,             0);
-    rb_define_method(SoundStream, "pause",           Pause,            0);
-    rb_define_method(SoundStream, "stop",            Stop,             0);
-    rb_define_method(SoundStream, "loop=",           SetLoop,          1);
-    rb_define_method(SoundStream, "playing_offset=", SetPlayingOffset, 1);
-    rb_define_method(SoundStream, "loop",            GetLoop,          0);
-    rb_define_method(SoundStream, "playing_offset",  GetPlayingOffset, 0);
-    rb_define_method(SoundStream, "sample_rate",     GetSampleRate,    0);
-    rb_define_method(SoundStream, "channels_count",  GetChannelsCount, 0);
-    rb_define_method(SoundStream, "status",          GetStatus,        0);
-    
+    rb_define_method( rbSoundStream::Class, "play",            rbSoundStream::Play,             0 );
+    rb_define_method( rbSoundStream::Class, "pause",           rbSoundStream::Pause,            0 );
+    rb_define_method( rbSoundStream::Class, "stop",            rbSoundStream::Stop,             0 );
+    rb_define_method( rbSoundStream::Class, "loop=",           rbSoundStream::SetLoop,          1 );
+    rb_define_method( rbSoundStream::Class, "playing_offset=", rbSoundStream::SetPlayingOffset, 1 );
+    rb_define_method( rbSoundStream::Class, "loop",            rbSoundStream::GetLoop,          0 );
+    rb_define_method( rbSoundStream::Class, "playing_offset",  rbSoundStream::GetPlayingOffset, 0 );
+    rb_define_method( rbSoundStream::Class, "sample_rate",     rbSoundStream::GetSampleRate,    0 );
+    rb_define_method( rbSoundStream::Class, "channels_count",  rbSoundStream::GetChannelsCount, 0 );
+    rb_define_method( rbSoundStream::Class, "status",          rbSoundStream::GetStatus,        0 );
+
     // Instance aliasses
-    rb_define_alias(SoundStream, "Play",             "play"           );
-    rb_define_alias(SoundStream, "Pause",            "pause"          );
-    rb_define_alias(SoundStream, "Stop",             "stop"           );
-    rb_define_alias(SoundStream, "SetLoop",          "loop="          );
-    rb_define_alias(SoundStream, "SetPlayingOffset", "playing_offset=");
-    rb_define_alias(SoundStream, "offset=",          "playing_offset=");
-    rb_define_alias(SoundStream, "GetLoop",          "loop"           );
-    rb_define_alias(SoundStream, "GetPlayingOffset", "playing_offset" );
-    rb_define_alias(SoundStream, "offset",           "playing_offset" );
-    rb_define_alias(SoundStream, "GetSampleRate",    "sample_rate"    );
-    rb_define_alias(SoundStream, "GetChannelsCount", "channels_count" );
-    rb_define_alias(SoundStream, "channels",         "channels_count" );
-    rb_define_alias(SoundStream, "GetStatus",        "status"         );
+    rb_define_alias( rbSoundStream::Class, "Play",             "play"            );
+    rb_define_alias( rbSoundStream::Class, "Pause",            "pause"           );
+    rb_define_alias( rbSoundStream::Class, "Stop",             "stop"            );
+    rb_define_alias( rbSoundStream::Class, "SetLoop",          "loop="           );
+    rb_define_alias( rbSoundStream::Class, "SetPlayingOffset", "playing_offset=" );
+    rb_define_alias( rbSoundStream::Class, "offset=",          "playing_offset=" );
+    rb_define_alias( rbSoundStream::Class, "GetLoop",          "loop"            );
+    rb_define_alias( rbSoundStream::Class, "GetPlayingOffset", "playing_offset"  );
+    rb_define_alias( rbSoundStream::Class, "offset",           "playing_offset"  );
+    rb_define_alias( rbSoundStream::Class, "GetSampleRate",    "sample_rate"     );
+    rb_define_alias( rbSoundStream::Class, "GetChannelsCount", "channels_count"  );
+    rb_define_alias( rbSoundStream::Class, "channels",         "channels_count"  );
+    rb_define_alias( rbSoundStream::Class, "GetStatus",        "status"          );
 }
 
 // SoundStream#play
 // SoundStream#Play
-VALUE rbSoundStream::Play(VALUE self)
+VALUE rbSoundStream::Play( VALUE aSelf )
 {
-    ToSFML(self)->Play();
+    ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->Play();
     return Qnil;
 }
 
 // SoundStream#pause
 // SoundStream#Pause
-VALUE rbSoundStream::Pause(VALUE self)
+VALUE rbSoundStream::Pause( VALUE aSelf )
 {
-    ToSFML(self)->Pause();
+    ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->Pause();
     return Qnil;
 }
 
 // SoundStream#stop
 // SoundStream#Stop
-VALUE rbSoundStream::Stop(VALUE self)
+VALUE rbSoundStream::Stop( VALUE aSelf )
 {
-    ToSFML(self)->Stop();
+    ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->Stop();
     return Qnil;
 }
 
 // SoundStream#loop=(loop)
 // SoundStream#SetLoop(loop)
-VALUE rbSoundStream::SetLoop(VALUE self, VALUE loop)
+VALUE rbSoundStream::SetLoop( VALUE aSelf, VALUE aLoop )
 {
-    ToSFML(self)->SetLoop(RTEST(loop));
+    ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->SetLoop(RTEST(loop));
     return Qnil;
 }
 
 // SoundStream#playing_offset=(offset)
 // SoundStream#SetPlayingOffset(offset)
 // SoundStream#offset=(offset)
-VALUE rbSoundStream::SetPlayingOffset(VALUE self, VALUE offset)
+VALUE rbSoundStream::SetPlayingOffset( VALUE aSelf, VALUE anOffset )
 {
-    ToSFML(self)->SetPlayingOffset(NUM2UINT(offset));
+    ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->SetPlayingOffset( NUM2UINT( anOffset ) );
     return Qnil;
 }
 
 // SoundStream#loop
 // SoundStream#GetLoop
-VALUE rbSoundStream::GetLoop(VALUE self)
+VALUE rbSoundStream::GetLoop( VALUE aSelf )
 {
-    return RBOOL(ToSFML(self)->GetLoop());
+    return RBOOL( ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->GetLoop() );
 }
 
 // SoundStream#playing_offset
 // SoundStream#GetPlayingOffset
 // SoundStream#offset
-VALUE rbSoundStream::GetPlayingOffset(VALUE self)
+VALUE rbSoundStream::GetPlayingOffset( VALUE aSelf )
 {
-    return UINT2NUM(ToSFML(self)->GetPlayingOffset());
+    return UINT2NUM( ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->GetPlayingOffset() );
 }
 
 // SoundStream#sample_rate
 // SoundStream#GetSampleRate
-VALUE rbSoundStream::GetSampleRate(VALUE self)
+VALUE rbSoundStream::GetSampleRate( VALUE aSelf )
 {
-    return UINT2NUM(ToSFML(self)->GetSampleRate());
+    return UINT2NUM( ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->GetSampleRate() );
 }
 
 // SoundStream#channels_count
 // SoundStream#GetChannelsCount
 // SoundStream#channels
-VALUE rbSoundStream::GetChannelsCount(VALUE self)
+VALUE rbSoundStream::GetChannelsCount( VALUE aSelf )
 {
-    return UINT2NUM(ToSFML(self)->GetChannelsCount());
+    return UINT2NUM( ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->GetChannelsCount() );
 }
 
 // SoundStream#status
 // SoundStream#GetStatus
-VALUE rbSoundStream::GetStatus(VALUE self)
+VALUE rbSoundStream::GetStatus( VALUE aSelf )
 {
-    return INT2FIX(ToSFML(self)->GetStatus());
+    return INT2FIX( ToSFML< sf::SoundStream >( aSelf, rbSoundStream::Class )->GetStatus() );
 }

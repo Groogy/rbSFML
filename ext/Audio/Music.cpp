@@ -25,7 +25,7 @@
 
 void rbMusic::Init( VALUE SFML )
 {
-    rbMusic::Class = rb_define_class_under( SFML, "Music", rbSoundStream::SoundStream );
+    rbMusic::Class = rb_define_class_under( SFML, "Music", rbSoundStream::Class );
     rb_include_module( rbMusic::Class, rbNonCopyable::Module );
 
     // Class methods
