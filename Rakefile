@@ -42,7 +42,6 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
 
 SHARED = ["#{EXT_DIR}/InputStream.cpp" ]
-WRAPPER = FileList.new( "#{WRAPPER_DIR}/*.cpp" )
 
 LIBS = []
 OBJS = {}
