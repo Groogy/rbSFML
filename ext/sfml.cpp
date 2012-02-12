@@ -26,15 +26,15 @@ extern "C"
 {
 
     void Init_system();
-    void Init_window();
+    //void Init_window();
     //void Init_graphics();
-    void Init_audio();
+    //void Init_audio();
 
     void Init_sfml()
     {
         Init_system();
-        Init_window();
+        //Init_window();
         //Init_graphics();
-        Init_audio();
+        //Init_audio();
     }
 }

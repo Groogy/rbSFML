@@ -3,6 +3,12 @@ This is the Ruby bindings of the [SFML library](https://github.com/LaurentGomila
 I hope you enjoy using rbSFML. If you make anything in it then we are very interested in hearing about it.  
 We can always be reached at http://www.sfml-dev.org/forum for support, ideas or just have a nice chat.
 
+NOTICE
+============
+
+This is the development branch where we are trying ot different things. Here we are using for instance
+LBg/RbCpp to bind SFML C++ with Ruby.
+
 Dependencies
 ============
 
