@@ -18,7 +18,7 @@ OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
 EXT_DIR = 'ext'
-WRAPPER_DIR = 'wrapper'
+WRAPPER_DIR = 'cppruby'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
 
 SFML_INC = ENV['SFML_INCLUDE'] || "include"
@@ -41,7 +41,7 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :all      => FileList.new("#{EXT_DIR}/all.cpp"),
         :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
 
-SHARED = ["#{EXT_DIR}/InputStream.cpp" ]
+SHARED = [ "#{EXT_DIR}/InputStream.cpp" ]
 
 LIBS = []
 OBJS = {}
