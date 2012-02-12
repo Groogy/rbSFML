@@ -18,6 +18,7 @@ OBJ_DIR = 'obj'
 SO_DIR = 'sfml'
 DOC_DIR = 'doc'
 EXT_DIR = 'ext'
+WRAPPER_DIR = 'wrapper'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
 
 SFML_INC = ENV['SFML_INCLUDE'] || "include"
@@ -27,8 +28,8 @@ RUBY_INC = CONFIG['rubyhdrdir']
 RUBY_LIB = CONFIG['libdir']
 RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
 
-CXX = CONFIG['CXX']
-CXXFLAGS = "#{CONFIG['CXXFLAGS']} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} "
+CXX = CONFIG['CXX'] 
+CXXFLAGS = "-std=c++0x #{CONFIG['CXXFLAGS']} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -I#{WRAPPER_DIR}"
 
 LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
 LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']} -L#{SFML_LIB} -L#{RUBY_LIB} #{RUBY_LINK}".sub("$(DEFFILE)", "")
@@ -40,7 +41,8 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :all      => FileList.new("#{EXT_DIR}/all.cpp"),
         :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
 
-SHARED = ["#{EXT_DIR}/InputStream.cpp"]
+SHARED = ["#{EXT_DIR}/InputStream.cpp" ]
+WRAPPER = FileList.new( "#{WRAPPER_DIR}/*.cpp" )
 
 LIBS = []
 OBJS = {}
@@ -124,7 +126,7 @@ def create_so(src)
   so = "#{SO_DIR}/#{src}.so"
   mkdir_p SO_DIR
   puts "Creating #{so}"
-  objs = OBJS[src].join(" ")
+  objs = OBJS[src].join(" ") 
   s = "-s" if ARGV.include? "static"
   sfml_link = case src
   when :audio;    "-lsfml-audio#{s} -lsfml-system#{s}"
