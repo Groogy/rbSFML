@@ -16,6 +16,14 @@ namespace rbSFML
 		Time();
 		~Time();
 		
+		rb::Object AsSeconds();
+		rb::Object AsMilliseconds();
+		rb::Object AsMicroseconds();
+		
+		rb::Object NegateOperator();
+		rb::Object AdditionOperator( rb::Object aRightOperand );
+		rb::Object SubtractOperator( rb::Object aRightOperand );
+		
 	private:
 		sf::Time myTime;
 	};

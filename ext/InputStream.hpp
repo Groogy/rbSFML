@@ -23,7 +23,6 @@
 #define INPUTSTREAM_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
 
 #include <SFML/System/InputStream.hpp>
 

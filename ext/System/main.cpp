@@ -1,5 +1,4 @@
-#include <Ruby.hpp>
-
+#include "rbSFML.hpp"
 #include "Time.hpp"
 #include "Time.cpp"
 

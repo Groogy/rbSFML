@@ -22,10 +22,19 @@
 #ifndef RBSFML_HPP
 #define RBSFML_HPP
 
-#include <ruby.h>
+#include <Ruby.hpp>
 #include <new>
 
 #define SFML_VERSION    "2.0"
 #define BINDING_VERSION "development-unstable"
+
+#define INVALID_EXPECTED_TYPE( type ) \
+rb_raise( rb::eTypeError, "Did not receive expected type '%s'", rb_class2name( type ) );
+
+#define INVALID_EXPECTED_TYPES( type1, type2 ) \
+rb_raise( rb::eTypeError, "Did not receive expected types ( '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ) );
+
+#define INVALID_ARGUMENT_LIST( count, argumentList ) \
+rb_raise( rb::eArgError, "wrong number of arguments(%i for %s)", count, argumentList );
 
 #endif // RBSFML_HPP
