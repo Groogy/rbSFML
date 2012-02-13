@@ -34,14 +34,14 @@ CXXFLAGS = "-std=c++0x #{CONFIG['CXXFLAGS']} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY
 LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
 LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']} -L#{SFML_LIB} -L#{RUBY_LIB} #{RUBY_LINK}".sub("$(DEFFILE)", "")
 
-SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
-        :graphics => FileList.new("#{EXT_DIR}/Graphics/*.cpp"),
-        :window   => FileList.new("#{EXT_DIR}/Window/*.cpp"),
-        :system   => FileList.new("#{EXT_DIR}/System/*.cpp"),
+SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/main.cpp"),
+        :graphics => FileList.new("#{EXT_DIR}/Graphics/main.cpp"),
+        :window   => FileList.new("#{EXT_DIR}/Window/main.cpp"),
+        :system   => FileList.new("#{EXT_DIR}/System/main.cpp"),
         :all      => FileList.new("#{EXT_DIR}/all.cpp"),
         :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
 
-SHARED = [ "#{EXT_DIR}/InputStream.cpp" ]
+SHARED = ["#{EXT_DIR}/InputStream.cpp" ]
 
 LIBS = []
 OBJS = {}
