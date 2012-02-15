@@ -10,11 +10,13 @@ rb::Class rbSFML::Time::GetClass()
 void rbSFML::Time::Init( rb::Module SFML )
 {	
 	localClass = rb::DataClass< rbSFML::Time >::Define( SFML, "Time" );
+	localClass.include( rb::mComparable );
 	
 	localClass.def< &rbSFML::Time::AsSeconds >( "as_seconds" );
 	localClass.def< &rbSFML::Time::AsMilliseconds >( "as_milliseconds" );
 	localClass.def< &rbSFML::Time::AsMicroseconds >( "as_microseconds" );
 	
+	localClass.def< &rbSFML::Time::MarshalDump >( "marshal_dump" );
 	localClass.def< &rbSFML::Time::Inspect >( "inspect" );
 	localClass.def< &rbSFML::Time::GetMemoryUsage >( "memory_usage" );
 	
@@ -23,6 +25,7 @@ void rbSFML::Time::Init( rb::Module SFML )
 	localClass.def< &rbSFML::Time::SubtractOperator >( "-" );
 	localClass.def< &rbSFML::Time::MultiplyOperator >( "*" );
 	localClass.def< &rbSFML::Time::DivisionOperator >( "/" );
+	localClass.def< &rbSFML::Time::CompareOperator >( "<=>" );
 	
 	localClass.alias( "to_s", "inspect" );
 }
@@ -33,6 +36,12 @@ rbSFML::Time::Time()
 
 rbSFML::Time::~Time()
 {
+}
+
+rb::Object rbSFML::Time::InitializeCopy( rb::Object aSource )
+{
+	myTime = aSource.data< rbSFML::Time >().myTime;
+	return *this;
 }
 
 rb::Object rbSFML::Time::AsSeconds()
@@ -48,6 +57,12 @@ rb::Object rbSFML::Time::AsMilliseconds()
 rb::Object rbSFML::Time::AsMicroseconds()
 {
 	return rb::ruby_cast< rb::Object >( myTime.AsMicroseconds() );
+}
+
+rb::Object rbSFML::Time::MarshalDump()
+{
+	rb_raise( rb::eTypeError, "can't dump %s", rb_class2name( localClass ) );
+	return rb::Nil;
 }
 
 rb::Object rbSFML::Time::Inspect()
@@ -127,4 +142,12 @@ rb::Object rbSFML::Time::DivisionOperator( rb::Object aRightOperand )
 	}
 	
 	return newTime;
+}
+
+rb::Object rbSFML::Time::CompareOperator( rb::Object aRightOperand )
+{
+	sf::Time time = aRightOperand.data< rbSFML::Time >().myTime;
+	if( myTime == time ) return 0;
+	if( myTime > time ) return 1;
+	return -1;
 }

@@ -17,6 +17,8 @@ namespace rb
         
         static Module Define(const char* name);
         static Module Define(Module under, const char* name);
+		
+		Module& include( Module module );
         
     };
     

@@ -14,4 +14,8 @@ namespace rb
         return rb_define_module_under(under, name);
     }
     
+	Module& Module::include( Module module )
+	{
+		rb_include_module( value, module );
+	}
 }

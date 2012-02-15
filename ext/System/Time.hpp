@@ -16,10 +16,13 @@ namespace rbSFML
 		Time();
 		~Time();
 		
+		rb::Object InitializeCopy( rb::Object aSource );
+		
 		rb::Object AsSeconds();
 		rb::Object AsMilliseconds();
 		rb::Object AsMicroseconds();
 		
+		rb::Object MarshalDump();
 		rb::Object Inspect();
 		rb::Object GetMemoryUsage();
 		
@@ -28,6 +31,7 @@ namespace rbSFML
 		rb::Object SubtractOperator( rb::Object aRightOperand );
 		rb::Object MultiplyOperator( rb::Object aRightOperand );
 		rb::Object DivisionOperator( rb::Object aRightOperand );
+		rb::Object CompareOperator( rb::Object aRightOperand );
 		
 	private:
 		sf::Time myTime;
