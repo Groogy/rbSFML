@@ -12,6 +12,8 @@ void rbSFML::Time::Init( rb::Module SFML )
 	localClass = rb::DataClass< rbSFML::Time >::Define( SFML, "Time" );
 	localClass.include( rb::mComparable );
 	
+	localClass.def< &rbSFML::Time::InitializeCopy >( "initialize_copy" );
+	
 	localClass.def< &rbSFML::Time::AsSeconds >( "as_seconds" );
 	localClass.def< &rbSFML::Time::AsMilliseconds >( "as_milliseconds" );
 	localClass.def< &rbSFML::Time::AsMicroseconds >( "as_microseconds" );
