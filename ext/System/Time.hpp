@@ -20,9 +20,14 @@ namespace rbSFML
 		rb::Object AsMilliseconds();
 		rb::Object AsMicroseconds();
 		
+		rb::Object Inspect();
+		rb::Object GetMemoryUsage();
+		
 		rb::Object NegateOperator();
 		rb::Object AdditionOperator( rb::Object aRightOperand );
 		rb::Object SubtractOperator( rb::Object aRightOperand );
+		rb::Object MultiplyOperator( rb::Object aRightOperand );
+		rb::Object DivisionOperator( rb::Object aRightOperand );
 		
 	private:
 		sf::Time myTime;

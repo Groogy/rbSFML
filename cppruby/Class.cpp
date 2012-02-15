@@ -118,6 +118,12 @@ namespace rb
         define_method((VALUE(*)(...))f, name, 4);
         return *this;
     }
+	
+	Class& Class::alias( const char* newName, const char* originalName )
+	{
+		rb_define_alias( value, newName, originalName );
+		return *this;
+	}
     
 #undef define_method
     

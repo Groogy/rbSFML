@@ -77,6 +77,8 @@ namespace rb
         DataClass<T, Allocator>& def(const char* name);
         template<Object(T::*Func)(Object, Object, Object, Object)>
         DataClass<T, Allocator>& def(const char* name);
+		
+		DataClass<T, Allocator>& alias( const char* newName, const char* originalName );
         
     };
     

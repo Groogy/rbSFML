@@ -54,6 +54,8 @@ namespace rb
         Class& def(const char* name);
         template<Object(*Func)(Object, Object, Object, Object, Object)>
         Class& def(const char* name);
+		
+		Class& alias( const char* newName, const char* originalName );
         
     };
     
