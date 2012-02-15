@@ -33,7 +33,6 @@ namespace rbSFML
 		rb::Object DivisionOperator( rb::Object aRightOperand );
 		rb::Object CompareOperator( rb::Object aRightOperand );
 		
-	private:
 		sf::Time myTime;
 	};
 }

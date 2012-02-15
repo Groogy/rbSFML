@@ -1,35 +1,35 @@
 #include "Time.hpp"
 
-static rb::DataClass< rbSFML::Time > localClass;
+static rb::DataClass< rbSFML::Time > localTimeClass;
 
 rb::Class rbSFML::Time::GetClass()
 {
-	return localClass;
+	return localTimeClass;
 }
 
 void rbSFML::Time::Init( rb::Module SFML )
 {	
-	localClass = rb::DataClass< rbSFML::Time >::Define( SFML, "Time" );
-	localClass.include( rb::mComparable );
+	localTimeClass = rb::DataClass< rbSFML::Time >::Define( SFML, "Time" );
+	localTimeClass.include( rb::mComparable );
 	
-	localClass.def< &rbSFML::Time::InitializeCopy >( "initialize_copy" );
+	localTimeClass.def< &rbSFML::Time::InitializeCopy >( "initialize_copy" );
 	
-	localClass.def< &rbSFML::Time::AsSeconds >( "as_seconds" );
-	localClass.def< &rbSFML::Time::AsMilliseconds >( "as_milliseconds" );
-	localClass.def< &rbSFML::Time::AsMicroseconds >( "as_microseconds" );
+	localTimeClass.def< &rbSFML::Time::AsSeconds >( "as_seconds" );
+	localTimeClass.def< &rbSFML::Time::AsMilliseconds >( "as_milliseconds" );
+	localTimeClass.def< &rbSFML::Time::AsMicroseconds >( "as_microseconds" );
 	
-	localClass.def< &rbSFML::Time::MarshalDump >( "marshal_dump" );
-	localClass.def< &rbSFML::Time::Inspect >( "inspect" );
-	localClass.def< &rbSFML::Time::GetMemoryUsage >( "memory_usage" );
+	localTimeClass.def< &rbSFML::Time::MarshalDump >( "marshal_dump" );
+	localTimeClass.def< &rbSFML::Time::Inspect >( "inspect" );
+	localTimeClass.def< &rbSFML::Time::GetMemoryUsage >( "memory_usage" );
 	
-	localClass.def< &rbSFML::Time::NegateOperator >( "-@" );
-	localClass.def< &rbSFML::Time::AdditionOperator >( "+" );
-	localClass.def< &rbSFML::Time::SubtractOperator >( "-" );
-	localClass.def< &rbSFML::Time::MultiplyOperator >( "*" );
-	localClass.def< &rbSFML::Time::DivisionOperator >( "/" );
-	localClass.def< &rbSFML::Time::CompareOperator >( "<=>" );
+	localTimeClass.def< &rbSFML::Time::NegateOperator >( "-@" );
+	localTimeClass.def< &rbSFML::Time::AdditionOperator >( "+" );
+	localTimeClass.def< &rbSFML::Time::SubtractOperator >( "-" );
+	localTimeClass.def< &rbSFML::Time::MultiplyOperator >( "*" );
+	localTimeClass.def< &rbSFML::Time::DivisionOperator >( "/" );
+	localTimeClass.def< &rbSFML::Time::CompareOperator >( "<=>" );
 	
-	localClass.alias( "to_s", "inspect" );
+	localTimeClass.alias( "to_s", "inspect" );
 }
 
 rbSFML::Time::Time()
@@ -63,13 +63,13 @@ rb::Object rbSFML::Time::AsMicroseconds()
 
 rb::Object rbSFML::Time::MarshalDump()
 {
-	rb_raise( rb::eTypeError, "can't dump %s", rb_class2name( localClass ) );
+	rb_raise( rb::eTypeError, "can't dump %s", rb_class2name( localTimeClass ) );
 	return rb::Nil;
 }
 
 rb::Object rbSFML::Time::Inspect()
 {
-	return rb_sprintf( "%s(%fs)", rb_class2name( localClass ), myTime.AsSeconds() );
+	return rb_sprintf( "%s(%fs)", rb_class2name( localTimeClass ), myTime.AsSeconds() );
 }
 
 rb::Object rbSFML::Time::GetMemoryUsage()
@@ -79,38 +79,38 @@ rb::Object rbSFML::Time::GetMemoryUsage()
 
 rb::Object rbSFML::Time::NegateOperator()
 {
-	rb::Object newTime = localClass.New();
+	rb::Object newTime = localTimeClass.New();
 	newTime.data< rbSFML::Time >().myTime = -myTime;
 	return newTime;
 }
 
 rb::Object rbSFML::Time::AdditionOperator( rb::Object aRightOperand )
 {
-	if( aRightOperand.is_instance_of( localClass ) == rb::False )
+	if( aRightOperand.is_instance_of( localTimeClass ) == rb::False )
 	{
-		INVALID_EXPECTED_TYPE( localClass );
+		INVALID_EXPECTED_TYPE( localTimeClass );
 	}
 	
-	rb::Object newTime = localClass.New();
+	rb::Object newTime = localTimeClass.New();
 	newTime.data< rbSFML::Time >().myTime = aRightOperand.data< rbSFML::Time >().myTime + myTime;
 	return newTime;
 }
 
 rb::Object rbSFML::Time::SubtractOperator( rb::Object aRightOperand )
 {
-	if( aRightOperand.is_instance_of( localClass ) == rb::False )
+	if( aRightOperand.is_instance_of( localTimeClass ) == rb::False )
 	{
-		INVALID_EXPECTED_TYPE( localClass );
+		INVALID_EXPECTED_TYPE( localTimeClass );
 	}
 	
-	rb::Object newTime = localClass.New();
+	rb::Object newTime = localTimeClass.New();
 	newTime.data< rbSFML::Time >().myTime = aRightOperand.data< rbSFML::Time >().myTime - myTime;
 	return newTime;
 }
 
 rb::Object rbSFML::Time::MultiplyOperator( rb::Object aRightOperand )
 {
-	rb::Object newTime = localClass.New();
+	rb::Object newTime = localTimeClass.New();
 	if( aRightOperand.is_instance_of( rb::cFixnum ) == rb::True )
 	{
 		newTime.data< rbSFML::Time >().myTime = myTime * rb::ruby_cast< sf::Int64 >( aRightOperand );
@@ -129,7 +129,7 @@ rb::Object rbSFML::Time::MultiplyOperator( rb::Object aRightOperand )
 
 rb::Object rbSFML::Time::DivisionOperator( rb::Object aRightOperand )
 {
-	rb::Object newTime = localClass.New();
+	rb::Object newTime = localTimeClass.New();
 	if( aRightOperand.is_instance_of( rb::cFixnum ) == rb::True )
 	{
 		newTime.data< rbSFML::Time >().myTime = myTime / rb::ruby_cast< sf::Int64 >( aRightOperand );
