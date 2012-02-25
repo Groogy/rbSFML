@@ -22,198 +22,138 @@
 #define AUDIO_SOUNDSOURCE_CPP
 #include "SoundSource.hpp"
 
-void rbSoundSource::Init(VALUE SFML)
+void rbSoundSource::Init( VALUE SFML )
 {
-    SoundSource = rb_define_class_under(SFML, "SoundSource", rb_cObject);
+    rbSoundSource::Class = rb_define_class_under( SFML, "SoundSource", rb_cObject );
     
-	rb_define_const(SoundSource, "Stopped", INT2FIX(sf::SoundSource::Stopped));
-	rb_define_const(SoundSource, "Paused",  INT2FIX(sf::SoundSource::Paused ));
-	rb_define_const(SoundSource, "Playing", INT2FIX(sf::SoundSource::Playing));
+	rb_define_const( rbSoundSource::Class, "Stopped", INT2FIX( sf::SoundSource::Stopped ) );
+	rb_define_const( rbSoundSource::Class, "Paused",  INT2FIX( sf::SoundSource::Paused ) );
+	rb_define_const( rbSoundSource::Class, "Playing", INT2FIX( sf::SoundSource::Playing ) );
     
     // Class methods
-    rb_define_alloc_func(SoundSource, Allocate);
+    rb_define_alloc_func( rbSoundSource::Class, rbMacros::AbstractAllocate );
     
     // Instance methods
-    rb_define_method(SoundSource, "marshal_dump",          MarshalDump,            0);
-    rb_define_method(SoundSource, "marshal_load",          MarshalLoad,            1);
-    rb_define_method(SoundSource, "pitch",                 Pitch,                 -1);
-    rb_define_method(SoundSource, "GetPitch",              GetPitch,               0);
-    rb_define_method(SoundSource, "SetPitch",              SetPitch,               1);
-    rb_define_method(SoundSource, "volume",                Volume,                -1);
-    rb_define_method(SoundSource, "GetVolume",             GetVolume,              0);
-    rb_define_method(SoundSource, "SetVolume",             SetVolume,              1);
-    rb_define_method(SoundSource, "position",              Position,              -1);
-    rb_define_method(SoundSource, "GetPosition",           GetPosition,            0);
-    rb_define_method(SoundSource, "SetPosition",           SetPosition,           -1);
-    rb_define_method(SoundSource, "relative_to_listener=", SetRelativeToListener,  1);
-    rb_define_method(SoundSource, "relative_to_listener?", IsRelativeToListener,   0);
-    rb_define_method(SoundSource, "min_distance",          MinDistance,           -1);
-    rb_define_method(SoundSource, "GetMinDistance",        GetMinDistance,         0);
-    rb_define_method(SoundSource, "SetMinDistance",        SetMinDistance,         1);
-    rb_define_method(SoundSource, "attenuation",           Attenuation,           -1);
-    rb_define_method(SoundSource, "GetAttenuation",        GetAttenuation,         0);
-    rb_define_method(SoundSource, "SetAttenuation",        SetAttenuation,         1);
+    rb_define_method( rbSoundSource::Class, "marshal_dump",          rbSoundSource::MarshalDump,            0 );
+    rb_define_method( rbSoundSource::Class, "marshal_load",          rbSoundSource::MarshalLoad,            1 );
+    rb_define_method( rbSoundSource::Class, "get_pitch",             rbSoundSource::GetPitch,               0 );
+    rb_define_method( rbSoundSource::Class, "set_pitch",             rbSoundSource::SetPitch,               1 );
+    rb_define_method( rbSoundSource::Class, "get_volume",            rbSoundSource::GetVolume,              0 );
+    rb_define_method( rbSoundSource::Class, "set_volume",            rbSoundSource::SetVolume,              1 );
+    rb_define_method( rbSoundSource::Class, "get_position",          rbSoundSource::GetPosition,            0 );
+    rb_define_method( rbSoundSource::Class, "set_position",          rbSoundSource::SetPosition,           -1 );
+    rb_define_method( rbSoundSource::Class, "relative_to_listener=", rbSoundSource::SetRelativeToListener,  1 );
+    rb_define_method( rbSoundSource::Class, "relative_to_listener?", rbSoundSource::IsRelativeToListener,   0 );
+    rb_define_method( rbSoundSource::Class, "get_min_distance",      rbSoundSource::GetMinDistance,         0 );
+    rb_define_method( rbSoundSource::Class, "set_min_distance",      rbSoundSource::SetMinDistance,         1 );
+    rb_define_method( rbSoundSource::Class, "get_attenuation",       rbSoundSource::GetAttenuation,         0 );
+    rb_define_method( rbSoundSource::Class, "set_attenuation",       rbSoundSource::SetAttenuation,         1 );
     
     // Instance aliasses
-    rb_define_alias(SoundSource, "pitch=",                "pitch"                );
-    rb_define_alias(SoundSource, "volume=",               "volume"               );
-    rb_define_alias(SoundSource, "position=",             "position"             );
-    rb_define_alias(SoundSource, "SetRelativeToListener", "relative_to_listener=");
-    rb_define_alias(SoundSource, "relative_to_listener",  "relative_to_listener=");
-    rb_define_alias(SoundSource, "IsRelativeToListener",  "relative_to_listener?");
-    rb_define_alias(SoundSource, "min_distance=",         "min_distance"         );
-    rb_define_alias(SoundSource, "attenuation=",          "attenuation"          );
+	rb_define_alias( rbSoundSource::Class, "pitch", 				"get_pitch"				);
+    rb_define_alias( rbSoundSource::Class, "pitch=",                "set_pitch"             );
+	rb_define_alias( rbSoundSource::Class, "volume",               	"get_volume"            );
+    rb_define_alias( rbSoundSource::Class, "volume=",               "set_volume"            );
+	rb_define_alias( rbSoundSource::Class, "position",            	"get_position"          );
+    rb_define_alias( rbSoundSource::Class, "position=",             "set_position"          );
+	rb_define_alias( rbSoundSource::Class, "min_distance",          "get_min_distance"      );
+    rb_define_alias( rbSoundSource::Class, "min_distance=",         "set_min_distance"      );
+	rb_define_alias( rbSoundSource::Class, "attenuation",           "get_attenuation"       );
+    rb_define_alias( rbSoundSource::Class, "attenuation=",          "set_attenuation"       );
 }
 
 // SoundSource#marshal_dump
-VALUE rbSoundSource::MarshalDump(VALUE self)
+VALUE rbSoundSource::MarshalDump( VALUE aSelf )
 {
-    sf::SoundSource* sound_source = ToSFML(self);
-    sf::Vector3f position = sound_source->GetPosition();
+    sf::SoundSource* soundSource = rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class );
+    sf::Vector3f position = soundSource->GetPosition();
     
     VALUE ptr[8];
-    ptr[0] = rb_float_new(sound_source->GetPitch());
-    ptr[1] = rb_float_new(sound_source->GetVolume());
-    ptr[2] = rb_float_new(position.x);
-    ptr[3] = rb_float_new(position.y);
-    ptr[4] = rb_float_new(position.z);
-    ptr[5] = RBOOL(sound_source->IsRelativeToListener());
-    ptr[6] = rb_float_new(sound_source->GetMinDistance());
-    ptr[7] = rb_float_new(sound_source->GetAttenuation());
-    return rb_ary_new4(8, ptr);
+    ptr[0] = rb_float_new( soundSource->GetPitch() );
+    ptr[1] = rb_float_new( soundSource->GetVolume() );
+    ptr[2] = rb_float_new( position.x );
+    ptr[3] = rb_float_new( position.y );
+    ptr[4] = rb_float_new( position.z );
+    ptr[5] = RBOOL( soundSource->IsRelativeToListener() );
+    ptr[6] = rb_float_new( soundSource->GetMinDistance() );
+    ptr[7] = rb_float_new( soundSource->GetAttenuation() );
+    return rb_ary_new4( 8, ptr );
 }
 
 // SoundSource#marshal_load
-VALUE rbSoundSource::MarshalLoad(VALUE self, VALUE data)
+VALUE rbSoundSource::MarshalLoad( VALUE aSelf, VALUE aData )
 {
-    sf::SoundSource* sound_source = ToSFML(self);
+    sf::SoundSource* soundSource = rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class );
     
-    VALUE* ptr = RARRAY_PTR(data);
-    sound_source->SetPitch(NUM2DBL(ptr[0]));
-    sound_source->SetVolume(NUM2DBL(ptr[1]));
-    float x = NUM2DBL(ptr[2]);
-    float y = NUM2DBL(ptr[3]);
-    float z = NUM2DBL(ptr[4]);
-    sound_source->SetPosition(x, y, z);
-    sound_source->SetRelativeToListener(RTEST(ptr[5]));
-    sound_source->SetMinDistance(NUM2DBL(ptr[6]));
-    sound_source->SetAttenuation(NUM2DBL(ptr[7]));
-    return Qnil;
-}
-
-// SoundSource#pitch
-// SoundSource#pitch(pitch)
-// SoundSource#pitch=(pitch)
-VALUE rbSoundSource::Pitch(int argc, VALUE argv[], VALUE self)
-{
-    switch(argc)
-    {
-        case 0:
-            return GetPitch(self);
-        case 1:
-            return SetPitch(self, argv[0]);
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments (%i for 0..1)", argc);
-    }
+    VALUE* ptr = RARRAY_PTR( aData );
+    soundSource->SetPitch( NUM2DBL( ptr[ 0 ] ) );
+    soundSource->SetVolume( NUM2DBL( ptr[ 1 ] ) );
+    float x = NUM2DBL( ptr[ 2 ] );
+    float y = NUM2DBL( ptr[ 3 ] );
+    float z = NUM2DBL( ptr[ 4 ] );
+    soundSource->SetPosition( x, y, z );
+    soundSource->SetRelativeToListener( RTEST( ptr[ 5 ] ) );
+    soundSource->SetMinDistance( NUM2DBL( ptr[ 6 ] ) );
+    soundSource->SetAttenuation( NUM2DBL( ptr[ 7 ] ) );
     return Qnil;
 }
 
 // SoundSource#GetPitch
-VALUE rbSoundSource::GetPitch(VALUE self)
+VALUE rbSoundSource::GetPitch( VALUE aSelf )
 {
-    return rb_float_new(ToSFML(self)->GetPitch());
+    return rb_float_new( rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->GetPitch() );
 }
 
 // SoundSource#SetPitch(pitch)
-VALUE rbSoundSource::SetPitch(VALUE self, VALUE pitch)
+VALUE rbSoundSource::SetPitch( VALUE aSelf, VALUE aPitch )
 {
-    ToSFML(self)->SetPitch(NUM2DBL(pitch));
-    return Qnil;
-}
-
-// SoundSource#volume
-// SoundSource#volume(volume)
-// SoundSource#volume=(volume)
-VALUE rbSoundSource::Volume(int argc, VALUE argv[], VALUE self)
-{
-    switch(argc)
-    {
-        case 0:
-            return GetVolume(self);
-        case 1:
-            return SetVolume(self, argv[0]);
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments (%i for 0..1)", argc);
-    }
+    rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetPitch( NUM2DBL( aPitch ) );
     return Qnil;
 }
 
 // SoundSource#GetVolume
-VALUE rbSoundSource::GetVolume(VALUE self)
+VALUE rbSoundSource::GetVolume( VALUE aSelf )
 {
-    return rb_float_new(ToSFML(self)->GetVolume());
+    return rb_float_new( rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->GetVolume() );
 }
 
 // SoundSource#SetVolume(volume)
-VALUE rbSoundSource::SetVolume(VALUE self, VALUE volume)
+VALUE rbSoundSource::SetVolume( VALUE aSelf, VALUE aVolume )
 {
-    ToSFML(self)->SetVolume(NUM2DBL(volume));
-    return Qnil;
-}
-
-// SoundSource#position
-// SoundSource#position(position)
-// SoundSource#position=(position)
-// SoundSource#position(x, y, z)
-VALUE rbSoundSource::Position(int argc, VALUE argv[], VALUE self)
-{
-    switch(argc)
-    {
-        case 0:
-            return GetPosition(self);
-        case 1:
-        case 3:
-            return SetPosition(argc, argv, self);
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments (%i for 0, 1, or 3)", argc);
-    }
-    
+    rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetVolume( NUM2DBL( aVolume ) );
     return Qnil;
 }
 
 // SoundSource#GetPosition
-VALUE rbSoundSource::GetPosition(VALUE self)
+VALUE rbSoundSource::GetPosition( VALUE aSelf )
 {
-    sf::Vector3f pos = ToSFML(self)->GetPosition();
-    return rbVector3::ToRuby(pos);
+    sf::Vector3f pos = rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->GetPosition();
+    return rbVector3::ToRuby( pos );
 }
 
 // SoundSource#SetPosition(position)
 // SoundSource#SetPosition(x, y, z)
-VALUE rbSoundSource::SetPosition(int argc, VALUE argv[], VALUE self)
+VALUE rbSoundSource::SetPosition( int argc, VALUE argv[], VALUE aSelf )
 {
     switch (argc)
     {
         case 1:
         {
-            sf::Vector3f pos = rbVector3::ToSFMLf(argv[0]);
-            ToSFML(self)->SetPosition(pos);
+            sf::Vector3f pos = rbVector3::ToSFMLf( argv[0] );
+            rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetPosition(pos);
             break;
         }
         case 3:
         {
-            float x = NUM2DBL(argv[0]);
-            float y = NUM2DBL(argv[1]);
-            float z = NUM2DBL(argv[2]);
-            ToSFML(self)->SetPosition(x, y, z);
+            float x = NUM2DBL( argv[ 0 ] );
+            float y = NUM2DBL( argv[ 1 ] );
+            float z = NUM2DBL( argv[ 2 ] );
+            rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetPosition( x, y, z );
             break;
         }
         default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 1 or 3)", argc);
+            rb_raise( rb_eArgError,
+                      "wrong number of arguments(%i for 1 or 3)", argc );
     }
     return Qnil;
 }
@@ -221,78 +161,41 @@ VALUE rbSoundSource::SetPosition(int argc, VALUE argv[], VALUE self)
 // SoundSource#relative_to_listener(relative)
 // SoundSource#relative_to_listener=(relative)
 // SoundSource#SetRelativeToListener(relative)
-VALUE rbSoundSource::SetRelativeToListener(VALUE self, VALUE relative)
+VALUE rbSoundSource::SetRelativeToListener( VALUE aSelf, VALUE aRelative )
 {
-    ToSFML(self)->SetRelativeToListener(RTEST(relative));
+    rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetRelativeToListener( RTEST( aRelative ) );
     return Qnil;
 }
 
 // SoundSource#relative_to_listener?
 // SoundSource#IsRelativeToListener
-VALUE rbSoundSource::IsRelativeToListener(VALUE self)
+VALUE rbSoundSource::IsRelativeToListener( VALUE aSelf )
 {
-    return RBOOL(ToSFML(self)->IsRelativeToListener());
-}
-
-// SoundSource#min_distance
-// SoundSource#min_distance(distance)
-// SoundSource#min_distance=(distance)
-VALUE rbSoundSource::MinDistance(int argc, VALUE argv[], VALUE self)
-{
-    switch(argc)
-    {
-        case 0:
-            return GetMinDistance(self);
-        case 1:
-            return SetMinDistance(self, argv[0]);
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments (%i for 0..1)", argc);
-    }
-    
-    return Qnil;
+    return RBOOL( rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->IsRelativeToListener() );
 }
 
 // SoundSource#GetMinDistance
-VALUE rbSoundSource::GetMinDistance(VALUE self)
+VALUE rbSoundSource::GetMinDistance( VALUE aSelf )
 {
-    return rb_float_new(ToSFML(self)->GetMinDistance());
+    return rb_float_new( rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->GetMinDistance() );
 }
 
 // SoundSource#SetMinDistance(attenuation)
-VALUE rbSoundSource::SetMinDistance(VALUE self, VALUE attenuation)
+VALUE rbSoundSource::SetMinDistance( VALUE aSelf, VALUE anAttenuation )
 {
-    ToSFML(self)->SetMinDistance(NUM2DBL(attenuation));
-    return Qnil;
-}
-
-// SoundSource#attenuation
-// SoundSource#attenuation(attenuation)
-// SoundSource#attenuation=(attenuation)
-VALUE rbSoundSource::Attenuation(int argc, VALUE argv[], VALUE self)
-{
-    switch(argc)
-    {
-        case 0:
-            return GetAttenuation(self);
-        case 1:
-            return SetAttenuation(self, argv[0]);
-        default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments (%i for 0..1)", argc);
-    }
+    rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetMinDistance( NUM2DBL( anAttenuation ) );
     return Qnil;
 }
 
 // SoundSource#GetAttenuation
-VALUE rbSoundSource::GetAttenuation(VALUE self)
+VALUE rbSoundSource::GetAttenuation( VALUE aSelf )
 {
-    return rb_float_new(ToSFML(self)->GetAttenuation());
+    return rb_float_new( rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->GetAttenuation() );
 }
 
 // SoundSource#SetAttenuation(attenuation)
-VALUE rbSoundSource::SetAttenuation(VALUE self, VALUE attenuation)
+VALUE rbSoundSource::SetAttenuation( VALUE aSelf, VALUE anAttenuation )
 {
-    ToSFML(self)->SetAttenuation(NUM2DBL(attenuation));
+    rbMacros::ToSFML< sf::SoundSource >( aSelf, rbSoundSource::Class )->SetAttenuation( NUM2DBL( anAttenuation ) );
     return Qnil;
 }

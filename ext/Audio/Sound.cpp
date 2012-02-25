@@ -25,7 +25,7 @@
 
 void rbSound::Init( VALUE SFML )
 {
-    rbSound::Class = rb_define_class_under( SFML, "Sound", rbSoundSource::SoundSource );
+    rbSound::Class = rb_define_class_under( SFML, "Sound", rbSoundSource::Class );
 
     // Class methods
     rb_define_alloc_func( rbSound::Class, rbMacros::Allocate< sf::Sound > );
@@ -165,7 +165,8 @@ VALUE rbSound::GetLoop( VALUE aSelf )
 // Sound#offset
 VALUE rbSound::GetPlayingOffset( VALUE aSelf )
 {
-    sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->GetPlayingOffset() );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+    *time = rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->GetPlayingOffset();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 

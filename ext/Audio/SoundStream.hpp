@@ -76,10 +76,9 @@ namespace rbSoundStream
     // SoundStream#GetSampleRate
     static VALUE GetSampleRate( VALUE aSelf );
 
-    // SoundStream#channels_count
-    // SoundStream#GetChannelsCount
-    // SoundStream#channels
-    static VALUE GetChannelsCount( VALUE aSelf );
+    // SoundStream#channel_count
+    // SoundStream#GetChannelCount
+    static VALUE GetChannelCount( VALUE aSelf );
 
     // SoundStream#status
     // SoundStream#GetStatus

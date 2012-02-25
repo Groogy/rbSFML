@@ -22,31 +22,28 @@
 #define AUDIO_SOUNDBUFFERRECORDER_CPP
 #include "SoundBufferRecorder.hpp"
 
-void rbSoundBufferRecorder::Init(VALUE SFML)
+void rbSoundBufferRecorder::Init( VALUE SFML )
 {
-    SoundBufferRecorder = rb_define_class_under(SFML, "SoundBufferRecorder", rbSoundRecorder::SoundRecorder);
+    rbSoundBufferRecorder::Class = rb_define_class_under( SFML, "SoundBufferRecorder", rbSoundRecorder::Class );
     
     // Class methods
-    rb_define_alloc_func(SoundBufferRecorder, Allocate);
+    rb_define_alloc_func( rbSoundBufferRecorder::Class, rbMacros::Allocate< sf::SoundBufferRecorder > );
     
     // Instance methods
-    rb_define_method(SoundBufferRecorder, "buffer",       GetBuffer,      0);
-    rb_define_method(SoundBufferRecorder, "memory_usage", GetMemoryUsage, 0);
-    
-    // Instance aliasses
-    rb_define_alias(SoundBufferRecorder, "GetBuffer", "buffer");
+    rb_define_method( rbSoundBufferRecorder::Class, "buffer",       rbSoundBufferRecorder::GetBuffer,      0 );
+    rb_define_method( rbSoundBufferRecorder::Class, "memory_usage", rbSoundBufferRecorder::GetMemoryUsage, 0 );
 }
 
 // SoundBufferRecorder#buffer
 // SoundBufferRecorder#GetBuffer
-VALUE rbSoundBufferRecorder::GetBuffer(VALUE self)
+VALUE rbSoundBufferRecorder::GetBuffer( VALUE aSelf )
 {
-    sf::SoundBuffer* buffer = const_cast<sf::SoundBuffer*>(&ToSFML(self)->GetBuffer());
-    return rb_data_object_alloc(rbSoundBuffer::SoundBuffer, buffer, NULL, NULL);
+    sf::SoundBuffer* buffer = const_cast< sf::SoundBuffer* >( &rbMacros::ToSFML< sf::SoundBufferRecorder >( aSelf, rbSoundBufferRecorder::Class )->GetBuffer() );
+    return rbMacros::ToRubyNoGC( buffer, rbSoundBuffer::Class );
 }
 
 // SoundBufferRecorder#memory_usage
-VALUE rbSoundBufferRecorder::GetMemoryUsage(VALUE self)
+VALUE rbSoundBufferRecorder::GetMemoryUsage( VALUE aSelf )
 {
-    return SIZET2NUM(sizeof(sf::SoundBufferRecorder));
+    return SIZET2NUM( sizeof( sf::SoundBufferRecorder ) );
 }

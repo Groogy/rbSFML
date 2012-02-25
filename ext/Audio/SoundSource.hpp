@@ -30,105 +30,64 @@
 #include <SFML/Audio/SoundSource.hpp>
 
 namespace rbSoundSource
-{
-    static inline VALUE Allocate(VALUE);
-    static inline sf::SoundSource* ToSFML(VALUE sound_source);
-    
-#if defined(AUDIO_SOUNDSOURCE_CPP)
-    VALUE SoundSource;
+{    
+#if defined( AUDIO_SOUNDSOURCE_CPP )
+    VALUE Class;
 #else
-    extern VALUE SoundSource;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_AUDIO)
-    void Init(VALUE SFML); 
+#if defined( RBSFML_AUDIO )
+    void Init( VALUE SFML ); 
 #endif
     
-#if defined(AUDIO_SOUNDSOURCE_CPP)
+#if defined( AUDIO_SOUNDSOURCE_CPP )
     // SoundSource#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // SoundSource#marshal_load
-    static VALUE MarshalLoad(VALUE self, VALUE data);
-    
-    // SoundSource#pitch
-    // SoundSource#pitch(pitch)
-    // SoundSource#pitch=(pitch)
-    static VALUE Pitch(int argc, VALUE argv[], VALUE self);
+    static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
     
     // SoundSource#GetPitch
-    static VALUE GetPitch(VALUE self);
+    static VALUE GetPitch( VALUE aSelf );
     
     // SoundSource#SetPitch(pitch)
-    static VALUE SetPitch(VALUE self, VALUE pitch);
-    
-    // SoundSource#volume
-    // SoundSource#volume(volume)
-    // SoundSource#volume=(volume)
-    static VALUE Volume(int argc, VALUE argv[], VALUE self);
+    static VALUE SetPitch( VALUE aSelf, VALUE aPitch );
     
     // SoundSource#GetVolume
-    static VALUE GetVolume(VALUE self);
+    static VALUE GetVolume( VALUE aSelf );
     
     // SoundSource#SetVolume(volume)
-    static VALUE SetVolume(VALUE self, VALUE volume);
-    
-    // SoundSource#position
-    // SoundSource#position(position)
-    // SoundSource#position=(position)
-    // SoundSource#position(x, y, z)
-    static VALUE Position(int argc, VALUE argv[], VALUE self);
+    static VALUE SetVolume( VALUE aSelf, VALUE aVolume );
     
     // SoundSource#GetPosition
-    static VALUE GetPosition(VALUE self);
+    static VALUE GetPosition( VALUE aSelf );
     
     // SoundSource#SetPosition(position)
     // SoundSource#SetPosition(x, y, z)
-    static VALUE SetPosition(int argc, VALUE argv[], VALUE self);
+    static VALUE SetPosition( int argc, VALUE argv[], VALUE aSelf );
     
     // SoundSource#relative_to_listener(relative)
     // SoundSource#relative_to_listener=(relative)
     // SoundSource#SetRelativeToListener(relative)
-    static VALUE SetRelativeToListener(VALUE self, VALUE relative);
+    static VALUE SetRelativeToListener( VALUE aSelf, VALUE aRelative );
     
     // SoundSource#relative_to_listener?
     // SoundSource#IsRelativeToListener
-    static VALUE IsRelativeToListener(VALUE self);
-    
-    // SoundSource#min_distance
-    // SoundSource#min_distance(distance)
-    // SoundSource#min_distance=(distance)
-    static VALUE MinDistance(int argc, VALUE argv[], VALUE self);
+    static VALUE IsRelativeToListener( VALUE aSelf );
     
     // SoundSource#GetMinDistance
-    static VALUE GetMinDistance(VALUE self);
+    static VALUE GetMinDistance( VALUE aSelf );
     
     // SoundSource#SetMinDistance(distance)
-    static VALUE SetMinDistance(VALUE self, VALUE distance);
-    
-    // SoundSource#attenuation
-    // SoundSource#attenuation(attenuation)
-    // SoundSource#attenuation=(attenuation)
-    static VALUE Attenuation(int argc, VALUE argv[], VALUE self);
+    static VALUE SetMinDistance( VALUE aSelf, VALUE aDistance );
     
     // SoundSource#GetAttenuation
-    static VALUE GetAttenuation(VALUE self);
+    static VALUE GetAttenuation( VALUE aSelf );
     
     // SoundSource#SetAttenuation(attenuation)
-    static VALUE SetAttenuation(VALUE self, VALUE attenuation);
-#endif
-    
-}
-
-VALUE rbSoundSource::Allocate(VALUE self)
-{
-    rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
-    return Qnil;
-}
-
-sf::SoundSource* rbSoundSource::ToSFML(VALUE sound_source)
-{
-    return (sf::SoundSource*)DATA_PTR(sound_source);
+    static VALUE SetAttenuation( VALUE aSelf, VALUE anAttenuation );
+#endif   
 }
 
 #endif // AUDIO_SOUNDSOURCE_HPP

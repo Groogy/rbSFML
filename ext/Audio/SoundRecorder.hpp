@@ -29,58 +29,38 @@
 #include <SFML/Audio/SoundRecorder.hpp>
 
 namespace rbSoundRecorder
-{
-    static inline VALUE Allocate(VALUE);
-    static inline sf::SoundRecorder* ToSFML(VALUE sound_recorder);
-    
-#if defined(AUDIO_SOUNDRECORDER_CPP)
-    VALUE SoundRecorder;
+{    
+#if defined( AUDIO_SOUNDRECORDER_CPP )
+    VALUE Class;
 #else
-    extern VALUE SoundRecorder;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_AUDIO)
-    void Init(VALUE SFML); 
+#if defined( RBSFML_AUDIO )
+    void Init( VALUE SFML ); 
 #endif
     
-#if defined(AUDIO_SOUNDRECORDER_CPP)
-    // SoundRecorder#clone
-    static VALUE Clone(VALUE self);
-    
-    // SoundRecorder#dup
-    static VALUE Dup(VALUE self);
-    
+#if defined( AUDIO_SOUNDRECORDER_CPP )    
     // SoundRecorder#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // SoundRecorder#start(sample_rate)
     // SoundRecorder#Start(sample_rate)
-    static VALUE Start(int argc, VALUE argv[], VALUE self);
+    static VALUE Start( int argc, VALUE argv[], VALUE aSelf );
     
     // SoundRecorder#stop
     // SoundRecorder#Stop
-    static VALUE Stop(VALUE self);
+    static VALUE Stop( VALUE aSelf );
     
     // SoundRecorder#sample_rate
     // SoundRecorder#GetSampleRate
-    static VALUE GetSampleRate(VALUE self);
+    static VALUE GetSampleRate( VALUE aSelf );
     
     // SoundRecorder::available?
     // SoundRecorder::IsAvailable
-    static VALUE IsAvailable(VALUE self);
+    static VALUE IsAvailable( VALUE aSelf );
 #endif
     
-}
-
-VALUE rbSoundRecorder::Allocate(VALUE self)
-{
-    rb_raise(rb_eRuntimeError, "can't allocate instance of abstract class");
-    return Qnil;
-}
-
-sf::SoundRecorder* rbSoundRecorder::ToSFML(VALUE sound_recorder)
-{
-    return (sf::SoundRecorder*)DATA_PTR(sound_recorder);
 }
 
 #endif // AUDIO_SOUNDRECORDER_HPP

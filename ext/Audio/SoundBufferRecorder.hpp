@@ -31,72 +31,26 @@
 #include <SFML/Audio/SoundBufferRecorder.hpp>
 
 namespace rbSoundBufferRecorder
-{
-    
-    static inline void Free(void* sound_buffer_recorder);
-    static inline VALUE Allocate(VALUE);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::SoundBufferRecorder* sound_buffer_recorder, VALUE klass=false);
-    static inline sf::SoundBufferRecorder* ToSFML(VALUE sound_buffer_recorder, VALUE klass=false);
-    
-#if defined(AUDIO_SOUNDBUFFERRECORDER_CPP)
-    VALUE SoundBufferRecorder;
+{    
+#if defined( AUDIO_SOUNDBUFFERRECORDER_CPP )
+    VALUE Class;
 #else
-    extern VALUE SoundBufferRecorder;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_AUDIO)
-    void Init(VALUE SFML);
+#if defined( RBSFML_AUDIO )
+    void Init( VALUE SFML );
 #endif
 
-#if defined(AUDIO_SOUNDBUFFERRECORDER_CPP)
+#if defined( AUDIO_SOUNDBUFFERRECORDER_CPP )
     // SoundBufferRecorder#buffer
     // SoundBufferRecorder#GetBuffer
-    static VALUE GetBuffer(VALUE self);
+    static VALUE GetBuffer( VALUE aSelf );
     
     // SoundBufferRecorder#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 };
-
-void rbSoundBufferRecorder::Free(void* sound_buffer_recorder)
-{
-    delete (sf::SoundBufferRecorder*)sound_buffer_recorder;
-}
-
-VALUE rbSoundBufferRecorder::Allocate(VALUE self)
-{
-    sf::SoundBufferRecorder* sound_buffer_recorder = new(std::nothrow) sf::SoundBufferRecorder;
-    if (sound_buffer_recorder == NULL) rb_memerror();
-    return ToRuby(sound_buffer_recorder, self);
-}
-
-VALUE rbSoundBufferRecorder::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = SoundBufferRecorder;
-    
-    if (rb_obj_is_kind_of(other, SoundBufferRecorder))
-        return other;
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
-}
-
-VALUE rbSoundBufferRecorder::ToRuby(sf::SoundBufferRecorder* sound_buffer_recorder, VALUE klass)
-{
-    if (!klass)
-        klass = SoundBufferRecorder;
-    
-    return rb_data_object_alloc(klass, sound_buffer_recorder, NULL, Free);
-}
-
-sf::SoundBufferRecorder* rbSoundBufferRecorder::ToSFML(VALUE sound_buffer_recorder, VALUE klass)
-{
-    sound_buffer_recorder = ToRuby(sound_buffer_recorder, klass);
-    return (sf::SoundBufferRecorder*)DATA_PTR(sound_buffer_recorder);
-}
 
 #endif // AUDIO_SOUNDBUFFERRECORDER_HPP

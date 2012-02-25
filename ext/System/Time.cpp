@@ -25,7 +25,7 @@
 
 void rbTime::Init( VALUE SFML )
 {
-    rbTime::Class = rb_define_class_under(SFML, "Time", rb_cObject );
+    rbTime::Class = rb_define_class_under( SFML, "Time", rb_cObject );
     rb_include_module( rbTime::Class, rb_mComparable );
 
     // Class methods
@@ -99,39 +99,43 @@ VALUE rbTime::Compare( VALUE aSelf, VALUE anOther )
 // Time#-@
 VALUE rbTime::Negate( VALUE aSelf )
 {
-	return rbMacros::ToRuby( new sf::Time( -( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) ), rbTime::Class );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+	*time = -( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) );
+	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#+( other )
 VALUE rbTime::Addition( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) +
-								   ( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+	*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) +
+			( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) );
 	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#-( other )
 VALUE rbTime::Subtract( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) -
-								   ( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) ) );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+	*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) -
+			( *rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class ) );
 	return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Time#*( other )
 VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = NULL;
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
 
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
-		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
-							 static_cast< sf::Int64 >( FIX2LONG( anOther ) ) );
+		*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
+				static_cast< sf::Int64 >( FIX2LONG( anOther ) );
 	}
 	else if( rb_obj_is_kind_of( anOther, rb_cFloat ) )
 	{
-		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
-							 static_cast< float >( NUM2DBL( anOther ) ) );
+		*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) *
+				static_cast< float >( NUM2DBL( anOther ) );
 	}
 	else
 	{
@@ -144,17 +148,17 @@ VALUE rbTime::Multiply( VALUE aSelf, VALUE anOther )
 // Time#/( other )
 VALUE rbTime::Divide( VALUE aSelf, VALUE anOther )
 {
-	sf::Time *time = NULL;
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
 
 	if( rb_obj_is_kind_of( anOther, rb_cFixnum ) )
 	{
-		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
-							 static_cast< sf::Int64 >( FIX2LONG( anOther ) ) );
+		*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
+				static_cast< sf::Int64 >( FIX2LONG( anOther ) );
 	}
 	else if( rb_obj_is_kind_of( anOther, rb_cFloat ) )
 	{
-		time = new sf::Time( ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
-							 static_cast< float >( NUM2DBL( anOther ) ) );
+		*time = ( *rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class ) ) /
+				static_cast< float >( NUM2DBL( anOther ) );
 	}
 	else
 	{

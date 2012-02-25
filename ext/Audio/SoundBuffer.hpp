@@ -86,18 +86,17 @@ namespace rbSoundBuffer
     // SoundBuffer#GetSamples
     static VALUE GetSamples( VALUE aSelf );
 
-    // SoundBuffer#samples_count
-    // SoundBuffer#GetSamplesCount
-    static VALUE GetSamplesCount( VALUE aSelf );
+    // SoundBuffer#sample_count
+    // SoundBuffer#GetSampleCount
+    static VALUE GetSampleCount( VALUE aSelf );
 
     // SoundBuffer#sample_rate
     // SoundBuffer#GetSampleRate
     static VALUE GetSampleRate( VALUE aSelf );
 
-    // SoundBuffer#channels_count
-    // SoundBuffer#GetChannelsCount
-    // SoundBuffer#channels
-    static VALUE GetChannelsCount( VALUE aSelf );
+    // SoundBuffer#channel_count
+    // SoundBuffer#GetChannelCount
+    static VALUE GetChannelCount( VALUE aSelf );
 
     // SoundBuffer#duration
     // SoundBuffer#GetDuration

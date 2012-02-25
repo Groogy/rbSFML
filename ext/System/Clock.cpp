@@ -65,7 +65,8 @@ VALUE rbClock::MarshalDump( VALUE aSelf )
 // Clock#time
 VALUE rbClock::GetElapsedTime( VALUE aSelf )
 {
-	sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime() );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+	*time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
@@ -73,7 +74,8 @@ VALUE rbClock::GetElapsedTime( VALUE aSelf )
 VALUE rbClock::Restart( VALUE aSelf )
 {
     rb_check_frozen( aSelf );
-    sf::Time *time = new sf::Time( rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart() );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+    *time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 

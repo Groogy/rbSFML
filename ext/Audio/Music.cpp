@@ -100,7 +100,8 @@ VALUE rbMusic::OpenFromStream( VALUE aSelf, VALUE aStream )
 // Music#GetDuration
 VALUE rbMusic::GetDuration( VALUE aSelf )
 {
-    sf::Time* time = new sf::Time( rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration() );
+	sf::Time* time = rbMacros::Allocate< sf::Time >();
+    *time = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 

@@ -21,93 +21,69 @@
 
 #define AUDIO_SOUNDRECORDER_CPP
 #include "SoundRecorder.hpp"
+#include "NonCopyable.hpp"
 
 void rbSoundRecorder::Init(VALUE SFML)
 {
-    SoundRecorder = rb_define_class_under(SFML, "SoundRecorder", rb_cObject);
+    rbSoundRecorder::Class = rb_define_class_under( SFML, "SoundRecorder", rb_cObject );
+	rb_include_module( rbSoundRecorder::Class, rbNonCopyable::Module );
     
     // Class methods
-    rb_define_alloc_func(SoundRecorder, Allocate);
-    rb_define_singleton_method(SoundRecorder, "available?", IsAvailable, 0);
-    
-    // Singleton aliasses
-    VALUE sSoundRecorder = rb_singleton_class(SoundRecorder);
-    rb_define_alias(sSoundRecorder, "IsAvailable", "available?");
+    rb_define_alloc_func( rbSoundRecorder::Class, rbMacros::AbstractAllocate );
+    rb_define_singleton_method( rbSoundRecorder::Class, "available?", rbSoundRecorder::IsAvailable, 0 );
+
     
     // Instance methods
-    rb_define_method(SoundRecorder, "clone",        Clone,          0);
-    rb_define_method(SoundRecorder, "dup",          Dup,            0);
-    rb_define_method(SoundRecorder, "marshal_dump", MarshalDump,    0);
-    rb_define_method(SoundRecorder, "start",        Start,         -1);
-    rb_define_method(SoundRecorder, "stop",         Stop,           0);
-    rb_define_method(SoundRecorder, "sample_rate",  GetSampleRate,  0);
-    
-    // Instance aliasses
-    rb_define_alias(SoundRecorder, "Start",         "start");
-    rb_define_alias(SoundRecorder, "Stop",          "stop");
-    rb_define_alias(SoundRecorder, "GetSampleRate", "sample_rate");
-}
-
-// SoundRecorder#clone
-VALUE rbSoundRecorder::Clone(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't clone instance of %s",
-             rb_obj_classname(self));
-    return Qnil;
-}
-
-// SoundRecorder#dup
-VALUE rbSoundRecorder::Dup(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't dup instance of %s",
-             rb_obj_classname(self));
-    return Qnil;
+    rb_define_method( rbSoundRecorder::Class, "marshal_dump", rbSoundRecorder::MarshalDump,    0);
+    rb_define_method( rbSoundRecorder::Class, "start",        rbSoundRecorder::Start,         -1);
+    rb_define_method( rbSoundRecorder::Class, "stop",         rbSoundRecorder::Stop,           0);
+    rb_define_method( rbSoundRecorder::Class, "sample_rate",  rbSoundRecorder::GetSampleRate,  0);
 }
 
 // SoundRecorder#marshal_dump
-VALUE rbSoundRecorder::MarshalDump(VALUE self)
+VALUE rbSoundRecorder::MarshalDump( VALUE aSelf )
 {
-    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
+    rb_raise( rb_eTypeError, "can't dump %s", rb_obj_classname( aSelf ) );
     return Qnil;
 }
 
 // SoundRecorder#start(sample_rate)
 // SoundRecorder#Start(sample_rate)
-VALUE rbSoundRecorder::Start(int argc, VALUE argv[], VALUE self)
+VALUE rbSoundRecorder::Start( int argc, VALUE argv[], VALUE aSelf )
 {
-    switch (argc)
+    switch( argc )
     {
         case 0:
-            ToSFML(self)->Start();
+            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Start();
             break;
         case 1:
-            ToSFML(self)->Start(NUM2UINT(argv[0]));
+            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Start( NUM2UINT( argv[ 0 ] ) );
             break;
         default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 0..1)", argc);
+            rb_raise( rb_eArgError,
+                      "wrong number of arguments(%i for 0..1)", argc );
     }
     return Qnil;
 }
 
 // SoundRecorder#stop
 // SoundRecorder#Stop
-VALUE rbSoundRecorder::Stop(VALUE self)
+VALUE rbSoundRecorder::Stop( VALUE aSelf )
 {
-    ToSFML(self)->Stop();
+    rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Stop();
     return Qnil;
 }
 
 // SoundRecorder#sample_rate
 // SoundRecorder#GetSampleRate
-VALUE rbSoundRecorder::GetSampleRate(VALUE self)
+VALUE rbSoundRecorder::GetSampleRate( VALUE aSelf )
 {
-    return UINT2NUM(ToSFML(self)->GetSampleRate());
+    return UINT2NUM( rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->GetSampleRate() );
 }
 
 // SoundRecorder::available?
 // SoundRecorder::IsAvailable
-VALUE rbSoundRecorder::IsAvailable(VALUE self)
+VALUE rbSoundRecorder::IsAvailable( VALUE aSelf )
 {
-    return RBOOL(sf::SoundRecorder::IsAvailable());
+    return RBOOL( sf::SoundRecorder::IsAvailable() );
 }

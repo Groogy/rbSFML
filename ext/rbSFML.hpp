@@ -37,13 +37,20 @@ namespace rbMacros
         object->~T();
         xfree( someMemory );
     }
+	
+	template< typename T >
+	static inline T* Allocate()
+	{
+		void* memory = xmalloc( sizeof( T ) );
+        if( memory == NULL ) rb_memerror();
+        T* object = new( memory ) T;
+		return object;
+	}
 
     template< typename T >
     static inline VALUE Allocate( VALUE aKlass )
     {
-        void* memory = xmalloc( sizeof( T ) );
-        if( memory == NULL ) rb_memerror();
-        T* object = new( memory ) T;
+        T* object = Allocate< T >();
         return ToRuby( object, aKlass );
     }
 
@@ -71,6 +78,12 @@ namespace rbMacros
     static inline VALUE ToRuby( T* anObject, VALUE aKlass )
     {
         return rb_data_object_alloc( aKlass, anObject, NULL, rbMacros::Free< T > );
+    }
+	
+	template< typename T >
+    static inline VALUE ToRubyNoGC( T* anObject, VALUE aKlass )
+    {
+        return rb_data_object_alloc( aKlass, anObject, NULL, NULL );
     }
 
     template< typename T >
