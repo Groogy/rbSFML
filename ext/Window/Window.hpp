@@ -34,128 +34,114 @@
 
 namespace rbWindow
 {
-    
-    static inline void Free(void* window);
-    static inline VALUE Allocate(VALUE self);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Window* window, VALUE klass=false);
-    static inline sf::Window* ToSFML(VALUE window, VALUE klass=false);
-    
-#if defined(WINDOW_WINDOW_CPP)
-    VALUE Window;
+#if defined( WINDOW_WINDOW_CPP )
+    VALUE Class;
 #else
-    extern VALUE Window;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_WINDOW_CPP)
+#if defined( WINDOW_WINDOW_CPP )
     // Window#initialize(...)
-    static VALUE Initialize(int argc, VALUE args[], VALUE self);
+    static VALUE Initialize( int argc, VALUE args[], VALUE aSelf );
     
     // Window#marshal_dump
-    static VALUE MarshalDump(VALUE self);
-    
-    // Window#clone
-    static VALUE Clone(VALUE self);
-    
-    // Window#dup
-    static VALUE Dup(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // Window#create(...)
     // Window#Create(...)
-    static VALUE Create(int argc, VALUE args[], VALUE self);
+    static VALUE Create( int argc, VALUE args[], VALUE aSelf );
     
     // Window#close
     // Window#Close
-    static VALUE Close(VALUE self);
+    static VALUE Close( VALUE aSelf );
     
     // Window#opened?
     // Window#IsOpened
     // Window#open?
-    static VALUE IsOpened(VALUE self);
+    static VALUE IsOpen( VALUE aSelf );
     
     // Window#width
     // Window#GetWidth
-    static VALUE GetWidth(VALUE self);
+    static VALUE GetWidth( VALUE aSelf );
     
     // Window#height
     // Window#GetHeight
-    static VALUE GetHeight(VALUE self);
+    static VALUE GetHeight( VALUE aSelf );
     
     // Window#settings
     // Window#GetSettings
-    static VALUE GetSettings(VALUE self);
+    static VALUE GetSettings( VALUE aSelf );
     
     // Window#poll_event
     // Window#PollEvent
     // Window#poll_event(event)
     // Window#PollEvent(event)
-    static VALUE PollEvent(int argc, VALUE argv[], VALUE self);
+    static VALUE PollEvent( int argc, VALUE argv[], VALUE aSelf );
     
     // Window#wait_event
     // Window#WaitEvent
     // Window#wait_event(event)
     // Window#WaitEvent(event)
-    static VALUE WaitEvent(int argc, VALUE argv[], VALUE self);
+    static VALUE WaitEvent( int argc, VALUE argv[], VALUE aSelf );
     
     // Window#each_event
-    static VALUE EachEvent(VALUE self);
+    static VALUE EachEvent( VALUE aSelf );
     
     // Window#vertical_sync=(enabled)
     // Window#EnableVerticalSync(enabled)
     // Window#vertical_sync(enabled)
-    static VALUE EnableVerticalSync(VALUE self, VALUE enabled);
+    static VALUE EnableVerticalSync( VALUE aSelf, VALUE anEnabled );
     
     // Window#mouse_cursor=(show)
     // Window#ShowMouseCursor(show)
     // Window#mouse_cursor(show)
-    static VALUE ShowMouseCursor(VALUE self, VALUE show);
+    static VALUE ShowMouseCursor( VALUE aSelf, VALUE aShow );
     
     // Window#position(x, y)
     // Window#Position(x, y)
-    static VALUE SetPosition(VALUE self, VALUE x, VALUE y);
+    static VALUE SetPosition( VALUE aSelf, VALUE anX, VALUE anY );
     
     // Window#position=(vector2)
-    static VALUE SetPosition2(VALUE self, VALUE vector2);
+    static VALUE SetPosition2( VALUE aSelf, VALUE aVector2 );
     
     // Window#size(width, height)
     // Window#Size(width, height)
-    static VALUE SetSize(VALUE self, VALUE width, VALUE height);
+    static VALUE SetSize( VALUE aSelf, VALUE aWidth, VALUE aHeight );
     
     // Window#size=(vector2)
-    static VALUE SetSize2(VALUE self, VALUE vector2);
+    static VALUE SetSize2( VALUE aSelf, VALUE aVector2 );
     
     // Window#title=(title)
     // Window#SetTitle(title)
     // Window#title(title)
-    static VALUE SetTitle(VALUE self, VALUE title);
+    static VALUE SetTitle( VALUE aSelf, VALUE aTitle );
     
     // Window#show=(show)
     // Window#Show(show)
     // Window#show(show)
-    static VALUE Show(VALUE self, VALUE show);
+    static VALUE Show( VALUE aSelf, VALUE aShow );
     
     // Window#key_repeat=(enabled)
     // Window#EnableKeyRepeat(enabled)
     // Window#key_repeat(enabled)
-    static VALUE EnableKeyRepeat(VALUE self, VALUE enabled);
+    static VALUE EnableKeyRepeat( VALUE aSelf, VALUE anEnabled );
     
     // Window#icon(width, height, pixels)
     // Window#SetIcon(width, height, pixels)
-    static VALUE SetIcon(VALUE self, VALUE width, VALUE height, VALUE pixels);
+    static VALUE SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE aPixels );
     
     // Window#active(active=true)
     // Window#SetActive(active=true)
     // Window#active=(active=true)
-    static VALUE SetActive(int argc, VALUE argv[], VALUE self);
+    static VALUE SetActive( int argc, VALUE argv[], VALUE aSelf );
     
     // Window#display(active)
     // Window#Display(active)
-    static VALUE Display(VALUE self);
+    static VALUE Display( VALUE aSelf );
     
     // Window#framerate=(limit)
     // Window#SetFramerateLimit(limit)
@@ -163,69 +149,30 @@ namespace rbWindow
     // Window#framerate_limit=(limit)
     // Window#framerate_limit(limit)
     // Window#fps=(limit)
-    static VALUE SetFramerateLimit(VALUE self, VALUE limit);
+    static VALUE SetFramerateLimit( VALUE aSelf, VALUE aLimit );
     
     // Window#frame_time
     // Window#GetFrameTime
     // Window#time
-    static VALUE GetFrameTime(VALUE self);
+    static VALUE GetFrameTime( VALUE aSelf );
     
     // Window#joystick_threshold=(threshold)
     // Window#SetJoystickThreshold(threshold)
     // Window#joystick_threshold(threshold)
-    static VALUE SetJoystickThreshold(VALUE self, VALUE threshold);
+    static VALUE SetJoystickThreshold( VALUE aSelf, VALUE aThreshold );
     
     // Window#system_handle
     // Window#GetSystemHandle
     // Window#handle
-    static VALUE GetSystemHandle(VALUE self);
+    static VALUE GetSystemHandle( VALUE aSelf );
     
     // Window#inspect
     // Window#to_s
-    static VALUE Inspect(VALUE self);
+    static VALUE Inspect( VALUE aSelf );
 
     // Window#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
-    
-}
-
-void rbWindow::Free(void* window)
-{
-    delete (sf::Window*)window;
-}
-
-VALUE rbWindow::Allocate(VALUE self)
-{
-    sf::Window* window = new(std::nothrow) sf::Window;
-    if (window == NULL) rb_memerror();
-    return ToRuby(window, self);
-}
-
-VALUE rbWindow::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = Window;
-    
-    if (rb_obj_is_kind_of(other, Window))
-        return other;
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
-}
-
-VALUE rbWindow::ToRuby(sf::Window* window, VALUE klass)
-{
-    if (!klass)
-        klass = Window;
-    
-    return rb_data_object_alloc(klass, window, NULL, Free);
-}
-
-sf::Window* rbWindow::ToSFML(VALUE window, VALUE klass)
-{
-    window = ToRuby(window, klass);
-    return (sf::Window*)DATA_PTR(window);
 }
 
 #endif // WINDOW_WINDOW_HPP

@@ -32,173 +32,150 @@
 
 namespace rbContextSettings
 {
-    
-    static inline void Free(void* settings);
-    static inline VALUE Allocate(VALUE);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::ContextSettings* settings, VALUE klass=false);
-    static inline sf::ContextSettings* ToSFML(VALUE settings, VALUE klass=false);
-    
-#if defined(WINDOW_CONTEXTSETTINGS_CPP)
-    VALUE ContextSettings;
+	static inline VALUE ToRuby( VALUE anOther );
+	static inline VALUE ToRuby( sf::ContextSettings* someSettings );
+	static inline sf::ContextSettings* ToSFML( VALUE someSettings );
+	
+#if defined( WINDOW_CONTEXTSETTINGS_CPP )
+    VALUE Class;
 #else
-    extern VALUE ContextSettings;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_WINDOW) || defined(RBSFML_SFML)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW ) || defined( RBSFML_SFML )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_CONTEXTSETTINGS_CPP)
+#if defined( WINDOW_CONTEXTSETTINGS_CPP )
     // ContextSettings#initialize(...)
-    static VALUE Initialize(int argc, VALUE argv[], VALUE self);
+    static VALUE Initialize( int argc, VALUE argv[], VALUE aSelf );
     
     // ContextSettings#initialize_copy(settings)
-    static VALUE InitializeCopy(VALUE self, VALUE settings);
+    static VALUE InitializeCopy( VALUE aSelf, VALUE aSettings );
     
     // ContextSettings#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf);
     
     // ContextSettings#marshal_load(data)
-    static VALUE MarshalLoad(VALUE self, VALUE data);
+    static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
     
     // ContextSettings#depth_bits
     // ContextSettings#DepthBits
-    static VALUE GetDepthBits(VALUE self);
+    static VALUE GetDepthBits( VALUE aSelf );
     
     // ContextSettings#stencil_bits
     // ContextSettings#StencilBits
-    static VALUE GetStencilBits(VALUE self);
+    static VALUE GetStencilBits( VALUE aSelf );
     
     // ContextSettings#antialiasing_level
     // ContextSettings#AntialiasingLevel
-    static VALUE GetAntialiasingLevel(VALUE self);
+    static VALUE GetAntialiasingLevel( VALUE aSelf );
     
     // ContextSettings#major_version
     // ContextSettings#MajorVersion
-    static VALUE GetMajorVersion(VALUE self);
+    static VALUE GetMajorVersion( VALUE aSelf );
     
     // ContextSettings#minor_version
     // ContextSettings#MinorVersion
-    static VALUE GetMinorVersion(VALUE self);
+    static VALUE GetMinorVersion( VALUE aSelf );
     
     // ContextSettings#depth_bits=(value)
     // ContextSettings#DepthBits=(value)
-    static VALUE SetDepthBits(VALUE self, VALUE value);
+    static VALUE SetDepthBits( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#stencil_bits=(value)
     // ContextSettings#StencilBits=(value)
-    static VALUE SetStencilBits(VALUE self, VALUE value);
+    static VALUE SetStencilBits( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#antialiasing_level=(value)
     // ContextSettings#AntialiasingLevel=(value)
-    static VALUE SetAntialiasingLevel(VALUE self, VALUE value);
+    static VALUE SetAntialiasingLevel( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#major_version=(value)
     // ContextSettings#MajorVersion=(value)
-    static VALUE SetMajorVersion(VALUE self, VALUE value);
+    static VALUE SetMajorVersion( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#minor_version=(value)
     // ContextSettings#MinorVersion=(value)
-    static VALUE SetMinorVersion(VALUE self, VALUE value);
+    static VALUE SetMinorVersion( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#==(other)
     // ContextSettings#eql?(other)
     // ContextSettings#equal?(other)
-    static VALUE Equal(VALUE self, VALUE other);
+    static VALUE Equal( VALUE aSelf, VALUE anOther );
     
     // ContextSettings#inspect
     // ContextSettings#to_s
-    static VALUE Inspect(VALUE self);
+    static VALUE Inspect( VALUE aSelf );
     
     // ContextSettings#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
-}
-
-void rbContextSettings::Free(void* settings)
-{
-    delete (sf::ContextSettings*)settings;
-}
-
-VALUE rbContextSettings::Allocate(VALUE self)
-{
-    sf::ContextSettings* settings = new(std::nothrow) sf::ContextSettings;
-    if (settings == NULL) rb_memerror();
-    return ToRuby(settings, self);
 }
 
 // Internal
 struct ToRubyHashInfo
 {
-    sf::ContextSettings* set;
+    sf::ContextSettings* instance;
     const char* klass;
 };
 
 // Internal
-static int ToRubyHashIterator(VALUE key, VALUE value, VALUE extra)
+static int ToRubyHashIterator( VALUE aKey, VALUE aValue, VALUE anExtra )
 {
-    ToRubyHashInfo* info = (ToRubyHashInfo*)extra;
+    ToRubyHashInfo* info = ( ToRubyHashInfo* )anExtra;
     
     std::string sym;
-    if (rb_type(key) == T_SYMBOL)
-        sym = rb_id2name(SYM2ID(key));
+    if( rb_type( aKey ) == T_SYMBOL )
+        sym = rb_id2name( SYM2ID( aKey ) );
     else
-        sym = StringValueCStr(key);
+        sym = StringValueCStr( aKey );
     
-    if (sym == "depth_bits" or sym == "DepthBits")
-        info->set->DepthBits = NUM2UINT(value);
-    else if (sym == "stencil_bits" or sym == "StencilBits")
-        info->set->StencilBits = NUM2UINT(value);
-    else if (sym == "antialiasing_level" or sym == "AntialiasingLevel")
-        info->set->AntialiasingLevel = NUM2UINT(value);
-    else if (sym == "major_version" or sym == "MajorVersion")
-        info->set->MajorVersion = NUM2UINT(value);
-    else if (sym == "minor_version" or sym == "MinorVersion")
-        info->set->MinorVersion = NUM2UINT(value);
+    if( sym == "depth_bits" or sym == "DepthBits" )
+        info->instance->DepthBits = NUM2UINT( aValue );
+    else if( sym == "stencil_bits" or sym == "StencilBits" )
+        info->instance->StencilBits = NUM2UINT( aValue );
+    else if( sym == "antialiasing_level" or sym == "AntialiasingLevel" )
+        info->instance->AntialiasingLevel = NUM2UINT( aValue );
+    else if( sym == "major_version" or sym == "MajorVersion" )
+        info->instance->MajorVersion = NUM2UINT( aValue );
+    else if( sym == "minor_version" or sym == "MinorVersion" )
+        info->instance->MinorVersion = NUM2UINT( aValue );
     else
-        rb_raise(rb_eArgError,
-                 "unknown attribute %s for %s", sym.c_str(), info->klass);
+        rb_raise( rb_eArgError,
+                  "unknown attribute %s for %s", sym.c_str(), info->klass );
                  
     return ST_CONTINUE;
 }
 
-VALUE rbContextSettings::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = ContextSettings;
+VALUE rbContextSettings::ToRuby( VALUE anOther )
+{    
+    if( rb_obj_is_kind_of( anOther, rbContextSettings::Class ) )
+        return anOther;
     
-    if (rb_obj_is_kind_of(other, ContextSettings))
-        return other;
-    
-    if (rb_type(other) == T_HASH)
+    if( rb_type( anOther ) == T_HASH )
     {
         ToRubyHashInfo info;
-        info.set = new(std::nothrow) sf::ContextSettings;
-        if (info.set == NULL) rb_memerror();
-        info.klass = rb_class2name(klass);
-        rb_hash_foreach(other, (int(*)(...))ToRubyHashIterator, (VALUE)&info);  
-        return ToRuby(info.set, klass);
+        info.instance = rbMacros::Allocate< sf::ContextSettings >();
+        info.klass = rb_class2name( rbContextSettings::Class );
+        rb_hash_foreach( anOther, reinterpret_cast< int(*)(...) >( ToRubyHashIterator ), reinterpret_cast< VALUE >( &info ) );  
+        return rbContextSettings::ToRuby( info.instance );
     }
     
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
+    rb_raise( rb_eTypeError, "can't convert %s into %s",
+              rb_obj_classname( anOther ), rb_class2name( rbContextSettings::Class ) );
 }
 
-VALUE rbContextSettings::ToRuby(sf::ContextSettings* settings, VALUE klass)
-{
-    if (!klass)
-        klass = ContextSettings;
-    
-    return rb_data_object_alloc(ContextSettings, settings, NULL, Free);
+VALUE rbContextSettings::ToRuby( sf::ContextSettings* someSettings )
+{    
+    return rb_data_object_alloc( rbContextSettings::Class, someSettings, NULL, rbMacros::Free< sf::ContextSettings* > );
 }
 
-sf::ContextSettings* rbContextSettings::ToSFML(VALUE settings, VALUE klass)
+sf::ContextSettings* rbContextSettings::ToSFML( VALUE someSettings )
 {
-    settings = ToRuby(settings, klass);
-    return (sf::ContextSettings*)DATA_PTR(settings);
+    someSettings = rbContextSettings::ToRuby( someSettings );
+    return ( sf::ContextSettings* )DATA_PTR( someSettings );
 }
 
 #endif // WINDOW_CONTEXTSETTINGS_HPP

@@ -21,85 +21,66 @@
 
 #define WINDOW_CONTEXT_CPP
 #include "Context.hpp"
+#include "System/SFML.hpp"
+#include "System/NonCopyable.hpp"
 
-void rbContext::Init(VALUE SFML)
+void rbContext::Init( VALUE SFML )
 {
-    Context = rb_define_class_under(SFML, "Context", rb_cObject);
+    rbContext::Class = rb_define_class_under( SFML, "Context", rb_cObject );
+	rb_include_module( rbContext::Class, rbNonCopyable::Module );
     
     // Class methods
-    rb_define_alloc_func(Context, Allocate);
+    rb_define_alloc_func( rbContext::Class, rbMacros::Allocate< sf::Context > );
     
     // Instance methods
-    rb_define_method(Context, "initialize",   Initialize,     -1);
-    rb_define_method(Context, "marshal_dump", MarshalDump,     0);
-    rb_define_method(Context, "clone",        Clone,           0);
-    rb_define_method(Context, "dup",          Dup,             0);
-    rb_define_method(Context, "active=",      SetActive,       1);
-    rb_define_method(Context, "memory_usage", GetMemoryUsage,  0);
-    
-    // Instance aliasses
-    rb_define_alias(Context, "SetActive", "active=");
-    rb_define_alias(Context, "active",    "active=");
+    rb_define_method( rbContext::Class, "initialize",   rbContext::Initialize,     -1 );
+    rb_define_method( rbContext::Class, "marshal_dump", rbContext::MarshalDump,     0 );
+    rb_define_method( rbContext::Class, "active=",      rbContext::SetActive,       1 );
+    rb_define_method( rbContext::Class, "memory_usage", rbContext::GetMemoryUsage,  0 );
 }
 
 // Context#initialize
 // Context#initialize(settings, width, height)
-VALUE rbContext::Initialize(int argc, VALUE argv[], VALUE self)
+VALUE rbContext::Initialize( int argc, VALUE argv[], VALUE aSelf )
 {
     switch(argc)
     {
         case 0:
             break;
         case 3:
-            new(ToSFML(self)) sf::Context(*rbContextSettings::ToSFML(argv[0]),
-                                          UINT2NUM(argv[1]),
-                                          UINT2NUM(argv[2]));
+            new( rbMacros::ToSFML< sf::Context >( aSelf, rbContext::Class ) ) sf::Context( *rbContextSettings::ToSFML( argv[ 0 ] ),
+                                          UINT2NUM( argv[ 1 ] ),
+                                          UINT2NUM( argv[ 2 ] ) );
             break;
         default:
-            rb_raise(rb_eArgError,
-                     "wrong number of arguments(%i for 0 or 3)", argc);
+            rb_raise( rb_eArgError,
+                      "wrong number of arguments(%i for 0 or 3)", argc );
     }
     
     return Qnil;
 }
 
 // Context#marshal_dump
-VALUE rbContext::MarshalDump(VALUE self)
+VALUE rbContext::MarshalDump( VALUE aSelf )
 {
-    rb_raise(rb_eTypeError, "can't dump %s", rb_obj_classname(self));
-    return Qnil;
-}
-
-// Context#clone
-VALUE rbContext::Clone(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't clone instance of %s",
-             rb_obj_classname(self));
-    return Qnil;
-}
-
-// Context#dup
-VALUE rbContext::Dup(VALUE self)
-{
-    rb_raise(rb_eTypeError, "can't dup instance of %s",
-             rb_obj_classname(self));
+    rb_raise( rb_eTypeError, "can't dump %s", rb_obj_classname( aSelf ) );
     return Qnil;
 }
 
 // Context#active=(active)
 // Context#SetActive(active)
 // Context#active(active)
-VALUE rbContext::SetActive(VALUE self, VALUE active)
+VALUE rbContext::SetActive( VALUE aSelf, VALUE anActiveFlag )
 {
-    rb_check_frozen(self);
-    bool ret = ToSFML(self)->SetActive(RTEST(active));
-    if (!ret)
-        rbSFML::Raise("");
+    rb_check_frozen( aSelf );
+	rbSFML::PrepareErrorStream();
+    bool ret = rbMacros::ToSFML< sf::Context >( aSelf, rbContext::Class )->SetActive( RTEST( anActiveFlag ) );
+    rbSFML::CheckRaise();	
     return RBOOL(ret);
 }
 
 // VideoMode#memory_usage
-VALUE rbContext::GetMemoryUsage(VALUE self)
+VALUE rbContext::GetMemoryUsage( VALUE aSelf )
 {
-    return INT2FIX(sizeof(sf::Context));
+    return INT2FIX( sizeof( sf::Context ) );
 }

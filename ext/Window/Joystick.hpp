@@ -32,45 +32,43 @@
 
 namespace rbJoystick
 {
-    
-#if defined(WINDOW_JOYSTICK_CPP)
-    VALUE Joystick;
+#if defined( WINDOW_JOYSTICK_CPP )
+    VALUE Module;
 #else
-    extern VALUE Joystick;
+    extern VALUE Module;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_JOYSTICK_CPP)
+#if defined( WINDOW_JOYSTICK_CPP )
     // Joystick::connected?(id)
     // Joystick::IsConnected(id)
-    static VALUE IsConnected(VALUE self, VALUE id);
+    static VALUE IsConnected( VALUE aSelf, VALUE anID );
     
     // Joystick::button_count(id)
     // Joystick::GetButtonCount(id)
-    static VALUE GetButtonCount(VALUE self, VALUE id);
+    static VALUE GetButtonCount( VALUE aSelf, VALUE anID );
     
     // Joystick::axis?(id, axis)
     // Joystick::HasAxis(id, axis)
     // Joystick::has_axis(id, axis)
-    static VALUE HasAxis(VALUE self, VALUE id, VALUE axis);
+    static VALUE HasAxis( VALUE aSelf, VALUE anID, VALUE anAxis );
     
     // Joystick::button_pressed?(id, button)
     // Joystick::IsButtonPressed(id, button)
     // Joystick::pressed?(id, button)
-    static VALUE IsButtonPressed(VALUE self, VALUE id, VALUE button);
+    static VALUE IsButtonPressed( VALUE aSelf, VALUE anID, VALUE aButton );
     
     // Joystick::axis_position(id, axis)
     // Joystick::GetAxisPosition(id, axis)
-    static VALUE GetAxisPosition(VALUE self, VALUE id, VALUE axis);
+    static VALUE GetAxisPosition( VALUE aself, VALUE anID, VALUE anAxis );
     
     // Joystick::update
     // Joystick::Update
-    static VALUE Update(VALUE self);
+    static VALUE Update( VALUE aSelf );
 #endif
-    
 }
 
 #endif // WINDOW_JOYSTICK_HPP

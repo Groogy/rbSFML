@@ -24,7 +24,6 @@
 
 #include <ruby.h>
 #include <rbSFML.hpp>
-#include <System/SFML.hpp>
 #include <InputStream.hpp>
 
 #include <SFML/Audio/SoundBuffer.hpp>

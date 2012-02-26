@@ -26,9 +26,6 @@
 
 #include <rbSFML.hpp>
 
-#include <System/SFML.hpp>
-#include <System/Vector3.hpp>
-
 #include <Audio/SoundSource.hpp>
 #include <Audio/Sound.hpp>
 #include <Audio/SoundBuffer.hpp>

@@ -29,25 +29,23 @@
 #include <SFML/Window/Keyboard.hpp>
 
 namespace rbKeyboard
-{
-    
-#if defined(WINDOW_KEYBOARD_CPP)
-    VALUE Keyboard;
+{   
+#if defined( WINDOW_KEYBOARD_CPP )
+    VALUE Module;
 #else
-    extern VALUE Keyboard;
+    extern VALUE Module;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_KEYBOARD_CPP)
+#if defined( WINDOW_KEYBOARD_CPP )
     // Keyboard::key_pressed?(button)
     // Keyboard::IsKeyPressed(button)
     // Keyboard::pressed?(button)
-    static VALUE IsKeyPressed(VALUE self, VALUE key);
+    static VALUE IsKeyPressed( VALUE aSelf, VALUE aKey );
 #endif
-    
 }
 
 #endif // WINDOW_KEYBOARD_HPP

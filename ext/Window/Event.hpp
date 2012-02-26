@@ -31,145 +31,98 @@
 
 namespace rbEvent
 {
-    
-    static inline void Free(void* event);
-    static inline VALUE Allocate(VALUE);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Event* event, VALUE klass=false);
-    static inline sf::Event* ToSFML(VALUE event, VALUE klass=false);
-    
 #if defined(WINDOW_EVENT_CPP)
-    VALUE Event;
-    VALUE Event_Type;
-    VALUE Event_Size;
-    VALUE Event_Key;
-    VALUE Event_Text;
-    VALUE Event_MouseMove;
-    VALUE Event_MouseButton;
-    VALUE Event_MouseWheel;
-    VALUE Event_JoystickMove;
-    VALUE Event_JoystickButton;
-    VALUE Event_JoystickConnect;
+    VALUE Class;
+    VALUE Class_Type;
+    VALUE Class_Size;
+    VALUE Class_Key;
+    VALUE Class_Text;
+    VALUE Class_MouseMove;
+    VALUE Class_MouseButton;
+    VALUE Class_MouseWheel;
+    VALUE Class_JoystickMove;
+    VALUE Class_JoystickButton;
+    VALUE Class_JoystickConnect;
 #else
-    extern VALUE Event;
-    extern VALUE Event_Type;
-    extern VALUE Event_Size;
-    extern VALUE Event_Key;
-    extern VALUE Event_Text;
-    extern VALUE Event_MouseMove;
-    extern VALUE Event_MouseButton;
-    extern VALUE Event_MouseWheel;
-    extern VALUE Event_JoystickMove;
-    extern VALUE Event_JoystickButton;
-    extern VALUE Event_JoystickConnect;
+    extern VALUE Class;
+    extern VALUE Class_Type;
+    extern VALUE Class_Size;
+    extern VALUE Class_Key;
+    extern VALUE Class_Text;
+    extern VALUE Class_MouseMove;
+    extern VALUE Class_MouseButton;
+    extern VALUE Class_MouseWheel;
+    extern VALUE Class_JoystickMove;
+    extern VALUE Class_JoystickButton;
+    extern VALUE Class_JoystickConnect;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_EVENT_CPP)
-    static VALUE EventType(int id);
-    static VALUE EventTypeCaseEqual(VALUE self, VALUE other);
+#if defined( WINDOW_EVENT_CPP )
+    static VALUE EventType( int anID );
+    static VALUE EventTypeCaseEqual( VALUE aSelf, VALUE anOther );
     
     // Event#initialize_copy(event)
-    static VALUE InitializeCopy(VALUE self, VALUE event);
+    static VALUE InitializeCopy( VALUE aSelf, VALUE anEvent );
     
     // Event#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // Event#type
     // Event#Type
-    static VALUE Type(VALUE self);
+    static VALUE Type( VALUE aSelf );
     
     // Event#info
-    static VALUE Info(VALUE self);
+    static VALUE Info( VALUE aSelf );
     
     // Event#size
     // Event#Size
-    static VALUE Size(VALUE self);
+    static VALUE Size( VALUE aSelf );
     
     // Event#key
     // Event#Key
-    static VALUE Key(VALUE self);
+    static VALUE Key( VALUE aSelf );
     
     // Event#text
     // Event#Text
-    static VALUE Text(VALUE self);
+    static VALUE Text( VALUE aSelf );
     
     // Event#mouse_move
     // Event#MouseMove
-    static VALUE MouseMove(VALUE self);
+    static VALUE MouseMove( VALUE aSelf );
     
     // Event#mouse_button
     // Event#MouseButton
-    static VALUE MouseButton(VALUE self);
+    static VALUE MouseButton( VALUE aSelf );
     
     // Event#mouse_wheel
     // Event#MouseWheel
-    static VALUE MouseWheel(VALUE self);
+    static VALUE MouseWheel( VALUE aSelf );
     
     // Event#joystick_move
     // Event#JoystickMove
-    static VALUE JoystickMove(VALUE self);
+    static VALUE JoystickMove( VALUE aSelf );
     
     // Event#joystick_button
     // Event#JoystickButton
-    static VALUE JoystickButton(VALUE self);
+    static VALUE JoystickButton( VALUE aSelf );
     
     // Event#joystick_connect
     // Event#JoystickConnect
-    static VALUE JoystickConnect(VALUE self);
+    static VALUE JoystickConnect( VALUE aSelf );
     
     // Event#==(other)
-    static VALUE Equal(VALUE self, VALUE other);
+    static VALUE Equal( VALUE aSelf, VALUE anOther );
     
     // Event#inspect
-    static VALUE Inspect(VALUE self);
+    static VALUE Inspect( VALUE aSelf );
     
     // Event#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
-#endif
-    
-}
-
-void rbEvent::Free(void* event)
-{
-    delete (sf::Event*)event;
-}
-
-VALUE rbEvent::Allocate(VALUE self)
-{
-    sf::Event* event = new(std::nothrow) sf::Event;
-    if (event == NULL) rb_memerror();
-    return ToRuby(event, self);
-}
-
-VALUE rbEvent::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = Event;
-    
-    if (rb_obj_is_kind_of(other, Event))
-        return other;
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
-}
-
-VALUE rbEvent::ToRuby(sf::Event* event, VALUE klass)
-{
-    if (!klass)
-        klass = Event;
-    
-    return rb_data_object_alloc(Event, event, NULL, Free);
-}
-
-sf::Event* rbEvent::ToSFML(VALUE event, VALUE klass)
-{
-    event = ToRuby(event);
-    return (sf::Event*)DATA_PTR(event);
+    static VALUE GetMemoryUsage( VALUE aSelf );
+#endif   
 }
 
 #endif // WINDOW_EVENT_HPP

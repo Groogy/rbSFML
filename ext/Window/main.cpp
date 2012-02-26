@@ -21,16 +21,18 @@
 
 #include <Window.hpp>
 
-#if !defined(RBSFML_SFML)
+#if !defined( RBSFML_SFML )
 #include <sstream>
-std::stringstream gErrorStream;
-namespace rbVector2 { VALUE Vector2; }
+std::stringstream globalErrorStream;
+namespace rbVector2 { VALUE Class; }
+namespace rbNonCopyable { VALUE Module; }
 #endif
 
-static inline void InitDependencies(VALUE SFML)
+static inline void InitDependencies( VALUE SFML )
 {
-#if !defined(RBSFML_SFML)
-    rbVector2::Vector2 = rb_const_get(SFML, rb_intern("Vector2"));
+#if !defined( RBSFML_SFML )
+    rbVector2::Class = rb_const_get( SFML, rb_intern( "Vector2" ) );
+	rbNonCopyable::Module = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
 #endif
 }
 
@@ -39,19 +41,19 @@ void Init_window()
 {
     VALUE SFML = rbSFML::Module();
     
-    if (!rb_cvar_defined(SFML, rb_intern("@@system")))
-        rb_require("sfml/system");
+    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) )
+        rb_require( "sfml/system" );
     
-    rb_cv_set(SFML, "@@window", Qtrue);
+    rb_cv_set( SFML, "@@window", Qtrue );
     
-    InitDependencies(SFML);
+    InitDependencies( SFML );
     
-    rbContext::Init(SFML);
-    rbContextSettings::Init(SFML);
-    rbEvent::Init(SFML);
-    rbKeyboard::Init(SFML);
-    rbMouse::Init(SFML);
-    rbStyle::Init(SFML);
-    rbVideoMode::Init(SFML);
-    rbWindow::Init(SFML);
+    rbContext::Init( SFML );
+    rbContextSettings::Init( SFML );
+    rbEvent::Init( SFML );
+    rbKeyboard::Init( SFML );
+    rbMouse::Init( SFML );
+    rbStyle::Init( SFML );
+    rbVideoMode::Init( SFML );
+    rbWindow::Init( SFML );
 }

@@ -29,131 +29,109 @@
 #include <SFML/Window/VideoMode.hpp>
 
 namespace rbVideoMode
-{
+{    
+    static inline VALUE ToRuby( VALUE anOther );
+    static inline VALUE ToRuby( sf::VideoMode* aVideoMode );
+    static inline sf::VideoMode* ToSFML( VALUE aVideoMode );
     
-    static inline void Free(void* video_mode);
-    static inline VALUE Allocate(VALUE self);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::VideoMode* video_mode, VALUE klass=false);
-    static inline sf::VideoMode* ToSFML(VALUE video_mode, VALUE klass=false);
-    
-#if defined(WINDOW_VIDEOMODE_CPP)
-    VALUE VideoMode;
+#if defined( WINDOW_VIDEOMODE_CPP )
+    VALUE Class;
 #else
-    extern VALUE VideoMode;
+    extern VALUE Class;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_VIDEOMODE_CPP)
+#if defined( WINDOW_VIDEOMODE_CPP)
     // VideoMode::desktop_mode
     // VideoMode::GetDesktopMode
-    static VALUE GetDesktopMode(VALUE self);
+    static VALUE GetDesktopMode( VALUE aSelf );
     
     // VideoMode::fullscreen_modes
     // VideoMode::GetFullscreenModes
-    static VALUE GetFullscreenModes(VALUE self);
+    static VALUE GetFullscreenModes( VALUE aSelf );
     
     // VideoMode#initialize
-    static VALUE Initialize(int argc, VALUE args[], VALUE self);
+    static VALUE Initialize( int argc, VALUE args[], VALUE aSelf );
     
     // VideoMode#initialize_copy(video_mode)
-    static VALUE InitializeCopy(VALUE self, VALUE video_mode);
+    static VALUE InitializeCopy( VALUE aSelf, VALUE aVideoMode );
     
     // VideoMode#marshal_dump
-    static VALUE MarshalDump(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // VideoMode#marshal_load(data)
-    static VALUE MarshalLoad(VALUE self, VALUE data);
+    static VALUE MarshalLoad( VALUE aSelf, VALUE someData );
     
     // VideoMode#valid?
     // VideoMode#IsValid
-    static VALUE IsValid(VALUE self);
+    static VALUE IsValid( VALUE aSelf );
     
     // VideoMode#width
     // VideoMode#Width
-    static VALUE GetWidth(VALUE self);
+    static VALUE GetWidth( VALUE aSelf );
     
     // VideoMode#height
     // VideoMode#Height
-    static VALUE GetHeight(VALUE self);
+    static VALUE GetHeight( VALUE aSelf );
     
     // VideoMode#bpp
     // VideoMode#BitsPerPixel
     // VideoMode#bits_per_pixel
     // VideoMode#bits
-    static VALUE GetBitsPerPixel(VALUE self);
+    static VALUE GetBitsPerPixel( VALUE aSelf );
     
     // VideoMode#width=(value)
     // VideoMode#Width=(value)
-    static VALUE SetWidth(VALUE self, VALUE value);
+    static VALUE SetWidth( VALUE aSelf, VALUE aValue );
     
     // VideoMode#height=(value)
     // VideoMode#Height=(value)
-    static VALUE SetHeight(VALUE self, VALUE value);
+    static VALUE SetHeight( VALUE aSelf, VALUE aValue );
     
     // VideoMode#bpp=(value)
     // VideoMode#BitsPerPixel=(value)
     // VideoMode#bits_per_pixel=(value)
     // VideoMode#bits=(value)
-    static VALUE SetBitsPerPixel(VALUE self, VALUE value);
+    static VALUE SetBitsPerPixel( VALUE aSelf, VALUE aValue );
     
     // VideoMode#<=>(other)
-    static VALUE Compare(VALUE self, VALUE other);
+    static VALUE Compare( VALUE aSelf, VALUE anOther );
     
     // VideoMode#inspect
     // VideoMode#to_s
-    static VALUE Inspect(VALUE self);
+    static VALUE Inspect( VALUE aSelf );
     
     // VideoMode#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
 }
 
-void rbVideoMode::Free(void* video_mode)
-{
-    delete (sf::VideoMode*)video_mode;
+VALUE rbVideoMode::ToRuby( VALUE anOther )
+{    
+    if( rb_obj_is_kind_of( anOther, rbVideoMode::Class ) )
+        return anOther;
+    
+    if( rb_type( anOther ) == T_ARRAY )
+        return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
+                                      rbVideoMode::Class );
+    
+    rb_raise( rb_eTypeError, "can't convert %s into %s",
+              rb_obj_classname( anOther ), rb_class2name( rbVideoMode::Class ) );
 }
 
-VALUE rbVideoMode::Allocate(VALUE self)
+VALUE rbVideoMode::ToRuby( sf::VideoMode* aVideoMode )
 {
-    sf::VideoMode* video_mode = new(std::nothrow) sf::VideoMode;
-    if (video_mode == NULL) rb_memerror();
-    return ToRuby(video_mode, self);
-} 
-
-VALUE rbVideoMode::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = VideoMode;
-    
-    if (rb_obj_is_kind_of(other, VideoMode))
-        return other;
-    
-    if (rb_type(other) == T_ARRAY)
-        return rb_class_new_instance(RARRAY_LEN(other), RARRAY_PTR(other),
-                                     klass);
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
+    return rb_data_object_alloc( rbVideoMode::Class, aVideoMode, NULL, rbMacros::Free< sf::VideoMode > );
 }
 
-VALUE rbVideoMode::ToRuby(sf::VideoMode* video_mode, VALUE klass)
+sf::VideoMode* rbVideoMode::ToSFML( VALUE aVideoMode )
 {
-    if (!klass)
-        klass = VideoMode;
-    
-    return rb_data_object_alloc(klass, video_mode, NULL, Free);
-}
-
-sf::VideoMode* rbVideoMode::ToSFML(VALUE video_mode, VALUE klass)
-{
-    video_mode = ToRuby(video_mode, klass);
-    return (sf::VideoMode*)DATA_PTR(video_mode);
+    aVideoMode = rbVideoMode::ToRuby( aVideoMode );
+    return static_cast< sf::VideoMode* >( DATA_PTR( aVideoMode ) );
 }
 
 #endif // WINDOW_VIDEOMODE_HPP

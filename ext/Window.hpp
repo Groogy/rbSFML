@@ -26,9 +26,6 @@
 
 #include <rbSFML.hpp>
 
-#include <System/SFML.hpp>
-#include <System/Vector2.hpp>
-
 #include <Window/Context.hpp>
 #include <Window/ContextSettings.hpp>
 #include <Window/Event.hpp>

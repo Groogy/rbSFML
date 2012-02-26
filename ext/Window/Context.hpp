@@ -23,95 +23,41 @@
 #define WINDOW_CONTEXT_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <Window/ContextSettings.hpp>
+#include "rbSFML.hpp"
+#include "System/SFML.hpp"
+#include "Window/ContextSettings.hpp"
 
 #include <SFML/Window/Context.hpp>
 
 namespace rbContext
-{
-    
-    static inline void Free(void* context);
-    static inline VALUE Allocate(VALUE);
-    
-    static inline VALUE ToRuby(VALUE other, VALUE klass=false);
-    static inline VALUE ToRuby(sf::Context* context, VALUE klass=false);
-    static inline sf::Context* ToSFML(VALUE context, VALUE klass=false);
-    
-    static inline VALUE Allocate(VALUE);
-    
-#if defined(WINDOW_CONTEXT_CPP)
-    VALUE Context;
+{    
+#if defined( WINDOW_CONTEXT_CPP )
+    VALUE Class;
 #else
     extern VALUE Context;
 #endif
     
-#if defined(RBSFML_WINDOW)
-    void Init(VALUE SFML);
+#if defined( RBSFML_WINDOW )
+    void Init( VALUE SFML );
 #endif
     
-#if defined(WINDOW_CONTEXT_CPP)
+#if defined( WINDOW_CONTEXT_CPP )
     // Context#initialize
     // Context#initialize(settings, width, height)
-    static VALUE Initialize(int argc, VALUE argv[], VALUE self);
+    static VALUE Initialize( int argc, VALUE argv[], VALUE aSelf );
     
     // Context#marshal_dump
-    static VALUE MarshalDump(VALUE self);
-    
-    // Context#clone
-    static VALUE Clone(VALUE self);
-    
-    // Context#dup
-    static VALUE Dup(VALUE self);
+    static VALUE MarshalDump( VALUE aSelf );
     
     // Context#active=(active)
     // Context#SetActive(active)
     // Context#active(active)
-    static VALUE SetActive(VALUE self, VALUE active);
+    static VALUE SetActive( VALUE aSelf, VALUE anActiveFlag );
     
     // Context#memory_usage
-    static VALUE GetMemoryUsage(VALUE self);
+    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
-}
-
-void rbContext::Free(void* context)
-{
-    delete (sf::Context*)context;
-}
-
-VALUE rbContext::Allocate(VALUE self)
-{
-    sf::Context* context = new(std::nothrow) sf::Context;
-    if (context == NULL) rb_memerror();
-    return ToRuby(context, self);
-}
-
-VALUE rbContext::ToRuby(VALUE other, VALUE klass)
-{
-    if (!klass)
-        klass = Context;
-    
-    if (rb_obj_is_kind_of(other, Context))
-        return other;
-    
-    rb_raise(rb_eTypeError, "can't convert %s into %s",
-             rb_obj_classname(other), rb_class2name(klass));
-}
-
-VALUE rbContext::ToRuby(sf::Context* context, VALUE klass)
-{
-    if (!klass)
-        klass = Context;
-    
-    return rb_data_object_alloc(klass, context, NULL, Free);
-}
-
-sf::Context* rbContext::ToSFML(VALUE context, VALUE klass)
-{
-    context = ToRuby(context, klass);
-    return (sf::Context*)DATA_PTR(context);
 }
 
 #endif // WINDOW_CONTEXT_HPP
