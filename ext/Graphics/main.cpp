@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -19,22 +19,41 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <Window.hpp>
+
+#include "Color.hpp"
+#include "Rect.hpp"
+
+#if !defined( RBSFML_SFML )
 #include <sstream>
 std::stringstream globalErrorStream;
+namespace rbVector2 { VALUE Class; }
+namespace rbNonCopyable { VALUE Module; }
+#endif
+
+static inline void InitDependencies( VALUE SFML )
+{
+#if !defined( RBSFML_SFML )
+    rbVector2::Class = rb_const_get( SFML, rb_intern( "Vector2" ) );
+	rbNonCopyable::Module = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
+#endif
+}
 
 extern "C"
+void Init_window()
 {
-
-    void Init_system();
-    void Init_window();
-    void Init_graphics();
-    void Init_audio();
-
-    void Init_sfml()
-    {
-        Init_system();
-        Init_window();
-        Init_graphics();
-        Init_audio();
-    }
+    VALUE SFML = rbSFML::Module();
+    
+    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) || !rb_cvar_defined( SFML, rb_intern( "@@window" ) ) )
+	{
+        rb_require( "sfml/system" );
+		rb_require( "sfml/window" );
+	}
+    
+    rb_cv_set( SFML, "@@graphics", Qtrue );
+    
+    InitDependencies( SFML );
+	
+	rbColor::Init( SFML );
+	rbRect::Init( SFML );
 }

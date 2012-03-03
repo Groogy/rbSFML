@@ -1,5 +1,5 @@
 /* rbSFML
- * Copyright (c) 2012 Henrik Valter Vogelius Hansson - groogy@groogy.se
+ * Copyright (c) 2010 Henrik Valter Vogelius Hansson - groogy@groogy.se
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
@@ -18,23 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  */
+ 
+#ifndef GRAPHICS_HPP
+#define GRAPHICS_HPP
 
-#include <sstream>
-std::stringstream globalErrorStream;
+#include <ruby.h>
 
-extern "C"
-{
+#include <rbSFML.hpp>
 
-    void Init_system();
-    void Init_window();
-    void Init_graphics();
-    void Init_audio();
-
-    void Init_sfml()
-    {
-        Init_system();
-        Init_window();
-        Init_graphics();
-        Init_audio();
-    }
-}
+#endif // GRAPHICS_HPP
