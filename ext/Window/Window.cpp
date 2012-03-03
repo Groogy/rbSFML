@@ -64,7 +64,7 @@ void rbWindow::Init( VALUE SFML )
     // Instance aliasses
     rb_define_alias( rbWindow::Class, "Create",               "create"              );
     rb_define_alias( rbWindow::Class, "Close",                "close"               );
-    rb_define_alias( rbWindow::Class, "IsOpen",               "opened?"             );
+    rb_define_alias( rbWindow::Class, "IsOpen",               "open?"               );
     rb_define_alias( rbWindow::Class, "GetWidth",             "width"               );
     rb_define_alias( rbWindow::Class, "GetHeight",            "height"              );
     rb_define_alias( rbWindow::Class, "GetSettings",          "settings"            );
