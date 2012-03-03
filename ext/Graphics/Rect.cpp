@@ -32,6 +32,7 @@ void rbRect::Init( VALUE SFML )
     rb_define_method( rbRect::Class, "initialize",      rbRect::Initialize,     -1 );
     rb_define_method( rbRect::Class, "initialize_copy", rbRect::InitializeCopy,  1 );
 	rb_define_method( rbRect::Class, "contains?",		rbRect::Contains,		-1 );
+	rb_define_method( rbRect::Class, "intersects?",		rbRect::Intersects,		-1 );
     rb_define_method( rbRect::Class, "marshal_dump",    rbRect::MarshalDump,     0 );
     rb_define_method( rbRect::Class, "marshal_load",    rbRect::MarshalLoad,     1 );
     rb_define_method( rbRect::Class, "==",              rbRect::Equal,           1 );
@@ -40,9 +41,10 @@ void rbRect::Init( VALUE SFML )
     rb_define_method( rbRect::Class, "memory_usage",    rbRect::GetMemoryUsage,  0 );
 
     // Attribute accessors
-    rb_define_attr( rbRect::Class, "x", true, true );
-    rb_define_attr( rbRect::Class, "y", true, true );
-    rb_define_attr( rbRect::Class, "z", true, true );
+    rb_define_attr( rbRect::Class, "left", true, true );
+    rb_define_attr( rbRect::Class, "top", true, true );
+    rb_define_attr( rbRect::Class, "width", true, true );
+	rb_define_attr( rbRect::Class, "height", true, true );
 
     // Instance aliases
     rb_define_alias( rbRect::Class, "equal?", "eql?"    );
@@ -133,8 +135,8 @@ static VALUE internalContains( VALUE aSelf, VALUE anX, VALUE anY )
 		return Qfalse;
 }
 
-// Rect#contains(x, y)
-// Rect#contains(vector2)
+// Rect#contains?(x, y)
+// Rect#contains?(vector2)
 VALUE rbRect::Contains( int argc, VALUE* args, VALUE aSelf )
 {
 	VALUE point;
@@ -159,6 +161,61 @@ VALUE rbRect::Contains( int argc, VALUE* args, VALUE aSelf )
             {
                 INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
             }
+		default:
+            INVALID_ARGUMENT_LIST( argc, "1 or 2" );
+	}
+	
+	return Qfalse;
+}
+
+static VALUE internalIntersects( VALUE aSelf, VALUE aRect, VALUE anIntersection )
+{
+	VALUE left   = MAX( rbRect::GetLeft( aSelf ),   rbRect::GetLeft( aRect ) );
+	VALUE top    = MAX( rbRect::GetTop( aSelf ),    rbRect::GetTop( aRect ) );
+	VALUE right  = MIN( rb_funcall( rbRect::GetLeft( aSelf ), rb_intern( "+" ), 1, rbRect::GetWidth( aSelf ) ), rb_funcall( rbRect::GetLeft( aRect ), rb_intern( "+" ), 1, rbRect::GetWidth( aRect ) ) );
+	VALUE bottom = MIN( rb_funcall( rbRect::GetTop( aSelf ), rb_intern( "+" ), 1, rbRect::GetHeight( aSelf ) ), rb_funcall( rbRect::GetTop( aRect ), rb_intern( "+" ), 1, rbRect::GetHeight( aRect ) ) );
+
+	if( rb_funcall( left, rb_intern( "<" ), 1, right ) == Qtrue && rb_funcall( top, rb_intern( "<" ), 1, bottom ) )
+	{
+		if( anIntersection != Qnil )
+		{
+			rbRect::SetLeft( anIntersection, left );
+			rbRect::SetTop( anIntersection, top );
+			rbRect::SetWidth( anIntersection, rb_funcall( right, rb_intern( "-" ), 1, left ) );
+			rbRect::SetHeight( anIntersection, rb_funcall( top, rb_intern( "-" ), 1, bottom ) );
+		}
+		return Qtrue;
+	}
+	else
+	{
+		return Qfalse;
+	}
+}
+
+// Rect#intersects?(rect)
+// Rect#intersects?(rect, intersection)
+VALUE rbRect::Intersects( int argc, VALUE* args, VALUE aSelf )
+{
+	VALUE rect;
+	VALUE intersection;
+	switch( argc )
+	{
+		case 1:
+			rect = rbRect::ToRuby( args[ 0 ] );
+			if( rbRect::Type( aSelf ) != rbRect::Type( rect ) )
+				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
+				
+			return internalIntersects( aSelf, rect, Qnil );
+		case 2:
+			rect = rbRect::ToRuby( args[ 0 ] );
+			if( rbRect::Type( aSelf ) != rbRect::Type( rect ) )
+				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
+				
+			intersection = rbRect::ToRuby( args[ 1 ] );
+			if( rbRect::Type( aSelf ) != rbRect::Type( intersection ) )
+				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
+				
+			return internalIntersects( aSelf, rect, intersection );
 		default:
             INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}

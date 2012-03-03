@@ -65,9 +65,13 @@ namespace rbRect
     // Rect#initialize_copy(rect)
     static VALUE InitializeCopy( VALUE aSelf, VALUE aRect );
 	
-	// Rect#contains(x, y)
-	// Rect#contains(vector2)
+	// Rect#contains?(x, y)
+	// Rect#contains?(vector2)
 	static VALUE Contains( int argc, VALUE* args, VALUE aSelf );
+	
+	// Rect#intersects?(rect)
+	// Rect#intersects?(rect, intersection)
+	static VALUE Intersects( int argc, VALUE* args, VALUE aSelf );
 
     // Rect#marshal_dump
     static VALUE MarshalDump(VALUE aSelf );
