@@ -31,6 +31,7 @@ void rbRect::Init( VALUE SFML )
     // Instance methods
     rb_define_method( rbRect::Class, "initialize",      rbRect::Initialize,     -1 );
     rb_define_method( rbRect::Class, "initialize_copy", rbRect::InitializeCopy,  1 );
+	rb_define_method( rbRect::Class, "contains?",		rbRect::Contains,		-1 );
     rb_define_method( rbRect::Class, "marshal_dump",    rbRect::MarshalDump,     0 );
     rb_define_method( rbRect::Class, "marshal_load",    rbRect::MarshalLoad,     1 );
     rb_define_method( rbRect::Class, "==",              rbRect::Equal,           1 );
@@ -71,7 +72,7 @@ VALUE rbRect::Initialize( int argc, VALUE argv[], VALUE aSelf )
 			position = rbVector2::ToRuby( argv[ 0 ] );
 			size = rbVector2::ToRuby( argv[ 1 ] );
 			if( rbVector2::Type( position ) != rbVector2::Type( size ) )
-				rb_raise( rb_eTypeError, "Vectors must be of same type!" );
+				rb_raise( rb_eTypeError, "Vectors must be of same numeric type!" );
 				
 			rbRect::SetLeft( aSelf, rbVector2::GetX( position ) );
 			rbRect::SetTop( aSelf, rbVector2::GetY( position ) );
@@ -119,6 +120,50 @@ VALUE rbRect::InitializeCopy( VALUE aSelf, VALUE aRect )
 	rbRect::SetHeight( aSelf, height );
 
     return aSelf;
+}
+
+static VALUE internalContains( VALUE aSelf, VALUE anX, VALUE anY )
+{
+	if( rb_funcall( anX, rb_intern( ">=" ), 1, rbRect::GetLeft( aSelf ) ) == Qtrue &&
+		rb_funcall( anX, rb_intern( "<" ), 1, rb_funcall( rbRect::GetLeft( aSelf ), rb_intern( "+" ), 1, rbRect::GetWidth( aSelf ) ) ) == Qtrue && 
+		rb_funcall( anY, rb_intern( ">=" ), 1, rbRect::GetTop( aSelf ) ) == Qtrue && 
+		rb_funcall( anY, rb_intern( "<" ), 1, rb_funcall( rbRect::GetTop( aSelf ), rb_intern( "+" ), 1, rbRect::GetHeight( aSelf ) ) ) == Qtrue )
+		return Qtrue;
+	else
+		return Qfalse;
+}
+
+// Rect#contains(x, y)
+// Rect#contains(vector2)
+VALUE rbRect::Contains( int argc, VALUE* args, VALUE aSelf )
+{
+	VALUE point;
+	switch( argc )
+	{
+		case 1:
+			point = rbVector2::ToRuby( args[ 0 ] );
+			if( rbVector2::Type( point ) != rbRect::Type( aSelf ) )
+				rb_raise( rb_eTypeError, "Vector and rect must be of same numeric type!" );
+			
+			return internalContains( aSelf, rbVector2::GetX( point ), rbVector2::GetY( point ) );
+		case 2:
+			if( rbRect::Type( aSelf ) == T_FIXNUM and FIXNUM_P( args[ 0 ] ) and FIXNUM_P( args[ 1 ] ) )
+            {
+				return internalContains( aSelf, args[ 0 ], args[ 1 ] );
+            }
+            else if( rbRect::Type( aSelf ) == T_FLOAT and ISFLOAT( args[ 0 ] ) and ISFLOAT( args[ 1 ] ) )
+            {
+				return internalContains( aSelf, args[ 0 ], args[ 1 ] );
+            }
+            else
+            {
+                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
+            }
+		default:
+            INVALID_ARGUMENT_LIST( argc, "1 or 2" );
+	}
+	
+	return Qfalse;
 }
 
 // Rect#marshal_dump
