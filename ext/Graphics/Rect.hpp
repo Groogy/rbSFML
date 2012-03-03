@@ -31,8 +31,8 @@ namespace rbRect
 {
     static inline int Type( VALUE aRect );
     static inline VALUE ToRuby( VALUE anOther );
-    static inline VALUE ToRuby( sf::IntRect& aRect );
-    static inline VALUE ToRuby( sf::FloatRect& aRect );
+    static inline VALUE ToRuby( const sf::IntRect& aRect );
+    static inline VALUE ToRuby( const sf::FloatRect& aRect );
     static inline sf::IntRect ToSFMLi( VALUE aRect );
     static inline sf::FloatRect ToSFMLf( VALUE aRect );
 
@@ -119,7 +119,7 @@ VALUE rbRect::ToRuby( VALUE anOther )
               rb_obj_classname( anOther ), rb_class2name( rbRect::Class ) );
 }
 
-VALUE rbRect::ToRuby( sf::IntRect& aRect )
+VALUE rbRect::ToRuby( const sf::IntRect& aRect )
 {
     VALUE left = INT2FIX( aRect.Left );
     VALUE top = INT2FIX( aRect.Top );
@@ -128,7 +128,7 @@ VALUE rbRect::ToRuby( sf::IntRect& aRect )
     return rb_class_new_instance( 4, ( VALUE[] ){ left, top, width, height }, rbRect::Class );
 }
 
-VALUE rbRect::ToRuby( sf::FloatRect& aRect )
+VALUE rbRect::ToRuby( const sf::FloatRect& aRect )
 {
     VALUE left = rb_float_new( aRect.Left );
     VALUE top = rb_float_new( aRect.Top );
