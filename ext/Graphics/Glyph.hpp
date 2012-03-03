@@ -59,7 +59,7 @@ namespace rbGlyph
     static VALUE InitializeCopy( VALUE aSelf, VALUE aGlyph );
 	
     // Glyph#marshal_dump
-    static VALUE MarshalDump(VALUE aSelf );
+    static VALUE MarshalDump( VALUE aSelf );
 
     // Glyph#marshal_load(data)
     static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
