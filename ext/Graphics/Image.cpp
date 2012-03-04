@@ -63,8 +63,14 @@ void rbImage::Init( VALUE SFML )
 // Image#initialize
 VALUE rbImage::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
-	if( argc > 0 )
+	if( argc >= 2 )
+	{
 		rbImage::Create( argc, args, aSelf );
+	}
+	else if( argc == 1 )
+	{
+		rbImage::LoadFromFile( aSelf, args[ 0 ] );
+	}
 		
     return Qnil;
 }
