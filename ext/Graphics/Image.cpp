@@ -61,6 +61,9 @@ void rbImage::Init( VALUE SFML )
 }
 
 // Image#initialize
+// Image#initialize(filename)
+// Image#initialize(width, height, color = SFML::Color::Black)
+// Image#initialize(width, height, pixels)
 VALUE rbImage::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
 	if( argc >= 2 )

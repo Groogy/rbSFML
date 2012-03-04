@@ -41,6 +41,9 @@ namespace rbImage
 
 #if defined( GRAPHICS_IMAGE_CPP )
     // Image#initialize
+	// Image#initialize(filename)
+	// Image#initialize(width, height, color = SFML::Color::Black)
+	// Image#initialize(width, height, pixels)
     static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
 
     // Image#initialize_copy(image)
