@@ -27,6 +27,7 @@
 std::stringstream globalErrorStream;
 namespace rbVector2 { VALUE Class; }
 namespace rbNonCopyable { VALUE Module; }
+namespace rbWindow { VALUE Class; }
 #endif
 
 static inline void InitDependencies( VALUE SFML )
@@ -34,6 +35,7 @@ static inline void InitDependencies( VALUE SFML )
 #if !defined( RBSFML_SFML )
     rbVector2::Class = rb_const_get( SFML, rb_intern( "Vector2" ) );
 	rbNonCopyable::Module = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
+	rbWindow::Class = rb_const_get( SFML, rb_intern( "Window" ) );
 #endif
 }
 
@@ -56,4 +58,5 @@ void Init_window()
 	rbRect::Init( SFML );
 	rbGlyph::Init( SFML );
 	rbImage::Init( SFML );
+	rbTexture::Init( SFML );
 }
