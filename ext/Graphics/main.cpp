@@ -78,5 +78,6 @@ void Init_window()
 	rbImage::Init( SFML );
 	rbTexture::Init( SFML );
 	rbFont::Init( SFML );
+	rbDrawable::Init( SFML );
 	
 }
