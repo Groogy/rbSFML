@@ -46,6 +46,16 @@ void rbColor::Init( VALUE SFML )
 
     // Instance aliases
     rb_define_alias( rbColor::Class, "to_s",   "inspect" );
+	
+	rb_define_const( rbColor::Class, "Black",       rb_obj_freeze( rbColor::ToRuby( sf::Color::Black ) ) );
+	rb_define_const( rbColor::Class, "White",       rb_obj_freeze( rbColor::ToRuby( sf::Color::White ) ) );
+	rb_define_const( rbColor::Class, "Red",         rb_obj_freeze( rbColor::ToRuby( sf::Color::Red ) ) );
+	rb_define_const( rbColor::Class, "Green",       rb_obj_freeze( rbColor::ToRuby( sf::Color::Green ) ) );
+	rb_define_const( rbColor::Class, "Blue",        rb_obj_freeze( rbColor::ToRuby( sf::Color::Blue ) ) );
+	rb_define_const( rbColor::Class, "Yellow",      rb_obj_freeze( rbColor::ToRuby( sf::Color::Yellow ) ) );
+	rb_define_const( rbColor::Class, "Magenta",     rb_obj_freeze( rbColor::ToRuby( sf::Color::Magenta ) ) );
+	rb_define_const( rbColor::Class, "Cyan",        rb_obj_freeze( rbColor::ToRuby( sf::Color::Cyan ) ) );
+	rb_define_const( rbColor::Class, "Transparent", rb_obj_freeze( rbColor::ToRuby( sf::Color::Transparent ) ) );
 }
 
 // Vector3#initialize
