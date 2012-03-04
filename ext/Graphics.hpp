@@ -30,5 +30,6 @@
 #include "Graphics/Rect.hpp"
 #include "Graphics/Glyph.hpp"
 #include "Graphics/Image.hpp"
+#include "Graphics/Texture.hpp"
 
 #endif // GRAPHICS_HPP
