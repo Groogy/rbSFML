@@ -79,5 +79,5 @@ void Init_window()
 	rbTexture::Init( SFML );
 	rbFont::Init( SFML );
 	rbDrawable::Init( SFML );
-	
+	rbTransform::Init( SFML );
 }

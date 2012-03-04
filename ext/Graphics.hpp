@@ -33,5 +33,6 @@
 #include "Graphics/Texture.hpp"
 #include "Graphics/Font.hpp"
 #include "Graphics/Drawable.hpp"
+#include "Graphics/Transform.hpp"
 
 #endif // GRAPHICS_HPP
