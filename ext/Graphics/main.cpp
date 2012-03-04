@@ -42,22 +42,25 @@ static inline void InitDependencies( VALUE SFML )
 
 static inline void InitEnumerations( VALUE SFML )
 {
-	rb_define_const( SFML, "BlendAlpha",    sf::BlendAlpha    );
-	rb_define_const( SFML, "BlendAdd",      sf::BlendAdd      );
-	rb_define_const( SFML, "BlendMultiply", sf::BlendMultiply );
-	rb_define_const( SFML, "BlendNone",     sf::BlendNone     );
+	if( rb_const_defined( SFML, rb_intern( "BlendAlpha" ) ) == Qfalse )
+	{
+		rb_define_const( SFML, "BlendAlpha",    sf::BlendAlpha    );
+		rb_define_const( SFML, "BlendAdd",      sf::BlendAdd      );
+		rb_define_const( SFML, "BlendMultiply", sf::BlendMultiply );
+		rb_define_const( SFML, "BlendNone",     sf::BlendNone     );
 	
-	rb_define_const( SFML, "Points",         sf::Points         );
-	rb_define_const( SFML, "Lines",          sf::Lines          );
-	rb_define_const( SFML, "LinesStrip",     sf::LinesStrip     );
-	rb_define_const( SFML, "Triangles",      sf::Triangles      );
-	rb_define_const( SFML, "TrianglesStrip", sf::TrianglesStrip );
-	rb_define_const( SFML, "TrianglesFan",   sf::TrianglesFan   );
-	rb_define_const( SFML, "Quads",          sf::Quads          );
+		rb_define_const( SFML, "Points",         sf::Points         );
+		rb_define_const( SFML, "Lines",          sf::Lines          );
+		rb_define_const( SFML, "LinesStrip",     sf::LinesStrip     );
+		rb_define_const( SFML, "Triangles",      sf::Triangles      );
+		rb_define_const( SFML, "TrianglesStrip", sf::TrianglesStrip );
+		rb_define_const( SFML, "TrianglesFan",   sf::TrianglesFan   );
+		rb_define_const( SFML, "Quads",          sf::Quads          );
+	}
 }
 
 extern "C"
-void Init_window()
+void Init_graphics()
 {
     VALUE SFML = rbSFML::Module();
     
