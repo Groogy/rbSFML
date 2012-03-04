@@ -41,7 +41,6 @@ void rbImage::Init( VALUE SFML )
 	rb_define_method( rbImage::Class, "load_from_memory",       rbImage::LoadFromMemory,       1 );
 	rb_define_method( rbImage::Class, "load_from_stream",       rbImage::LoadFromStream,       1 );
 	rb_define_method( rbImage::Class, "save_to_file",           rbImage::SaveToFile,           1 );
-	rb_define_method( rbImage::Class, "save_to_file",           rbImage::SaveToFile,           1 );
 	rb_define_method( rbImage::Class, "width",                  rbImage::GetWidth,             0 );
 	rb_define_method( rbImage::Class, "height",                 rbImage::GetHeight,            0 );
 	rb_define_method( rbImage::Class, "create_mask_from_color", rbImage::CreateMaskFromColor, -1 );
