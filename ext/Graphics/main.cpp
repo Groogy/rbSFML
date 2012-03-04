@@ -59,4 +59,5 @@ void Init_window()
 	rbGlyph::Init( SFML );
 	rbImage::Init( SFML );
 	rbTexture::Init( SFML );
+	rbFont::Init( SFML );
 }
