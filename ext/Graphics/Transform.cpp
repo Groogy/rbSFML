@@ -53,7 +53,8 @@ void rbTransform::Init( VALUE SFML )
     // Instance aliases
     rb_define_alias( rbTransform::Class, "to_s",   "inspect" );
 	
-	rb_define_const( rbTransform::Class, "Identity", rbMacros::ToConstRuby( &sf::Transform::Identity, rbTransform::Class ) );
+	if( rb_const_defined( rbTransform::Class, rb_intern( "Identity" ) ) == Qfalse )
+		rb_define_const( rbTransform::Class, "Identity", rbMacros::ToConstRuby( &sf::Transform::Identity, rbTransform::Class ) );
 }
 
 // Transform#initialize
