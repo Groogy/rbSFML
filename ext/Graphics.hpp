@@ -26,4 +26,9 @@
 
 #include <rbSFML.hpp>
 
+#include "Graphics/Color.hpp"
+#include "Graphics/Rect.hpp"
+#include "Graphics/Glyph.hpp"
+#include "Graphics/Image.hpp"
+
 #endif // GRAPHICS_HPP

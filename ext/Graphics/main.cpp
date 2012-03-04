@@ -19,10 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <Window.hpp>
-
-#include "Color.hpp"
-#include "Rect.hpp"
+#include <Graphics.hpp>
+#include <System/SFML.hpp>
 
 #if !defined( RBSFML_SFML )
 #include <sstream>
@@ -56,4 +54,6 @@ void Init_window()
 	
 	rbColor::Init( SFML );
 	rbRect::Init( SFML );
+	rbGlyph::Init( SFML );
+	rbImage::Init( SFML );
 }
