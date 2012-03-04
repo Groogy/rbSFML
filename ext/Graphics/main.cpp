@@ -21,6 +21,7 @@
 
 #include <Graphics.hpp>
 #include <System/SFML.hpp>
+#include <SFML/Graphics.hpp>
 
 #if !defined( RBSFML_SFML )
 #include <sstream>
@@ -39,6 +40,22 @@ static inline void InitDependencies( VALUE SFML )
 #endif
 }
 
+static inline void InitEnumerations( VALUE SFML )
+{
+	rb_define_const( SFML, "BlendAlpha",    sf::BlendAlpha    );
+	rb_define_const( SFML, "BlendAdd",      sf::BlendAdd      );
+	rb_define_const( SFML, "BlendMultiply", sf::BlendMultiply );
+	rb_define_const( SFML, "BlendNone",     sf::BlendNone     );
+	
+	rb_define_const( SFML, "Points",         sf::Points         );
+	rb_define_const( SFML, "Lines",          sf::Lines          );
+	rb_define_const( SFML, "LinesStrip",     sf::LinesStrip     );
+	rb_define_const( SFML, "Triangles",      sf::Triangles      );
+	rb_define_const( SFML, "TrianglesStrip", sf::TrianglesStrip );
+	rb_define_const( SFML, "TrianglesFan",   sf::TrianglesFan   );
+	rb_define_const( SFML, "Quads",          sf::Quads          );
+}
+
 extern "C"
 void Init_window()
 {
@@ -53,6 +70,7 @@ void Init_window()
     rb_cv_set( SFML, "@@graphics", Qtrue );
     
     InitDependencies( SFML );
+	InitEnumerations( SFML );
 	
 	rbColor::Init( SFML );
 	rbRect::Init( SFML );
@@ -60,4 +78,5 @@ void Init_window()
 	rbImage::Init( SFML );
 	rbTexture::Init( SFML );
 	rbFont::Init( SFML );
+	
 }
