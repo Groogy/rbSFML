@@ -50,29 +50,35 @@ private:
 static VALUE rbInternalAllocateDrawable( VALUE aKlass )
 {
 	rbInternalDrawable* drawable = rbMacros::Allocate< rbInternalDrawable >();
-	VALUE object = rbMacros::ToRuby( drawable, rbDrawable::Class );
+	VALUE object = rbMacros::ToRuby( drawable, rbDrawable::Module );
 	drawable->SetSelf( object );
 	return object;
 }
 
+static VALUE rbInternalIncludedDrawable( VALUE aModule, VALUE aBase )
+{
+	rb_define_alloc_func( aBase, rbInternalAllocateDrawable );
+	return Qnil;
+}
+
 void rbDrawable::Init( VALUE SFML )
 {
-    rbDrawable::Class = rb_define_class_under( SFML, "Drawable", rb_cObject );
+    rbDrawable::Module = rb_define_module_under( SFML, "Drawable" );
 	
 	// Class methods
-	rb_define_alloc_func( rbDrawable::Class, rbInternalAllocateDrawable );
+	rb_define_module_function( rbDrawable::Module, "included", rbInternalIncludedDrawable, 1 );
 
     // Instance methods
-	rb_define_method( rbDrawable::Class, "initialize",             rbDrawable::Initialize,           0 );
-    rb_define_method( rbDrawable::Class, "initialize_copy",        rbDrawable::InitializeCopy,       1 );
-	rb_define_method( rbDrawable::Class, "draw",                   rbDrawable::Draw,                 2 );
-	rb_define_method( rbDrawable::Class, "marshal_dump",           rbDrawable::MarshalDump,          0 );
-    rb_define_method( rbDrawable::Class, "==",                     rbDrawable::Equal,                1 );
-    rb_define_method( rbDrawable::Class, "inspect",                rbDrawable::Inspect,              0 );
-    rb_define_method( rbDrawable::Class, "memory_usage",           rbDrawable::GetMemoryUsage,       0 );
+	rb_define_method( rbDrawable::Module, "initialize",             rbDrawable::Initialize,           0 );
+    rb_define_method( rbDrawable::Module, "initialize_copy",        rbDrawable::InitializeCopy,       1 );
+	rb_define_method( rbDrawable::Module, "draw",                   rbDrawable::Draw,                 2 );
+	rb_define_method( rbDrawable::Module, "marshal_dump",           rbDrawable::MarshalDump,          0 );
+    rb_define_method( rbDrawable::Module, "==",                     rbDrawable::Equal,                1 );
+    rb_define_method( rbDrawable::Module, "inspect",                rbDrawable::Inspect,              0 );
+    rb_define_method( rbDrawable::Module, "memory_usage",           rbDrawable::GetMemoryUsage,       0 );
 
     // Instance aliases
-    rb_define_alias( rbDrawable::Class, "to_s",       "inspect" );
+    rb_define_alias( rbDrawable::Module, "to_s",       "inspect" );
 }
 
 // Drawable#initialize
@@ -105,9 +111,9 @@ VALUE rbDrawable::MarshalDump( VALUE aSelf )
 // Drawable#==(other)
 VALUE rbDrawable::Equal( VALUE aSelf, VALUE anOther )
 {
-    if( !rb_obj_is_kind_of( anOther, rbDrawable::Class ) )
+    if( !rb_obj_is_kind_of( anOther, rbDrawable::Module ) )
 		return Qfalse;
-    else if( rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Class ) == rbMacros::ToSFML< sf::Drawable >( anOther, rbDrawable::Class ) )
+    else if( rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Module ) == rbMacros::ToSFML< sf::Drawable >( anOther, rbDrawable::Module ) )
 		return Qtrue;
 	else
 		return Qfalse;
@@ -119,7 +125,7 @@ VALUE rbDrawable::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Class ) );
+					   rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Module ) );
 }
 
 // Drawable#memory_usage

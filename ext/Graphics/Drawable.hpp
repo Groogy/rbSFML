@@ -30,9 +30,9 @@
 namespace rbDrawable
 {
 #if defined( GRAPHICS_DRAWABLE_CPP )
-    VALUE Class;
+    VALUE Module;
 #else
-    extern VALUE Class;
+    extern VALUE Module;
 #endif
 
 #if defined( RBSFML_GRAPHICS )
