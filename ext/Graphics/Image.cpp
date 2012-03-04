@@ -319,6 +319,6 @@ VALUE rbImage::Inspect( VALUE aSelf )
 // Image#memory_usage
 VALUE rbImage::GetMemoryUsage( VALUE aSelf )
 {
-	sf::Image* image = rbMacros::ToSFML< sf::Image >( aSelf );
+	sf::Image* image = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
     return INT2FIX( sizeof( sf::Image ) + image->GetWidth() * image->GetHeight() );
 }
