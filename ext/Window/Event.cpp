@@ -37,7 +37,9 @@ void rbEvent::Init( VALUE SFML )
     rbEvent::Class_JoystickMove    = rb_define_class_under( rbEvent::Class, "JoystickMove",    rb_cObject );
     rbEvent::Class_JoystickButton  = rb_define_class_under( rbEvent::Class, "JoystickButton",  rb_cObject );
     rbEvent::Class_JoystickConnect = rb_define_class_under( rbEvent::Class, "JoystickConnect", rb_cObject );
-    rb_define_method( rbEvent::Class_Type, "===", EventTypeCaseEqual, 1 );
+    rb_define_method( rbEvent::Class_Type, "===", rbEvent::EventTypeCaseEqual, 1 );
+	
+	rb_define_alias( rbEvent::Class_Type, "==", "===" );
     
     // Event::Size accessors
     rb_define_attr( rbEvent::Class_Size, "width",  true, false );
@@ -166,13 +168,21 @@ VALUE rbEvent::EventType( int anID )
     return type;
 }
 
+#include <iostream>
+
 // Internal
 VALUE rbEvent::EventTypeCaseEqual( VALUE aSelf, VALUE anOther )
 {
-    anOther = rbMacros::ToRuby( anOther, rbEvent::Class );
-    VALUE id1 = rb_iv_get( aSelf, "@id" );
-    VALUE id2 = rb_iv_get( rbEvent::Type( anOther ), "@id" );
-    return RBOOL( id1 == id2 );
+	if( rb_obj_is_kind_of( anOther, rbEvent::Class_Type ) )
+	{
+		VALUE id1 = rb_iv_get( aSelf, "@id" );
+		VALUE id2 = rb_iv_get( anOther, "@id" );
+		return RBOOL( id1 == id2 );
+	}
+	else
+	{
+		return Qfalse;
+	}
 }
 
 // Event#initialize_copy(event)
