@@ -29,7 +29,7 @@
 
 namespace rbTransformable
 {
-	sf::Transformable* ToSFML( VALUE aValue );
+	static inline sf::Transformable* ToSFML( VALUE aValue );
 	
 #if defined( GRAPHICS_TRANSFORMABLE_CPP )
     VALUE Module;
