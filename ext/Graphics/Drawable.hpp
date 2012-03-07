@@ -29,6 +29,8 @@
 
 namespace rbDrawable
 {
+	static inline sf::Drawable* ToSFML( VALUE aValue );
+
 #if defined( GRAPHICS_DRAWABLE_CPP )
     VALUE Module;
 #else
@@ -62,6 +64,14 @@ namespace rbDrawable
     // Drawable#memory_usage
     static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
+}
+
+sf::Drawable* rbDrawable::ToSFML( VALUE aValue )
+{
+	aValue = rbMacros::ToRuby( aValue, rbDrawable::Module );
+	char* compensationPtr = reinterpret_cast< char* >( DATA_PTR( aValue ) );
+    unsigned int ptrOffset = FIX2UINT( rb_iv_get( aValue, "@__internal__drawable_offset" ) );
+	return reinterpret_cast< sf::Drawable* >( compensationPtr + ptrOffset );
 }
 
 #endif // GRAPHICS_DRAWABLE_HPP

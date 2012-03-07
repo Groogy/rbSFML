@@ -84,7 +84,10 @@ void rbDrawable::Init( VALUE SFML )
 // Drawable#initialize
 VALUE rbDrawable::Initialize( VALUE aSelf )
 {
-	rb_raise( rb_eRuntimeError, "can't allocate instance of abstract class %s", rb_obj_classname( aSelf ) );
+	if( rb_iv_get( aSelf, "@__internal__drawable_offset" ) == Qnil )
+	{
+		rb_iv_set( aSelf, "@__internal__drawable_offset", INT2FIX( 0 ) );
+	}
 	return Qnil;
 }
 
@@ -113,7 +116,7 @@ VALUE rbDrawable::Equal( VALUE aSelf, VALUE anOther )
 {
     if( !rb_obj_is_kind_of( anOther, rbDrawable::Module ) )
 		return Qfalse;
-    else if( rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Module ) == rbMacros::ToSFML< sf::Drawable >( anOther, rbDrawable::Module ) )
+    else if( rbDrawable::ToSFML( aSelf ) == rbDrawable::ToSFML( anOther ) )
 		return Qtrue;
 	else
 		return Qfalse;
@@ -125,7 +128,7 @@ VALUE rbDrawable::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Drawable >( aSelf, rbDrawable::Module ) );
+					   rbDrawable::ToSFML( aSelf ) );
 }
 
 // Drawable#memory_usage
