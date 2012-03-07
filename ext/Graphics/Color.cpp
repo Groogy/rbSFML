@@ -58,9 +58,9 @@ void rbColor::Init( VALUE SFML )
 	rb_define_const( rbColor::Class, "Transparent", rb_obj_freeze( rbColor::ToRuby( sf::Color::Transparent ) ) );
 }
 
-// Vector3#initialize
-// Vector3#initialize(color)
-// Vector3#initialize(r, g, b, a=255)
+// Color#initialize
+// Color#initialize(color)
+// Color#initialize(r, g, b, a=255)
 VALUE rbColor::Initialize( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
@@ -182,7 +182,7 @@ VALUE rbColor::Equal( VALUE aSelf, VALUE anOther )
 // Color#to_s
 VALUE rbColor::Inspect( VALUE aSelf )
 {
-	return rb_sprintf( "%s(%i, %i, %i, %I)",
+	return rb_sprintf( "%s(%i, %i, %i, %i)",
 					   rb_obj_classname( aSelf ),
 					   FIX2INT( rbColor::GetRed( aSelf ) ),
 					   FIX2INT( rbColor::GetGreen( aSelf ) ),
