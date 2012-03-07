@@ -32,8 +32,8 @@ namespace rbVector2
 {
     static inline int Type( VALUE aVector2 );
     static inline VALUE ToRuby( VALUE anOther );
-    static inline VALUE ToRuby( sf::Vector2i& aVector2 );
-    static inline VALUE ToRuby( sf::Vector2f& aVector2 );
+    static inline VALUE ToRuby( const sf::Vector2i& aVector2 );
+    static inline VALUE ToRuby( const sf::Vector2f& aVector2 );
     static inline sf::Vector2i ToSFMLi( VALUE aVector2 );
     static inline sf::Vector2f ToSFMLf( VALUE aVector2 );
 
@@ -124,14 +124,14 @@ VALUE rbVector2::ToRuby( VALUE anOther )
               rb_obj_classname( anOther ), rb_class2name( rbVector2::Class ) );
 }
 
-VALUE rbVector2::ToRuby( sf::Vector2i& aVector2 )
+VALUE rbVector2::ToRuby( const sf::Vector2i& aVector2 )
 {
     VALUE x = INT2FIX( aVector2.x );
     VALUE y = INT2FIX( aVector2.y );
     return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
 }
 
-VALUE rbVector2::ToRuby( sf::Vector2f& aVector2 )
+VALUE rbVector2::ToRuby( const sf::Vector2f& aVector2 )
 {
     VALUE x = rb_float_new( aVector2.x );
     VALUE y = rb_float_new( aVector2.y );

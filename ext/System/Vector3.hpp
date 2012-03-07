@@ -32,8 +32,8 @@ namespace rbVector3
 {
     static inline int Type( VALUE aVector3 );
     static inline VALUE ToRuby( VALUE anOther );
-    static inline VALUE ToRuby( sf::Vector3i& aVector3 );
-    static inline VALUE ToRuby( sf::Vector3f& aVector3 );
+    static inline VALUE ToRuby( const sf::Vector3i& aVector3 );
+    static inline VALUE ToRuby( const sf::Vector3f& aVector3 );
     static inline sf::Vector3i ToSFMLi( VALUE aVector3 );
     static inline sf::Vector3f ToSFMLf( VALUE aVector3 );
 
@@ -127,7 +127,7 @@ VALUE rbVector3::ToRuby( VALUE anOther )
               rb_obj_classname( anOther ), rb_class2name( rbVector3::Class ));
 }
 
-VALUE rbVector3::ToRuby( sf::Vector3i& aVector3 )
+VALUE rbVector3::ToRuby( const sf::Vector3i& aVector3 )
 {
     VALUE x = INT2FIX( aVector3.x );
     VALUE y = INT2FIX( aVector3.y );
@@ -135,7 +135,7 @@ VALUE rbVector3::ToRuby( sf::Vector3i& aVector3 )
     return rb_class_new_instance( 3, ( VALUE[] ){ x, y, z }, rbVector3::Class );
 }
 
-VALUE rbVector3::ToRuby( sf::Vector3f& aVector3 )
+VALUE rbVector3::ToRuby( const sf::Vector3f& aVector3 )
 {
     VALUE x = rb_float_new( aVector3.x );
     VALUE y = rb_float_new( aVector3.y );
