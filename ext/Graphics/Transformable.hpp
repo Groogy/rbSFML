@@ -29,6 +29,8 @@
 
 namespace rbTransformable
 {
+	sf::Transformable* ToSFML( VALUE aValue );
+	
 #if defined( GRAPHICS_TRANSFORMABLE_CPP )
     VALUE Module;
 #else
@@ -46,6 +48,58 @@ namespace rbTransformable
 	// Transformable#initialize_copy(source)
     static VALUE InitializeCopy( VALUE aSelf, VALUE aSource );
 	
+	// Transformable#set_position(x, y)
+	// Transformable#set_position(vector2)
+	// Transformable#position=(vector2)
+	static VALUE SetPosition( int argc, VALUE* args, VALUE aSelf );
+	
+	// Transformable#set_rotation(angle)
+	// Transformable#rotation=(angle)
+	static VALUE SetRotation( VALUE aSelf, VALUE anAngle );
+	
+	// Transformable#set_scale(x, y)
+	// Transformable#set_scale(vector2)
+	// Transformable#scale=(vector2)
+	static VALUE SetScale( int argc, VALUE* args, VALUE aSelf );
+	
+	// Transformable#set_origin(x, y)
+	// Transformable#set_origin(vector2)
+	// Transformable#origin=(vector2)
+	static VALUE SetOrigin( int argc, VALUE* args, VALUE aSelf );
+	
+	// Transformable#get_position()
+	// Transformable#position()
+	static VALUE GetPosition( VALUE aSelf );
+	
+	// Transformable#get_rotation()
+	// Transformable#rotation()
+	static VALUE GetRotation( VALUE aSelf );
+	
+	// Transformable#get_scale()
+	// Transformable#scale()
+	// Transformable#scale(x, y)
+	// Transformable#scale(vector2)
+	static VALUE GetScale( int argc, VALUE* args, VALUE aSelf );
+	
+	// Transformable#get_origin()
+	// Transformable#origin()
+	static VALUE GetOrigin( VALUE aSelf );
+	
+	// Transformable#move(x, y)
+	// Transformable#move(vector2)
+	static VALUE Move( int argc, VALUE* args, VALUE aSelf );
+	
+	// Transformable#rotate(angle)
+	static VALUE Rotate( VALUE aSelf, VALUE anAngle );
+	
+	// Transformable#get_transform()
+	// Transformable#transform()
+	static VALUE GetTransform( VALUE aSelf );
+	
+	// Transformable#get_inverse_transform()
+	// Transformable#inverse_transform()
+	static VALUE GetInverseTransform( VALUE aSelf );
+	
     // Transformable#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
 
@@ -59,6 +113,14 @@ namespace rbTransformable
     // Transformable#memory_usage
     static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
+}
+
+sf::Transformable* rbTransformable::ToSFML( VALUE aValue )
+{
+	aValue = rbMacros::ToRuby( aValue, rbTransformable::Module );
+	char* compensationPtr = reinterpret_cast< char* >( DATA_PTR( aValue ) );
+    unsigned int ptrOffset = FIX2UINT( rb_iv_get( aValue, "@__internal__transformable_offset" ) );
+	return reinterpret_cast< sf::Transformable* >( compensationPtr + ptrOffset );
 }
 
 #endif // GRAPHICS_TRANSFORMABLE_HPP
