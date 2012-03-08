@@ -32,8 +32,8 @@
 namespace rbVertex
 {
     static inline VALUE ToRuby( VALUE anOther );
-    static inline VALUE ToRuby( const sf::Vertex& aColor );
-    static inline sf::Vertex ToSFML( VALUE aColor );
+    static inline VALUE ToRuby( const sf::Vertex& aVertex );
+    static inline sf::Vertex ToSFML( VALUE aVertex );
 	
 	static inline VALUE GetPosition( VALUE aSelf );
 	static inline VALUE GetColor( VALUE aSelf );
