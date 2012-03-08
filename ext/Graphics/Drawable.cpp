@@ -88,6 +88,8 @@ VALUE rbDrawable::Initialize( VALUE aSelf )
 	{
 		rb_iv_set( aSelf, "@__internal__drawable_offset", INT2FIX( 0 ) );
 	}
+	
+	rb_call_super( 0, NULL );
 	return Qnil;
 }
 
