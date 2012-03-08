@@ -34,5 +34,7 @@
 #include "Graphics/Font.hpp"
 #include "Graphics/Drawable.hpp"
 #include "Graphics/Transform.hpp"
+#include "Graphics/Transformable.hpp"
+#include "Graphics/Vertex.hpp"
 
 #endif // GRAPHICS_HPP

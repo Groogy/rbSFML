@@ -83,4 +83,6 @@ void Init_graphics()
 	rbFont::Init( SFML );
 	rbDrawable::Init( SFML );
 	rbTransform::Init( SFML );
+	rbTransformable::Init( SFML );
+	rbVertex::Init( SFML );
 }
