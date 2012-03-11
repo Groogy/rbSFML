@@ -31,8 +31,10 @@ namespace rbShader
 {
 #if defined( GRAPHICS_SHADER_CPP )
     VALUE Class;
+	VALUE Class_CurrentTextureType;
 #else
     extern VALUE Class;
+	extern VALUE Class_CurrentTextureType;
 #endif
 
 #if defined( RBSFML_GRAPHICS )
@@ -59,6 +61,24 @@ namespace rbShader
 	// Shader#load_from_stream(stream, type)
 	// Shader#load_from_stream(vertex_stream, fragment_stream)
 	static VALUE LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 );
+	
+	// Shader#set_parameter(name, x)
+	// Shader#set_parameter(name, x, y)
+	// Shader#set_parameter(name, x, y, z)
+	// Shader#set_parameter(name, vector2)
+	// Shader#set_parameter(name, vector3)
+	// Shader#set_parameter(name, color)
+	// Shader#set_parameter(name, transform)
+	// Shader#set_parameter(name, texture)
+	// Shader#set_parameter(name, current_texture)
+	// Shader#[]=(name, x)
+	// Shader#[]=(name, vector2)
+	// Shader#[]=(name, vector3)
+	// Shader#[]=(name, color)
+	// Shader#[]=(name, transform)
+	// Shader#[]=(name, texture)
+	// Shader#[]=(name, current_texture)
+	static VALUE SetParameter( int argc, VALUE* args, VALUE aSelf );
 	
 	// Shader#bind()
 	static VALUE Bind( VALUE aSelf );

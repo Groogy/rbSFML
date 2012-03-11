@@ -27,6 +27,7 @@
 #include "System/Vector2.hpp"
 #include "System/Vector3.hpp"
 #include "System/NonCopyable.hpp"
+#include "Graphics/Color.hpp"
 #include "Graphics/Transform.hpp"
 #include "Graphics/Texture.hpp"
 
@@ -34,6 +35,10 @@ void rbShader::Init( VALUE SFML )
 {
     rbShader::Class = rb_define_class_under( SFML, "Shader", rb_cObject );
 	rb_include_module( rbShader::Class, rbNonCopyable::Module );
+	
+	rbShader::Class_CurrentTextureType = rb_define_class_under( rbShader::Class, "CurrentTextureType", rb_cObject );
+	rb_include_module( rbShader::Class, rbNonCopyable::Module );
+	rb_define_alloc_func( rbShader::Class, rbMacros::AbstractAllocate );
 	
 	// Class methods
 	rb_define_alloc_func( rbShader::Class, rbMacros::Allocate< sf::Shader > );
@@ -59,6 +64,8 @@ void rbShader::Init( VALUE SFML )
 	
 	rb_define_const( rbShader::Class, "Vertex",   INT2NUM( sf::Shader::Vertex )   );
 	rb_define_const( rbShader::Class, "Fragment", INT2NUM( sf::Shader::Fragment ) );
+	
+	rb_define_const( rbShader::Class, "CurrentTexture", rbShader::Class_CurrentTextureType );
 }
 
 // Shader.available?()
@@ -133,6 +140,76 @@ VALUE rbShader::LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 	}
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
+}
+
+// Shader#set_parameter(name, x)
+// Shader#set_parameter(name, x, y)
+// Shader#set_parameter(name, x, y, z)
+// Shader#set_parameter(name, vector2)
+// Shader#set_parameter(name, vector3)
+// Shader#set_parameter(name, color)
+// Shader#set_parameter(name, transform)
+// Shader#set_parameter(name, texture)
+// Shader#set_parameter(name, current_texture)
+// Shader#[]=(name, x)
+// Shader#[]=(name, vector2)
+// Shader#[]=(name, vector3)
+// Shader#[]=(name, color)
+// Shader#[]=(name, transform)
+// Shader#[]=(name, texture)
+// Shader#[]=(name, current_texture)
+VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
+{
+	if( argc <= 1 )
+		INVALID_ARGUMENT_LIST( argc, "2..4" );
+		
+	std::string name = StringValueCStr( args[ 0 ] );
+	switch( argc )
+	{
+	case 2:
+		if( rb_obj_is_kind_of( args[ 1 ], rb_cNumeric ) == Qtrue )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ) );
+		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbVector2::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 2 ) )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbVector2::ToSFMLf( args[ 1 ] ) );
+		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbVector3::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 3 ) )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbVector3::ToSFMLf( args[ 1 ] ) );
+		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbColor::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 4 ) )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbColor::ToSFML( args[ 1 ] ) );
+		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbTransform::Class ) == Qtrue )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class ) );
+		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbTexture::Class ) == Qtrue )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, *rbMacros::ToSFML< sf::Texture >( args[ 1 ], rbTexture::Class ) );
+		}
+		else if( args[ 1 ] == rbShader::Class_CurrentTextureType )
+		{
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, sf::Shader::CurrentTexture );
+		}
+		else
+		{
+			INVALID_EXPECTED_TYPES7( rb_cNumeric, rbVector2::Class, rbVector3::Class, rbColor::Class, rbTransform::Class, rbTexture::Class, rbShader::Class_CurrentTextureType );
+		}
+		break;
+	case 3:
+		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ) );
+		break;
+	case 4:
+		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ), NUM2DBL( args[ 3 ] ) );
+		break;
+	default:
+		INVALID_ARGUMENT_LIST( argc, "2..4" );
+	}
+	return Qnil;
 }
 
 // Shader#bind()

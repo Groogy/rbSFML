@@ -36,5 +36,6 @@
 #include "Graphics/Transform.hpp"
 #include "Graphics/Transformable.hpp"
 #include "Graphics/Vertex.hpp"
+#include "Graphics/Shader.hpp"
 
 #endif // GRAPHICS_HPP

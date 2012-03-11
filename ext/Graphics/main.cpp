@@ -85,4 +85,5 @@ void Init_graphics()
 	rbTransform::Init( SFML );
 	rbTransformable::Init( SFML );
 	rbVertex::Init( SFML );
+	rbShader::Init( SFML );
 }
