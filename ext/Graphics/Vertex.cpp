@@ -146,7 +146,7 @@ VALUE rbVertex::Inspect( VALUE aSelf )
 					   StringValueCStr( texCoords ) );
 }
 
-// Color#memory_usage
+// Vertex#memory_usage
 VALUE rbVertex::GetMemoryUsage( VALUE aSelf )
 {
     return INT2FIX( 0 );
