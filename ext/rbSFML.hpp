@@ -151,6 +151,10 @@ typedef VALUE ( *RubyFunctionPtr )( ... );
 		
 #define INVALID_EXPECTED_TYPES3( type1, type2, type3 ) \
 		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s', '%s' )", rb_class2name( type1 ), rb_class2name( type2 ), rb_class2name( type3 ) );
+
+#define INVALID_EXPECTED_TYPES5( type1, type2, type3, type4, type5 ) \
+		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s', '%s', '%s', '%s' )", \
+		rb_class2name( type1 ), rb_class2name( type2 ), rb_class2name( type3 ), rb_class2name( type4 ), rb_class2name( type5 ) );
 		
 #define INVALID_EXPECTED_TYPES6( type1, type2, type3, type4, type5, type6 ) \
 		rb_raise( rb_eTypeError, "Did not receive expected types ( '%s', '%s', '%s', '%s', '%s', '%s' )", \
