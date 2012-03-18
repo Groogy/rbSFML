@@ -133,15 +133,19 @@ void rbKeyboard::Init( VALUE SFML )
     
     // Singleton aliasses
     VALUE sKeyboard = rb_singleton_class( rbKeyboard::Module );
-    rb_define_alias( sKeyboard, "IsKeyPressed", "key_pressed?" );
-    rb_define_alias( sKeyboard, "pressed?",     "key_pressed?" );
+    rb_define_alias( sKeyboard, "isKeyPressed",    "key_pressed?" );
+	rb_define_alias( sKeyboard, "is_key_pressed?", "key_pressed?" );
+	rb_define_alias( sKeyboard, "is_key_pressed",  "key_pressed?" );
+    rb_define_alias( sKeyboard, "pressed?",        "key_pressed?" );
 }
 
-// Keyboard::key_pressed?(button)
-// Keyboard::IsKeyPressed(button)
-// Keyboard::pressed?(button)
+// Keyboard.key_pressed?(button)
+// Keyboard.isKeyPressed(button)
+// Keyboard.is_key_pressed?(button)
+// Keyboard.is_key_pressed(button)
+// Keyboard.pressed?(button)
 VALUE rbKeyboard::IsKeyPressed( VALUE self, VALUE key )
 {
     sf::Keyboard::Key k = static_cast< sf::Keyboard::Key >( NUM2INT( key ) );
-    return RBOOL( sf::Keyboard::IsKeyPressed( k ) );
+    return RBOOL( sf::Keyboard::isKeyPressed( k ) );
 }

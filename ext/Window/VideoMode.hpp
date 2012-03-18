@@ -45,12 +45,14 @@ namespace rbVideoMode
 #endif
     
 #if defined( WINDOW_VIDEOMODE_CPP)
-    // VideoMode::desktop_mode
-    // VideoMode::GetDesktopMode
+    // VideoMode.desktop_mode
+	// VideoMode.get_desktop_mode
+    // VideoMode.getDesktopMode
     static VALUE GetDesktopMode( VALUE aSelf );
     
-    // VideoMode::fullscreen_modes
-    // VideoMode::GetFullscreenModes
+    // VideoMode.fullscreen_modes
+	// VideoMode.get_fullscreen_modes
+    // VideoMode.getFullscreenModes
     static VALUE GetFullscreenModes( VALUE aSelf );
     
     // VideoMode#initialize
@@ -66,33 +68,31 @@ namespace rbVideoMode
     static VALUE MarshalLoad( VALUE aSelf, VALUE someData );
     
     // VideoMode#valid?
-    // VideoMode#IsValid
+	// VideoMode#is_valid?
+	// VideoMode#is_valid
+    // VideoMode#isValid
     static VALUE IsValid( VALUE aSelf );
     
     // VideoMode#width
-    // VideoMode#Width
     static VALUE GetWidth( VALUE aSelf );
     
     // VideoMode#height
-    // VideoMode#Height
     static VALUE GetHeight( VALUE aSelf );
     
     // VideoMode#bpp
-    // VideoMode#BitsPerPixel
+    // VideoMode#bitsPerPixel
     // VideoMode#bits_per_pixel
     // VideoMode#bits
     static VALUE GetBitsPerPixel( VALUE aSelf );
     
     // VideoMode#width=(value)
-    // VideoMode#Width=(value)
     static VALUE SetWidth( VALUE aSelf, VALUE aValue );
     
     // VideoMode#height=(value)
-    // VideoMode#Height=(value)
     static VALUE SetHeight( VALUE aSelf, VALUE aValue );
     
     // VideoMode#bpp=(value)
-    // VideoMode#BitsPerPixel=(value)
+    // VideoMode#bitsPerPixel=(value)
     // VideoMode#bits_per_pixel=(value)
     // VideoMode#bits=(value)
     static VALUE SetBitsPerPixel( VALUE aSelf, VALUE aValue );

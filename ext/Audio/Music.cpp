@@ -49,6 +49,7 @@ void rbMusic::Init( VALUE SFML )
     rb_define_alias( rbMusic::Class, "openFromStream",   "open_from_stream" );
     rb_define_alias( rbMusic::Class, "open_stream",      "open_from_stream" );
     rb_define_alias( rbMusic::Class, "getDuration",      "duration"         );
+	rb_define_alias( rbMusic::Class, "get_duration",     "duration"         );
     rb_define_alias( rbMusic::Class, "to_s",             "inspect"          );
 }
 
@@ -60,48 +61,49 @@ VALUE rbMusic::MarshalDump( VALUE aSelf )
 }
 
 // Music#open_from_file(filename)
-// Music#OpenFromFile(filename)
+// Music#openFromFile(filename)
 // Music#open_file(filename)
 // Music#open(filename)
 VALUE rbMusic::OpenFromFile( VALUE aSelf, VALUE aFilename )
 {
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromFile( StringValueCStr( aFilename ) );
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->openFromFile( StringValueCStr( aFilename ) );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // Music#open_from_memory(data)
-// Music#OpenFromMemory(data)
+// Music#openFromMemory(data)
 // Music#open_memory(data)
 VALUE rbMusic::OpenFromMemory( VALUE aSelf, VALUE aData )
 {
     StringValue( aData );
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromMemory( RSTRING_PTR( aData ),
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->openFromMemory( RSTRING_PTR( aData ),
                                                              RSTRING_LEN( aData ) );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // Music#open_from_stream(stream)
-// Music#OpenFromStream(stream)
+// Music#openFromStream(stream)
 // Music#open_stream(stream)
 VALUE rbMusic::OpenFromStream( VALUE aSelf, VALUE aStream )
 {
     rbInputStream stream( aStream );
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->OpenFromStream( stream );
+    bool ret = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->openFromStream( stream );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // Music#duration
+// Music#get_duration
 // Music#GetDuration
 VALUE rbMusic::GetDuration( VALUE aSelf )
 {
 	sf::Time* time = rbMacros::Allocate< sf::Time >();
-    *time = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration();
+    *time = rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->getDuration();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
@@ -112,7 +114,7 @@ VALUE rbMusic::Inspect( VALUE aSelf )
     return rb_sprintf( "%s(%p: %fs)",
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
-                      rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->GetDuration() );
+                      rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->getDuration() );
 }
 
 // Music#memory_usage

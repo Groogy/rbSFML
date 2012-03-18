@@ -49,6 +49,7 @@ void rbShader::Init( VALUE SFML )
 	rb_define_method( rbShader::Class, "load_from_file",	     rbShader::LoadFromFile,         2 );
 	rb_define_method( rbShader::Class, "load_from_memory",       rbShader::LoadFromMemory,       2 );
 	rb_define_method( rbShader::Class, "load_from_stream",       rbShader::LoadFromStream,       2 );
+	rb_define_method( rbShader::Class, "set_parameter",          rbShader::SetParameter,        -1 );
 	rb_define_method( rbShader::Class, "bind",                   rbShader::Bind,                 0 );
 	rb_define_method( rbShader::Class, "unbind",                 rbShader::Unbind,               0 );
     rb_define_method( rbShader::Class, "marshal_dump",           rbShader::MarshalDump,          0 );
@@ -58,9 +59,17 @@ void rbShader::Init( VALUE SFML )
 	
 	// Class aliases
 	rb_define_alias( rb_singleton_class( rbShader::Class ), "is_available?", "available?" );
+	rb_define_alias( rb_singleton_class( rbShader::Class ), "is_available",  "available?" );
+	rb_define_alias( rb_singleton_class( rbShader::Class ), "isAvailable",   "available?" );
 
     // Instance aliases
-    rb_define_alias( rbShader::Class, "to_s",       "inspect"       );
+	rb_define_alias( rbShader::Class, "loadFromFile",        "load_from_file"         );
+	rb_define_alias( rbShader::Class, "loadFromMemory",      "load_from_memory"       );
+	rb_define_alias( rbShader::Class, "loadFromStream",      "load_from_stream"       );
+	rb_define_alias( rbShader::Class, "saveToFile",          "save_to_file"           );
+	rb_define_alias( rbShader::Class, "setParameter",        "set_parameter"          );
+	rb_define_alias( rbShader::Class, "[]=",                 "set_parameter"          );
+    rb_define_alias( rbShader::Class, "to_s",                "inspect"                );
 	
 	rb_define_const( rbShader::Class, "Vertex",   INT2NUM( sf::Shader::Vertex )   );
 	rb_define_const( rbShader::Class, "Fragment", INT2NUM( sf::Shader::Fragment ) );
@@ -71,7 +80,7 @@ void rbShader::Init( VALUE SFML )
 // Shader.available?()
 VALUE rbShader::IsAvailable( VALUE aSelf )
 {
-	return RBOOL( sf::Shader::IsAvailable() );	
+	return RBOOL( sf::Shader::isAvailable() );	
 }
 
 // Shader#initialize
@@ -84,6 +93,8 @@ VALUE rbShader::Initialize( int argc, VALUE* args, VALUE aSelf )
 
 // Shader#load_from_file(filename, type)
 // Shader#load_from_file(vertex_filename, fragment_filename)
+// Shader#loadFromFile(filename, type)
+// Shader#loadFromFile(vertex_filename, fragment_filename)
 VALUE rbShader::LoadFromFile( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 {
 	rb_check_frozen( aSelf );
@@ -91,11 +102,11 @@ VALUE rbShader::LoadFromFile( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 	bool result = false;
 	if( rb_obj_is_kind_of( anArg2, rb_cString ) == Qtrue )
 	{
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromFile( StringValueCStr( anArg1 ), StringValueCStr( anArg2 ) );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromFile( StringValueCStr( anArg1 ), StringValueCStr( anArg2 ) );
 	}
 	else
 	{
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromFile( StringValueCStr( anArg1 ), static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromFile( StringValueCStr( anArg1 ), static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
 	}
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
@@ -103,6 +114,8 @@ VALUE rbShader::LoadFromFile( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 
 // Shader#load_from_memory(data, type)
 // Shader#load_from_memory(vertex_data, fragment_data)
+// Shader#loadFromMemory(data, type)
+// Shader#loadFromMemory(vertex_data, fragment_data)
 VALUE rbShader::LoadFromMemory( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 {
 	rb_check_frozen( aSelf );
@@ -110,11 +123,11 @@ VALUE rbShader::LoadFromMemory( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 	bool result = false;
 	if( rb_obj_is_kind_of( anArg2, rb_cString ) == Qtrue )
 	{
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromMemory( std::string( RSTRING_PTR( anArg1 ), RSTRING_LEN( anArg1 ) ), std::string( RSTRING_PTR( anArg2 ), RSTRING_LEN( anArg2 ) ) );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromMemory( std::string( RSTRING_PTR( anArg1 ), RSTRING_LEN( anArg1 ) ), std::string( RSTRING_PTR( anArg2 ), RSTRING_LEN( anArg2 ) ) );
 	}
 	else
 	{
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromMemory( std::string( RSTRING_PTR( anArg1 ), RSTRING_LEN( anArg1 ) ), static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromMemory( std::string( RSTRING_PTR( anArg1 ), RSTRING_LEN( anArg1 ) ), static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
 	}
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
@@ -122,6 +135,8 @@ VALUE rbShader::LoadFromMemory( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 
 // Shader#load_from_stream(stream, type)
 // Shader#load_from_stream(vertex_stream, fragment_stream)
+// Shader#loadFromStream(stream, type)
+// Shader#loadFromStream(vertex_stream, fragment_stream)
 VALUE rbShader::LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 {
 	rb_check_frozen( aSelf );
@@ -131,12 +146,12 @@ VALUE rbShader::LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 	{
 		rbInputStream stream1( anArg1 );
 		rbInputStream stream2( anArg2 );
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromStream( stream1, stream2 );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromStream( stream1, stream2 );
 	}
 	else
 	{
 		rbInputStream stream1( anArg1 );
-		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->LoadFromStream( stream1, static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
+		result = rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->loadFromStream( stream1, static_cast< sf::Shader::Type >( NUM2INT( anArg2 ) ) );
 	}
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
@@ -151,6 +166,15 @@ VALUE rbShader::LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 // Shader#set_parameter(name, transform)
 // Shader#set_parameter(name, texture)
 // Shader#set_parameter(name, current_texture)
+// Shader#setParameter(name, x)
+// Shader#setParameter(name, x, y)
+// Shader#setParameter(name, x, y, z)
+// Shader#setParameter(name, vector2)
+// Shader#setParameter(name, vector3)
+// Shader#setParameter(name, color)
+// Shader#setParameter(name, transform)
+// Shader#setParameter(name, texture)
+// Shader#setParameter(name, current_texture)
 // Shader#[]=(name, x)
 // Shader#[]=(name, vector2)
 // Shader#[]=(name, vector3)
@@ -169,31 +193,31 @@ VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 	case 2:
 		if( rb_obj_is_kind_of( args[ 1 ], rb_cNumeric ) == Qtrue )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, NUM2DBL( args[ 1 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbVector2::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 2 ) )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbVector2::ToSFMLf( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, rbVector2::ToSFMLf( args[ 1 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbVector3::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 3 ) )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbVector3::ToSFMLf( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, rbVector3::ToSFMLf( args[ 1 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbColor::Class ) == Qtrue || ( TYPE( args[ 1 ] ) == T_ARRAY && RARRAY_LEN( args[ 1 ] ) == 4 ) )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, rbColor::ToSFML( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, rbColor::ToSFML( args[ 1 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbTransform::Class ) == Qtrue )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbTexture::Class ) == Qtrue )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, *rbMacros::ToSFML< sf::Texture >( args[ 1 ], rbTexture::Class ) );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, *rbMacros::ToSFML< sf::Texture >( args[ 1 ], rbTexture::Class ) );
 		}
 		else if( args[ 1 ] == rbShader::Class_CurrentTextureType )
 		{
-			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, sf::Shader::CurrentTexture );
+			rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, sf::Shader::CurrentTexture );
 		}
 		else
 		{
@@ -201,10 +225,10 @@ VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 		}
 		break;
 	case 3:
-		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ) );
+		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ) );
 		break;
 	case 4:
-		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->SetParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ), NUM2DBL( args[ 3 ] ) );
+		rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->setParameter( name, NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ), NUM2DBL( args[ 3 ] ) );
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "2..4" );
@@ -215,14 +239,14 @@ VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 // Shader#bind()
 VALUE rbShader::Bind( VALUE aSelf )
 {
-	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->Bind();
+	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->bind();
 	return Qnil;
 }
 
 // Shader#unbind()
 VALUE rbShader::Unbind( VALUE aSelf )
 {
-	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->Unbind();
+	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->unbind();
 	return Qnil;
 }
 

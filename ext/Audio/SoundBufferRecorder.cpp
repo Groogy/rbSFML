@@ -32,13 +32,17 @@ void rbSoundBufferRecorder::Init( VALUE SFML )
     // Instance methods
     rb_define_method( rbSoundBufferRecorder::Class, "buffer",       rbSoundBufferRecorder::GetBuffer,      0 );
     rb_define_method( rbSoundBufferRecorder::Class, "memory_usage", rbSoundBufferRecorder::GetMemoryUsage, 0 );
+	
+	// Instance aliasses
+    rb_define_alias( rbSoundBufferRecorder::Class, "get_buffer",      "buffer"    );
 }
 
 // SoundBufferRecorder#buffer
-// SoundBufferRecorder#GetBuffer
+// SoundBufferRecorder#get_buffer
+// SoundBufferRecorder#getBuffer
 VALUE rbSoundBufferRecorder::GetBuffer( VALUE aSelf )
 {
-    sf::SoundBuffer* buffer = const_cast< sf::SoundBuffer* >( &rbMacros::ToSFML< sf::SoundBufferRecorder >( aSelf, rbSoundBufferRecorder::Class )->GetBuffer() );
+    sf::SoundBuffer* buffer = const_cast< sf::SoundBuffer* >( &rbMacros::ToSFML< sf::SoundBufferRecorder >( aSelf, rbSoundBufferRecorder::Class )->getBuffer() );
     return rbMacros::ToRubyNoGC( buffer, rbSoundBuffer::Class );
 }
 

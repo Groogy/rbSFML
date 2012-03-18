@@ -45,12 +45,15 @@ namespace rbTime
     static VALUE InitializeCopy( VALUE aSelf, VALUE aTime );
 	
 	// Time#as_seconds
+	// Time#asSeconds
 	static VALUE AsSeconds( VALUE aSelf );
 	
 	// Time#as_milliseconds
+	// Time#asMilliseconds
 	static VALUE AsMilliseconds( VALUE aSelf );
 	
 	// Time#as_microseconds
+	// Time#asMicroseconds
 	static VALUE AsMicroseconds( VALUE aSelf );
     
     // Time#marshal_dump

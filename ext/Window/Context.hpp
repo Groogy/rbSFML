@@ -50,8 +50,7 @@ namespace rbContext
     static VALUE MarshalDump( VALUE aSelf );
     
     // Context#active=(active)
-    // Context#SetActive(active)
-    // Context#active(active)
+    // Context#setActive(active)
     static VALUE SetActive( VALUE aSelf, VALUE anActiveFlag );
     
     // Context#memory_usage

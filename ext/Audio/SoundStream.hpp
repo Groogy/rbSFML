@@ -43,45 +43,49 @@ namespace rbSoundStream
 
 #if defined( AUDIO_SOUNDSTREAM_CPP )
     // SoundStream#play
-    // SoundStream#Play
     static VALUE Play( VALUE aSelf );
 
     // SoundStream#pause
-    // SoundStream#Pause
     static VALUE Pause( VALUE aSelf );
 
     // SoundStream#stop
-    // SoundStream#Stop
     static VALUE Stop( VALUE aSelf );
 
     // SoundStream#loop=(loop)
-    // SoundStream#SetLoop(loop)
+	// SoundStream#set_loop(loop)
+    // SoundStream#setLoop(loop)
     static VALUE SetLoop( VALUE aSelf, VALUE aLoop );
 
     // SoundStream#playing_offset=(offset)
-    // SoundStream#SetPlayingOffset(offset)
+	// SoundStream#set_playing_offset(offset
+    // SoundStream#setPlayingOffset(offset)
     // SoundStream#offset=(offset)
     static VALUE SetPlayingOffset( VALUE aSelf, VALUE anOffset );
 
     // SoundStream#loop
-    // SoundStream#GetLoop
+	// SoundStream#get_loop
+    // SoundStream#getLoop
     static VALUE GetLoop( VALUE aSelf );
 
     // SoundStream#playing_offset
-    // SoundStream#GetPlayingOffset
+	// SoundStream#get_playing_offset
+    // SoundStream#getPlayingOffset
     // SoundStream#offset
     static VALUE GetPlayingOffset( VALUE aSelf );
 
     // SoundStream#sample_rate
-    // SoundStream#GetSampleRate
+	// SoundStream#get_sample_rate
+    // SoundStream#getSampleRate
     static VALUE GetSampleRate( VALUE aSelf );
 
     // SoundStream#channel_count
-    // SoundStream#GetChannelCount
+	// SoundStream#get_channel_count
+    // SoundStream#getChannelCount
     static VALUE GetChannelCount( VALUE aSelf );
 
     // SoundStream#status
-    // SoundStream#GetStatus
+	// SoundStream#get_status
+    // SoundStream#getStatus
     static VALUE GetStatus( VALUE aSelf );
 
 #endif

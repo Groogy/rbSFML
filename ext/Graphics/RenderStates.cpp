@@ -50,7 +50,9 @@ void rbRenderStates::Init( VALUE SFML )
     rb_define_method( rbRenderStates::Class, "memory_usage",    rbRenderStates::GetMemoryUsage,  0 );
 
     // Instance aliases
-    rb_define_alias( rbRenderStates::Class, "to_s",   "inspect" );
+	rb_define_alias( rbRenderStates::Class, "blendMode",    "blend_mode"  );
+    rb_define_alias( rbRenderStates::Class, "blendMode=",   "blend_mode=" );
+	rb_define_alias( rbRenderStates::Class, "to_s",         "inspect="    );
 	
 	// Constants
 	rb_define_const( rbRenderStates::Class, "Default", rbMacros::ToConstRuby( &sf::RenderStates::Default, rbRenderStates::Class ) );
@@ -73,26 +75,26 @@ VALUE rbRenderStates::Initialize( int argc, VALUE* args, VALUE aSelf )
 	case 1:
 		if( TYPE( args[ 0 ] ) == T_ARRAY || RARRAY_LEN( args[ 0 ] ) == 4 )
 		{
-			states->BlendMode =  static_cast< sf::BlendMode >( NUM2UINT( rb_ary_entry( args[ 0 ], 0 ) ) );
-			states->Transform = *rbMacros::ToSFML< sf::Transform >( rb_ary_entry( args[ 0 ], 1 ), rbTransform::Class );
-			states->Texture   =  rbMacros::ToSFML< sf::Texture >( rb_ary_entry( args[ 0 ], 2 ), rbTexture::Class );
-			states->Shader    =  rbMacros::ToSFML< sf::Shader >( rb_ary_entry( args[ 0 ], 3 ), rbShader::Class );
+			states->blendMode =  static_cast< sf::BlendMode >( NUM2UINT( rb_ary_entry( args[ 0 ], 0 ) ) );
+			states->transform = *rbMacros::ToSFML< sf::Transform >( rb_ary_entry( args[ 0 ], 1 ), rbTransform::Class );
+			states->texture   =  rbMacros::ToSFML< sf::Texture >( rb_ary_entry( args[ 0 ], 2 ), rbTexture::Class );
+			states->shader    =  rbMacros::ToSFML< sf::Shader >( rb_ary_entry( args[ 0 ], 3 ), rbShader::Class );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rb_cNumeric ) == Qtrue )
 		{
-			states->BlendMode = static_cast< sf::BlendMode >( NUM2UINT( args[ 0 ] ) );
+			states->blendMode = static_cast< sf::BlendMode >( NUM2UINT( args[ 0 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbTransform::Class ) == Qtrue )
 		{
-			states->Transform = *rbMacros::ToSFML< sf::Transform >( args[ 0 ], rbTransform::Class );
+			states->transform = *rbMacros::ToSFML< sf::Transform >( args[ 0 ], rbTransform::Class );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbTexture::Class ) == Qtrue )
 		{
-			states->Texture = rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class );
+			states->texture = rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbShader::Class ) == Qtrue )
 		{
-			states->Shader = rbMacros::ToSFML< sf::Shader >( args[ 0 ], rbShader::Class );
+			states->shader = rbMacros::ToSFML< sf::Shader >( args[ 0 ], rbShader::Class );
 		}
 		else
 		{
@@ -100,26 +102,26 @@ VALUE rbRenderStates::Initialize( int argc, VALUE* args, VALUE aSelf )
 		}
 		break;
 	case 4:
-		states->BlendMode =  static_cast< sf::BlendMode >( NUM2UINT( args[ 0 ] ) );
-		states->Transform = *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class );
-		states->Texture   =  rbMacros::ToSFML< sf::Texture >( args[ 2 ], rbTexture::Class );
-		states->Shader    =  rbMacros::ToSFML< sf::Shader >( args[ 3 ], rbShader::Class );
+		states->blendMode =  static_cast< sf::BlendMode >( NUM2UINT( args[ 0 ] ) );
+		states->transform = *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class );
+		states->texture   =  rbMacros::ToSFML< sf::Texture >( args[ 2 ], rbTexture::Class );
+		states->shader    =  rbMacros::ToSFML< sf::Shader >( args[ 3 ], rbShader::Class );
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "0, 1 or 4" );
 	}
 	
-	VALUE transform = rbMacros::ToConstRuby( &states->Transform, rbTransform::Class );
+	VALUE transform = rbMacros::ToConstRuby( &states->transform, rbTransform::Class );
 	rb_iv_set( aSelf, "@__ref__transform", transform );
 	rb_iv_set( transform, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( transform );
 	
-	VALUE texture = rbMacros::ToConstRuby( states->Texture, rbTexture::Class );
+	VALUE texture = rbMacros::ToConstRuby( states->texture, rbTexture::Class );
 	rb_iv_set( aSelf, "@__ref__texture", texture );
 	rb_iv_set( texture, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( texture );
 	
-	VALUE shader = rbMacros::ToConstRuby( states->Shader, rbShader::Class );
+	VALUE shader = rbMacros::ToConstRuby( states->shader, rbShader::Class );
 	rb_iv_set( aSelf, "@__ref__shader", shader );
 	rb_iv_set( shader, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( shader );
@@ -133,17 +135,17 @@ VALUE rbRenderStates::InitializeCopy( VALUE aSelf, VALUE aState )
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
     *states = *rbRenderStates::ToSFML( aState );
 	
-	VALUE transform = rbMacros::ToConstRuby( &states->Transform, rbTransform::Class );
+	VALUE transform = rbMacros::ToConstRuby( &states->transform, rbTransform::Class );
 	rb_iv_set( aSelf, "@__ref__transform", transform );
 	rb_iv_set( transform, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( transform );
 	
-	VALUE texture = rbMacros::ToConstRuby( states->Texture, rbTexture::Class );
+	VALUE texture = rbMacros::ToConstRuby( states->texture, rbTexture::Class );
 	rb_iv_set( aSelf, "@__ref__texture", texture );
 	rb_iv_set( texture, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( texture );
 	
-	VALUE shader = rbMacros::ToConstRuby( states->Shader, rbShader::Class );
+	VALUE shader = rbMacros::ToConstRuby( states->shader, rbShader::Class );
 	rb_iv_set( aSelf, "@__ref__shader", shader );
 	rb_iv_set( shader, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( shader );
@@ -151,15 +153,17 @@ VALUE rbRenderStates::InitializeCopy( VALUE aSelf, VALUE aState )
 }
 
 // RenderStates#blend_mode
+// RenderStates#blendMode
 VALUE rbRenderStates::GetBlendMode( VALUE aSelf )
 {
-	return INT2NUM( rbRenderStates::ToSFML( aSelf )->BlendMode );
+	return INT2NUM( rbRenderStates::ToSFML( aSelf )->blendMode );
 }
 
 // RenderStates#blend_mode=(mode)
+// RenderStates#blendMode=(mode)
 VALUE rbRenderStates::SetBlendMode( VALUE aSelf, VALUE aBlendMode )
 {
-	rbRenderStates::ToSFML( aSelf )->BlendMode = static_cast< sf::BlendMode >( NUM2UINT( aBlendMode ) );
+	rbRenderStates::ToSFML( aSelf )->blendMode = static_cast< sf::BlendMode >( NUM2UINT( aBlendMode ) );
 	return Qnil;
 }
 
@@ -172,7 +176,7 @@ VALUE rbRenderStates::GetTransform( VALUE aSelf )
 // RenderStates#transform=(transform)
 VALUE rbRenderStates::SetTransform( VALUE aSelf, VALUE aTransform )
 {
-	rbRenderStates::ToSFML( aSelf )->Transform = *rbMacros::ToSFML< sf::Transform >( aTransform, rbTransform::Class );
+	rbRenderStates::ToSFML( aSelf )->transform = *rbMacros::ToSFML< sf::Transform >( aTransform, rbTransform::Class );
 	return Qnil;
 }
 
@@ -186,8 +190,8 @@ VALUE rbRenderStates::GetTexture( VALUE aSelf )
 VALUE rbRenderStates::SetTexture( VALUE aSelf, VALUE aTexture )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
-	states->Texture = rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class );
-	VALUE texture = rbMacros::ToConstRuby( states->Texture, rbTexture::Class );
+	states->texture = rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class );
+	VALUE texture = rbMacros::ToConstRuby( states->texture, rbTexture::Class );
 	rb_iv_set( aSelf, "@__ref__texture", texture );
 	rb_iv_set( texture, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( texture );
@@ -203,8 +207,8 @@ VALUE rbRenderStates::GetShader( VALUE aSelf )
 VALUE rbRenderStates::SetShader( VALUE aSelf, VALUE aShader )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
-	states->Shader = rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class );
-	VALUE shader = rbMacros::ToConstRuby( states->Shader, rbShader::Class );
+	states->shader = rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class );
+	VALUE shader = rbMacros::ToConstRuby( states->shader, rbShader::Class );
 	rb_iv_set( aSelf, "@__ref__shader", shader );
 	rb_iv_set( shader, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( shader );

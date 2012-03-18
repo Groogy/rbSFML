@@ -48,59 +48,71 @@ void rbJoystick::Init( VALUE SFML )
     
     // Singleton aliasses
     VALUE sJoystick = rb_singleton_class( rbJoystick::Module );
-    rb_define_alias( sJoystick, "IsConnected",     "connected?"      );
-    rb_define_alias( sJoystick, "GetButtonCount",  "button_count"    );
-    rb_define_alias( sJoystick, "HasAxis",         "axis?"           );
-    rb_define_alias( sJoystick, "has_axis",        "axis?"           );
-    rb_define_alias( sJoystick, "IsButtonPressed", "button_pressed?" );
-    rb_define_alias( sJoystick, "pressed?",        "button_pressed?" );
-    rb_define_alias( sJoystick, "GetAxisPosition", "axis_position"   );
-    rb_define_alias( sJoystick, "Update",          "update"          );
+    rb_define_alias( sJoystick, "isConnected",        "connected?"      );
+	rb_define_alias( sJoystick, "is_connected",       "connected?"      );
+	rb_define_alias( sJoystick, "is_connected?",      "connected?"      );
+    rb_define_alias( sJoystick, "getButtonCount",     "button_count"    );
+	rb_define_alias( sJoystick, "get_button_count",   "button_count"    );
+    rb_define_alias( sJoystick, "hasAxis",            "axis?"           );
+    rb_define_alias( sJoystick, "has_axis?",          "axis?"           );
+	rb_define_alias( sJoystick, "has_axis",           "axis?"           );
+    rb_define_alias( sJoystick, "isButtonPressed",    "button_pressed?" );
+    rb_define_alias( sJoystick, "pressed?",           "button_pressed?" );
+	rb_define_alias( sJoystick, "is_button_pressed?", "button_pressed?" );
+	rb_define_alias( sJoystick, "is_button_pressed",  "button_pressed?" );
+    rb_define_alias( sJoystick, "getAxisPosition",    "axis_position"   );
+	rb_define_alias( sJoystick, "get_axis_position",  "axis_position"   );
 }
 
-// Joystick::connected?(id)
-// Joystick::IsConnected(id)
+// Joystick.connected?(id)
+// Joystick.isConnected(id)
+// Joystick.is_connected?(id)
+// Joystick.is_connected(id)
 VALUE rbJoystick::IsConnected( VALUE aSelf, VALUE anID )
 {
-    return RBOOL( sf::Joystick::IsConnected( NUM2INT( anID ) ) );
+    return RBOOL( sf::Joystick::isConnected( NUM2INT( anID ) ) );
 }
 
-// Joystick::button_count(id)
-// Joystick::GetButtonCount(id)
+// Joystick.button_count(id)
+// Joystick.getButtonCount(id)
+// Joystick.get_button_count(id)
 VALUE rbJoystick::GetButtonCount( VALUE aSelf, VALUE anID )
 {
-    return INT2FIX( sf::Joystick::GetButtonCount( NUM2INT( anID ) ) );
+    return INT2FIX( sf::Joystick::getButtonCount( NUM2INT( anID ) ) );
 }
 
-// Joystick::axis?(id, axis)
-// Joystick::HasAxis(id, axis)
-// Joystick::has_axis(id, axis)
+// Joystick.axis?(id, axis)
+// Joystick.HasAxis(id, axis)
+// Joystick.has_axis?(id, axis)
+// Joystick.has_axis(id, axis)
 VALUE rbJoystick::HasAxis( VALUE aSelf, VALUE anID, VALUE anAxis )
 {
     sf::Joystick::Axis a = static_cast< sf::Joystick::Axis >( NUM2INT( anAxis ) );
-    return RBOOL( sf::Joystick::HasAxis( NUM2INT( anID ), a ) );
+    return RBOOL( sf::Joystick::hasAxis( NUM2INT( anID ), a ) );
 }
 
-// Joystick::button_pressed?(id, button)
-// Joystick::IsButtonPressed(id, button)
-// Joystick::pressed?(id, button)
+// Joystick.button_pressed?(id, button)
+// Joystick.isButtonPressed(id, button)
+// Joystick.is_button_pressed?(id, button)
+// Joystick.is_button_pressed(id, button)
+// Joystick.pressed?(id, button)
 VALUE rbJoystick::IsButtonPressed( VALUE aSelf, VALUE anID, VALUE aButton )
 {
-    return RBOOL( sf::Joystick::IsButtonPressed( NUM2INT( anID ), NUM2INT( aButton ) ) );
+    return RBOOL( sf::Joystick::isButtonPressed( NUM2INT( anID ), NUM2INT( aButton ) ) );
 }
 
-// Joystick::axis_position(id, axis)
-// Joystick::GetAxisPosition(id, axis)
+// Joystick.axis_position(id, axis)
+// Joystick.getAxisPosition(id, axis)
+// Joystick.get_axis_position(id, axis)
 VALUE rbJoystick::GetAxisPosition( VALUE aSelf, VALUE anID, VALUE anAxis )
 {
     sf::Joystick::Axis a = static_cast< sf::Joystick::Axis >( NUM2INT( anAxis ) );
-    return rb_float_new( sf::Joystick::GetAxisPosition( NUM2INT( anID ), a ) );
+    return rb_float_new( sf::Joystick::getAxisPosition( NUM2INT( anID ), a ) );
 }
 
-// Joystick::update
-// Joystick::Update
+// Joystick.update
 VALUE rbJoystick::Update( VALUE aSelf )
 {
-    sf::Joystick::Update();
+    sf::Joystick::update();
     return Qnil;
 }

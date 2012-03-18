@@ -52,16 +52,29 @@ void rbFont::Init( VALUE SFML )
 	
 	// Class aliases
 	rb_define_alias( rb_singleton_class( rbFont::Class ), "get_default_font", "default_font" );
+	rb_define_alias( rb_singleton_class( rbFont::Class ), "getDefaultFont",   "default_font" );
 
     // Instance aliases
-    rb_define_alias( rbFont::Class, "to_s",       "inspect" );
+	rb_define_alias( rbFont::Class, "loadFromFile",   "load_from_file"   );
+	rb_define_alias( rbFont::Class, "load_file",      "load_from_file"   );
+	rb_define_alias( rbFont::Class, "load",           "load_from_file"   );
+	rb_define_alias( rbFont::Class, "loadFromMemory", "load_from_memory" );
+	rb_define_alias( rbFont::Class, "load_memory",    "load_from_memory" );
+	rb_define_alias( rbFont::Class, "loadFromStream", "load_from_stream" );
+	rb_define_alias( rbFont::Class, "load_stream",    "load_from_stream" );
+	rb_define_alias( rbFont::Class, "getGlyph",       "get_glyph"        );
+	rb_define_alias( rbFont::Class, "getKerning",     "get_kerning"      );
+	rb_define_alias( rbFont::Class, "getLineSpacing", "get_line_spacing" );
+	rb_define_alias( rbFont::Class, "getTexture",     "get_texture"      );
+    rb_define_alias( rbFont::Class, "to_s",           "inspect"          );
 }
 
 // Font.default_font()
 // Font.get_default_font()
+// Font.getDefaultFont()
 VALUE rbFont::GetDefaultFont( VALUE aSelf )
 {
-	return rbMacros::ToConstRuby( &sf::Font::GetDefaultFont(), rbFont::Class );	
+	return rbMacros::ToConstRuby( &sf::Font::getDefaultFont(), rbFont::Class );	
 }
 
 // Font#initialize
@@ -84,43 +97,51 @@ VALUE rbFont::InitializeCopy( VALUE aSelf, VALUE aFont )
 }
 
 // Font#load_from_file(filename)
+// Font#load_file(filename)
+// Font#loadFromFile(filename)
+// Font#load(filename)
 VALUE rbFont::LoadFromFile( VALUE aSelf, VALUE aFilename )
 {
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->LoadFromFile( StringValueCStr( aFilename ) );
+	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->loadFromFile( StringValueCStr( aFilename ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Font#load_from_memory(data)
+// Font#load_memory(data)
+// Font#loadFromMemory(data)
 VALUE rbFont::LoadFromMemory( VALUE aSelf, VALUE someData )
 {
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->LoadFromMemory( RSTRING_PTR( someData ), RSTRING_LEN( someData ) );
+	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->loadFromMemory( RSTRING_PTR( someData ), RSTRING_LEN( someData ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Font#load_from_stream(stream)
+// Font#load_stream(stream)
+// Font#loadFromStream(stream)
 VALUE rbFont::LoadFromStream( VALUE aSelf, VALUE aStream )
 {
 	rb_check_frozen( aSelf );
 
 	rbInputStream stream( aStream );
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->LoadFromStream( stream );
+	bool result = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->loadFromStream( stream );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Font#get_glyph(code_point, character_size, bold)
+// Font#getGlyph(code_point, character_size, bold)
 VALUE rbFont::GetGlyph( VALUE aSelf, VALUE aCodePoint, VALUE aCharacterSize, VALUE aBoldFlag )
 {
-	const sf::Glyph& glyph = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->GetGlyph( NUM2UINT( aCodePoint ), NUM2UINT( aCharacterSize ),
+	const sf::Glyph& glyph = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->getGlyph( NUM2UINT( aCodePoint ), NUM2UINT( aCharacterSize ),
 																							 RTEST( aBoldFlag ) );
 		
 	VALUE glyphObj = rbGlyph::ToRuby( glyph );
@@ -129,21 +150,24 @@ VALUE rbFont::GetGlyph( VALUE aSelf, VALUE aCodePoint, VALUE aCharacterSize, VAL
 }
 
 // Font#get_kerning(first, second, character_size)
+// Font#getKerning(first, second, character_size)
 VALUE rbFont::GetKerning( VALUE aSelf, VALUE aFirst, VALUE aSecond, VALUE aCharacterSize )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->GetKerning( NUM2UINT( aFirst ), NUM2UINT( aSecond ), NUM2UINT( aCharacterSize ) ) );
+	return INT2NUM( rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->getKerning( NUM2UINT( aFirst ), NUM2UINT( aSecond ), NUM2UINT( aCharacterSize ) ) );
 }
 
 // Font#get_line_spacing(character_size)
+// Font#getLineSpacing(character_size)
 VALUE rbFont::GetLineSpacing( VALUE aSelf, VALUE aCharacterSize )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->GetLineSpacing( NUM2UINT( aCharacterSize ) ) );
+	return INT2NUM( rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->getLineSpacing( NUM2UINT( aCharacterSize ) ) );
 }
 
 // Font#get_texture(character_size)
+// Font#getTexture(character_size)
 VALUE rbFont::GetTexture( VALUE aSelf, VALUE aCharacterSize )
 {
-	const sf::Texture& texture = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->GetTexture( NUM2UINT( aCharacterSize ) );
+	const sf::Texture& texture = rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class )->getTexture( NUM2UINT( aCharacterSize ) );
 	return rbMacros::ToConstRuby( &texture, rbTexture::Class );
 }
 

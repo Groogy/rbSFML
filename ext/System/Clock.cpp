@@ -66,7 +66,7 @@ VALUE rbClock::MarshalDump( VALUE aSelf )
 VALUE rbClock::GetElapsedTime( VALUE aSelf )
 {
 	sf::Time* time = rbMacros::Allocate< sf::Time >();
-	*time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->GetElapsedTime();
+	*time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->getElapsedTime();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
@@ -75,7 +75,7 @@ VALUE rbClock::Restart( VALUE aSelf )
 {
     rb_check_frozen( aSelf );
 	sf::Time* time = rbMacros::Allocate< sf::Time >();
-    *time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->Restart();
+    *time = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class )->restart();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
@@ -86,7 +86,7 @@ VALUE rbClock::Inspect( VALUE aSelf )
     sf::Clock* clock = rbMacros::ToSFML< sf::Clock >( aSelf, rbClock::Class );
     return rb_sprintf( "%s(%fs)",
                        rb_obj_classname( aSelf ),
-                       clock->GetElapsedTime().AsSeconds() );
+                       clock->getElapsedTime().asSeconds() );
 }
 
 // Clock#memory_usage

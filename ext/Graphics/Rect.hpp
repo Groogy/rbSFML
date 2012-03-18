@@ -121,19 +121,19 @@ VALUE rbRect::ToRuby( VALUE anOther )
 
 VALUE rbRect::ToRuby( const sf::IntRect& aRect )
 {
-    VALUE left = INT2FIX( aRect.Left );
-    VALUE top = INT2FIX( aRect.Top );
-    VALUE width = INT2FIX( aRect.Width );
-	VALUE height = INT2FIX( aRect.Height );
+    VALUE left = INT2FIX( aRect.left );
+    VALUE top = INT2FIX( aRect.top );
+    VALUE width = INT2FIX( aRect.width );
+	VALUE height = INT2FIX( aRect.height );
     return rb_class_new_instance( 4, ( VALUE[] ){ left, top, width, height }, rbRect::Class );
 }
 
 VALUE rbRect::ToRuby( const sf::FloatRect& aRect )
 {
-    VALUE left = rb_float_new( aRect.Left );
-    VALUE top = rb_float_new( aRect.Top );
-    VALUE width = rb_float_new( aRect.Width );
-	VALUE height = rb_float_new( aRect.Height );
+    VALUE left = rb_float_new( aRect.left );
+    VALUE top = rb_float_new( aRect.top );
+    VALUE width = rb_float_new( aRect.width );
+	VALUE height = rb_float_new( aRect.height );
     return rb_class_new_instance( 4, ( VALUE[] ){ left, top, width, height }, rbRect::Class );
 }
 

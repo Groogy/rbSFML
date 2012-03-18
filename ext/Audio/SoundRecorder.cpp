@@ -31,14 +31,24 @@ void rbSoundRecorder::Init(VALUE SFML)
     
     // Class methods
     rb_define_alloc_func( rbSoundRecorder::Class, rbMacros::AbstractAllocate );
-    rb_define_singleton_method( rbSoundRecorder::Class, "available?", rbSoundRecorder::IsAvailable, 0 );
+    rb_define_class_method( rbSoundRecorder::Class, "available?", rbSoundRecorder::IsAvailable, 0 );
+	
+	// Class aliases
+	VALUE sListener = rb_singleton_class( rbSoundRecorder::Class );
+	rb_define_alias( sListener, "is_available?", "available?" );
+	rb_define_alias( sListener, "is_available",  "available?" );
+	rb_define_alias( sListener, "isAvailable",   "available?" );
 
     
     // Instance methods
-    rb_define_method( rbSoundRecorder::Class, "marshal_dump", rbSoundRecorder::MarshalDump,    0);
-    rb_define_method( rbSoundRecorder::Class, "start",        rbSoundRecorder::Start,         -1);
-    rb_define_method( rbSoundRecorder::Class, "stop",         rbSoundRecorder::Stop,           0);
-    rb_define_method( rbSoundRecorder::Class, "sample_rate",  rbSoundRecorder::GetSampleRate,  0);
+    rb_define_method( rbSoundRecorder::Class, "marshal_dump", rbSoundRecorder::MarshalDump,    0 );
+    rb_define_method( rbSoundRecorder::Class, "start",        rbSoundRecorder::Start,         -1 );
+    rb_define_method( rbSoundRecorder::Class, "stop",         rbSoundRecorder::Stop,           0 );
+    rb_define_method( rbSoundRecorder::Class, "sample_rate",  rbSoundRecorder::GetSampleRate,  0 );
+	
+	// Instance aliasses
+    rb_define_alias( rbSoundRecorder::Class, "getSampleRate",      "sample_rate"    );
+	rb_define_alias( rbSoundRecorder::Class, "get_sample_rate",    "sample_rate"    );
 }
 
 // SoundRecorder#marshal_dump
@@ -49,16 +59,15 @@ VALUE rbSoundRecorder::MarshalDump( VALUE aSelf )
 }
 
 // SoundRecorder#start(sample_rate)
-// SoundRecorder#Start(sample_rate)
 VALUE rbSoundRecorder::Start( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
     {
         case 0:
-            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Start();
+            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->start();
             break;
         case 1:
-            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Start( NUM2UINT( argv[ 0 ] ) );
+            rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->start( NUM2UINT( argv[ 0 ] ) );
             break;
         default:
             rb_raise( rb_eArgError,
@@ -68,23 +77,25 @@ VALUE rbSoundRecorder::Start( int argc, VALUE argv[], VALUE aSelf )
 }
 
 // SoundRecorder#stop
-// SoundRecorder#Stop
 VALUE rbSoundRecorder::Stop( VALUE aSelf )
 {
-    rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->Stop();
+    rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->stop();
     return Qnil;
 }
 
 // SoundRecorder#sample_rate
-// SoundRecorder#GetSampleRate
+// SoundRecorder#get_sample_rate
+// SoundRecorder#getSampleRate
 VALUE rbSoundRecorder::GetSampleRate( VALUE aSelf )
 {
-    return UINT2NUM( rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->GetSampleRate() );
+    return UINT2NUM( rbMacros::ToSFML< sf::SoundRecorder >( aSelf, rbSoundRecorder::Class )->getSampleRate() );
 }
 
-// SoundRecorder::available?
-// SoundRecorder::IsAvailable
+// SoundRecorder.available?
+// SoundRecorder.is_available?
+// SoundRecorder.is_available
+// SoundRecorder.isAvailable
 VALUE rbSoundRecorder::IsAvailable( VALUE aSelf )
 {
-    return RBOOL( sf::SoundRecorder::IsAvailable() );
+    return RBOOL( sf::SoundRecorder::isAvailable() );
 }

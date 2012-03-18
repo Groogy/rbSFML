@@ -28,25 +28,25 @@ rbInputStream::rbInputStream( VALUE anInputObject )
     self = anInputObject;
 }
 
-sf::Int64 rbInputStream::Read( char* aBuffer, sf::Int64 aSize )
+sf::Int64 rbInputStream::read( char* aBuffer, sf::Int64 aSize )
 {
     VALUE str = rb_funcall( self, rb_intern( "read" ), 1, INT2NUM( aSize ) );
     memcpy( aBuffer, RSTRING_PTR( str ), RSTRING_LEN( str ) );
     return RSTRING_LEN( str );
 }
 
-sf::Int64 rbInputStream::Seek( sf::Int64 aPosition )
+sf::Int64 rbInputStream::seek( sf::Int64 aPosition )
 {
     VALUE returnValue = rb_funcall( self, rb_intern( "seek" ), 1, INT2NUM( aPosition ) );
     return NUM2INT( returnValue );
 }
 
-sf::Int64 rbInputStream::Tell()
+sf::Int64 rbInputStream::tell()
 {
     return NUM2INT( rb_funcall( self, rb_intern( "tell" ), 0 ) );
 }
 
-sf::Int64 rbInputStream::GetSize()
+sf::Int64 rbInputStream::getSize()
 {
     static VALUE cSEEK_END = rb_const_get( rb_cIO, rb_intern( "SEEK_END" ) );
     VALUE pos = rb_funcall( self, rb_intern( "tell" ), 0 );

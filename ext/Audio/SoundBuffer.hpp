@@ -52,53 +52,58 @@ namespace rbSoundBuffer
     static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
 
     // SoundBuffer#load_from_file(filename)
-    // SoundBuffer#LoadFromFile(filename)
+    // SoundBuffer#loadFromFile(filename)
     // SoundBuffer#load_file(filename)
     // SoundBuffer#load(filename)
     static VALUE LoadFromFile( VALUE aSelf, VALUE aFilename );
 
     // SoundBuffer#load_from_memory(data)
-    // SoundBuffer#LoadFromMemory(data)
+    // SoundBuffer#loadFromMemory(data)
     // SoundBuffer#load_memory(data)
     static VALUE LoadFromMemory( VALUE aSelf, VALUE aData );
 
     // SoundBuffer#load_from_stream(stream)
-    // SoundBuffer#LoadFromStream(stream)
+    // SoundBuffer#loadFromStream(stream)
     // SoundBuffer#load_stream(stream)
     static VALUE LoadFromStream( VALUE aSelf, VALUE aStream );
 
     // SoundBuffer#load_from_samples(samples, channels_count, sample_rate)
-    // SoundBuffer#LoadFromSamples(samples, channels_count, sample_rate)
+    // SoundBuffer#loadFromSamples(samples, channels_count, sample_rate)
     // SoundBuffer#load_samples(samples, channels_count, sample_rate)
     // SoundBuffer#load_from_samples(samples, samples_count, channels_count, sample_rate)
-    // SoundBuffer#LoadFromSamples(samples, samples_count, channels_count, sample_rate)
+    // SoundBuffer#loadFromSamples(samples, samples_count, channels_count, sample_rate)
     // SoundBuffer#load_samples(samples, samples_count, channels_count, sample_rate)
     static VALUE LoadFromSamples( int argc, VALUE argv[], VALUE aSelf );
 
     // SoundBuffer#save_to_file(filename)
-    // SoundBuffer#SaveToFile(filename)
+    // SoundBuffer#saveToFile(filename)
     // SoundBuffer#save_file(filename)
     // SoundBuffer#save(filename)
     static VALUE SaveToFile( VALUE aSelf, VALUE aFilename );
 
     // SoundBuffer#samples
-    // SoundBuffer#GetSamples
+	// SoundBuffer#get_samples
+    // SoundBuffer#getSamples
     static VALUE GetSamples( VALUE aSelf );
 
     // SoundBuffer#sample_count
-    // SoundBuffer#GetSampleCount
+	// SoundBuffer#get_sample_count
+    // SoundBuffer#getSampleCount
     static VALUE GetSampleCount( VALUE aSelf );
 
     // SoundBuffer#sample_rate
-    // SoundBuffer#GetSampleRate
+	// SoundBuffer#get_sample_rate
+    // SoundBuffer#getSampleRate
     static VALUE GetSampleRate( VALUE aSelf );
 
     // SoundBuffer#channel_count
-    // SoundBuffer#GetChannelCount
+	// SoundBuffer#get_channel_count
+    // SoundBuffer#getChannelCount
     static VALUE GetChannelCount( VALUE aSelf );
 
     // SoundBuffer#duration
-    // SoundBuffer#GetDuration
+	// SoundBuffer#get_duration
+    // SoundBuffer#getDuration
     static VALUE GetDuration( VALUE aSelf );
 
     // SoundBuffer#==(other)

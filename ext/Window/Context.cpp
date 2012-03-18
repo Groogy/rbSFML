@@ -37,6 +37,9 @@ void rbContext::Init( VALUE SFML )
     rb_define_method( rbContext::Class, "marshal_dump", rbContext::MarshalDump,     0 );
     rb_define_method( rbContext::Class, "active=",      rbContext::SetActive,       1 );
     rb_define_method( rbContext::Class, "memory_usage", rbContext::GetMemoryUsage,  0 );
+	
+	// Instance aliasses
+    rb_define_alias( rbContext::Class, "setActive", "active=" );
 }
 
 // Context#initialize
@@ -74,7 +77,7 @@ VALUE rbContext::SetActive( VALUE aSelf, VALUE anActiveFlag )
 {
     rb_check_frozen( aSelf );
 	rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::Context >( aSelf, rbContext::Class )->SetActive( RTEST( anActiveFlag ) );
+    bool ret = rbMacros::ToSFML< sf::Context >( aSelf, rbContext::Class )->setActive( RTEST( anActiveFlag ) );
     rbSFML::CheckRaise();	
     return RBOOL(ret);
 }

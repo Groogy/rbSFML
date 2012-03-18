@@ -52,24 +52,29 @@ void rbSoundBuffer::Init( VALUE SFML )
     rb_define_method( rbSoundBuffer::Class, "memory_usage",      rbSoundBuffer::GetMemoryUsage,   0 );
 
     // Instance aliasses
-    rb_define_alias( rbSoundBuffer::Class, "LoadFromFile",     "load_from_file"    );
-    rb_define_alias( rbSoundBuffer::Class, "load_file",        "load_from_file"    );
-    rb_define_alias( rbSoundBuffer::Class, "load",             "load_from_file"    );
-    rb_define_alias( rbSoundBuffer::Class, "LoadFromMemory",   "load_from_memory"  );
-    rb_define_alias( rbSoundBuffer::Class, "load_memory",      "load_from_memory"  );
-    rb_define_alias( rbSoundBuffer::Class, "LoadFromStream",   "load_from_stream"  );
-    rb_define_alias( rbSoundBuffer::Class, "load_stream",      "load_from_stream"  );
-    rb_define_alias( rbSoundBuffer::Class, "LoadFromSamples",  "load_from_samples" );
-    rb_define_alias( rbSoundBuffer::Class, "load_samples",     "load_from_samples" );
-    rb_define_alias( rbSoundBuffer::Class, "SaveToFile",       "save_to_file"      );
-    rb_define_alias( rbSoundBuffer::Class, "save_file",        "save_to_file"      );
-    rb_define_alias( rbSoundBuffer::Class, "save",             "save_to_file"      );
-    rb_define_alias( rbSoundBuffer::Class, "GetSamples",       "samples"           );
-    rb_define_alias( rbSoundBuffer::Class, "GetSampleCount",   "sample_count"      );
-    rb_define_alias( rbSoundBuffer::Class, "GetSampleRate",    "sample_rate"       );
-    rb_define_alias( rbSoundBuffer::Class, "GetChannelCount",  "channel_count"    );
-    rb_define_alias( rbSoundBuffer::Class, "GetDuration",      "duration"          );
-    rb_define_alias( rbSoundBuffer::Class, "to_s",             "inspect"           );
+    rb_define_alias( rbSoundBuffer::Class, "loadFromFile",      "load_from_file"    );
+    rb_define_alias( rbSoundBuffer::Class, "load_file",         "load_from_file"    );
+    rb_define_alias( rbSoundBuffer::Class, "load",              "load_from_file"    );
+    rb_define_alias( rbSoundBuffer::Class, "loadFromMemory",    "load_from_memory"  );
+    rb_define_alias( rbSoundBuffer::Class, "load_memory",       "load_from_memory"  );
+    rb_define_alias( rbSoundBuffer::Class, "loadFromStream",    "load_from_stream"  );
+    rb_define_alias( rbSoundBuffer::Class, "load_stream",       "load_from_stream"  );
+    rb_define_alias( rbSoundBuffer::Class, "loadFromSamples",   "load_from_samples" );
+    rb_define_alias( rbSoundBuffer::Class, "load_samples",      "load_from_samples" );
+    rb_define_alias( rbSoundBuffer::Class, "saveToFile",        "save_to_file"      );
+    rb_define_alias( rbSoundBuffer::Class, "save_file",         "save_to_file"      );
+    rb_define_alias( rbSoundBuffer::Class, "save",              "save_to_file"      );
+    rb_define_alias( rbSoundBuffer::Class, "getSamples",        "samples"           );
+	rb_define_alias( rbSoundBuffer::Class, "get_samples",       "samples"           );
+    rb_define_alias( rbSoundBuffer::Class, "getSampleCount",    "sample_count"      );
+	rb_define_alias( rbSoundBuffer::Class, "get_sample_count",  "sample_count"      );
+    rb_define_alias( rbSoundBuffer::Class, "getSampleRate",     "sample_rate"       );
+	rb_define_alias( rbSoundBuffer::Class, "get_sample_rate",   "sample_rate"       );
+    rb_define_alias( rbSoundBuffer::Class, "getChannelCount",   "channel_count"     );
+	rb_define_alias( rbSoundBuffer::Class, "get_channel_count", "channel_count"     );
+    rb_define_alias( rbSoundBuffer::Class, "getDuration",       "duration"          );
+	rb_define_alias( rbSoundBuffer::Class, "get_duration",      "duration"          );
+    rb_define_alias( rbSoundBuffer::Class, "to_s",              "inspect"           );
 }
 
 // SoundBuffer#initialize_copy( sound_buffer )
@@ -85,10 +90,10 @@ VALUE rbSoundBuffer::MarshalDump( VALUE aSelf )
     sf::SoundBuffer* soundBuffer = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class );
 
     VALUE ptr[ 3 ];
-    ptr[ 0 ] = rb_str_new( ( const char* ) soundBuffer->GetSamples(),
-							soundBuffer->GetSampleCount() * 2 );
-    ptr[ 1 ] = UINT2NUM( soundBuffer->GetChannelCount() );
-    ptr[ 2 ] = UINT2NUM( soundBuffer->GetSampleRate() );
+    ptr[ 0 ] = rb_str_new( ( const char* ) soundBuffer->getSamples(),
+							soundBuffer->getSampleCount() * 2 );
+    ptr[ 1 ] = UINT2NUM( soundBuffer->getChannelCount() );
+    ptr[ 2 ] = UINT2NUM( soundBuffer->getSampleRate() );
     return rb_ary_new4( 3, ptr );
 }
 
@@ -103,53 +108,53 @@ VALUE rbSoundBuffer::MarshalLoad( VALUE aSelf, VALUE aData )
     unsigned int channelCount = NUM2UINT( ptr[ 1 ] );
     unsigned int sampleRate    = NUM2UINT( ptr[ 2 ] );
 
-    soundBuffer->LoadFromSamples( samples, sampleCount, channelCount,
+    soundBuffer->loadFromSamples( samples, sampleCount, channelCount,
                                    sampleRate );
     return Qnil;
 }
 
 // SoundBuffer#load_from_file(filename)
-// SoundBuffer#LoadFromFile(filename)
+// SoundBuffer#loadFromFile(filename)
 // SoundBuffer#load_file(filename)
 // SoundBuffer#load(filename)
 VALUE rbSoundBuffer::LoadFromFile( VALUE aSelf, VALUE aFilename )
 {
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->LoadFromFile( StringValueCStr( aFilename ) );
+    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->loadFromFile( StringValueCStr( aFilename ) );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // SoundBuffer#load_from_memory(data)
-// SoundBuffer#LoadFromMemory(data)
+// SoundBuffer#loadFromMemory(data)
 // SoundBuffer#load_memory(data)
 VALUE rbSoundBuffer::LoadFromMemory( VALUE aSelf, VALUE aData )
 {
     StringValue( aData );
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->LoadFromMemory( RSTRING_PTR( aData ),
+    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->loadFromMemory( RSTRING_PTR( aData ),
 																								   RSTRING_LEN( aData ) );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // SoundBuffer#load_from_stream(stream)
-// SoundBuffer#LoadFromStream(stream)
+// SoundBuffer#loadFromStream(stream)
 // SoundBuffer#load_stream(stream)
 VALUE rbSoundBuffer::LoadFromStream( VALUE aSelf, VALUE aStream )
 {
     rbInputStream stream( aStream );
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->LoadFromStream( stream );
+    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->loadFromStream( stream );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // SoundBuffer#load_from_samples(samples, channels_count, sample_rate)
-// SoundBuffer#LoadFromSamples(samples, channels_count, sample_rate)
+// SoundBuffer#loadFromSamples(samples, channels_count, sample_rate)
 // SoundBuffer#load_samples(samples, channels_count, sample_rate)
 // SoundBuffer#load_from_samples(samples, samples_count, channels_count, sample_rate)
-// SoundBuffer#LoadFromSamples(samples, samples_count, channels_count, sample_rate)
+// SoundBuffer#loadFromSamples(samples, samples_count, channels_count, sample_rate)
 // SoundBuffer#load_samples(samples, samples_count, channels_count, sample_rate)
 VALUE rbSoundBuffer::LoadFromSamples( int argc, VALUE argv[], VALUE aSelf )
 {
@@ -182,7 +187,7 @@ VALUE rbSoundBuffer::LoadFromSamples( int argc, VALUE argv[], VALUE aSelf )
         samples[ index ] = NUM2INT( samplesPtr[ index ] );
     }
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->LoadFromSamples( samples, sampleCount,
+    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->loadFromSamples( samples, sampleCount,
 																			channelCount, sampleRate );
     delete[] samples;
     rbSFML::CheckRaise();
@@ -196,17 +201,18 @@ VALUE rbSoundBuffer::LoadFromSamples( int argc, VALUE argv[], VALUE aSelf )
 VALUE rbSoundBuffer::SaveToFile( VALUE aSelf, VALUE aFilename )
 {
     rbSFML::PrepareErrorStream();
-    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->SaveToFile( StringValueCStr( aFilename ) );
+    bool ret = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->saveToFile( StringValueCStr( aFilename ) );
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
 // SoundBuffer#samples
-// SoundBuffer#GetSamples
+// SoundBuffer#get_samples
+// SoundBuffer#getSamples
 VALUE rbSoundBuffer::GetSamples( VALUE aSelf )
 {
-    const sf::Int16* samples  = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetSamples();
-    std::size_t sampleCount = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetSampleCount();
+    const sf::Int16* samples  = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSamples();
+    std::size_t sampleCount = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSampleCount();
     VALUE ary = rb_ary_new2( sampleCount );
     for( std::size_t index = 0; index < sampleCount; index++ )
     {
@@ -216,33 +222,37 @@ VALUE rbSoundBuffer::GetSamples( VALUE aSelf )
     return ary;
 }
 
-// SoundBuffer#samples_count
-// SoundBuffer#GetSamplesCount
+// SoundBuffer#sample_count
+// SoundBuffer#get_sample_count
+// SoundBuffer#getSampleCount
 VALUE rbSoundBuffer::GetSampleCount( VALUE aSelf )
 {
-    return INT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetSampleCount() );
+    return INT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSampleCount() );
 }
 
 // SoundBuffer#sample_rate
-// SoundBuffer#GetSampleRate
+// SoundBuffer#get_sample_rate
+// SoundBuffer#getSampleRate
 VALUE rbSoundBuffer::GetSampleRate( VALUE aSelf )
 {
-    return UINT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetSampleRate() );
+    return UINT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSampleRate() );
 }
 
-// SoundBuffer#channels_count
-// SoundBuffer#GetChannelsCount
+// SoundBuffer#channel_count
+// SoundBuffer#get_channel_count
+// SoundBuffer#getChannelCount
 VALUE rbSoundBuffer::GetChannelCount( VALUE aSelf )
 {
-    return UINT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetChannelCount() );
+    return UINT2NUM( rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getChannelCount() );
 }
 
 // SoundBuffer#duration
-// SoundBuffer#GetDuration
+// SoundBuffer#get_duration
+// SoundBuffer#getDuration
 VALUE rbSoundBuffer::GetDuration( VALUE aSelf )
 {
 	sf::Time *time = rbMacros::Allocate< sf::Time >();
-	*time = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetDuration();
+	*time = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getDuration();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
@@ -253,13 +263,13 @@ VALUE rbSoundBuffer::Equal( VALUE aSelf, VALUE anOther )
     sf::SoundBuffer* left = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class );
     sf::SoundBuffer* right = rbMacros::ToSFML< sf::SoundBuffer >( anOther, rbSoundBuffer::Class );
 
-    if( left->GetSampleCount() != right->GetSampleCount() ) return Qfalse;
-    if( left->GetSampleRate() != right->GetSampleRate() ) return Qfalse;
-    if( left->GetChannelCount() != right->GetChannelCount() ) return Qfalse;
+    if( left->getSampleCount() != right->getSampleCount() ) return Qfalse;
+    if( left->getSampleRate() != right->getSampleRate() ) return Qfalse;
+    if( left->getChannelCount() != right->getChannelCount() ) return Qfalse;
 
-    std::size_t sampleCount = left->GetSampleCount();
-    const sf::Int16* leftSamples = left->GetSamples();
-    const sf::Int16* rightSamples = right->GetSamples();
+    std::size_t sampleCount = left->getSampleCount();
+    const sf::Int16* leftSamples = left->getSamples();
+    const sf::Int16* rightSamples = right->getSamples();
     for( std::size_t index = 0; index < sampleCount; index++ )
     {
         if( leftSamples[ index ] != rightSamples[ index ] ) return Qfalse;
@@ -275,12 +285,12 @@ VALUE rbSoundBuffer::Inspect( VALUE aSelf )
     return rb_sprintf("%s(%p: %ims)",
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
-                      rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetDuration() );
+                      rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getDuration() );
 }
 
 // SoundBuffer#memory_usage
 VALUE rbSoundBuffer::GetMemoryUsage( VALUE aSelf )
 {
-    std::size_t samplesCount = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->GetSampleCount();
+    std::size_t samplesCount = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSampleCount();
     return SIZET2NUM( sizeof( sf::SoundBuffer ) + samplesCount * 2 );
 }

@@ -43,32 +43,40 @@ namespace rbListener
 #endif
 
 #if defined( AUDIO_LISTENER_CPP )
-    // Listener::get_global_volume
-    // Listener::global_volume
+	// Listener.global_volume
+    // Listener.get_global_volume
+	// Listener.getGlobalVolume
     static VALUE GetGlobalVolume( VALUE aSelf );
 
-    // Listener::set_global_volume( volume )
-    // Listener::global_volume=( volume )
+	// Listener.global_volume=( volume )
+    // Listener.set_global_volume( volume )
+	// Listener.setGlobalVolume( volume )
     static VALUE SetGlobalVolume( VALUE aSelf, VALUE aVolume );
 
-    // Listener::get_position
-    // Listener::position
+	// Listener.position
+    // Listener.get_position
+	// Listener.getPoistion
     static VALUE GetPosition( VALUE aSelf );
 
-    // Listener::set_position(position)
-    // Listener::set_position(x, y, z)
-    // Listener::position=(position)
-    // Listener::position=(x, y, z)
+    // Listener.set_position(position)
+    // Listener.set_position(x, y, z)
+    // Listener.position=(position)
+    // Listener.position=(x, y, z)
+	// Listener.setPosition(position)
+	// Listener.setPosition(x, y, z)
     static VALUE SetPosition( int argc, VALUE argv[], VALUE aSelf );
 
-    // Listener::get_direction
-    // Listener::direction
+    // Listener.get_direction
+    // Listener.direction
+	// Listener.getDirection
     static VALUE GetDirection( VALUE aSelf );
 
-    // Listener::set_direction(direction)
-    // Listener::set_direction(x, y, z)
-    // Listener::direction=(direction)
-    // Listener::direction=(x, y, z)
+    // Listener.set_direction(direction)
+    // Listener.set_direction(x, y, z)
+    // Listener.direction=(direction)
+    // Listener.direction=(x, y, z)
+	// Listener.setDirection(direction)
+	// Listener.setDirection(x, y, z)
     static VALUE SetDirection( int argc, VALUE argv[], VALUE aSelf );
 
 #endif

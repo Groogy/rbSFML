@@ -45,19 +45,20 @@ namespace rbSoundRecorder
     static VALUE MarshalDump( VALUE aSelf );
     
     // SoundRecorder#start(sample_rate)
-    // SoundRecorder#Start(sample_rate)
     static VALUE Start( int argc, VALUE argv[], VALUE aSelf );
     
     // SoundRecorder#stop
-    // SoundRecorder#Stop
     static VALUE Stop( VALUE aSelf );
     
     // SoundRecorder#sample_rate
-    // SoundRecorder#GetSampleRate
+	// SoundRecorder#get_sample_rate
+    // SoundRecorder#getSampleRate
     static VALUE GetSampleRate( VALUE aSelf );
     
-    // SoundRecorder::available?
-    // SoundRecorder::IsAvailable
+    // SoundRecorder.available?
+	// SoundRecorder.is_available?
+	// SoundRecorder.is_available
+    // SoundRecorder.isAvailable
     static VALUE IsAvailable( VALUE aSelf );
 #endif
     

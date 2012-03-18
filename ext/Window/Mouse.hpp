@@ -44,17 +44,26 @@ namespace rbMouse
 #endif
     
 #if defined( WINDOW_MOUSE_CPP )
-    // Mouse::button_pressed?(button)
-    // Mouse::IsButtonPressed(button)
-    // Mouse::pressed?(button)
+    // Mouse.button_pressed?(button)
+    // Mouse.isButtonPressed(button)
+	// Mouse.is_button_pressed?(button)
+	// Mouse.is_button_pressed(button)
+    // Mouse.pressed?(button)
     static VALUE IsButtonPressed( VALUE aSelf, VALUE aButton );
     
-    // Mouse::GetPosition
-    // Mouse::GetPosition(relative_to)
+	// Mouse.position
+    // Mouse.getPosition
+	// Mouse.get_position
+	// Mouse.position(relative_to)
+    // Mouse.getPosition(relative_to)
+    // Mouse.get_position(relative_to)
     static VALUE GetPosition( int argc, VALUE argv[], VALUE aSelf );
     
-    // Mouse::SetPosition(position, relative_to)
-    // Mouse::SetPosition(position)
+	// Mouse.position=(position)
+	// Mouse.set_position(poition)
+	// Mouse.setPosition(position)
+	// Mouse.set_position(position, relative_to)
+    // Mouse.setPosition(position, relative_to)
     static VALUE SetPosition( int argc, VALUE argv[], VALUE aSelf );
 #endif
     

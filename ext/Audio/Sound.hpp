@@ -57,48 +57,53 @@ namespace rbSound
     static VALUE MarshalDump( VALUE aSelf );
 
     // Sound#play
-    // Sound#Play
     static VALUE Play( VALUE aSelf );
 
     // Sound#pause
-    // Sound#Pause
     static VALUE Pause( VALUE aSelf );
 
     // Sound#stop
-    // Sound#Stop
     static VALUE Stop( VALUE aSelf );
 
     // Sound#buffer=(buffer)
-    // Sound#SetBuffer(buffer)
+	// Sound#set_buffer(buffer)
+    // Sound#setBuffer(buffer)
     static VALUE SetBuffer( VALUE aSelf, VALUE aBuffer );
 
     // Sound#loop=(loop)
-    // Sound#SetLoop(loop)
+	// Sound#set_loop(loop)
+    // Sound#setLoop(loop)
     static VALUE SetLoop( VALUE aSelf, VALUE aLoop );
 
     // Sound#playing_offset=(offset)
-    // Sound#SetPlayingOffset(offset)
+	// Sound#set_playing_offset(offset)
+    // Sound#setPlayingOffset(offset)
     // Sound#offset=(offset)
     static VALUE SetPlayingOffset( VALUE aSelf, VALUE anOffset );
 
     // Sound#buffer
-    // Sound#GetBuffer
+	// Sound#get_buffer
+    // Sound#getBuffer
     static VALUE GetBuffer( VALUE aSelf );
 
     // Sound#loop
-    // Sound#GetLoop
+	// Sound#get_loop
+    // Sound#getLoop
     static VALUE GetLoop( VALUE aSelf );
 
     // Sound#playing_offset
-    // Sound#GetPlayingOffset
+	// Sound#get_playing_offset
+    // Sound#getPlayingOffset
     // Sound#offset
     static VALUE GetPlayingOffset( VALUE aSelf );
 
     // Sound#status
+	// Sound#get_status
     // Sound#GetStatus
     static VALUE GetStatus( VALUE aSelf );
 
     // Sound#inspect
+	// Sound#to_s
     static VALUE Inspect( VALUE aSelf );
 
     // Sound#memory_usage

@@ -42,6 +42,7 @@ namespace rbFont
 #if defined( GRAPHICS_FONT_CPP )
 	// Font.default_font()
 	// Font.get_default_font()
+	// Font.getDefaultFont()
 	static VALUE GetDefaultFont( VALUE aSelf );
 
     // Font#initialize
@@ -52,24 +53,35 @@ namespace rbFont
     static VALUE InitializeCopy( VALUE aSelf, VALUE aFont );
 	
 	// Font#load_from_file(filename)
+	// Font#load_file(filename)
+	// Font#loadFromFile(filename)
+	// Font#load(filename)
 	static VALUE LoadFromFile( VALUE aSelf, VALUE aFilename );
 	
 	// Font#load_from_memory(data)
+	// Font#load_memory(data)
+	// Font#loadFromMemory(data)
 	static VALUE LoadFromMemory( VALUE aSelf, VALUE someData );
 	
 	// Font#load_from_stream(stream)
+	// Font#load_stream(stream)
+	// Font#loadFromStream(stream)
 	static VALUE LoadFromStream( VALUE aSelf, VALUE aStream );
 	
 	// Font#get_glyph(code_point, character_size, bold)
+	// Font#getGlyph(code_point, character_size, bold)
 	static VALUE GetGlyph( VALUE aSelf, VALUE aCodePoint, VALUE aCharacterSize, VALUE aBoldFlag );
 	
 	// Font#get_kerning(first, second, character_size)
+	// Font#getKerning(first, second, character_size)
 	static VALUE GetKerning( VALUE aSelf, VALUE aFirst, VALUE aSecond, VALUE aCharacterSize );
 	
 	// Font#get_line_spacing(character_size)
+	// Font#getLineSpacing(character_size)
 	static VALUE GetLineSpacing( VALUE aSelf, VALUE aCharacterSize );
 	
 	// Font#get_texture(character_size)
+	// Font#getTexture(character_size)
 	static VALUE GetTexture( VALUE aSelf, VALUE aCharacterSize );
 	
     // Font#marshal_dump

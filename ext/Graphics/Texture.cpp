@@ -60,12 +60,20 @@ void rbTexture::Init( VALUE SFML )
 	
 	// Class aliases
 	rb_define_alias( rb_singleton_class( rbTexture::Class ), "get_maximum_size", "maximum_size" );
+	rb_define_alias( rb_singleton_class( rbTexture::Class ), "getMaximumSize", "maximum_size" );
 
     // Instance aliases
-    rb_define_alias( rbTexture::Class, "to_s",       "inspect"       );
-	rb_define_alias( rbTexture::Class, "to_image",   "copy_to_image" );
-	rb_define_alias( rbTexture::Class, "smooth",     "smooth?"       );
-	rb_define_alias( rbTexture::Class, "repeated",   "repeated?"       );
+    rb_define_alias( rbTexture::Class, "to_s",         "inspect"       );
+	rb_define_alias( rbTexture::Class, "to_image",     "copy_to_image" );
+	rb_define_alias( rbTexture::Class, "copyToImage",  "copy_to_image" );
+	rb_define_alias( rbTexture::Class, "smooth",       "smooth?"       );
+	rb_define_alias( rbTexture::Class, "isSmooth",     "smooth?"       );
+	rb_define_alias( rbTexture::Class, "is_smooth?",   "smooth?"       );
+	rb_define_alias( rbTexture::Class, "is_smooth",    "smooth?"       );
+	rb_define_alias( rbTexture::Class, "repeated",     "repeated?"     );
+	rb_define_alias( rbTexture::Class, "is_repeated?", "repeated?"     );
+	rb_define_alias( rbTexture::Class, "is_repeated",  "repeated?"     );
+	rb_define_alias( rbTexture::Class, "isRepeated",   "repeated?"     );
 	
 	rb_define_const( rbTexture::Class, "Normalized", INT2NUM( sf::Texture::Normalized ) );
 	rb_define_const( rbTexture::Class, "Pixels",     INT2NUM( sf::Texture::Pixels ) );
@@ -74,7 +82,7 @@ void rbTexture::Init( VALUE SFML )
 // Texture.maximum_size()
 VALUE rbTexture::GetMaximumSize( VALUE aSelf )
 {
-	return INT2NUM( sf::Texture::GetMaximumSize() );	
+	return INT2NUM( sf::Texture::getMaximumSize() );	
 }
 
 // Texture#initialize
@@ -107,12 +115,13 @@ VALUE rbTexture::Create( VALUE aSelf, VALUE aWidth, VALUE aHeight )
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->Create( NUM2INT( aWidth ), NUM2INT( aHeight ) );
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->create( NUM2INT( aWidth ), NUM2INT( aHeight ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Texture#load_from_file(filename, area = nil)
+// Texture#loadFromFile(filename, area = nil)
 VALUE rbTexture::LoadFromFile( int argc, VALUE* args, VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
@@ -132,12 +141,13 @@ VALUE rbTexture::LoadFromFile( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->LoadFromFile( StringValueCStr( filename ), rbRect::ToSFMLi( area ) );
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromFile( StringValueCStr( filename ), rbRect::ToSFMLi( area ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Texture#load_from_memory(data, area = nil)
+// Texture#loadFromMemory(data, area = nil)
 VALUE rbTexture::LoadFromMemory( int argc, VALUE* args, VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
@@ -157,13 +167,14 @@ VALUE rbTexture::LoadFromMemory( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->LoadFromMemory( RSTRING_PTR( data ),
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromMemory( RSTRING_PTR( data ),
 																						  RSTRING_LEN( data ), rbRect::ToSFMLi( area ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Texture#load_from_stream(stream, area = nil)
+// Texture#loadFromStream(stream, area = nil)
 VALUE rbTexture::LoadFromStream( int argc, VALUE* args, VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
@@ -184,12 +195,13 @@ VALUE rbTexture::LoadFromStream( int argc, VALUE* args, VALUE aSelf )
 	
 	rbInputStream stream( streamObj );
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->LoadFromStream( stream, rbRect::ToSFMLi( area ) );
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromStream( stream, rbRect::ToSFMLi( area ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
 // Texture#load_from_image(image, area = nil)
+// Texture#loadFromImage(image, area = nil)
 VALUE rbTexture::LoadFromImage( int argc, VALUE* args, VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
@@ -209,7 +221,7 @@ VALUE rbTexture::LoadFromImage( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->LoadFromImage( *rbMacros::ToSFML< sf::Image >( image, rbImage::Class ), rbRect::ToSFMLi( area ) );
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromImage( *rbMacros::ToSFML< sf::Image >( image, rbImage::Class ), rbRect::ToSFMLi( area ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
@@ -217,21 +229,22 @@ VALUE rbTexture::LoadFromImage( int argc, VALUE* args, VALUE aSelf )
 // Texture#width
 VALUE rbTexture::GetWidth( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->GetWidth() );
+	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getWidth() );
 }
 
 // Texture#height
 VALUE rbTexture::GetHeight( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->GetHeight() );
+	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getHeight() );
 }
 
 // Texture#copy_to_image
+// Texture#copyToImage
 // Texture#to_image
 VALUE rbTexture::CopyToImage( VALUE aSelf )
 {
 	VALUE image = rb_class_new_instance( 0, NULL, rbImage::Class );
-	*rbMacros::ToSFML< sf::Image >( image, rbImage::Class ) = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->CopyToImage();
+	*rbMacros::ToSFML< sf::Image >( image, rbImage::Class ) = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->copyToImage();
 	return image;
 }
 
@@ -257,18 +270,18 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 			{
 				pixels[ index ] = NUM2INT( rb_ary_entry( args[ 0 ], index ) );
 			}
-			texture->Update( pixels );
+			texture->update( pixels );
 			xfree( pixels );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbImage::Class ) )
 		{
 			sf::Image* image = rbMacros::ToSFML< sf::Image >( args[ 0 ], rbImage::Class );
-			texture->Update( *image );
+			texture->update( *image );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbWindow::Class ) )
 		{
 			sf::Window* window = rbMacros::ToSFML< sf::Window >( args[ 0 ], rbWindow::Class );
-			texture->Update( *window );
+			texture->update( *window );
 		}
 		else
 		{
@@ -278,12 +291,12 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 		if( rb_obj_is_kind_of( args[ 0 ], rbImage::Class ) )
 		{
 			sf::Image* image = rbMacros::ToSFML< sf::Image >( args[ 0 ], rbImage::Class );
-			texture->Update( *image, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ) );
+			texture->update( *image, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ) );
 		}
 		else if( rb_obj_is_kind_of( args[ 0 ], rbWindow::Class ) )
 		{
 			sf::Window* window = rbMacros::ToSFML< sf::Window >( args[ 0 ], rbWindow::Class );
-			texture->Update( *window, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ) );
+			texture->update( *window, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ) );
 		}
 		else
 		{
@@ -298,7 +311,7 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 			{
 				pixels[ index ] = NUM2INT( rb_ary_entry( args[ 0 ], index ) );
 			}
-			texture->Update( pixels, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ), NUM2INT( args[ 3 ] ), NUM2INT( args[ 4 ] ) );
+			texture->update( pixels, NUM2INT( args[ 1 ] ), NUM2INT( args[ 2 ] ), NUM2INT( args[ 3 ] ), NUM2INT( args[ 4 ] ) );
 			xfree( pixels );
 		}
 		else
@@ -325,37 +338,45 @@ VALUE rbTexture::Bind( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "0 or 1" );
 	}
 	
-	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->Bind( type );
+	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->bind( type );
 	return Qnil;
 }
 
 // Texture#smooth=(flag)
+// Texture#set_smooth(flag)
+// Texture#setSmooth(flag)
 VALUE rbTexture::SetSmooth( VALUE aSelf, VALUE aFlag )
 {
-	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->SetSmooth( RTEST( aFlag ) );
+	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->setSmooth( RTEST( aFlag ) );
 	return Qnil;
 }
 
-// Texture#smooth
 // Texture#smooth?
+// Texture#is_smooth?
+// Texture#is_smooth
+// Texture#isSmooth
 VALUE rbTexture::GetSmooth( VALUE aSelf )
 {
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->IsSmooth();
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->isSmooth();
 	return result == true ? Qtrue : Qfalse;
 }
 
 // Texture#repeated=(flag)
+// Texture#set_repeated(flag)
+// Texture#setRepeated(flag)
 VALUE rbTexture::SetRepeated( VALUE aSelf, VALUE aFlag )
 {
-	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->SetRepeated( RTEST( aFlag ) );
+	rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->setRepeated( RTEST( aFlag ) );
 	return Qnil;
 }
 
-// Texture#repeated
 // Texture#repeated?
+// Texture#is_repeated?
+// Texture#is_repeated
+// Texture#isRepeated
 VALUE rbTexture::GetRepeated( VALUE aSelf )
 {
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->IsRepeated();
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->isRepeated();
 	return result == true ? Qtrue : Qfalse;
 }
 
@@ -383,8 +404,8 @@ VALUE rbTexture::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%ix%i, %p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->GetWidth(),
-					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->GetHeight(),
+					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getWidth(),
+					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getHeight(),
 					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class ) );
 }
 

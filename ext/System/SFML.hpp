@@ -85,12 +85,12 @@ void rbSFML::PrepareErrorStream()
     VALUE SFML = Module();
     VALUE flag = rb_cv_get(SFML, "@@raise_exceptions");
     if( RTEST( flag ) )
-        sf::Err().rdbuf( globalErrorStream.rdbuf() );
+        sf::err().rdbuf( globalErrorStream.rdbuf() );
 }
 
 std::string rbSFML::Message()
 {
-    sf::Err().rdbuf( std::cerr.rdbuf() );
+    sf::err().rdbuf( std::cerr.rdbuf() );
     if( RTEST( rb_cv_get( Module(), "@@raise_exceptions" ) ) )
     {
         std::string message = globalErrorStream.str();

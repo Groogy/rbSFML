@@ -32,71 +32,68 @@ void rbWindow::Init( VALUE SFML )
     rb_define_alloc_func( rbWindow::Class, rbMacros::Allocate< sf::Window > );
     
     // Instance methods
-    rb_define_method( rbWindow::Class, "initialize",          rbWindow::Initialize,           -1 );
-    rb_define_method( rbWindow::Class, "marshal_dump",        rbWindow::MarshalDump,           0 );
-    rb_define_method( rbWindow::Class, "create",              rbWindow::Create,               -1 );
-    rb_define_method( rbWindow::Class, "close",               rbWindow::Close,                 0 );
-    rb_define_method( rbWindow::Class, "open?",               rbWindow::IsOpen,                0 );
-    rb_define_method( rbWindow::Class, "width",               rbWindow::GetWidth,              0 );
-    rb_define_method( rbWindow::Class, "height",              rbWindow::GetHeight,             0 );
-    rb_define_method( rbWindow::Class, "settings",            rbWindow::GetSettings,           0 );
-    rb_define_method( rbWindow::Class, "poll_event",          rbWindow::PollEvent,            -1 );
-    rb_define_method( rbWindow::Class, "wait_event",          rbWindow::WaitEvent,            -1 );
-    rb_define_method( rbWindow::Class, "each_event",          rbWindow::EachEvent,             0 );
-    rb_define_method( rbWindow::Class, "vertical_sync=",      rbWindow::EnableVerticalSync,    1 );
-    rb_define_method( rbWindow::Class, "mouse_cursor=",       rbWindow::ShowMouseCursor,       1 );
-    rb_define_method( rbWindow::Class, "position",            rbWindow::SetPosition,           2 );
-    rb_define_method( rbWindow::Class, "position=",           rbWindow::SetPosition2,          1 );
-    rb_define_method( rbWindow::Class, "size",                rbWindow::SetSize,               2 );
-    rb_define_method( rbWindow::Class, "size=",               rbWindow::SetSize2,              1 );
-    rb_define_method( rbWindow::Class, "title=",              rbWindow::SetTitle,              1 );
-    rb_define_method( rbWindow::Class, "show=",               rbWindow::Show,                  1 );
-    rb_define_method( rbWindow::Class, "key_repeat=",         rbWindow::EnableKeyRepeat,       1 );
-    rb_define_method( rbWindow::Class, "icon",                rbWindow::SetIcon,               3 );
-    rb_define_method( rbWindow::Class, "active",              rbWindow::SetActive,            -1 );
-    rb_define_method( rbWindow::Class, "display",             rbWindow::Display,               0 );
-    rb_define_method( rbWindow::Class, "framerate=",          rbWindow::SetFramerateLimit,     1 );
-    rb_define_method( rbWindow::Class, "joystick_threshold=", rbWindow::SetJoystickThreshold,  1 );
-    rb_define_method( rbWindow::Class, "system_handle",       rbWindow::GetSystemHandle,       0 );
-    rb_define_method( rbWindow::Class, "inspect",             rbWindow::Inspect,               0 );
-    rb_define_method( rbWindow::Class, "memory_usage",        rbWindow::GetMemoryUsage,        0 );
+    rb_define_method( rbWindow::Class, "initialize",             rbWindow::Initialize,             -1 );
+    rb_define_method( rbWindow::Class, "marshal_dump",           rbWindow::MarshalDump,             0 );
+    rb_define_method( rbWindow::Class, "create",                 rbWindow::Create,                 -1 );
+    rb_define_method( rbWindow::Class, "close",                  rbWindow::Close,                   0 );
+    rb_define_method( rbWindow::Class, "open?",                  rbWindow::IsOpen,                  0 );
+    rb_define_method( rbWindow::Class, "settings",               rbWindow::GetSettings,             0 );
+    rb_define_method( rbWindow::Class, "poll_event",             rbWindow::PollEvent,              -1 );
+    rb_define_method( rbWindow::Class, "wait_event",             rbWindow::WaitEvent,              -1 );
+    rb_define_method( rbWindow::Class, "each_event",             rbWindow::EachEvent,               0 );
+    rb_define_method( rbWindow::Class, "vertical_sync_enabled=", rbWindow::SetVerticalSyncEnabled,  1 );
+    rb_define_method( rbWindow::Class, "mouse_cursor_visible=",  rbWindow::SetMouseCursorVisible,   1 );
+    rb_define_method( rbWindow::Class, "position=",              rbWindow::SetPosition,             1 );
+    rb_define_method( rbWindow::Class, "size=",                  rbWindow::SetSize,                 1 );
+    rb_define_method( rbWindow::Class, "title=",                 rbWindow::SetTitle,                1 );
+    rb_define_method( rbWindow::Class, "visible=",               rbWindow::SetVisible,              1 );
+    rb_define_method( rbWindow::Class, "key_repeat_enabled=",    rbWindow::SetKeyRepeatEnabled,     1 );
+    rb_define_method( rbWindow::Class, "set_icon",               rbWindow::SetIcon,                 3 );
+    rb_define_method( rbWindow::Class, "set_active",             rbWindow::SetActive,              -1 );
+    rb_define_method( rbWindow::Class, "display",                rbWindow::Display,                 0 );
+    rb_define_method( rbWindow::Class, "framerate=",             rbWindow::SetFramerateLimit,       1 );
+    rb_define_method( rbWindow::Class, "joystick_threshold=",    rbWindow::SetJoystickThreshold,    1 );
+    rb_define_method( rbWindow::Class, "system_handle",          rbWindow::GetSystemHandle,         0 );
+    rb_define_method( rbWindow::Class, "inspect",                rbWindow::Inspect,                 0 );
+    rb_define_method( rbWindow::Class, "memory_usage",           rbWindow::GetMemoryUsage,          0 );
     
     // Instance aliasses
-    rb_define_alias( rbWindow::Class, "Create",               "create"              );
-    rb_define_alias( rbWindow::Class, "Close",                "close"               );
-    rb_define_alias( rbWindow::Class, "IsOpen",               "open?"               );
-    rb_define_alias( rbWindow::Class, "GetWidth",             "width"               );
-    rb_define_alias( rbWindow::Class, "GetHeight",            "height"              );
-    rb_define_alias( rbWindow::Class, "GetSettings",          "settings"            );
-    rb_define_alias( rbWindow::Class, "PollEvent",            "poll_event"          );
-    rb_define_alias( rbWindow::Class, "event",                "poll_event"          );
-    rb_define_alias( rbWindow::Class, "WaitEvent",            "wait_event"          );
-    rb_define_alias( rbWindow::Class, "EnableVerticalSync",   "vertical_sync="      );
-    rb_define_alias( rbWindow::Class, "vertical_sync",        "vertical_sync="      );
-    rb_define_alias( rbWindow::Class, "ShowMouseCursor",      "mouse_cursor="       );
-    rb_define_alias( rbWindow::Class, "mouse_cursor",         "mouse_cursor="       );
-    rb_define_alias( rbWindow::Class, "SetPosition",          "position"            );
-    rb_define_alias( rbWindow::Class, "SetSize",              "size"                );
-    rb_define_alias( rbWindow::Class, "SetTitle",             "title="              );
-    rb_define_alias( rbWindow::Class, "title",                "title="              );
-    rb_define_alias( rbWindow::Class, "Show",                 "show="               );
-    rb_define_alias( rbWindow::Class, "show",                 "show="               );
-    rb_define_alias( rbWindow::Class, "EnableKeyRepeat",      "key_repeat="         );
-    rb_define_alias( rbWindow::Class, "key_repeat",           "key_repeat="         );
-    rb_define_alias( rbWindow::Class, "SetIcon",              "icon"                );
-    rb_define_alias( rbWindow::Class, "SetActive",            "active"              );
-    rb_define_alias( rbWindow::Class, "active=",              "active"              );
-    rb_define_alias( rbWindow::Class, "Display",              "display"             );
-    rb_define_alias( rbWindow::Class, "SetFramerateLimit",    "framerate="          );
-    rb_define_alias( rbWindow::Class, "framerate",            "framerate="          );
-    rb_define_alias( rbWindow::Class, "framerate_limit=",     "framerate="          );
-    rb_define_alias( rbWindow::Class, "framerate_limit",      "framerate="          );
-    rb_define_alias( rbWindow::Class, "fps=",                 "framerate="          );
-    rb_define_alias( rbWindow::Class, "SetJoystickThreshold", "joystick_threshold=" );
-    rb_define_alias( rbWindow::Class, "joystick_threshold",   "joystick_threshold=" );
-    rb_define_alias( rbWindow::Class, "GetSystemHandle",      "system_handle"       );
-    rb_define_alias( rbWindow::Class, "handle",               "system_handle"       );
-    rb_define_alias( rbWindow::Class, "to_s",                 "inspect"             );
+    rb_define_alias( rbWindow::Class, "Create",                    "create"                 );
+    rb_define_alias( rbWindow::Class, "Close",                     "close"                  );
+	rb_define_alias( rbWindow::Class, "is_open?",                  "open?"                  );
+	rb_define_alias( rbWindow::Class, "is_open",                   "open?"                  );
+    rb_define_alias( rbWindow::Class, "isOpen",                    "open?"                  );
+	rb_define_alias( rbWindow::Class, "get_settings",              "settings"               );
+    rb_define_alias( rbWindow::Class, "getSettings",               "settings"               );
+    rb_define_alias( rbWindow::Class, "pollEvent",                 "poll_event"             );
+    rb_define_alias( rbWindow::Class, "waitEvent",                 "wait_event"             );
+	rb_define_alias( rbWindow::Class, "set_vertical_sync_enabled", "vertical_sync_enabled=" );
+    rb_define_alias( rbWindow::Class, "setVerticalSyncEnabled",    "vertical_sync_enabled=" );
+	rb_define_alias( rbWindow::Class, "set_mouse_cursor_visible",  "mouse_cursor_visible="  );
+    rb_define_alias( rbWindow::Class, "setMouseCursorVisible",     "mouse_cursor_visible="  );
+	rb_define_alias( rbWindow::Class, "set_position",              "position="              );
+    rb_define_alias( rbWindow::Class, "setPosition",               "position="              );
+	rb_define_alias( rbWindow::Class, "set_size",                  "size="                  );
+    rb_define_alias( rbWindow::Class, "setSize",                   "size="                  );
+	rb_define_alias( rbWindow::Class, "set_title",                 "title="                 );
+    rb_define_alias( rbWindow::Class, "setTitle",                  "title="                 );
+	rb_define_alias( rbWindow::Class, "set_visible",               "visible="               );
+    rb_define_alias( rbWindow::Class, "setVisible",                "visible="               );
+	rb_define_alias( rbWindow::Class, "set_key_repeat_enabled",    "key_repeat_enabled="    );
+    rb_define_alias( rbWindow::Class, "setKeyRepeatEnabled",       "key_repeat_enabled="    );
+    rb_define_alias( rbWindow::Class, "setIcon",                   "set_icon"               );
+	rb_define_alias( rbWindow::Class, "set_active",                "active="                );
+    rb_define_alias( rbWindow::Class, "setActive",                 "active="                );
+    rb_define_alias( rbWindow::Class, "setFramerateLimit",         "framerate="             );
+    rb_define_alias( rbWindow::Class, "framerate_limit=",          "framerate="             );
+    rb_define_alias( rbWindow::Class, "set_framerate_limit",       "framerate="             );
+	rb_define_alias( rbWindow::Class, "set_framerate",             "framerate="             );
+    rb_define_alias( rbWindow::Class, "fps=",                      "framerate="             );
+    rb_define_alias( rbWindow::Class, "setJoystickThreshold",      "joystick_threshold="    );
+    rb_define_alias( rbWindow::Class, "set_joystick_threshold",    "joystick_threshold="    );
+    rb_define_alias( rbWindow::Class, "getSystemHandle",           "system_handle"          );
+    rb_define_alias( rbWindow::Class, "handle",                    "system_handle"          );
+    rb_define_alias( rbWindow::Class, "to_s",                      "inspect"                );
 }
 
 // Window#initialize(...)
@@ -116,7 +113,6 @@ VALUE rbWindow::MarshalDump( VALUE aSelf )
 }
 
 // Window#create(...)
-// Window#Create(...)
 VALUE rbWindow::Create( int argc, VALUE argv[], VALUE aSelf )
 {
     sf::Window* window = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class );
@@ -161,62 +157,49 @@ VALUE rbWindow::Create( int argc, VALUE argv[], VALUE aSelf )
     switch( argc )
     {
         case 1:
-            window->Create( handle );
+            window->create( handle );
             break;
         case 2:
             if( handle == 0 )
-                window->Create( *mode, title );
+                window->create( *mode, title );
             else
-                window->Create( handle, *settings );
+                window->create( handle, *settings );
             break;
         case 3:
-            window->Create( *mode, title, style );
+            window->create( *mode, title, style );
             break;
         case 4:
-            window->Create( *mode, title, style, *settings );
+            window->create( *mode, title, style, *settings );
             break;
     }
-    rbSFML::CheckWarn();
+    rbSFML::CheckRaise();
     
     return Qnil;
 }
 
 // Window#close
-// Window#Close
 VALUE rbWindow::Close( VALUE aSelf )
 {
     rb_iv_set( aSelf, "@title", Qnil );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->Close();
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->close();
     return Qnil;
 }
 
-// Window#opened?
-// Window#IsOpened
 // Window#open?
+// Window#is_open?
+// Window#is_open
+// Window#isOpen
 VALUE rbWindow::IsOpen( VALUE aSelf )
 {
-    return RBOOL( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->IsOpen() );
-}
-
-// Window#width
-// Window#GetWidth
-VALUE rbWindow::GetWidth( VALUE aSelf )
-{
-    return INT2FIX( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->GetWidth() );
-}
-
-// Window#height
-// Window#GetHeight
-VALUE rbWindow::GetHeight( VALUE aSelf )
-{
-    return INT2FIX( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->GetHeight() );
+    return RBOOL( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->isOpen() );
 }
 
 // Window#settings
-// Window#GetSettings
+// Window#get_settings
+// Window#getSettings
 VALUE rbWindow::GetSettings( VALUE aSelf )
 {
-	sf::ContextSettings& settings = const_cast< sf::ContextSettings& >( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->GetSettings() );
+	sf::ContextSettings& settings = const_cast< sf::ContextSettings& >( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSettings() );
 	VALUE object = rbMacros::ToRuby( &settings, rbContextSettings::Class );
 	rb_iv_set( object, "@__ref__owner", aSelf );
 	rb_obj_freeze( object );
@@ -227,7 +210,7 @@ VALUE rbWindow::GetSettings( VALUE aSelf )
 static inline bool internalPollEvent( VALUE aSelf, VALUE anEvent )
 {    
     sf::Event event;
-    bool ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->PollEvent( event );
+    bool ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->pollEvent( event );
     if( ret )
         *rbMacros::ToSFML< sf::Event >( anEvent, rbEvent::Class ) = event;
     
@@ -261,7 +244,7 @@ static inline bool internalWaitEvent( VALUE aSelf, VALUE anEvent )
     using namespace rbWindow;
     
     sf::Event event;
-    bool ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->WaitEvent( event );
+    bool ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->waitEvent( event );
     if( ret )
         *rbMacros::ToSFML< sf::Event >( anEvent, rbEvent::Class ) = event;
     
@@ -296,7 +279,7 @@ VALUE rbWindow::EachEvent( VALUE aSelf )
     sf::Event event;
 	VALUE eventObject = rbMacros::Allocate< sf::Event >( rbEvent::Class );
 	sf::Event* eventPtr = rbMacros::ToSFML< sf::Event >( eventObject, rbEvent::Class );
-    while( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->PollEvent( event ) )
+    while( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->pollEvent( event ) )
     {
         *eventPtr = event;
         rb_yield( eventObject );
@@ -304,100 +287,78 @@ VALUE rbWindow::EachEvent( VALUE aSelf )
     return aSelf;
 }
 
-// Window#vertical_sync=(enabled)
-// Window#EnableVerticalSync(enabled)
-// Window#vertical_sync(enabled)
-VALUE rbWindow::EnableVerticalSync( VALUE aSelf, VALUE anEnabled )
+// Window#vertical_sync_enabled=(enabled)
+// Window#setVerticalSyncEnabled(enabled)
+// Window#set_vertical_sync_enabled(enabled)
+VALUE rbWindow::SetVerticalSyncEnabled( VALUE aSelf, VALUE anEnabled )
 {
     rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->EnableVerticalSync( RTEST( anEnabled ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setVerticalSyncEnabled( RTEST( anEnabled ) );
     return Qnil;
 }
 
-// Window#mouse_cursor=(show)
-// Window#ShowMouseCursor(show)
-// Window#mouse_cursor(show)
-VALUE rbWindow::ShowMouseCursor( VALUE aSelf, VALUE aShow )
+// Window#mouse_cursor_visible=(show)
+// Window#setMouseCursorVisible(show)
+// Window#set_mouse_cursor_visible(show)
+VALUE rbWindow::SetMouseCursorVisible( VALUE aSelf, VALUE aShow )
 {
     rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->ShowMouseCursor( RTEST( aShow ) );
-    return Qnil;
-}
-
-// Window#position(x, y)
-// Window#Position(x, y)
-VALUE rbWindow::SetPosition( VALUE aSelf, VALUE anX, VALUE anY )
-{
-    rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetPosition( NUM2INT( anX ), NUM2INT( anY ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setMouseCursorVisible( RTEST( aShow ) );
     return Qnil;
 }
 
 // Window#position=(vector2)
-VALUE rbWindow::SetPosition2( VALUE aSelf, VALUE aVector2 )
+// Window#set_position(vector2)
+// Window#setPosition(vector2)
+VALUE rbWindow::SetPosition( VALUE aSelf, VALUE aPosition )
 {
     rb_check_frozen( aSelf );
-    aVector2 = rbVector2::ToRuby( aVector2 );
-    VALUE x = rbVector2::GetX( aVector2 );
-    VALUE y = rbVector2::GetY( aVector2 );
-    SetPosition( aSelf, x, y );
-    
-    return Qnil;
-}
-
-// Window#size(width, height)
-// Window#Size(width, height)
-VALUE rbWindow::SetSize( VALUE aSelf, VALUE aWidth, VALUE aHeight )
-{
-    rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetSize( NUM2INT( aWidth ), NUM2INT( aHeight ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setPosition( rbVector2::ToSFMLi( aPosition ) );
     return Qnil;
 }
 
 // Window#size=(vector2)
-VALUE rbWindow::SetSize2( VALUE aSelf, VALUE aVector2 )
+// Window#set_size(vector2)
+// Window#setSize(vector2)
+VALUE rbWindow::SetSize( VALUE aSelf, VALUE aSize )
 {
     rb_check_frozen( aSelf );
-    aVector2 = rbVector2::ToRuby( aVector2 );
-    VALUE width  = rbVector2::GetX( aVector2 );
-    VALUE height = rbVector2::GetY( aVector2 );
-    SetSize( aSelf, width, height );
-    
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setSize( rbVector2::ToSFMLu( aSize ) );
     return Qnil;
 }
 
 // Window#title=(title)
-// Window#SetTitle(title)
-// Window#title(title)
+// Window#set_title(title)
+// Window#setTitle(title)
 VALUE rbWindow::SetTitle( VALUE aSelf, VALUE aTitle )
 {
     rb_check_frozen( aSelf );
     rb_iv_set( aSelf, "@title", StringValue( aTitle ) );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetTitle( StringValueCStr( aTitle ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setTitle( StringValueCStr( aTitle ) );
     return Qnil;
 }
 
-// Window#show=(show)
-// Window#Show(show)
-// Window#show(show)
-VALUE rbWindow::Show( VALUE aSelf, VALUE aShow )
+// Window#visible=(show)
+// Window#set_visible(show)
+// Window#setVisible(show)
+VALUE rbWindow::SetVisible( VALUE aSelf, VALUE aShow )
 {
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->Show( RTEST( aShow ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setVisible( RTEST( aShow ) );
     return Qnil;
 }
 
 // Window#key_repeat=(enabled)
-// Window#EnableKeyRepeat(enabled)
-// Window#key_repeat(enabled)
-VALUE rbWindow::EnableKeyRepeat( VALUE aSelf, VALUE anEnabled )
+// Window#set_key_repeat_enabled(enabled)
+// Window#setKeyRepeatEnabled(enabled)
+VALUE rbWindow::SetKeyRepeatEnabled( VALUE aSelf, VALUE anEnabled )
 {
     rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->EnableKeyRepeat( RTEST( anEnabled ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setKeyRepeatEnabled( RTEST( anEnabled ) );
     return Qnil;
 }
 
-// Window#icon(width, height, pixels)
-// Window#SetIcon(width, height, pixels)
+// Window#set_icon(width, height, pixels)
+// Window#etIcon(width, height, pixels)
 VALUE rbWindow::SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE somePixels )
 {
     unsigned int width  = NUM2UINT( aWidth );
@@ -417,14 +378,14 @@ VALUE rbWindow::SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE somePix
         pixels[ index ] = NUM2CHR( pixelsPtr[ index ] );
     }
     
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetIcon( width, height, pixels );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setIcon( width, height, pixels );
     xfree( pixels );
     return Qnil;
 }
 
-// Window#active(active=true)
-// Window#SetActive(active=true)
 // Window#active=(active=true)
+// Window#set_active(active=true)
+// Window#setActive(active=true)
 VALUE rbWindow::SetActive( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
@@ -441,52 +402,52 @@ VALUE rbWindow::SetActive( int argc, VALUE argv[], VALUE aSelf )
     switch( argc )
     {
         case 0:
-            ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetActive();
+            ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setActive();
             break;
         case 1:
-            ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetActive( RTEST( argv[ 0 ] ) );
+            ret = rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setActive( RTEST( argv[ 0 ] ) );
             break;
     }
     rbSFML::CheckRaise();
     return RBOOL( ret );
 }
 
-// Window#display(active)
-// Window#Display(active)
+// Window#display()
 VALUE rbWindow::Display( VALUE aSelf )
 {
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->Display();
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->display();
     return Qnil;
 }
 
+// Window#fps=(limit)
 // Window#framerate=(limit)
-// Window#SetFramerateLimit(limit)
-// Window#framerate(limit)
 // Window#framerate_limit=(limit)
-// Window#framerate_limit(limit)
+// Window#set_framerate(limit)
+// Window#set_framerate_limit(limit)
+// Window#setFramerateLimit(limit)
 VALUE rbWindow::SetFramerateLimit( VALUE aSelf, VALUE aLimit )
 {
     rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetFramerateLimit( NUM2INT( aLimit ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setFramerateLimit( NUM2INT( aLimit ) );
     return Qnil;
 }
 
 // Window#joystick_threshold=(threshold)
-// Window#SetJoystickThreshold(threshold)
-// Window#joystick_threshold(threshold)
+// Window#set_joystick_threshold(threshold)
+// Window#setJoystickThreshold(threshold)
 VALUE rbWindow::SetJoystickThreshold( VALUE aSelf, VALUE aThreshold )
 {
     rb_check_frozen( aSelf );
-    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->SetJoystickThreshold( NUM2DBL( aThreshold ) );
+    rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setJoystickThreshold( NUM2DBL( aThreshold ) );
     return Qnil;
 }
 
 // Window#system_handle
-// Window#GetSystemHandle
+// Window#getSystemHandle
 // Window#handle
 VALUE rbWindow::GetSystemHandle( VALUE aSelf )
 {
-    return UINT2NUM( (unsigned int)rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->GetSystemHandle() );
+    return UINT2NUM( (unsigned int)rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSystemHandle() );
 }
 
 // Window#inspect

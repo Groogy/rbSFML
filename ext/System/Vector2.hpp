@@ -35,6 +35,7 @@ namespace rbVector2
     static inline VALUE ToRuby( const sf::Vector2i& aVector2 );
     static inline VALUE ToRuby( const sf::Vector2f& aVector2 );
     static inline sf::Vector2i ToSFMLi( VALUE aVector2 );
+	static inline sf::Vector2u ToSFMLu( VALUE aVector2 );
     static inline sf::Vector2f ToSFMLf( VALUE aVector2 );
 
     static inline VALUE GetX( VALUE aVector2 );
@@ -144,6 +145,14 @@ sf::Vector2i rbVector2::ToSFMLi( VALUE aVector2 )
     int x = NUM2INT( GetX( aVector2 ) );
     int y = NUM2INT( GetY( aVector2 ) );
     return sf::Vector2i( x, y );
+}
+
+sf::Vector2u rbVector2::ToSFMLu( VALUE aVector2 )
+{
+    aVector2 = ToRuby( aVector2 );
+    unsigned int x = NUM2UINT( GetX( aVector2 ) );
+    unsigned int y = NUM2UINT( GetY( aVector2 ) );
+    return sf::Vector2u( x, y );
 }
 
 sf::Vector2f rbVector2::ToSFMLf( VALUE aVector2 )

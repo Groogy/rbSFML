@@ -43,6 +43,9 @@ namespace rbShader
 
 #if defined( GRAPHICS_SHADER_CPP )
 	// Shader.available?()
+	// Shader.is_available?()
+	// Shader.is_available()
+	// Shader.isAvailable()
 	static VALUE IsAvailable( VALUE aSelf );
 
     // Shader#initialize
@@ -52,14 +55,20 @@ namespace rbShader
 	
 	// Shader#load_from_file(filename, type)
 	// Shader#load_from_file(vertex_filename, fragment_filename)
+	// Shader#loadFromFile(filename, type)
+	// Shader#loadFromFile(vertex_filename, fragment_filename)
 	static VALUE LoadFromFile( VALUE aSelf, VALUE anArg1, VALUE anArg2 );
 	
 	// Shader#load_from_memory(data, type)
 	// Shader#load_from_memory(vertex_data, fragment_data)
+	// Shader#loadFromMemory(data, type)
+	// Shader#loadFromMemory(vertex_data, fragment_data)
 	static VALUE LoadFromMemory( VALUE aSelf, VALUE anArg1, VALUE anArg2 );
 	
 	// Shader#load_from_stream(stream, type)
 	// Shader#load_from_stream(vertex_stream, fragment_stream)
+	// Shader#loadFromStream(data, type)
+	// Shader#loadFromStream(vertex_data, fragment_data)
 	static VALUE LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 );
 	
 	// Shader#set_parameter(name, x)
@@ -71,6 +80,15 @@ namespace rbShader
 	// Shader#set_parameter(name, transform)
 	// Shader#set_parameter(name, texture)
 	// Shader#set_parameter(name, current_texture)
+	// Shader#setParameter(name, x)
+	// Shader#setParameter(name, x, y)
+	// Shader#setParameter(name, x, y, z)
+	// Shader#setParameter(name, vector2)
+	// Shader#setParameter(name, vector3)
+	// Shader#setParameter(name, color)
+	// Shader#setParameter(name, transform)
+	// Shader#setParameter(name, texture)
+	// Shader#setParameter(name, current_texture)
 	// Shader#[]=(name, x)
 	// Shader#[]=(name, vector2)
 	// Shader#[]=(name, vector3)

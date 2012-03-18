@@ -55,15 +55,19 @@ namespace rbTexture
 	static VALUE Create( VALUE aSelf, VALUE aWidth, VALUE aHeight );
 	
 	// Texture#load_from_file(filename, area = nil)
+	// Texture#loadFromFile(filename, area = nil)
 	static VALUE LoadFromFile( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#load_from_memory(data, area = nil)
+	// Texture#loadFromMemory(data, area = nil)
 	static VALUE LoadFromMemory( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#load_from_stream(stream, area = nil)
+	// Texture#loadFromStream(stream, area = nil)
 	static VALUE LoadFromStream( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#load_from_image(image, area = nil)
+	// Texture#loadFromImage(image, area = nil)
 	static VALUE LoadFromImage( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#width
@@ -74,6 +78,7 @@ namespace rbTexture
 	
 	// Texture#copy_to_image
 	// Texture#to_image
+	// Texture#copyToImage
 	static VALUE CopyToImage( VALUE aSelf );
 	
 	// Texture#update(pixels)
@@ -88,17 +93,24 @@ namespace rbTexture
 	static VALUE Bind( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#smooth=(flag)
+	// Texture#setSmooth=(flag)
 	static VALUE SetSmooth( VALUE aSelf, VALUE aFlag );
 	
-	// Texture#smooth
 	// Texture#smooth?
+	// Texture#is_smooth?
+	// Texture#is_smooth
+	// Texture#isSmooth
 	static VALUE GetSmooth( VALUE aSelf );
 	
 	// Texture#repeated=(flag)
+	// Texture#set_repeated(flag)
+	// Texture#setRepeated=(flag)
 	static VALUE SetRepeated( VALUE aSelf, VALUE aFlag );
 	
-	// Texture#repeated
 	// Texture#repeated?
+	// Texture#is_repeated?
+	// Texture#is_repeated
+	// Texture#isRepeated
 	static VALUE GetRepeated( VALUE aSelf );
 	
     // Texture#marshal_dump

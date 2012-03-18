@@ -41,9 +41,11 @@ namespace rbKeyboard
 #endif
     
 #if defined( WINDOW_KEYBOARD_CPP )
-    // Keyboard::key_pressed?(button)
-    // Keyboard::IsKeyPressed(button)
-    // Keyboard::pressed?(button)
+    // Keyboard.key_pressed?(button)
+    // Keyboard.isKeyPressed(button)
+	// Keyboard.is_key_pressed?(button)
+	// Keyboard.is_key_pressed(button)
+    // Keyboard.pressed?(button)
     static VALUE IsKeyPressed( VALUE aSelf, VALUE aKey );
 #endif
 }

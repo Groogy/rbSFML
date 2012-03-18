@@ -53,16 +53,26 @@ namespace rbImage
 	// Image#create(width, height, pixels)
 	static VALUE Create( int argc, VALUE* args, VALUE aSelf );
 	
+	// Image#loadFromFile(filename)
 	// Image#load_from_file(filename)
+	// Image#load_file(filename)
+	// Image#load(filename)
 	static VALUE LoadFromFile( VALUE aSelf, VALUE aFilename );
 	
+	// Image#loadFromMemory(data)
 	// Image#load_from_memory(data)
+	// Image#load_memory(data)
 	static VALUE LoadFromMemory( VALUE aSelf, VALUE someData );
 	
+	// Image#loadFromStream(stream)
 	// Image#load_from_stream(stream)
+	// Image#load_stream(stream)
 	static VALUE LoadFromStream( VALUE aSelf, VALUE aStream );
 	
+	// Image#saveToFile(filename)
 	// Image#save_to_file(filename)
+	// Image#save_file(filename)
+	// Image#save(filename)
 	static VALUE SaveToFile( VALUE aSelf, VALUE aFilename );
 	
 	// Image#width
@@ -71,6 +81,7 @@ namespace rbImage
 	// Image#height
 	static VALUE GetHeight( VALUE aSelf );
 	
+	// Image#createMaskFromColor(color, alpha=0)
 	// Image#create_mask_from_color(color, alpha=0)
 	static VALUE CreateMaskFromColor( int argc, VALUE* args, VALUE aSelf );
 	
@@ -78,18 +89,24 @@ namespace rbImage
 	static VALUE Copy( int argc, VALUE* args, VALUE aSelf );
 	
 	// Image#set_pixel(x, y, color)
+	// Image#setPixel(x, y, color)
 	static VALUE SetPixel( VALUE aSelf, VALUE anX, VALUE anY, VALUE aColor );
 	
 	// Image#get_pixel(x, y)
+	// Image#getPixel(x, y)
 	static VALUE GetPixel( VALUE aSelf, VALUE anX, VALUE anY );
 	
 	// Image#pixels()
+	// Image#get_pixels()
+	// Image#getPixels()
 	static VALUE GetPixelsPtr( VALUE aSelf );
 	
 	// Image#flip_horizontally
+	// Image#flipHorizontally
 	static VALUE FlipHorizontally( VALUE aSelf );
 	
 	// Image#flip_vertically
+	// Image#flipVertically
 	static VALUE FlipVertically( VALUE aSelf );
 	
     // Image#marshal_dump

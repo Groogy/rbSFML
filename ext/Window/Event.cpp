@@ -53,55 +53,38 @@ void rbEvent::Init( VALUE SFML )
     rb_define_attr( rbEvent::Class_Key, "control", true, false );
     rb_define_attr( rbEvent::Class_Key, "shift",   true, false );
     rb_define_attr( rbEvent::Class_Key, "system",  true, false );
-    rb_define_alias( rbEvent::Class_Key, "Code",    "code"   );
-    rb_define_alias( rbEvent::Class_Key, "Alt",     "alt"    );
-    rb_define_alias( rbEvent::Class_Key, "Control", "control" );
-    rb_define_alias( rbEvent::Class_Key, "Shift",   "shift" );
-    rb_define_alias( rbEvent::Class_Key, "System",  "system" );
     
     // Event::Text accessors
     rb_define_attr( rbEvent::Class_Text, "unicode", true, false );
-    rb_define_alias( rbEvent::Class_Text, "Unicode",  "unicode" );
     
     // Event::MouseMove accessors
     rb_define_attr(rbEvent::Class_MouseMove, "x", true, false );
     rb_define_attr(rbEvent::Class_MouseMove, "y", true, false );
-    rb_define_alias(rbEvent::Class_MouseMove, "X", "x" );
-    rb_define_alias(rbEvent::Class_MouseMove, "Y", "y" );
     
     // Event::MouseButton accessors
     rb_define_attr(rbEvent::Class_MouseButton, "button", true, false );
     rb_define_attr(rbEvent::Class_MouseButton, "x",      true, false );
     rb_define_attr(rbEvent::Class_MouseButton, "y",      true, false );
-    rb_define_alias(rbEvent::Class_MouseButton, "Button", "button" );
-    rb_define_alias(rbEvent::Class_MouseButton, "X",      "x"     );
-    rb_define_alias(rbEvent::Class_MouseButton, "Y",      "y"     );
     
     // Event::MouseWheel accessors
     rb_define_attr( rbEvent::Class_MouseWheel, "delta", true, false );
     rb_define_attr( rbEvent::Class_MouseWheel, "x",     true, false );
     rb_define_attr( rbEvent::Class_MouseWheel, "y",     true, false );
-    rb_define_alias( rbEvent::Class_MouseWheel, "Delta", "delta" );
-    rb_define_alias( rbEvent::Class_MouseWheel, "X",     "x"    );
-    rb_define_alias( rbEvent::Class_MouseWheel, "Y",     "y"    );
     
     // Event::JoystickConnect accessors
     rb_define_attr( rbEvent::Class_JoystickConnect, "id", true, false );
-    rb_define_alias( rbEvent::Class_JoystickConnect, "JoystickId", "id" );
+    rb_define_alias( rbEvent::Class_JoystickConnect, "joystickId", "id" );
     
     // Event::JoystickMove accessors
     rb_define_attr( rbEvent::Class_JoystickMove, "id",       true, false );
     rb_define_attr( rbEvent::Class_JoystickMove, "axis",     true, false );
     rb_define_attr( rbEvent::Class_JoystickMove, "position", true, false );
-    rb_define_alias( rbEvent::Class_JoystickMove, "JoystickId", "id"      );
-    rb_define_alias( rbEvent::Class_JoystickMove, "Axis",       "axis"    );
-    rb_define_alias( rbEvent::Class_JoystickMove, "Position",   "position" );
+    rb_define_alias( rbEvent::Class_JoystickMove, "joystickId", "id"      );
     
     // Event::JoystickButton accessors
     rb_define_attr( rbEvent::Class_JoystickButton, "id",     true, false );
     rb_define_attr( rbEvent::Class_JoystickButton, "button", true, false );
-    rb_define_alias( rbEvent::Class_JoystickButton, "JoystickId", "id"    );
-    rb_define_alias( rbEvent::Class_JoystickButton, "Button",     "button" );
+    rb_define_alias( rbEvent::Class_JoystickButton, "joystickId", "id"    );
     
     // Constants
     rb_define_const( rbEvent::Class, "Closed",                 EventType( sf::Event::Closed                 ) );
@@ -145,16 +128,12 @@ void rbEvent::Init( VALUE SFML )
     rb_define_method( rbEvent::Class, "memory_usage",     rbEvent::GetMemoryUsage,  0 );
     
     // Instance aliasses
-    rb_define_alias( rbEvent::Class, "Type",            "type"             );
-    rb_define_alias( rbEvent::Class, "Size",            "size"             );
-    rb_define_alias( rbEvent::Class, "Key",             "key"              );
-    rb_define_alias( rbEvent::Class, "Text",            "text"             );
-    rb_define_alias( rbEvent::Class, "MouseMove",       "mouse_move"       );
-    rb_define_alias( rbEvent::Class, "MouseButton",     "mouse_button"     );
-    rb_define_alias( rbEvent::Class, "MouseWheel",      "mouse_wheel"      );
-    rb_define_alias( rbEvent::Class, "JoystickMove",    "joystick_move"    );
-    rb_define_alias( rbEvent::Class, "JoystickButton",  "joystick_button"  );
-    rb_define_alias( rbEvent::Class, "JoystickConnect", "joystick_connect" );
+    rb_define_alias( rbEvent::Class, "mouseMove",       "mouse_move"       );
+    rb_define_alias( rbEvent::Class, "mouseButton",     "mouse_button"     );
+    rb_define_alias( rbEvent::Class, "mouseWheel",      "mouse_wheel"      );
+    rb_define_alias( rbEvent::Class, "joystickMove",    "joystick_move"    );
+    rb_define_alias( rbEvent::Class, "joystickButton",  "joystick_button"  );
+    rb_define_alias( rbEvent::Class, "joystickConnect", "joystick_connect" );
     rb_define_alias( rbEvent::Class, "eql?",            "=="               );
     rb_define_alias( rbEvent::Class, "equal?",          "=="               );
     rb_define_alias( rbEvent::Class, "to_s",            "inspect"          );
@@ -200,16 +179,15 @@ VALUE rbEvent::MarshalDump( VALUE aSelf )
 }
 
 // Event#type
-// Event#Type
 VALUE rbEvent::Type( VALUE aSelf )
 {
-    return EventType( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Type );
+    return EventType( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->type );
 }
 
 // Event#info
 VALUE rbEvent::Info( VALUE aSelf )
 {
-    switch( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Type )
+    switch( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->type )
     {
         case sf::Event::Closed:
         case sf::Event::LostFocus:
@@ -245,122 +223,119 @@ VALUE rbEvent::Info( VALUE aSelf )
 }
 
 // Event#size
-// Event#Size
 VALUE rbEvent::Size( VALUE aSelf )
 {
-    sf::Event::SizeEvent sizeEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Size;
+    sf::Event::SizeEvent sizeEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->size;
     VALUE size = rb_obj_alloc( rbEvent::Class_Size );
     
-    rb_iv_set( size, "@width",  INT2FIX( sizeEvent.Width  ) );
-    rb_iv_set( size, "@height", INT2FIX( sizeEvent.Height ) );
+    rb_iv_set( size, "@width",  INT2FIX( sizeEvent.width  ) );
+    rb_iv_set( size, "@height", INT2FIX( sizeEvent.height ) );
     
     return size;
 }
 
 // Event#key
-// Event#Key
 VALUE rbEvent::Key( VALUE aSelf )
 {
-    sf::Event::KeyEvent keyEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Key;
+    sf::Event::KeyEvent keyEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->key;
     VALUE key = rb_obj_alloc( rbEvent::Class_Key );
     
-    rb_iv_set( key, "@code",    INT2FIX( keyEvent.Code ) );
-    rb_iv_set( key, "@alt",     RBOOL( keyEvent.Alt     ) );
-    rb_iv_set( key, "@control", RBOOL( keyEvent.Control ) );
-    rb_iv_set( key, "@shift",   RBOOL( keyEvent.Shift   ) );
-    rb_iv_set( key, "@system",  RBOOL( keyEvent.System  ) );
+    rb_iv_set( key, "@code",    INT2FIX( keyEvent.code ) );
+    rb_iv_set( key, "@alt",     RBOOL( keyEvent.alt     ) );
+    rb_iv_set( key, "@control", RBOOL( keyEvent.control ) );
+    rb_iv_set( key, "@shift",   RBOOL( keyEvent.shift   ) );
+    rb_iv_set( key, "@system",  RBOOL( keyEvent.system  ) );
     
     return key;
 }
 
 // Event#text
-// Event#Text
 VALUE rbEvent::Text( VALUE aSelf )
 {
-    sf::Event::TextEvent textEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Text;
+    sf::Event::TextEvent textEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->text;
     VALUE text = rb_obj_alloc( rbEvent::Class_Text);
     
-    rb_iv_set( text, "@unicode", UINT2NUM( textEvent.Unicode ) );
+    rb_iv_set( text, "@unicode", UINT2NUM( textEvent.unicode ) );
     
     return text;
 }
 
 // Event#mouse_move
-// Event#MouseMove
+// Event#mouseMove
 VALUE rbEvent::MouseMove( VALUE aSelf )
 {
-    sf::Event::MouseMoveEvent mouseMoveEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->MouseMove;
+    sf::Event::MouseMoveEvent mouseMoveEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->mouseMove;
     VALUE mouseMove = rb_obj_alloc( rbEvent::Class_MouseMove);
     
-    rb_iv_set( mouseMove, "@x", INT2FIX( mouseMoveEvent.X ) );
-    rb_iv_set( mouseMove, "@y", INT2FIX( mouseMoveEvent.Y ) );
+    rb_iv_set( mouseMove, "@x", INT2FIX( mouseMoveEvent.x ) );
+    rb_iv_set( mouseMove, "@y", INT2FIX( mouseMoveEvent.y ) );
     
     return mouseMove;
 }
 
 // Event#mouse_button
-// Event#MouseButton
+// Event#mouseButton
 VALUE rbEvent::MouseButton( VALUE aSelf )
 {
-    sf::Event::MouseButtonEvent mouseButtonEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->MouseButton;
+    sf::Event::MouseButtonEvent mouseButtonEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->mouseButton;
     VALUE mouseButton = rb_obj_alloc( rbEvent::Class_MouseButton );
     
-    rb_iv_set( mouseButton, "@button", INT2FIX(mouseButtonEvent.Button ) );
-    rb_iv_set( mouseButton, "@x",      INT2FIX(mouseButtonEvent.X      ) );
-    rb_iv_set( mouseButton, "@y",      INT2FIX(mouseButtonEvent.Y      ) );
+    rb_iv_set( mouseButton, "@button", INT2FIX(mouseButtonEvent.button ) );
+    rb_iv_set( mouseButton, "@x",      INT2FIX(mouseButtonEvent.x      ) );
+    rb_iv_set( mouseButton, "@y",      INT2FIX(mouseButtonEvent.y      ) );
     
     return mouseButton;
 }
 
 // Event#mouse_wheel
-// Event#MouseWheel
+// Event#mouseWheel
 VALUE rbEvent::MouseWheel( VALUE aSelf )
 {
-    sf::Event::MouseWheelEvent mouseWheelEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->MouseWheel;
+    sf::Event::MouseWheelEvent mouseWheelEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->mouseWheel;
     VALUE mouseWheel = rb_obj_alloc( rbEvent::Class_MouseWheel );
     
-    rb_iv_set( mouseWheel, "@delta", INT2FIX( mouseWheelEvent.Delta ) );
-    rb_iv_set( mouseWheel, "@x",     INT2FIX( mouseWheelEvent.X     ) );
-    rb_iv_set( mouseWheel, "@y",     INT2FIX( mouseWheelEvent.Y     ) );
+    rb_iv_set( mouseWheel, "@delta", INT2FIX( mouseWheelEvent.delta ) );
+    rb_iv_set( mouseWheel, "@x",     INT2FIX( mouseWheelEvent.x     ) );
+    rb_iv_set( mouseWheel, "@y",     INT2FIX( mouseWheelEvent.y     ) );
     
     return mouseWheel;
 }
 
 // Event#joystick_move
-// Event#JoystickMove
+// Event#joystickMove
 VALUE rbEvent::JoystickMove( VALUE aSelf )
 {
-    sf::Event::JoystickMoveEvent joystickMoveEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->JoystickMove;
+    sf::Event::JoystickMoveEvent joystickMoveEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->joystickMove;
     VALUE joystickMove = rb_obj_alloc( rbEvent::Class_JoystickMove );
     
-    rb_iv_set( joystickMove, "@id",       INT2FIX( joystickMoveEvent.JoystickId ) );
-    rb_iv_set( joystickMove, "@axis",     INT2FIX( joystickMoveEvent.Axis       ) );
-    rb_iv_set( joystickMove, "@position", rb_float_new( joystickMoveEvent.Position ) );
+    rb_iv_set( joystickMove, "@id",       INT2FIX( joystickMoveEvent.joystickId ) );
+    rb_iv_set( joystickMove, "@axis",     INT2FIX( joystickMoveEvent.axis       ) );
+    rb_iv_set( joystickMove, "@position", rb_float_new( joystickMoveEvent.position ) );
     
     return joystickMove;
 }
 
 // Event#joystick_button
-// Event#JoystickButton
+// Event#joystickButton
 VALUE rbEvent::JoystickButton( VALUE aSelf )
 {
-    sf::Event::JoystickButtonEvent joystickButtonEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->JoystickButton;
+    sf::Event::JoystickButtonEvent joystickButtonEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->joystickButton;
     VALUE joystickButton = rb_obj_alloc( rbEvent::Class_JoystickButton);
     
-    rb_iv_set( joystickButton, "@id",     INT2FIX( joystickButtonEvent.JoystickId ) );
-    rb_iv_set( joystickButton, "@button", INT2FIX( joystickButtonEvent.Button     ) );
+    rb_iv_set( joystickButton, "@id",     INT2FIX( joystickButtonEvent.joystickId ) );
+    rb_iv_set( joystickButton, "@button", INT2FIX( joystickButtonEvent.button     ) );
     
     return joystickButton;
 }
 
 // Event#joystick_connect
-// Event#JoystickConnect
+// Event#joystickConnect
 VALUE rbEvent::JoystickConnect( VALUE aSelf )
 {
-    sf::Event::JoystickConnectEvent joystickConnectEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->JoystickConnect;
+    sf::Event::JoystickConnectEvent joystickConnectEvent = rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->joystickConnect;
     VALUE joystickConnect = rb_obj_alloc( rbEvent::Class_JoystickConnect);
     
-    rb_iv_set( joystickConnect, "@id", INT2FIX( joystickConnectEvent.JoystickId ) );
+    rb_iv_set( joystickConnect, "@id", INT2FIX( joystickConnectEvent.joystickId ) );
     
     return joystickConnect;
 }
@@ -424,7 +399,7 @@ VALUE rbEvent::Inspect( VALUE aSelf )
 {
     VALUE ret = rb_sprintf( "%s(%s",
 							rb_obj_classname( aSelf ),
-							EventTypeName( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->Type ) );
+							EventTypeName( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->type ) );
     VALUE info = rbEvent::Info( aSelf );
     if( info != Qnil )
     {

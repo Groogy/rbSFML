@@ -60,35 +60,35 @@ namespace rbContextSettings
     static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
     
     // ContextSettings#depth_bits
-    // ContextSettings#DepthBits
+    // ContextSettings#depthBits
     static VALUE GetDepthBits( VALUE aSelf );
     
     // ContextSettings#stencil_bits
-    // ContextSettings#StencilBits
+    // ContextSettings#stencilBits
     static VALUE GetStencilBits( VALUE aSelf );
     
     // ContextSettings#antialiasing_level
-    // ContextSettings#AntialiasingLevel
+    // ContextSettings#antialiasingLevel
     static VALUE GetAntialiasingLevel( VALUE aSelf );
     
     // ContextSettings#major_version
-    // ContextSettings#MajorVersion
+    // ContextSettings#majorVersion
     static VALUE GetMajorVersion( VALUE aSelf );
     
     // ContextSettings#minor_version
-    // ContextSettings#MinorVersion
+    // ContextSettings#minorVersion
     static VALUE GetMinorVersion( VALUE aSelf );
     
     // ContextSettings#depth_bits=(value)
-    // ContextSettings#DepthBits=(value)
+    // ContextSettings#depthBits=(value)
     static VALUE SetDepthBits( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#stencil_bits=(value)
-    // ContextSettings#StencilBits=(value)
+    // ContextSettings#stencilBits=(value)
     static VALUE SetStencilBits( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#antialiasing_level=(value)
-    // ContextSettings#AntialiasingLevel=(value)
+    // ContextSettings#antialiasingLevel=(value)
     static VALUE SetAntialiasingLevel( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#major_version=(value)
@@ -96,7 +96,7 @@ namespace rbContextSettings
     static VALUE SetMajorVersion( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#minor_version=(value)
-    // ContextSettings#MinorVersion=(value)
+    // ContextSettings#minorVersion=(value)
     static VALUE SetMinorVersion( VALUE aSelf, VALUE aValue );
     
     // ContextSettings#==(other)
@@ -133,15 +133,15 @@ static int ToRubyHashIterator( VALUE aKey, VALUE aValue, VALUE anExtra )
         sym = StringValueCStr( aKey );
     
     if( sym == "depth_bits" or sym == "DepthBits" )
-        info->instance->DepthBits = NUM2UINT( aValue );
+        info->instance->depthBits = NUM2UINT( aValue );
     else if( sym == "stencil_bits" or sym == "StencilBits" )
-        info->instance->StencilBits = NUM2UINT( aValue );
+        info->instance->stencilBits = NUM2UINT( aValue );
     else if( sym == "antialiasing_level" or sym == "AntialiasingLevel" )
-        info->instance->AntialiasingLevel = NUM2UINT( aValue );
+        info->instance->antialiasingLevel = NUM2UINT( aValue );
     else if( sym == "major_version" or sym == "MajorVersion" )
-        info->instance->MajorVersion = NUM2UINT( aValue );
+        info->instance->majorVersion = NUM2UINT( aValue );
     else if( sym == "minor_version" or sym == "MinorVersion" )
-        info->instance->MinorVersion = NUM2UINT( aValue );
+        info->instance->minorVersion = NUM2UINT( aValue );
     else
         rb_raise( rb_eArgError,
                   "unknown attribute %s for %s", sym.c_str(), info->klass );

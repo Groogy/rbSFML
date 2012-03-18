@@ -57,9 +57,11 @@ namespace rbRenderStates
     static VALUE InitializeCopy( VALUE aSelf, VALUE aState );
 	
 	// RenderStates#blend_mode
+	// RenderStates#blendMode
 	static VALUE GetBlendMode( VALUE aSelf );
 	
 	// RenderStates#blend_mode=(mode)
+	// RenderStates#blendMode=(mode)
 	static VALUE SetBlendMode( VALUE aSelf, VALUE aBlendMode );
 	
 	// RenderStates#transform

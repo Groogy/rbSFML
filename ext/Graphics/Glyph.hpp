@@ -87,9 +87,9 @@ VALUE rbGlyph::ToRuby( VALUE anOther )
 
 VALUE rbGlyph::ToRuby( const sf::Glyph& aGlyph )
 {
-    VALUE advance = INT2FIX( aGlyph.Advance );
-    VALUE bounds = rbRect::ToRuby( aGlyph.Bounds );
-    VALUE textureRect = rbRect::ToRuby( aGlyph.TextureRect );
+    VALUE advance = INT2FIX( aGlyph.advance );
+    VALUE bounds = rbRect::ToRuby( aGlyph.bounds );
+    VALUE textureRect = rbRect::ToRuby( aGlyph.textureRect );
     VALUE instance =  rb_class_new_instance( 0, NULL, rbGlyph::Class );
 	rbGlyph::SetAdvance( instance, advance );
 	rbGlyph::SetBounds( instance, bounds );
@@ -104,9 +104,9 @@ sf::Glyph rbGlyph::ToSFML( VALUE aGlyph )
     sf::IntRect bounds = rbRect::ToSFMLi( GetBounds( aGlyph ) );
     sf::IntRect textureRect = rbRect::ToSFMLi( GetTextureRect( aGlyph ) );
     sf::Glyph glyph;
-	glyph.Advance = advance;
-	glyph.Bounds = bounds;
-	glyph.TextureRect = textureRect;
+	glyph.advance = advance;
+	glyph.bounds = bounds;
+	glyph.textureRect = textureRect;
 	return glyph;
 }
 

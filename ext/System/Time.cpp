@@ -50,7 +50,10 @@ void rbTime::Init( VALUE SFML )
 	rb_define_const( rbTime::Class, "Zero", rbMacros::ToConstRuby( &sf::Time::Zero, rbTime::Class ) );
 
     // Instance aliasses
-    rb_define_alias( rbTime::Class, "to_s", "inspect" );
+    rb_define_alias( rbTime::Class, "to_s",           "inspect"         );
+	rb_define_alias( rbTime::Class, "asSeconds",      "as_seconds"      );
+	rb_define_alias( rbTime::Class, "asMilliseconds", "as_milliseconds" );
+	rb_define_alias( rbTime::Class, "asMicroseconds", "as_microseconds" );
 }
 
 // Time#initialize_copy( time )
@@ -61,21 +64,24 @@ VALUE rbTime::InitializeCopy( VALUE aSelf, VALUE aTime )
 }
 
 // Time#as_seconds
+// Time#asSeconds
 VALUE rbTime::AsSeconds( VALUE aSelf )
 {
-	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsSeconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asSeconds() );
 }
 
 // Time#as_milliseconds
+// Time#asMilliseconds
 VALUE rbTime::AsMilliseconds( VALUE aSelf )
 {
-	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMilliseconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMilliseconds() );
 }
 
 // Time#as_microseconds
+// Time#asMicroseconds
 VALUE rbTime::AsMicroseconds( VALUE aSelf )
 {
-	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds() );
+	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMicroseconds() );
 }
 
 // Time#marshal_dump
@@ -88,8 +94,8 @@ VALUE rbTime::MarshalDump( VALUE aSelf )
 // Time#<=>( other )
 VALUE rbTime::Compare( VALUE aSelf, VALUE anOther )
 {
-    sf::Uint64 time1 = rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->AsMicroseconds();
-    sf::Uint64 time2 = rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class )->AsMicroseconds();
+    sf::Uint64 time1 = rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMicroseconds();
+    sf::Uint64 time2 = rbMacros::ToSFML< sf::Time >( anOther, rbTime::Class )->asMicroseconds();
 
     if( time1 == time2 ) return INT2FIX( 0 );
     if( time1 > time2 ) return INT2FIX( 1 );
@@ -175,7 +181,7 @@ VALUE rbTime::Inspect( VALUE aSelf )
     sf::Time* time = rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class );
     return rb_sprintf( "%s(%fs)",
                        rb_obj_classname( aSelf ),
-                       time->AsSeconds() );
+                       time->asSeconds() );
 }
 
 // Time.memory_usage

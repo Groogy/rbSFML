@@ -59,17 +59,28 @@ void rbTransformable::Init( VALUE SFML )
     rb_define_method( rbTransformable::Module, "memory_usage",           rbTransformable::GetMemoryUsage,       0 );
 
     // Instance aliases
-    rb_define_alias( rbTransformable::Module, "to_s",              "inspect"                );
-	rb_define_alias( rbTransformable::Module, "position=",          "set_position"          );
-	rb_define_alias( rbTransformable::Module, "rotation=",          "set_rotation"          );
-	rb_define_alias( rbTransformable::Module, "scale=",             "set_scale"             );
-	rb_define_alias( rbTransformable::Module, "origin=",            "set_origin"            );
-	rb_define_alias( rbTransformable::Module, "position",           "get_position"          );
-	rb_define_alias( rbTransformable::Module, "rotation",           "get_rotation"          );
-	rb_define_alias( rbTransformable::Module, "scale",              "get_scale"             );
-	rb_define_alias( rbTransformable::Module, "origin",             "get_origin"            );
-	rb_define_alias( rbTransformable::Module, "transform",          "get_transform"         );
-	rb_define_alias( rbTransformable::Module, "inverse_transform",  "get_inverse_transform" );
+    rb_define_alias( rbTransformable::Module, "to_s",                "inspect"               );
+	rb_define_alias( rbTransformable::Module, "position=",           "set_position"          );
+	rb_define_alias( rbTransformable::Module, "setPosition",         "set_position"          );
+	rb_define_alias( rbTransformable::Module, "rotation=",           "set_rotation"          );
+	rb_define_alias( rbTransformable::Module, "setRotation",         "set_rotation"          );
+	rb_define_alias( rbTransformable::Module, "scale=",              "set_scale"             );
+	rb_define_alias( rbTransformable::Module, "setScale",            "set_scale"             );
+	rb_define_alias( rbTransformable::Module, "origin=",             "set_origin"            );
+	rb_define_alias( rbTransformable::Module, "setOrigin",           "set_origin"            );
+	rb_define_alias( rbTransformable::Module, "position",            "get_position"          );
+	rb_define_alias( rbTransformable::Module, "getPosition",         "get_position"          );
+	rb_define_alias( rbTransformable::Module, "rotation",            "get_rotation"          );
+	rb_define_alias( rbTransformable::Module, "getRotation",         "get_rotation"          );
+	rb_define_alias( rbTransformable::Module, "scale",               "get_scale"             );
+	rb_define_alias( rbTransformable::Module, "getScale",            "get_scale"             );
+	rb_define_alias( rbTransformable::Module, "origin",              "get_origin"            );
+	rb_define_alias( rbTransformable::Module, "get_origin",          "get_origin"            );
+	rb_define_alias( rbTransformable::Module, "getOrigin",           "get_origin"            );
+	rb_define_alias( rbTransformable::Module, "transform",           "get_transform"         );
+	rb_define_alias( rbTransformable::Module, "getTransform",        "get_transform"         );
+	rb_define_alias( rbTransformable::Module, "inverse_transform",   "get_inverse_transform" );
+	rb_define_alias( rbTransformable::Module, "getInverseTransform", "get_inverse_transform" );
 }
 
 // Transformable#initialize
@@ -91,6 +102,8 @@ VALUE rbTransformable::InitializeCopy( VALUE aSelf, VALUE aSource )
     return aSelf;
 }
 
+// Transformable#setPosition(x, y)
+// Transformable#setPosition(vector2)
 // Transformable#set_position(x, y)
 // Transformable#set_position(vector2)
 // Transformable#position=(vector2)
@@ -111,18 +124,21 @@ VALUE rbTransformable::SetPosition( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->SetPosition( position );
+	rbTransformable::ToSFML( aSelf )->setPosition( position );
 	return Qnil;
 }
 
+// Transformable#setRotation(angle)
 // Transformable#set_rotation(angle)
 // Transformable#rotation=(angle)
 VALUE rbTransformable::SetRotation( VALUE aSelf, VALUE anAngle )
 {
-	rbTransformable::ToSFML( aSelf )->SetRotation( NUM2DBL( anAngle ) );
+	rbTransformable::ToSFML( aSelf )->setRotation( NUM2DBL( anAngle ) );
 	return Qnil;
 }
 
+// Transformable#setScale(x, y)
+// Transformable#setScale(vector2)
 // Transformable#set_scale(x, y)
 // Transformable#set_scale(vector2)
 // Transformable#scale=(vector2)
@@ -143,10 +159,12 @@ VALUE rbTransformable::SetScale( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->SetScale( scale );
+	rbTransformable::ToSFML( aSelf )->setScale( scale );
 	return Qnil;
 }
 
+// Transformable#setOrigin(x, y)
+// Transformable#setOrigin(vector2)
 // Transformable#set_origin(x, y)
 // Transformable#set_origin(vector2)
 // Transformable#origin=(vector2)
@@ -167,24 +185,27 @@ VALUE rbTransformable::SetOrigin( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->SetScale( origin );
+	rbTransformable::ToSFML( aSelf )->setScale( origin );
 	return Qnil;
 }
 
+// Transformable#getPosition()
 // Transformable#get_position()
 // Transformable#position()
 VALUE rbTransformable::GetPosition( VALUE aSelf )
 {
-	return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->GetPosition() );
+	return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->getPosition() );
 }
 
+// Transformable#getRotation()
 // Transformable#get_rotation()
 // Transformable#rotation()
 VALUE rbTransformable::GetRotation( VALUE aSelf )
 {
-	return rb_float_new( rbTransformable::ToSFML( aSelf )->GetRotation() );
+	return rb_float_new( rbTransformable::ToSFML( aSelf )->getRotation() );
 }
 
+// Transformable#getScale()
 // Transformable#get_scale()
 // Transformable#scale()
 // Transformable#scale(x, y)
@@ -195,7 +216,7 @@ VALUE rbTransformable::GetScale( int argc, VALUE* args, VALUE aSelf )
 	switch( argc )
 	{
 	case 0:
-		return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->GetPosition() );
+		return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->getScale() );
 	case 1:
 		scale = rbVector2::ToSFMLf( args[ 0 ] );
 		break;
@@ -207,15 +228,16 @@ VALUE rbTransformable::GetScale( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "0..2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->Scale( scale );
+	rbTransformable::ToSFML( aSelf )->scale( scale );
 	return Qnil;
 }
 
+// Transformable#getOrigin()
 // Transformable#get_origin()
 // Transformable#origin()
 VALUE rbTransformable::GetOrigin( VALUE aSelf )
 {
-	return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->GetOrigin() );
+	return rbVector2::ToRuby( rbTransformable::ToSFML( aSelf )->getOrigin() );
 }
 
 // Transformable#move(x, y)
@@ -237,34 +259,38 @@ VALUE rbTransformable::Move( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->Move( offset );
+	rbTransformable::ToSFML( aSelf )->move( offset );
 	return Qnil;
 }
 
 // Transformable#rotate(angle)
 VALUE rbTransformable::Rotate( VALUE aSelf, VALUE anAngle )
 {
-	rbTransformable::ToSFML( aSelf )->Rotate( NUM2DBL( anAngle ) );
+	rbTransformable::ToSFML( aSelf )->rotate( NUM2DBL( anAngle ) );
 	return Qnil;
 }
 
+// Transformable#getTransform()
 // Transformable#get_transform()
 // Transformable#transform()
 VALUE rbTransformable::GetTransform( VALUE aSelf )
 {
-	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->GetTransform();
-	VALUE obj = rbMacros::ToConstRuby( &transform, rbTransform::Class );
+	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->getTransform();
+	VALUE obj = rbMacros::ToRuby( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
+	rb_obj_freeze( obj );
 	return obj;
 }
 
+// Transformable#getInverseTransform()
 // Transformable#get_inverse_transform()
 // Transformable#inverse_transform()
 VALUE rbTransformable::GetInverseTransform( VALUE aSelf )
 {
-	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->GetInverseTransform();
-	VALUE obj = rbMacros::ToConstRuby( &transform, rbTransform::Class );
+	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->getInverseTransform();
+	VALUE obj = rbMacros::ToRuby( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
+	rb_obj_freeze( obj );
 	return obj;
 }
 

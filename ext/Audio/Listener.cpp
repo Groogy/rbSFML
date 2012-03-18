@@ -37,36 +37,52 @@ void rbListener::Init( VALUE SFML )
 
     // Singleton aliasses
     VALUE sListener = rb_singleton_class( rbListener::Module );
-    rb_define_alias( sListener, "global_volume=", "set_global_volume" );
-    rb_define_alias( sListener, "global_volume",  "get_global_volume" );
-    rb_define_alias( sListener, "position=",      "set_position"      );
-    rb_define_alias( sListener, "position",       "get_position"      );
-    rb_define_alias( sListener, "direction=",     "set_direction"     );
-    rb_define_alias( sListener, "direction",      "get_direction"     );
+    rb_define_alias( sListener, "global_volume=",  "set_global_volume" );
+	rb_define_alias( sListener, "setGlobalVolume", "set_global_volume" );
+    rb_define_alias( sListener, "global_volume",   "get_global_volume" );
+	rb_define_alias( sListener, "getGlobalVolume", "get_global_volume" );
+    rb_define_alias( sListener, "position=",       "set_position"      );
+	rb_define_alias( sListener, "setPosition",     "set_position"      );
+    rb_define_alias( sListener, "position",        "get_position"      );
+	rb_define_alias( sListener, "getPosition",     "get_position"      );
+    rb_define_alias( sListener, "direction=",      "set_direction"     );
+	rb_define_alias( sListener, "setDirection",    "set_direction"     );
+    rb_define_alias( sListener, "direction",       "get_direction"     );
+	rb_define_alias( sListener, "getDirection",    "get_direction"     );
 }
 
-// Listener::GetGlobalVolume
+// Listener.global_volume
+// Listener.get_global_volume
+// Listener.getGlobalVolume
 VALUE rbListener::GetGlobalVolume( VALUE aSelf )
 {
-    return rb_float_new( sf::Listener::GetGlobalVolume() );
+    return rb_float_new( sf::Listener::getGlobalVolume() );
 }
 
-// Listener::SetGlobalVolume(volume)
+// Listener.global_volume=( volume )
+// Listener.set_global_volume( volume )
+// Listener.setGlobalVolume( volume )
 VALUE rbListener::SetGlobalVolume( VALUE aSelf, VALUE aVolume )
 {
-    sf::Listener::SetGlobalVolume( NUM2DBL( aVolume ) );
+    sf::Listener::setGlobalVolume( NUM2DBL( aVolume ) );
     return Qnil;
 }
 
-// Listener::GetPosition
+// Listener.position
+// Listener.get_position
+// Listener.getPoistion
 VALUE rbListener::GetPosition( VALUE aSelf )
 {
-    sf::Vector3f pos = sf::Listener::GetPosition();
+    sf::Vector3f pos = sf::Listener::getPosition();
     return rbVector3::ToRuby( pos );
 }
 
-// Listener::SetPosition(position)
-// Listener::SetPosition(x, y, z)
+// Listener.set_position(position)
+// Listener.set_position(x, y, z)
+// Listener.position=(position)
+// Listener.position=(x, y, z)
+// Listener.setPosition(position)
+// Listener.setPosition(x, y, z)
 VALUE rbListener::SetPosition( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
@@ -74,7 +90,7 @@ VALUE rbListener::SetPosition( int argc, VALUE argv[], VALUE aSelf )
         case 1:
         {
             sf::Vector3f pos = rbVector3::ToSFMLf( argv[ 0 ] );
-            sf::Listener::SetPosition( pos );
+            sf::Listener::setPosition( pos );
             break;
         }
         case 3:
@@ -82,7 +98,7 @@ VALUE rbListener::SetPosition( int argc, VALUE argv[], VALUE aSelf )
             float x = NUM2DBL( argv[ 0 ] );
             float y = NUM2DBL( argv[ 1 ] );
             float z = NUM2DBL( argv[ 2 ] );
-            sf::Listener::SetPosition( x, y, z );
+            sf::Listener::setPosition( x, y, z );
             break;
         }
         default:
@@ -91,15 +107,21 @@ VALUE rbListener::SetPosition( int argc, VALUE argv[], VALUE aSelf )
     return Qnil;
 }
 
-// Listener::GetDirection
+// Listener.get_direction
+// Listener.direction
+// Listener.getDirection
 VALUE rbListener::GetDirection( VALUE aSelf )
 {
-    sf::Vector3f pos = sf::Listener::GetDirection();
+    sf::Vector3f pos = sf::Listener::getDirection();
     return rbVector3::ToRuby( pos );
 }
 
-// Listener::SetDirection(direction)
-// Listener::SetDirection(x, y, z)
+// Listener.set_direction(direction)
+// Listener.set_direction(x, y, z)
+// Listener.direction=(direction)
+// Listener.direction=(x, y, z)
+// Listener.setDirection(direction)
+// Listener.setDirection(x, y, z)
 VALUE rbListener::SetDirection( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
@@ -107,7 +129,7 @@ VALUE rbListener::SetDirection( int argc, VALUE argv[], VALUE aSelf )
         case 1:
         {
             sf::Vector3f pos = rbVector3::ToSFMLf( argv[ 0 ] );
-            sf::Listener::SetDirection( pos );
+            sf::Listener::setDirection( pos );
             break;
         }
         case 3:
@@ -115,7 +137,7 @@ VALUE rbListener::SetDirection( int argc, VALUE argv[], VALUE aSelf )
             float x = NUM2DBL( argv[ 0 ] );
             float y = NUM2DBL( argv[ 1 ] );
             float z = NUM2DBL( argv[ 2 ] );
-            sf::Listener::SetDirection( x, y, z );
+            sf::Listener::setDirection( x, y, z );
             break;
         }
         default:

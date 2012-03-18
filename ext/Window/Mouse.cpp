@@ -39,33 +39,43 @@ void rbMouse::Init( VALUE SFML )
     
     // Singleton aliasses
     VALUE sMouse = rb_singleton_class( rbMouse::Module );
-    rb_define_alias( sMouse, "IsButtonPressed", "button_pressed?" );
-    rb_define_alias( sMouse, "pressed?",        "button_pressed?" );
-	rb_define_alias( sMouse, "position",		"get_position"    );
-    rb_define_alias( sMouse, "position=",       "set_position"    );
+    rb_define_alias( sMouse, "isButtonPressed",    "button_pressed?" );
+	rb_define_alias( sMouse, "is_button_pressed?", "button_pressed?" );
+	rb_define_alias( sMouse, "is_button_pressed",  "button_pressed?" );
+    rb_define_alias( sMouse, "pressed?",           "button_pressed?" );
+	rb_define_alias( sMouse, "position",		   "get_position"    );
+	rb_define_alias( sMouse, "getPosition",		   "get_position"    );
+    rb_define_alias( sMouse, "position=",          "set_position"    );
+	rb_define_alias( sMouse, "setPosition",        "set_position"    );
 }
 
-// Mouse::button_pressed?(button)
-// Mouse::IsButtonPressed(button)
-// Mouse::pressed?(button)
+// Mouse.button_pressed?(button)
+// Mouse.isButtonPressed(button)
+// Mouse.is_button_pressed?(button)
+// Mouse.is_button_pressed(button)
+// Mouse.pressed?(button)
 VALUE rbMouse::IsButtonPressed( VALUE aSelf, VALUE aButton )
 {
     sf::Mouse::Button btn = static_cast< sf::Mouse::Button >( NUM2INT( aButton ) );
-    return RBOOL( sf::Mouse::IsButtonPressed( btn ) );
+    return RBOOL( sf::Mouse::isButtonPressed( btn ) );
 }
 
-// Mouse::GetPosition
-// Mouse::GetPosition(relative_to)
+// Mouse.position
+// Mouse.getPosition
+// Mouse.get_position
+// Mouse.position(relative_to)
+// Mouse.getPosition(relative_to)
+// Mouse.get_position(relative_to)
 VALUE rbMouse::GetPosition( int argc, VALUE argv[], VALUE aSelf )
 {
     sf::Vector2i pos;
     switch( argc )
     {
         case 0:
-            pos = sf::Mouse::GetPosition();
+            pos = sf::Mouse::getPosition();
 			break;
         case 1:
-            pos = sf::Mouse::GetPosition( *rbMacros::ToSFML< sf::Window >( argv[0], rbWindow::Class ) );
+            pos = sf::Mouse::getPosition( *rbMacros::ToSFML< sf::Window >( argv[0], rbWindow::Class ) );
 			break;
         default:
             rb_raise( rb_eArgError,
@@ -74,8 +84,11 @@ VALUE rbMouse::GetPosition( int argc, VALUE argv[], VALUE aSelf )
     return rbVector2::ToRuby( pos );
 }
 
-// Mouse::SetPosition(position)
-// Mouse::SetPosition(position, relative_to)
+// Mouse.position=(position)
+// Mouse.set_position(poition)
+// Mouse.setPosition(position)
+// Mouse.set_position(position, relative_to)
+// Mouse.setPosition(position, relative_to)
 VALUE rbMouse::SetPosition( int argc, VALUE argv[], VALUE aSelf )
 {
     switch( argc )
@@ -83,14 +96,14 @@ VALUE rbMouse::SetPosition( int argc, VALUE argv[], VALUE aSelf )
         case 1:
         {
             sf::Vector2i pos = rbVector2::ToSFMLi( argv[ 0 ] );
-            sf::Mouse::SetPosition( pos );
+            sf::Mouse::setPosition( pos );
             break;
         }
         case 2:
         {
             sf::Vector2i pos = rbVector2::ToSFMLi( argv[ 0 ] );
             sf::Window* window = rbMacros::ToSFML< sf::Window >( argv[ 1 ], rbWindow::Class );
-            sf::Mouse::SetPosition( pos, *window );
+            sf::Mouse::setPosition( pos, *window );
             break;
         }
         default:

@@ -51,36 +51,47 @@ namespace rbTransformable
 	// Transformable#set_position(x, y)
 	// Transformable#set_position(vector2)
 	// Transformable#position=(vector2)
+	// Transformable#setPosition(x, y)
+	// Transformable#setPosition(vector2)
 	static VALUE SetPosition( int argc, VALUE* args, VALUE aSelf );
 	
 	// Transformable#set_rotation(angle)
+	// Transformable#setRotation(angle)
 	// Transformable#rotation=(angle)
 	static VALUE SetRotation( VALUE aSelf, VALUE anAngle );
 	
+	// Transformable#setScale(x, y)
+	// Transformable#setScale(vector2)
 	// Transformable#set_scale(x, y)
 	// Transformable#set_scale(vector2)
 	// Transformable#scale=(vector2)
 	static VALUE SetScale( int argc, VALUE* args, VALUE aSelf );
 	
+	// Transformable#setOrigin(x, y)
+	// Transformable#setOrigin(vector2)
 	// Transformable#set_origin(x, y)
 	// Transformable#set_origin(vector2)
 	// Transformable#origin=(vector2)
 	static VALUE SetOrigin( int argc, VALUE* args, VALUE aSelf );
 	
+	// Transformable#getPosition()
 	// Transformable#get_position()
 	// Transformable#position()
 	static VALUE GetPosition( VALUE aSelf );
 	
+	// Transformable#getRotation()
 	// Transformable#get_rotation()
 	// Transformable#rotation()
 	static VALUE GetRotation( VALUE aSelf );
 	
+	// Transformable#getScale()
 	// Transformable#get_scale()
 	// Transformable#scale()
 	// Transformable#scale(x, y)
 	// Transformable#scale(vector2)
 	static VALUE GetScale( int argc, VALUE* args, VALUE aSelf );
 	
+	// Transformable#getOrigin()
 	// Transformable#get_origin()
 	// Transformable#origin()
 	static VALUE GetOrigin( VALUE aSelf );
@@ -92,10 +103,12 @@ namespace rbTransformable
 	// Transformable#rotate(angle)
 	static VALUE Rotate( VALUE aSelf, VALUE anAngle );
 	
+	// Transformable#getTransform()
 	// Transformable#get_transform()
 	// Transformable#transform()
 	static VALUE GetTransform( VALUE aSelf );
 	
+	// Transformable#getInverseTransform()
 	// Transformable#get_inverse_transform()
 	// Transformable#inverse_transform()
 	static VALUE GetInverseTransform( VALUE aSelf );

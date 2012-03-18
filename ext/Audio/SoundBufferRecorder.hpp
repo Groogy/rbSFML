@@ -44,7 +44,8 @@ namespace rbSoundBufferRecorder
 
 #if defined( AUDIO_SOUNDBUFFERRECORDER_CPP )
     // SoundBufferRecorder#buffer
-    // SoundBufferRecorder#GetBuffer
+	// SoundBufferRecorder#get_buffer
+    // SoundBufferRecorder#getBuffer
     static VALUE GetBuffer( VALUE aSelf );
     
     // SoundBufferRecorder#memory_usage

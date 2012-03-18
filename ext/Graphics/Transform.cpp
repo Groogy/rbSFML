@@ -51,7 +51,13 @@ void rbTransform::Init( VALUE SFML )
     rb_define_method( rbTransform::Class, "memory_usage",           rbTransform::GetMemoryUsage,       0 );
 
     // Instance aliases
-    rb_define_alias( rbTransform::Class, "to_s",   "inspect" );
+    rb_define_alias( rbTransform::Class, "to_s",           "inspect"         );
+	rb_define_alias( rbTransform::Class, "get_matrix",     "matrix"          );
+	rb_define_alias( rbTransform::Class, "getMatrix",      "matrix"          );
+	rb_define_alias( rbTransform::Class, "get_inverse",    "inverse"         );
+	rb_define_alias( rbTransform::Class, "getInverse",     "inverse"         );
+	rb_define_alias( rbTransform::Class, "transformPoint", "transform_point" );
+	rb_define_alias( rbTransform::Class, "transformRect",  "transform_rect"  );
 	
 	if( rb_const_defined( rbTransform::Class, rb_intern( "Identity" ) ) == Qfalse )
 		rb_define_const( rbTransform::Class, "Identity", rbMacros::ToConstRuby( &sf::Transform::Identity, rbTransform::Class ) );
@@ -84,9 +90,11 @@ VALUE rbTransform::InitializeCopy( VALUE aSelf, VALUE aTransform )
 }
 
 // Transform#matrix
+// Transform#get_matrix
+// Transform#getMatrix
 VALUE rbTransform::GetMatrix( VALUE aSelf )
 {
-	const float* values = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->GetMatrix();
+	const float* values = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->getMatrix();
 	VALUE array = rb_ary_new2( 16 );
 	for( unsigned int index = 0; index < 16; index++ )
 	{
@@ -97,15 +105,19 @@ VALUE rbTransform::GetMatrix( VALUE aSelf )
 }
 
 // Transform#inverse
+// Transform#get_inverse
+// Transform#getInverse
 VALUE rbTransform::GetInverse( VALUE aSelf )
 {
 	VALUE inverse = rb_class_new_instance( 0, NULL, rbTransform::Class );
-	*rbMacros::ToSFML< sf::Transform >( inverse, rbTransform::Class ) = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->GetInverse();
+	*rbMacros::ToSFML< sf::Transform >( inverse, rbTransform::Class ) = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->getInverse();
 	return inverse;
 }
 
 // Transform#transform_point(x, y)
 // Transform#transform_point(vector2)
+// Transform#transformPoint(x, y)
+// Transform#transformPoint(vector2)
 VALUE rbTransform::TransformPoint( int argc, VALUE* args, VALUE aSelf )
 {
 	VALUE x;
@@ -126,21 +138,22 @@ VALUE rbTransform::TransformPoint( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	sf::Vector2f point = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->TransformPoint( NUM2DBL( x ), NUM2DBL( y ) );
+	sf::Vector2f point = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->transformPoint( NUM2DBL( x ), NUM2DBL( y ) );
 	return rbVector2::ToRuby( point );
 }
 
 // Transform#transform_rect(rect)
+// Transform#transformRect(rect)
 VALUE rbTransform::TransformRect( VALUE aSelf, VALUE aRect )
 {
-	return rbRect::ToRuby( rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->TransformRect( rbRect::ToSFMLf( aRect ) ) );	
+	return rbRect::ToRuby( rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->transformRect( rbRect::ToSFMLf( aRect ) ) );	
 }
 
 // Transform#combine(transform)
 VALUE rbTransform::Combine( VALUE aSelf, VALUE aTransform )
 {
 	VALUE result = rb_class_new_instance( 0, NULL, rbTransform::Class );
-	*rbMacros::ToSFML< sf::Transform >( result, rbTransform::Class ) = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Combine( *rbMacros::ToSFML< sf::Transform >( aTransform, rbTransform::Class ) );
+	*rbMacros::ToSFML< sf::Transform >( result, rbTransform::Class ) = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->combine( *rbMacros::ToSFML< sf::Transform >( aTransform, rbTransform::Class ) );
 	return result;
 }
 
@@ -168,7 +181,7 @@ VALUE rbTransform::Translate( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Translate( NUM2DBL( x ), NUM2DBL( y ) );
+	rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->translate( NUM2DBL( x ), NUM2DBL( y ) );
 	return aSelf;
 }
 
@@ -180,13 +193,13 @@ VALUE rbTransform::Rotate( int argc, VALUE* args, VALUE aSelf )
 	switch( argc )
 	{
 	case 1:
-		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Rotate( NUM2DBL( args[ 0 ] ) );
+		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->rotate( NUM2DBL( args[ 0 ] ) );
 		break;
 	case 2:
-		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Rotate( NUM2DBL( args[ 0 ] ), rbVector2::ToSFMLf( args[ 1 ] ) );
+		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->rotate( NUM2DBL( args[ 0 ] ), rbVector2::ToSFMLf( args[ 1 ] ) );
 		break;
 	case 3:
-		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Rotate( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ) );
+		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->rotate( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ) );
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "1..3" );
@@ -204,20 +217,20 @@ VALUE rbTransform::Scale( int argc, VALUE* args, VALUE aSelf )
 	switch( argc )
 	{
 	case 1:
-		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Scale( rbVector2::ToSFMLf( args[ 0 ] ) );
+		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->scale( rbVector2::ToSFMLf( args[ 0 ] ) );
 		break;
 	case 2:
 		if( rb_obj_is_kind_of( args[ 0 ], rbVector2::Class ) == Qtrue )
 		{
-			rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Scale( rbVector2::ToSFMLf( args[ 0 ] ), rbVector2::ToSFMLf( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->scale( rbVector2::ToSFMLf( args[ 0 ] ), rbVector2::ToSFMLf( args[ 1 ] ) );
 		}
 		else
 		{
-			rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Scale( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ) );
+			rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->scale( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ) );
 		}
 		break;
 	case 4:
-		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->Scale( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ), NUM2DBL( args[ 3 ] ) );
+		rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->scale( NUM2DBL( args[ 0 ] ), NUM2DBL( args[ 1 ] ), NUM2DBL( args[ 2 ] ), NUM2DBL( args[ 3 ] ) );
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "1, 2 or 4" );
@@ -243,7 +256,7 @@ VALUE rbTransform::MultiplyOperator( VALUE aSelf, VALUE aRight )
 VALUE rbTransform::MarshalDump( VALUE aSelf )
 {
     VALUE data[9];
-	const float* values = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->GetMatrix();
+	const float* values = rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class )->getMatrix();
 	data[0] = rb_float_new( values[ 0 ] );
 	data[1] = rb_float_new( values[ 4 ] );
 	data[2] = rb_float_new( values[ 12 ] );

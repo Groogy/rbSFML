@@ -50,19 +50,18 @@ void rbVideoMode::Init( VALUE SFML )
     
     // Class aliasses
     VALUE sVideoMode = rb_singleton_class( rbVideoMode::Class );
-    rb_define_alias( sVideoMode, "GetDesktopMode",     "desktop_mode"     );
-    rb_define_alias( sVideoMode, "GetFullscreenModes", "fullscreen_modes" );
+    rb_define_alias( sVideoMode, "getDesktopMode",       "desktop_mode"     );
+	rb_define_alias( sVideoMode, "get_desktop_mode",     "desktop_mode"     );
+    rb_define_alias( sVideoMode, "get_fullscreen_modes", "fullscreen_modes" );
     
     // Instance aliasses
-    rb_define_alias( rbVideoMode::Class, "IsValid",         "valid?"  );
-    rb_define_alias( rbVideoMode::Class, "Width",           "width"   );
-    rb_define_alias( rbVideoMode::Class, "Height",          "height"  );
-    rb_define_alias( rbVideoMode::Class, "BitsPerPixel",    "bpp"     );
+    rb_define_alias( rbVideoMode::Class, "isValid",         "valid?"  );
+	rb_define_alias( rbVideoMode::Class, "is_valid?",       "valid?"  );
+	rb_define_alias( rbVideoMode::Class, "is_valid",        "valid?"  );
+    rb_define_alias( rbVideoMode::Class, "bitsPerPixel",    "bpp"     );
     rb_define_alias( rbVideoMode::Class, "bits_per_pixel",  "bpp"     );
     rb_define_alias( rbVideoMode::Class, "bits",            "bpp"     );
-    rb_define_alias( rbVideoMode::Class, "Width=",          "width="  );
-    rb_define_alias( rbVideoMode::Class, "Height=",         "height=" );
-    rb_define_alias( rbVideoMode::Class, "BitsPerPixel=",   "bpp="    );
+    rb_define_alias( rbVideoMode::Class, "bitsPerPixel=",   "bpp="    );
     rb_define_alias( rbVideoMode::Class, "bits_per_pixel=", "bpp="    );
     rb_define_alias( rbVideoMode::Class, "bits=",           "bpp="    );
     rb_define_alias( rbVideoMode::Class, "eql?",            "=="      );
@@ -71,19 +70,21 @@ void rbVideoMode::Init( VALUE SFML )
 }
 
 // VideoMode::desktop_mode
+// VideoMode::get_desktop_mode
 // VideoMode::GetDesktopMode
 VALUE rbVideoMode::GetDesktopMode( VALUE aSelf )
 {
     VALUE videoMode = rbMacros::Allocate< sf::VideoMode >( rbVideoMode::Class );
-    *rbVideoMode::ToSFML( videoMode ) = sf::VideoMode::GetDesktopMode();
+    *rbVideoMode::ToSFML( videoMode ) = sf::VideoMode::getDesktopMode();
     return videoMode;
 }
 
 // VideoMode::fullscreen_modes
-// VideoMode::GetFullscreenModes
+// VideoMode::get_fullscreen_modes
+// VideoMode::getFullscreenModes
 VALUE rbVideoMode::GetFullscreenModes( VALUE aSelf )
 {
-    const std::vector< sf::VideoMode >& modes = sf::VideoMode::GetFullscreenModes();
+    const std::vector< sf::VideoMode >& modes = sf::VideoMode::getFullscreenModes();
     VALUE ary = rb_ary_new2( modes.size() );
     for (std::size_t index = 0; index < modes.size(); index++ )
     {
@@ -102,22 +103,22 @@ VALUE rbVideoMode::Initialize( int argc, VALUE argv[], VALUE aSelf )
     switch( argc )
     {
         case 0:
-            videoMode->Width = 0;
-            videoMode->Height = 0;
-            videoMode->BitsPerPixel = 0;
+            videoMode->width = 0;
+            videoMode->height = 0;
+            videoMode->bitsPerPixel = 0;
             break;
         case 1:
             InitializeCopy( aSelf, ToRuby( argv[ 0 ] ) );
             break;
         case 2:
-            videoMode->Width = NUM2UINT( argv[ 0 ] );
-            videoMode->Height = NUM2UINT( argv[ 1 ] );
-            videoMode->BitsPerPixel = 32;
+            videoMode->width = NUM2UINT( argv[ 0 ] );
+            videoMode->height = NUM2UINT( argv[ 1 ] );
+            videoMode->bitsPerPixel = 32;
             break;
         case 3:
-            videoMode->Width = NUM2UINT( argv[ 0 ] );
-            videoMode->Height = NUM2UINT( argv[ 1 ] );
-            videoMode->BitsPerPixel = NUM2UINT( argv[ 2 ] );
+            videoMode->width = NUM2UINT( argv[ 0 ] );
+            videoMode->height = NUM2UINT( argv[ 1 ] );
+            videoMode->bitsPerPixel = NUM2UINT( argv[ 2 ] );
             break;
         default:
             rb_raise( rb_eArgError,
@@ -140,9 +141,9 @@ VALUE rbVideoMode::MarshalDump( VALUE aSelf )
     sf::VideoMode* videoMode = rbVideoMode::ToSFML( aSelf );
     
     VALUE ptr[ 3 ];
-    ptr[ 0 ] = UINT2NUM( videoMode->Width );
-    ptr[ 1 ] = UINT2NUM( videoMode->Height );
-    ptr[ 2 ] = UINT2NUM( videoMode->BitsPerPixel );
+    ptr[ 0 ] = UINT2NUM( videoMode->width );
+    ptr[ 1 ] = UINT2NUM( videoMode->height );
+    ptr[ 2 ] = UINT2NUM( videoMode->bitsPerPixel );
     return rb_ary_new4( 3, ptr );
 }
 
@@ -152,68 +153,66 @@ VALUE rbVideoMode::MarshalLoad( VALUE aSelf, VALUE someData )
     sf::VideoMode* videoMode = rbVideoMode::ToSFML( aSelf );
     
     VALUE* ptr = RARRAY_PTR( someData );
-    videoMode->Width        = NUM2UINT( ptr[ 0 ] );
-    videoMode->Height       = NUM2UINT( ptr[ 1 ] );
-    videoMode->BitsPerPixel = NUM2UINT( ptr[ 2 ] );
+    videoMode->width        = NUM2UINT( ptr[ 0 ] );
+    videoMode->height       = NUM2UINT( ptr[ 1 ] );
+    videoMode->bitsPerPixel = NUM2UINT( ptr[ 2 ] );
     return Qnil;
 }
 
 // VideoMode#valid?
-// VideoMode#IsValid
+// VideoMode#is_valid?
+// VideoMode#is_valid
+// VideoMode#isValid
 VALUE rbVideoMode::IsValid( VALUE aSelf )
 {
-    return RBOOL( rbVideoMode::ToSFML( aSelf )->IsValid() );
+    return RBOOL( rbVideoMode::ToSFML( aSelf )->isValid() );
 }
 
 // VideoMode#width
-// VideoMode#Width
 VALUE rbVideoMode::GetWidth( VALUE aSelf )
 {
-    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->Width );
+    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->width );
 }
 
 // VideoMode#height
-// VideoMode#Height
 VALUE rbVideoMode::GetHeight( VALUE aSelf )
 {
-    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->Height );
+    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->height );
 }
 
 // VideoMode#bpp
-// VideoMode#BitsPerPixel
+// VideoMode#bitsPerPixel
 // VideoMode#bits_per_pixel
 // VideoMode#bits
 VALUE rbVideoMode::GetBitsPerPixel( VALUE aSelf )
 {
-    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->BitsPerPixel );
+    return UINT2NUM( rbVideoMode::ToSFML( aSelf )->bitsPerPixel );
 }
 
 // VideoMode#width=(value)
-// VideoMode#Width=(value)
 VALUE rbVideoMode::SetWidth( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbVideoMode::ToSFML( aSelf )->Width = NUM2UINT( aValue );
+    rbVideoMode::ToSFML( aSelf )->width = NUM2UINT( aValue );
     return Qnil;
 }
 
 // VideoMode#height=(value)
-// VideoMode#Height=(value)
 VALUE rbVideoMode::SetHeight( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbVideoMode::ToSFML( aSelf )->Height = NUM2UINT( aValue );
+    rbVideoMode::ToSFML( aSelf )->height = NUM2UINT( aValue );
     return Qnil;
 }
 
 // VideoMode#bpp=(value)
-// VideoMode#BitsPerPixel=(value)
+// VideoMode#bitsPerPixel=(value)
 // VideoMode#bits_per_pixel=(value)
 // VideoMode#bits=(value)
 VALUE rbVideoMode::SetBitsPerPixel( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbVideoMode::ToSFML( aSelf )->BitsPerPixel = NUM2UINT( aValue );
+    rbVideoMode::ToSFML( aSelf )->bitsPerPixel = NUM2UINT( aValue );
     return Qnil;
 }
 
@@ -234,9 +233,9 @@ VALUE rbVideoMode::Inspect( VALUE aSelf )
     sf::VideoMode* videoMode = rbVideoMode::ToSFML( aSelf );
     return rb_sprintf( "%s(%ux%u, %u-bits)",
                        rb_obj_classname( aSelf ),
-                       videoMode->Width,
-                       videoMode->Height,
-                       videoMode->BitsPerPixel );
+                       videoMode->width,
+                       videoMode->height,
+                       videoMode->bitsPerPixel );
 }
 
 // VideoMode#memory_usage

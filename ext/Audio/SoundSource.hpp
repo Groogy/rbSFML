@@ -48,44 +48,67 @@ namespace rbSoundSource
     // SoundSource#marshal_load
     static VALUE MarshalLoad( VALUE aSelf, VALUE aData );
     
-    // SoundSource#GetPitch
+	// SoundSource#pitch
+	// SoundSource#get_pitch
+    // SoundSource#getPitch
     static VALUE GetPitch( VALUE aSelf );
     
-    // SoundSource#SetPitch(pitch)
+	// SoundSource#pitch=(pitch)
+	// SoundSource#set_pitch(pitch)
+    // SoundSource#setPitch(pitch)
     static VALUE SetPitch( VALUE aSelf, VALUE aPitch );
     
-    // SoundSource#GetVolume
+	// SoundSource#volume
+	// SoundSource#get_volume
+    // SoundSource#getVolume
     static VALUE GetVolume( VALUE aSelf );
     
-    // SoundSource#SetVolume(volume)
+	// SoundSource#volume=(volume)
+	// SoundSource#set_volume(volume)
+    // SoundSource#setVolume(volume)
     static VALUE SetVolume( VALUE aSelf, VALUE aVolume );
     
-    // SoundSource#GetPosition
+	// SoundSource#position
+	// SoundSource#get_position
+    // SoundSource#getPosition
     static VALUE GetPosition( VALUE aSelf );
     
-    // SoundSource#SetPosition(position)
-    // SoundSource#SetPosition(x, y, z)
+	// SoundSource#position=(position)
+	// SoundSource#set_position(position)
+	// SoundSource#set_position(x, y, z)
+    // SoundSource#setPosition(position)
+    // SoundSource#setPosition(x, y, z)
     static VALUE SetPosition( int argc, VALUE argv[], VALUE aSelf );
     
-    // SoundSource#relative_to_listener(relative)
     // SoundSource#relative_to_listener=(relative)
-    // SoundSource#SetRelativeToListener(relative)
+	// SoundSource#set_relative_to_listener(relative)
+    // SoundSource#setRelativeToListener(relative)
     static VALUE SetRelativeToListener( VALUE aSelf, VALUE aRelative );
     
     // SoundSource#relative_to_listener?
-    // SoundSource#IsRelativeToListener
+	// SoundSource#is_relative_to_listener?
+	// SoundSource#is_relative_to_listener
+    // SoundSource#isRelativeToListener
     static VALUE IsRelativeToListener( VALUE aSelf );
     
-    // SoundSource#GetMinDistance
+	// SoundSource#min_distance
+	// SoundSource#get_min_distance
+    // SoundSource#getMinDistance
     static VALUE GetMinDistance( VALUE aSelf );
     
-    // SoundSource#SetMinDistance(distance)
+	// SoundSource#min_distance=(distance)
+	// SoundSource#set_min_distance(distance)
+    // SoundSource#setMinDistance(distance)
     static VALUE SetMinDistance( VALUE aSelf, VALUE aDistance );
     
-    // SoundSource#GetAttenuation
+	// SoundSource#attenuation
+    // SoundSource#get_attenuation
+	// SoundSource#getAttenuation
     static VALUE GetAttenuation( VALUE aSelf );
     
-    // SoundSource#SetAttenuation(attenuation)
+	// SoundSource#attenuation=(attenuation)
+	// SoundSource#set_attenuation(attenuation)
+    // SoundSource#setAttenuation(attenuation)
     static VALUE SetAttenuation( VALUE aSelf, VALUE anAttenuation );
 #endif   
 }

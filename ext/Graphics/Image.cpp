@@ -56,7 +56,18 @@ void rbImage::Init( VALUE SFML )
     rb_define_method( rbImage::Class, "memory_usage",           rbImage::GetMemoryUsage,       0 );
 
     // Instance aliases
-    rb_define_alias( rbImage::Class, "to_s",   "inspect" );
+	rb_define_alias( rbImage::Class, "loadFromFile",        "load_from_file"         );
+	rb_define_alias( rbImage::Class, "loadFromMemory",      "load_from_memory"       );
+	rb_define_alias( rbImage::Class, "loadFromStream",      "load_from_stream"       );
+	rb_define_alias( rbImage::Class, "saveToFile",          "save_to_file"           );
+	rb_define_alias( rbImage::Class, "createMaskFromColor", "create_mask_from_color" );
+	rb_define_alias( rbImage::Class, "setPixel",            "set_pixel"              );
+	rb_define_alias( rbImage::Class, "getPixel",            "get_pixel"              );
+	rb_define_alias( rbImage::Class, "getPixels",           "pixels"                 );
+	rb_define_alias( rbImage::Class, "get_pixels",          "pixels"                 );
+	rb_define_alias( rbImage::Class, "flipHorizontally",    "flip_horizontally"      );
+	rb_define_alias( rbImage::Class, "flipVertically",      "flip_vertically"        );
+    rb_define_alias( rbImage::Class, "to_s",                "inspect"                );
 }
 
 // Image#initialize
@@ -95,13 +106,13 @@ VALUE rbImage::Create( int argc, VALUE* args, VALUE aSelf )
 	{
 	case 2:
 		color = rb_const_get( rbColor::Class, rb_intern( "Black" ) );
-		rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->Create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), rbColor::ToSFML( color ) );
+		rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), rbColor::ToSFML( color ) );
 		break;
 	case 3:
 		if( ( TYPE( args[ 2 ] ) == T_ARRAY && ( RARRAY_LEN( args[ 2 ] ) == 3 || RARRAY_LEN( args[ 2 ] ) == 4 ) ) || rb_obj_is_kind_of( args[ 2 ], rbColor::Class ) == Qtrue )
 		{
 			color = rbColor::ToRuby( args[ 2 ] );
-			rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->Create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), rbColor::ToSFML( color ) );
+			rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), rbColor::ToSFML( color ) );
 		}
 		else if( TYPE( args[ 2 ] ) == T_ARRAY )
 		{
@@ -112,7 +123,7 @@ VALUE rbImage::Create( int argc, VALUE* args, VALUE aSelf )
 			{
 				pixels[ index ] = rb_ary_entry( pixelsArray, index );
 			}
-			rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->Create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), pixels );
+			rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->create( NUM2INT( args[ 0 ] ), NUM2INT( args[ 1 ] ), pixels );
 			xfree( pixels );
 		}
 		else
@@ -127,46 +138,56 @@ VALUE rbImage::Create( int argc, VALUE* args, VALUE aSelf )
 	return Qnil;
 }
 
+// Image#loadFromFile(filename)
 // Image#load_from_file(filename)
+// Image#load_file(filename)
+// Image#load(filename)
 VALUE rbImage::LoadFromFile( VALUE aSelf, VALUE aFilename )
 {
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->LoadFromFile( StringValueCStr( aFilename ) );
+	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->loadFromFile( StringValueCStr( aFilename ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
+// Image#loadFromMemory(data)
 // Image#load_from_memory(data)
+// Image#load_memory(data)
 VALUE rbImage::LoadFromMemory( VALUE aSelf, VALUE someData )
 {
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->LoadFromMemory( RSTRING_PTR( someData ),
+	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->loadFromMemory( RSTRING_PTR( someData ),
 																						  RSTRING_LEN( someData ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
+// Image#loadFromStream(stream)
 // Image#load_from_stream(stream)
+// Image#load_stream(stream)
 VALUE rbImage::LoadFromStream( VALUE aSelf, VALUE aStream )
 {
 	rb_check_frozen( aSelf );
 	
 	rbInputStream stream( aStream );
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->LoadFromStream( stream );
+	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->loadFromStream( stream );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
 
+// Image#saveToFile(filename)
 // Image#save_to_file(filename)
+// Image#save_file(filename)
+// Image#save(filename)
 VALUE rbImage::SaveToFile( VALUE aSelf, VALUE aFilename )
 {
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->SaveToFile( StringValueCStr( aFilename ) );
+	bool result = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->saveToFile( StringValueCStr( aFilename ) );
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
@@ -174,15 +195,16 @@ VALUE rbImage::SaveToFile( VALUE aSelf, VALUE aFilename )
 // Image#width
 VALUE rbImage::GetWidth( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->GetWidth() );
+	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getWidth() );
 }
 
 // Image#height
 VALUE rbImage::GetHeight( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->GetHeight() );
+	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getHeight() );
 }
 
+// Image#createMaskFromColor(color, alpha=0)
 // Image#create_mask_from_color(color, alpha=0)
 VALUE rbImage::CreateMaskFromColor( int argc, VALUE* args, VALUE aSelf )
 {
@@ -201,7 +223,7 @@ VALUE rbImage::CreateMaskFromColor( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->CreateMaskFromColor( rbColor::ToSFML( color ), NUM2INT( alpha ) );
+	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->createMaskFromColor( rbColor::ToSFML( color ), NUM2INT( alpha ) );
 	return Qnil;
 }
 
@@ -233,7 +255,7 @@ VALUE rbImage::Copy( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "3..5" );
 	}
 	
-	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->Copy( *rbMacros::ToSFML< sf::Image >( sourceImage, rbImage::Class ), 
+	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->copy( *rbMacros::ToSFML< sf::Image >( sourceImage, rbImage::Class ), 
 																  NUM2UINT( destX ), NUM2UINT( destY ), rbRect::ToSFMLi( sourceRect ), 
 																  applyAlpha == Qtrue ? true : false );
 																  
@@ -241,26 +263,30 @@ VALUE rbImage::Copy( int argc, VALUE* args, VALUE aSelf )
 }
 
 // Image#set_pixel(x, y, color)
+// Image#setPixel(x, y, color)
 VALUE rbImage::SetPixel( VALUE aSelf, VALUE anX, VALUE anY, VALUE aColor )
 {
 	rb_check_frozen( aSelf );
 	
-	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->SetPixel( NUM2INT( anX ), NUM2INT( anY ), rbColor::ToSFML( aColor ) );
+	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->setPixel( NUM2INT( anX ), NUM2INT( anY ), rbColor::ToSFML( aColor ) );
 	return Qnil;
 }
 
 // Image#get_pixel(x, y)
+// Image#getPixel(x, y)
 VALUE rbImage::GetPixel( VALUE aSelf, VALUE anX, VALUE anY )
 {
-	return rbColor::ToRuby( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->GetPixel( NUM2INT( anX ), NUM2INT( anY ) ) );
+	return rbColor::ToRuby( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getPixel( NUM2INT( anX ), NUM2INT( anY ) ) );
 }
 
 // Image#pixels()
+// Image#get_pixels()
+// Image#getPixels()
 VALUE rbImage::GetPixelsPtr( VALUE aSelf )
 {
 	sf::Image* selfImage = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
-	const sf::Uint8* pixels = selfImage->GetPixelsPtr();
-	const unsigned int pixelArraySize = selfImage->GetWidth() * selfImage->GetHeight() * 4;
+	const sf::Uint8* pixels = selfImage->getPixelsPtr();
+	const unsigned int pixelArraySize = selfImage->getWidth() * selfImage->getHeight() * 4;
 	VALUE pixelsArray = rb_ary_new2( pixelArraySize );
 	
 	for( unsigned int index = 0; index < pixelArraySize; index++ )
@@ -272,18 +298,20 @@ VALUE rbImage::GetPixelsPtr( VALUE aSelf )
 }
 
 // Image#flip_horizontally
+// Image#flipHorizontally
 VALUE rbImage::FlipHorizontally( VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
-	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->FlipHorizontally();
+	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->flipHorizontally();
 	return Qnil;
 }
 
 // Image#flip_vertically
+// Image#flipVertically
 VALUE rbImage::FlipVertically( VALUE aSelf )
 {
 	rb_check_frozen( aSelf );
-	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->FlipVertically();
+	rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->flipVertically();
 	return Qnil;
 }
 
@@ -311,8 +339,8 @@ VALUE rbImage::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%ix%i, %p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->GetWidth(),
-					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->GetHeight(),
+					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getWidth(),
+					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getHeight(),
 					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class ) );
 }
 
@@ -320,5 +348,5 @@ VALUE rbImage::Inspect( VALUE aSelf )
 VALUE rbImage::GetMemoryUsage( VALUE aSelf )
 {
 	sf::Image* image = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
-    return INT2FIX( sizeof( sf::Image ) + image->GetWidth() * image->GetHeight() );
+    return INT2FIX( sizeof( sf::Image ) + image->getWidth() * image->getHeight() );
 }

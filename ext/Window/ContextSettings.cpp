@@ -49,16 +49,16 @@ void rbContextSettings::Init( VALUE SFML )
     rb_define_method( rbContextSettings::Class, "memory_usage",        rbContextSettings::GetMemoryUsage,        0 );
     
     // Instance aliasses
-    rb_define_alias( rbContextSettings::Class, "DepthBits",          "depth_bits"          );
-    rb_define_alias( rbContextSettings::Class, "StencilBits",        "stencil_bits"        );
-    rb_define_alias( rbContextSettings::Class, "AntialiasingLevel",  "antialiasing_level"  );
-    rb_define_alias( rbContextSettings::Class, "MajorVersion",       "major_version"       );
-    rb_define_alias( rbContextSettings::Class, "MinorVersion",       "minor_version"       );
-    rb_define_alias( rbContextSettings::Class, "DepthBits=",         "depth_bits="         );
-    rb_define_alias( rbContextSettings::Class, "StencilBits=",       "stencil_bits="       );
-    rb_define_alias( rbContextSettings::Class, "AntialiasingLevel=", "antialiasing_level=" );
-    rb_define_alias( rbContextSettings::Class, "MajorVersion=",      "major_version="      );
-    rb_define_alias( rbContextSettings::Class, "MinorVersion=",      "minor_version="      );
+    rb_define_alias( rbContextSettings::Class, "depthBits",          "depth_bits"          );
+    rb_define_alias( rbContextSettings::Class, "stencilBits",        "stencil_bits"        );
+    rb_define_alias( rbContextSettings::Class, "antialiasingLevel",  "antialiasing_level"  );
+    rb_define_alias( rbContextSettings::Class, "majorVersion",       "major_version"       );
+    rb_define_alias( rbContextSettings::Class, "minorVersion",       "minor_version"       );
+    rb_define_alias( rbContextSettings::Class, "depthBits=",         "depth_bits="         );
+    rb_define_alias( rbContextSettings::Class, "stencilBits=",       "stencil_bits="       );
+    rb_define_alias( rbContextSettings::Class, "antialiasingLevel=", "antialiasing_level=" );
+    rb_define_alias( rbContextSettings::Class, "majorVersion=",      "major_version="      );
+    rb_define_alias( rbContextSettings::Class, "minorVersion=",      "minor_version="      );
     rb_define_alias( rbContextSettings::Class, "to_s",               "inspect"             );
     rb_define_alias( rbContextSettings::Class, "eql?",               "=="                  );
     rb_define_alias( rbContextSettings::Class, "equal?",             "=="                  );
@@ -79,15 +79,15 @@ VALUE rbContextSettings::Initialize( int argc, VALUE argv[], VALUE aSelf )
     switch( argc )
     {
         case 5:
-            settings->MinorVersion = NUM2UINT( argv[ 4 ] );
+            settings->minorVersion = NUM2UINT( argv[ 4 ] );
         case 4:
-            settings->MajorVersion = NUM2UINT( argv[ 3 ] );
+            settings->majorVersion = NUM2UINT( argv[ 3 ] );
         case 3:
-            settings->AntialiasingLevel = NUM2UINT( argv[ 2 ] );
+            settings->antialiasingLevel = NUM2UINT( argv[ 2 ] );
         case 2:
-            settings->StencilBits = NUM2UINT( argv[ 1 ] );
+            settings->stencilBits = NUM2UINT( argv[ 1 ] );
         case 1:
-            settings->DepthBits = NUM2UINT( argv[ 0 ] );
+            settings->depthBits = NUM2UINT( argv[ 0 ] );
         case 0:
             break;
         default:
@@ -111,11 +111,11 @@ VALUE rbContextSettings::MarshalDump( VALUE aSelf )
     sf::ContextSettings* settings = rbContextSettings::ToSFML( aSelf );
     
     VALUE ptr[ 5 ];
-    ptr[ 0 ] = UINT2NUM( settings->DepthBits );
-    ptr[ 1 ] = UINT2NUM( settings->StencilBits );
-    ptr[ 2 ] = UINT2NUM( settings->AntialiasingLevel );
-    ptr[ 3 ] = UINT2NUM( settings->MajorVersion );
-    ptr[ 4 ] = UINT2NUM( settings->MinorVersion );
+    ptr[ 0 ] = UINT2NUM( settings->depthBits );
+    ptr[ 1 ] = UINT2NUM( settings->stencilBits );
+    ptr[ 2 ] = UINT2NUM( settings->antialiasingLevel );
+    ptr[ 3 ] = UINT2NUM( settings->majorVersion );
+    ptr[ 4 ] = UINT2NUM( settings->minorVersion );
     return rb_ary_new4( 5, ptr );
 }
 
@@ -125,91 +125,91 @@ VALUE rbContextSettings::MarshalLoad( VALUE aSelf, VALUE aData )
     sf::ContextSettings* settings = rbContextSettings::ToSFML( aSelf );
     
     VALUE* ptr = RARRAY_PTR( aData );
-    settings->DepthBits         = NUM2UINT( ptr[ 0 ] );
-    settings->StencilBits       = NUM2UINT( ptr[ 1 ] );
-    settings->AntialiasingLevel = NUM2UINT( ptr[ 2 ] );
-    settings->MajorVersion      = NUM2UINT( ptr[ 3 ] );
-    settings->MinorVersion      = NUM2UINT( ptr[ 4 ] );
+    settings->depthBits         = NUM2UINT( ptr[ 0 ] );
+    settings->stencilBits       = NUM2UINT( ptr[ 1 ] );
+    settings->antialiasingLevel = NUM2UINT( ptr[ 2 ] );
+    settings->majorVersion      = NUM2UINT( ptr[ 3 ] );
+    settings->minorVersion      = NUM2UINT( ptr[ 4 ] );
     return Qnil;
 }
 
 // ContextSettings#depth_bits
-// ContextSettings#DepthBits
+// ContextSettings#septhBits
 VALUE rbContextSettings::GetDepthBits( VALUE aSelf )
 {
-    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->DepthBits );
+    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->depthBits );
 }
 
 // ContextSettings#stencil_bits
-// ContextSettings#StencilBits
+// ContextSettings#stencilBits
 VALUE rbContextSettings::GetStencilBits( VALUE aSelf )
 {
-    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->StencilBits );
+    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->stencilBits );
 }
 
 // ContextSettings#antialiasing_level
-// ContextSettings#AntialiasingLevel
+// ContextSettings#antialiasingLevel
 VALUE rbContextSettings::GetAntialiasingLevel( VALUE aSelf )
 {
-    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->AntialiasingLevel );
+    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->antialiasingLevel );
 }
 
 // ContextSettings#major_version
-// ContextSettings#MajorVersion
+// ContextSettings#majorVersion
 VALUE rbContextSettings::GetMajorVersion( VALUE aSelf )
 {
-    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->MajorVersion );
+    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->majorVersion );
 }
 
 // ContextSettings#minor_version
-// ContextSettings#MinorVersion
+// ContextSettings#minorVersion
 VALUE rbContextSettings::GetMinorVersion( VALUE aSelf )
 {
-    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->MinorVersion );
+    return UINT2NUM( rbContextSettings::ToSFML( aSelf )->minorVersion );
 }
 
 // ContextSettings#depth_bits=(value)
-// ContextSettings#DepthBits=(value)
+// ContextSettings#depthBits=(value)
 VALUE rbContextSettings::SetDepthBits( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbContextSettings::ToSFML( aSelf )->DepthBits = NUM2UINT( aValue );
+    rbContextSettings::ToSFML( aSelf )->depthBits = NUM2UINT( aValue );
     return Qnil;
 }
 
 // ContextSettings#stencil_bits=(value)
-// ContextSettings#StencilBits=(value)
+// ContextSettings#stencilBits=(value)
 VALUE rbContextSettings::SetStencilBits( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbContextSettings::ToSFML( aSelf )->StencilBits = NUM2UINT( aValue );
+    rbContextSettings::ToSFML( aSelf )->stencilBits = NUM2UINT( aValue );
     return Qnil;
 }
 
 // ContextSettings#antialiasing_level=(value)
-// ContextSettings#AntialiasingLevel=(value)
+// ContextSettings#antialiasingLevel=(value)
 VALUE rbContextSettings::SetAntialiasingLevel( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbContextSettings::ToSFML( aSelf )->AntialiasingLevel = NUM2UINT( aValue );
+    rbContextSettings::ToSFML( aSelf )->antialiasingLevel = NUM2UINT( aValue );
     return Qnil;
 }
 
 // ContextSettings#major_version=(value)
-// ContextSettings#MajorVersion=(value)
+// ContextSettings#majorVersion=(value)
 VALUE rbContextSettings::SetMajorVersion( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbContextSettings::ToSFML( aSelf )->MajorVersion = NUM2UINT( aValue );
+    rbContextSettings::ToSFML( aSelf )->majorVersion = NUM2UINT( aValue );
     return Qnil;
 }
 
 // ContextSettings#minor_version=(value)
-// ContextSettings#MinorVersion=(value)
+// ContextSettings#minorVersion=(value)
 VALUE rbContextSettings::SetMinorVersion( VALUE aSelf, VALUE aValue )
 {
     rb_check_frozen( aSelf );
-    rbContextSettings::ToSFML( aSelf )->MinorVersion = NUM2UINT( aValue );
+    rbContextSettings::ToSFML( aSelf )->minorVersion = NUM2UINT( aValue );
     return Qnil;
 }
 
@@ -222,11 +222,11 @@ VALUE rbContextSettings::Equal( VALUE aSelf, VALUE anOther )
     sf::ContextSettings* left = rbContextSettings::ToSFML( aSelf );
     sf::ContextSettings* right = rbContextSettings::ToSFML( anOther );
     
-    if( left->DepthBits         != right->DepthBits         ) return Qfalse;
-    if( left->StencilBits       != right->StencilBits       ) return Qfalse;
-    if( left->AntialiasingLevel != right->AntialiasingLevel ) return Qfalse;
-    if( left->MajorVersion      != right->MajorVersion      ) return Qfalse;
-    if( left->MinorVersion      != right->MinorVersion      ) return Qfalse;
+    if( left->depthBits         != right->depthBits         ) return Qfalse;
+    if( left->stencilBits       != right->stencilBits       ) return Qfalse;
+    if( left->antialiasingLevel != right->antialiasingLevel ) return Qfalse;
+    if( left->majorVersion      != right->majorVersion      ) return Qfalse;
+    if( left->minorVersion      != right->minorVersion      ) return Qfalse;
     
     return Qtrue;
 }
@@ -240,11 +240,11 @@ VALUE rbContextSettings::Inspect( VALUE aSelf )
                        "antialiasing_level: %u, major_version: %u, "
                        "minor_version: %u)",
                        rb_obj_classname( aSelf ),
-                       settings->DepthBits,
-                       settings->StencilBits,
-                       settings->AntialiasingLevel,
-                       settings->MajorVersion,
-                       settings->MinorVersion );
+                       settings->depthBits,
+                       settings->stencilBits,
+                       settings->antialiasingLevel,
+                       settings->majorVersion,
+                       settings->minorVersion );
 }
 
 // ContextSettings#memory_usage

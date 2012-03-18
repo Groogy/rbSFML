@@ -72,46 +72,42 @@ namespace rbEvent
     static VALUE MarshalDump( VALUE aSelf );
     
     // Event#type
-    // Event#Type
     static VALUE Type( VALUE aSelf );
     
     // Event#info
     static VALUE Info( VALUE aSelf );
     
     // Event#size
-    // Event#Size
     static VALUE Size( VALUE aSelf );
     
     // Event#key
-    // Event#Key
     static VALUE Key( VALUE aSelf );
     
     // Event#text
-    // Event#Text
     static VALUE Text( VALUE aSelf );
     
     // Event#mouse_move
-    // Event#MouseMove
+    // Event#mouseMove
     static VALUE MouseMove( VALUE aSelf );
     
     // Event#mouse_button
-    // Event#MouseButton
+    // Event#mouseButton
     static VALUE MouseButton( VALUE aSelf );
     
     // Event#mouse_wheel
-    // Event#MouseWheel
+    // Event#mouseWheel
     static VALUE MouseWheel( VALUE aSelf );
     
     // Event#joystick_move
-    // Event#JoystickMove
+    // Event#joystickMove
     static VALUE JoystickMove( VALUE aSelf );
     
     // Event#joystick_button
-    // Event#JoystickButton
+    // Event#joystickButton
     static VALUE JoystickButton( VALUE aSelf );
     
     // Event#joystick_connect
-    // Event#JoystickConnect
+    // Event#joystickConnect
     static VALUE JoystickConnect( VALUE aSelf );
     
     // Event#==(other)

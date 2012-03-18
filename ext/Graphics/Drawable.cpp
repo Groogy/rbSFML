@@ -37,7 +37,7 @@ public:
 		mySelf = aSelf;
 	}
 	
-	void Draw( sf::RenderTarget& aTarget, sf::RenderStates states) const
+	void draw( sf::RenderTarget& aTarget, sf::RenderStates states) const
 	{
 		rb_funcall( mySelf, myDrawID, 0 );
 	}

@@ -48,19 +48,22 @@ void rbSound::Init( VALUE SFML )
     rb_define_method( rbSound::Class, "memory_usage",    rbSound::GetMemoryUsage,    0 );
 
     // Instance aliasses
-    rb_define_alias( rbSound::Class, "Play",             "play"            );
-    rb_define_alias( rbSound::Class, "Pause",            "pause"           );
-    rb_define_alias( rbSound::Class, "Stop",             "stop"            );
-    rb_define_alias( rbSound::Class, "SetBuffer",        "buffer="         );
-    rb_define_alias( rbSound::Class, "SetLoop",          "loop="           );
-    rb_define_alias( rbSound::Class, "SetPlayingOffset", "playing_offset=" );
-    rb_define_alias( rbSound::Class, "offset=",          "playing_offset=" );
-    rb_define_alias( rbSound::Class, "GetBuffer",        "buffer"          );
-    rb_define_alias( rbSound::Class, "GetLoop",          "loop"            );
-    rb_define_alias( rbSound::Class, "GetPlayingOffset", "playing_offset"  );
-    rb_define_alias( rbSound::Class, "offset",           "playing_offset"  );
-    rb_define_alias( rbSound::Class, "GetStatus",        "status"          );
-    rb_define_alias( rbSound::Class, "to_s",             "inspect"         );
+    rb_define_alias( rbSound::Class, "setBuffer",          "buffer="         );
+	rb_define_alias( rbSound::Class, "set_buffer",         "buffer="         );
+    rb_define_alias( rbSound::Class, "setLoop",            "loop="           );
+	rb_define_alias( rbSound::Class, "set_loop",           "loop="           );
+    rb_define_alias( rbSound::Class, "setPlayingOffset",   "playing_offset=" );
+	rb_define_alias( rbSound::Class, "set_playing_offset", "playing_offset=" );
+    rb_define_alias( rbSound::Class, "offset=",            "playing_offset=" );
+    rb_define_alias( rbSound::Class, "getBuffer",          "buffer"          );
+	rb_define_alias( rbSound::Class, "get_buffer",         "buffer"          );
+    rb_define_alias( rbSound::Class, "get_loop",           "loop"            );
+    rb_define_alias( rbSound::Class, "getPlayingOffset",   "playing_offset"  );
+	rb_define_alias( rbSound::Class, "get_playing_offset", "playing_offset"  );
+    rb_define_alias( rbSound::Class, "offset",             "playing_offset"  );
+    rb_define_alias( rbSound::Class, "getStatus",          "status"          );
+	rb_define_alias( rbSound::Class, "get_status",         "status"          );
+    rb_define_alias( rbSound::Class, "to_s",               "inspect"         );
 }
 
 // Sound#initialize
@@ -97,84 +100,88 @@ VALUE rbSound::MarshalDump( VALUE aSelf )
 }
 
 // Sound#play
-// Sound#Play
 VALUE rbSound::Play( VALUE aSelf )
 {
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->Play();
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->play();
     return Qnil;
 }
 
 // Sound#pause
-// Sound#Pause
 VALUE rbSound::Pause( VALUE aSelf )
 {
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->Pause();
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->pause();
     return Qnil;
 }
 
 // Sound#stop
-// Sound#Stop
 VALUE rbSound::Stop( VALUE aSelf )
 {
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->Stop();
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->stop();
     return Qnil;
 }
 
 // Sound#buffer=(buffer)
-// Sound#SetBuffer(buffer)
+// Sound#set_buffer(buffer)
+// Sound#setBuffer(buffer)
 VALUE rbSound::SetBuffer( VALUE aSelf, VALUE aBuffer )
 {
     rb_iv_set( aSelf, "@__ref__sound_buffer", aBuffer );
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->SetBuffer( *rbMacros::ToSFML< sf::SoundBuffer >( aBuffer, rbSoundBuffer::Class ) );
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->setBuffer( *rbMacros::ToSFML< sf::SoundBuffer >( aBuffer, rbSoundBuffer::Class ) );
     return Qnil;
 }
 
 // Sound#loop=(loop)
-// Sound#SetLoop(loop)
+// Sound#set_loop(loop)
+// Sound#setLoop(loop)
 VALUE rbSound::SetLoop( VALUE aSelf, VALUE aLoop )
 {
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->SetLoop( RTEST( aLoop ) );
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->setLoop( RTEST( aLoop ) );
     return Qnil;
 }
 
 // Sound#playing_offset=(offset)
-// Sound#SetPlayingOffset(offset)
+// Sound#set_playing_offset(offset)
+// Sound#setPlayingOffset(offset)
 // Sound#offset=(offset)
 VALUE rbSound::SetPlayingOffset( VALUE aSelf, VALUE anOffset )
 {
-    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->SetPlayingOffset( *rbMacros::ToSFML< sf::Time >( anOffset, rbTime::Class ) );
+    rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->setPlayingOffset( *rbMacros::ToSFML< sf::Time >( anOffset, rbTime::Class ) );
     return Qnil;
 }
 
 // Sound#buffer
-// Sound#GetBuffer
+// Sound#get_buffer
+// Sound#getBuffer
 VALUE rbSound::GetBuffer( VALUE aSelf )
 {
     return rb_iv_get( aSelf, "@__ref__sound_buffer" );
 }
 
 // Sound#loop
-// Sound#GetLoop
+// Sound#get_loop
+// Sound#getLoop
 VALUE rbSound::GetLoop( VALUE aSelf )
 {
-    return RBOOL( rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->GetLoop() );
+    return RBOOL( rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->getLoop() );
 }
 
 // Sound#playing_offset
-// Sound#GetPlayingOffset
+// Sound#get_playing_offset
+// Sound#getPlayingOffset
 // Sound#offset
 VALUE rbSound::GetPlayingOffset( VALUE aSelf )
 {
 	sf::Time* time = rbMacros::Allocate< sf::Time >();
-    *time = rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->GetPlayingOffset();
+    *time = rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->getPlayingOffset();
     return rbMacros::ToRuby( time, rbTime::Class );
 }
 
 // Sound#status
-// Sound#GetStatus
+// Sound#get_status
+// Sound#getStatus
 VALUE rbSound::GetStatus( VALUE aSelf )
 {
-    return INT2FIX( rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->GetStatus() );
+    return INT2FIX( rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class )->getStatus() );
 }
 
 // Sound#inspect
@@ -183,7 +190,7 @@ VALUE rbSound::Inspect( VALUE aSelf )
 {
     return rb_sprintf( "%s(%p)",
                        rb_obj_classname( aSelf ),
-                       reinterpret_cast< void* >( aSelf ) );
+                       rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class ) );
 }
 
 // Sound#memory_usage

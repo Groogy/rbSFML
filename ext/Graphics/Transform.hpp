@@ -48,16 +48,23 @@ namespace rbTransform
     static VALUE InitializeCopy( VALUE aSelf, VALUE aTransform );
 	
 	// Transform#matrix
+	// Transform#get_matrix
+	// Transform#getMatrix
 	static VALUE GetMatrix( VALUE aSelf );
 	
 	// Transform#inverse
+	// Transform#get_inverse
+	// Transform#getInverse
 	static VALUE GetInverse( VALUE aSelf );
 	
 	// Transform#transform_point(x, y)
 	// Transform#transform_point(vector2)
+	// Transform#transformPoint(x, y)
+	// Transform#transformPoint(vector2)
 	static VALUE TransformPoint( int argc, VALUE* args, VALUE aSelf );
 	
 	// Transform#transform_rect(rect)
+	// Transform#transformRect(rect)
 	static VALUE TransformRect( VALUE aSelf, VALUE aRect );
 	
 	// Transform#combine(transform)

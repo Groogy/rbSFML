@@ -52,117 +52,99 @@ namespace rbWindow
     static VALUE MarshalDump( VALUE aSelf );
     
     // Window#create(...)
-    // Window#Create(...)
     static VALUE Create( int argc, VALUE args[], VALUE aSelf );
     
     // Window#close
-    // Window#Close
     static VALUE Close( VALUE aSelf );
     
-    // Window#opened?
-    // Window#IsOpened
     // Window#open?
+	// Window#is_open?
+	// Window#is_open
+    // Window#isOpen
     static VALUE IsOpen( VALUE aSelf );
     
-    // Window#width
-    // Window#GetWidth
-    static VALUE GetWidth( VALUE aSelf );
-    
-    // Window#height
-    // Window#GetHeight
-    static VALUE GetHeight( VALUE aSelf );
-    
     // Window#settings
-    // Window#GetSettings
+	// Window#get_settings
+    // Window#getSettings
     static VALUE GetSettings( VALUE aSelf );
     
     // Window#poll_event
-    // Window#PollEvent
+    // Window#pollEvent
     // Window#poll_event(event)
-    // Window#PollEvent(event)
+    // Window#pollEvent(event)
     static VALUE PollEvent( int argc, VALUE argv[], VALUE aSelf );
     
     // Window#wait_event
-    // Window#WaitEvent
+    // Window#waitEvent
     // Window#wait_event(event)
-    // Window#WaitEvent(event)
+    // Window#waitEvent(event)
     static VALUE WaitEvent( int argc, VALUE argv[], VALUE aSelf );
     
     // Window#each_event
     static VALUE EachEvent( VALUE aSelf );
     
-    // Window#vertical_sync=(enabled)
-    // Window#EnableVerticalSync(enabled)
-    // Window#vertical_sync(enabled)
-    static VALUE EnableVerticalSync( VALUE aSelf, VALUE anEnabled );
+    // Window#vertical_sync_enabled=(enabled)
+    // Window#setVerticalSyncEnabled(enabled)
+	// Window#set_vertical_sync_enabled(enabled)
+    static VALUE SetVerticalSyncEnabled( VALUE aSelf, VALUE anEnabled );
     
-    // Window#mouse_cursor=(show)
-    // Window#ShowMouseCursor(show)
-    // Window#mouse_cursor(show)
-    static VALUE ShowMouseCursor( VALUE aSelf, VALUE aShow );
-    
-    // Window#position(x, y)
-    // Window#Position(x, y)
-    static VALUE SetPosition( VALUE aSelf, VALUE anX, VALUE anY );
+    // Window#mouse_cursor_visible=(show)
+    // Window#setMouseCursorVisible(show)
+	// Window#set_mouse_cursor_visible(show)
+    static VALUE SetMouseCursorVisible( VALUE aSelf, VALUE aShow );
     
     // Window#position=(vector2)
-    static VALUE SetPosition2( VALUE aSelf, VALUE aVector2 );
-    
-    // Window#size(width, height)
-    // Window#Size(width, height)
-    static VALUE SetSize( VALUE aSelf, VALUE aWidth, VALUE aHeight );
+	// Window#set_position(vector2)
+	// Window#setPosition(vector2)
+    static VALUE SetPosition( VALUE aSelf, VALUE aPosition );
     
     // Window#size=(vector2)
-    static VALUE SetSize2( VALUE aSelf, VALUE aVector2 );
+	// Window#set_size(vector2)
+	// Window#setSize(vector2)
+    static VALUE SetSize( VALUE aSelf, VALUE aSize );
     
     // Window#title=(title)
-    // Window#SetTitle(title)
-    // Window#title(title)
+    // Window#set_title(title)
+    // Window#setTitle(title)
     static VALUE SetTitle( VALUE aSelf, VALUE aTitle );
     
-    // Window#show=(show)
-    // Window#Show(show)
-    // Window#show(show)
-    static VALUE Show( VALUE aSelf, VALUE aShow );
+    // Window#visible=(show)
+	// Window#set_visible(show)
+	// Window#setVisible(show)
+    static VALUE SetVisible( VALUE aSelf, VALUE aShow );
     
     // Window#key_repeat=(enabled)
-    // Window#EnableKeyRepeat(enabled)
-    // Window#key_repeat(enabled)
-    static VALUE EnableKeyRepeat( VALUE aSelf, VALUE anEnabled );
+	// Window#set_key_repeat_enabled(enabled)
+    // Window#setKeyRepeatEnabled(enabled)
+    static VALUE SetKeyRepeatEnabled( VALUE aSelf, VALUE anEnabled );
     
-    // Window#icon(width, height, pixels)
-    // Window#SetIcon(width, height, pixels)
+    // Window#set_icon(width, height, pixels)
+    // Window#setIcon(width, height, pixels)
     static VALUE SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE aPixels );
     
-    // Window#active(active=true)
-    // Window#SetActive(active=true)
-    // Window#active=(active=true)
+	// Window#active=(active = true)
+	// Window#set_active(active = true)
+    // Window#setActive(active = true)
     static VALUE SetActive( int argc, VALUE argv[], VALUE aSelf );
     
-    // Window#display(active)
-    // Window#Display(active)
+    // Window#display()
     static VALUE Display( VALUE aSelf );
     
+	// Window#fps=(limit)
     // Window#framerate=(limit)
-    // Window#SetFramerateLimit(limit)
-    // Window#framerate(limit)
     // Window#framerate_limit=(limit)
-    // Window#framerate_limit(limit)
-    // Window#fps=(limit)
+	// Window#set_framerate(limit)
+	// Window#set_framerate_limit(limit)
+	// Window#setFramerateLimit(limit)
     static VALUE SetFramerateLimit( VALUE aSelf, VALUE aLimit );
     
-    // Window#frame_time
-    // Window#GetFrameTime
-    // Window#time
-    static VALUE GetFrameTime( VALUE aSelf );
-    
     // Window#joystick_threshold=(threshold)
-    // Window#SetJoystickThreshold(threshold)
-    // Window#joystick_threshold(threshold)
+	// Window#set_joystick_threshold(threshold)
+    // Window#setJoystickThreshold(threshold)
     static VALUE SetJoystickThreshold( VALUE aSelf, VALUE aThreshold );
     
     // Window#system_handle
-    // Window#GetSystemHandle
+    // Window#getSystemHandle
     // Window#handle
     static VALUE GetSystemHandle( VALUE aSelf );
     
