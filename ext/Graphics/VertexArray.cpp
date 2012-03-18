@@ -48,7 +48,17 @@ void rbVertexArray::Init( VALUE SFML )
 // VertexArray#initialize
 // VertexArray#initialize(primitive_type, vertex_count = 0)
 VALUE rbVertexArray::Initialize( int argc, VALUE* args, VALUE aSelf )
-{
+{;
+	switch( argc )
+	{
+	case 2:
+		rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->resize( NUM2UINT( args[ 1 ] ) );
+	case 1:
+		rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->setPrimitiveType( static_cast< sf::PrimitiveType >( NUM2UINT( args[ 0 ] ) ) );
+		break;
+	default:
+		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
+	}
 	rb_iv_set( aSelf, "@__internal__drawable_offset", INT2FIX( 0 ) );
 	rb_call_super( 0, NULL );
 	return Qnil;
