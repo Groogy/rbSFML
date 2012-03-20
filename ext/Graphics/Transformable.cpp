@@ -99,7 +99,7 @@ VALUE rbTransformable::InitializeCopy( VALUE aSelf, VALUE aSource )
 {
 	*rbTransformable::ToSFML( aSelf ) = *rbTransformable::ToSFML( aSource );
 	rb_iv_set( aSelf, "@__internal__transformable_offset", rb_iv_get( aSource, "@__internal__transformable_offset" ) );
-    return aSelf;
+    return rb_call_super( 1, &aSource );
 }
 
 // Transformable#setPosition(x, y)
