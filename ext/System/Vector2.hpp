@@ -33,6 +33,7 @@ namespace rbVector2
     static inline int Type( VALUE aVector2 );
     static inline VALUE ToRuby( VALUE anOther );
     static inline VALUE ToRuby( const sf::Vector2i& aVector2 );
+	static inline VALUE ToRuby( const sf::Vector2u& aVector2 );
     static inline VALUE ToRuby( const sf::Vector2f& aVector2 );
     static inline sf::Vector2i ToSFMLi( VALUE aVector2 );
 	static inline sf::Vector2u ToSFMLu( VALUE aVector2 );
@@ -126,6 +127,13 @@ VALUE rbVector2::ToRuby( VALUE anOther )
 }
 
 VALUE rbVector2::ToRuby( const sf::Vector2i& aVector2 )
+{
+    VALUE x = INT2FIX( aVector2.x );
+    VALUE y = INT2FIX( aVector2.y );
+    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+}
+
+VALUE rbVector2::ToRuby( const sf::Vector2u& aVector2 )
 {
     VALUE x = INT2FIX( aVector2.x );
     VALUE y = INT2FIX( aVector2.y );
