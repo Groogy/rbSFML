@@ -45,8 +45,83 @@ namespace rbRenderTarget
     // RenderTarget#initialize
     static VALUE Initialize( VALUE aSelf );
 	
-	// RenderTarget#initialize_copy(source)
-    static VALUE InitializeCopy( VALUE aSelf, VALUE aSource );
+	// RenderTarget#clear(color=SFML::Color::Black)
+	static VALUE Clear( int argc, VALUE* args, VALUE aSelf );
+	
+	// RenderTarget#view=(view)
+	// RenderTarget#set_view(view)
+	// RenderTarget#setView(view)
+	static VALUE SetView( VALUE aSelf, VALUE aView );
+	
+	// RenderTarget#view
+	// RenderTarget#get_view
+	// RenderTarget#getView
+	static VALUE GetView( VALUE aSelf );
+		
+	// RenderTarget#default_view
+	// RenderTarget#get_default_view
+	// RenderTarget#getDefaultView
+	static VALUE GetDefaultView( VALUE aSelf );
+	
+	// RenderTarget#get_viewport(view)
+	// RenderTarget#getViewport(view)
+	static VALUE GetViewport( VALUE aSelf, VALUE aView );
+	
+	// RenderTarget#convert(x, y)
+	// RenderTarget#convert_coords(x, y)
+	// RenderTarget#convertCoords(x, y)
+	// RenderTarget#convert(x, y, view)
+	// RenderTarget#convert_coords(x, y, view)
+	// RenderTarget#convertCoords(x, y, view)
+	static VALUE ConvertCoords( int argc, VALUE* args, VALUE aSelf );
+	
+	// RenderTarget#draw(drawable, render_state)
+	// RenderTarget#draw(vertices, primitive_type, render_state)
+	static VALUE Draw( int argc, VALUE* args, VALUE aSelf );
+	
+	// RenderTarget#size
+	// RenderTarget#get_size
+	// RenderTarget#getSize
+	static VALUE GetSize( VALUE aSelf );
+	
+	// RenderTarget#push_states
+	// RenderTarget#push_gl_states
+	// RenderTarget#pushGLStates
+	static VALUE PushGLStates( VALUE aSelf );
+	
+	// RenderTarget#pop_states
+	// RenderTarget#pop_gl_states
+	// RenderTarget#popGLStates
+	static VALUE PopGLStates( VALUE aSelf );
+	
+	// RenderTarget#reset_states
+	// RenderTarget#reset_gl_states
+	// RenderTarget#resetGLStates
+	static VALUE ResetGLStates( VALUE aSelf );
+	
+	// RenderTarget#internal_initialize
+	// RenderTarget#internalInitialize
+	static VALUE InternalInitialize( VALUE aSelf );
+	
+	// RenderTarget#internal_apply_current_view
+	// RenderTarget#internalApplyCurrentView
+	static VALUE InternalApplyCurrentView( VALUE aSelf );
+	
+	// RenderTarget#internal_apply_blend_mode(mode)
+	// RenderTarget#internalApplyBlendMode(mode)
+	static VALUE InternalApplyBlendMode( VALUE aSelf, VALUE aMode );
+	
+	// RenderTarget#internal_apply_transform(transform)
+	// RenderTarget#internalApplyTransform(transform)
+	static VALUE InternalApplyTransform( VALUE aSelf, VALUE aTransformation );
+	
+	// RenderTarget#internal_apply_texture(texture)
+	// RenderTarget#internalApplyTexture(texture)
+	static VALUE InternalApplyTexture( VALUE aSelf, VALUE aTexture );
+	
+	// RenderTarget#internal_apply_shader(shader)
+	// RenderTarget#internalApplyShader(shader)
+	static VALUE InternalApplyShader( VALUE aSelf, VALUE aShader );
 	
     // RenderTarget#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
