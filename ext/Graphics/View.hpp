@@ -32,7 +32,7 @@ namespace rbView
 #if defined( GRAPHICS_VIEW_CPP )
     VALUE Class;
 #else
-    extern VALUE Clas;
+    extern VALUE Class;
 #endif
 
 #if defined( RBSFML_GRAPHICS )
