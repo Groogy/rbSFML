@@ -82,8 +82,8 @@ void rbWindow::Init( VALUE SFML )
 	rb_define_alias( rbWindow::Class, "set_key_repeat_enabled",    "key_repeat_enabled="    );
     rb_define_alias( rbWindow::Class, "setKeyRepeatEnabled",       "key_repeat_enabled="    );
     rb_define_alias( rbWindow::Class, "setIcon",                   "set_icon"               );
-	rb_define_alias( rbWindow::Class, "set_active",                "active="                );
-    rb_define_alias( rbWindow::Class, "setActive",                 "active="                );
+	rb_define_alias( rbWindow::Class, "active=",                   "set_active"             );
+    rb_define_alias( rbWindow::Class, "setActive",                 "set_active"             );
     rb_define_alias( rbWindow::Class, "setFramerateLimit",         "framerate="             );
     rb_define_alias( rbWindow::Class, "framerate_limit=",          "framerate="             );
     rb_define_alias( rbWindow::Class, "set_framerate_limit",       "framerate="             );
@@ -102,7 +102,7 @@ VALUE rbWindow::Initialize( int argc, VALUE argv[], VALUE aSelf )
     if( argc > 0 )
         Create( argc, argv, aSelf );
     
-    return rb_call_super( argc, argv );
+    return rb_call_super( 0, NULL );
 }
 
 // Window#marshal_dump
