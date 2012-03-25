@@ -42,8 +42,8 @@ namespace rbRenderTarget
 #endif
 
 #if defined( GRAPHICS_RENDER_TARGET_CPP )
-    // RenderTarget#initialize
-    static VALUE Initialize( VALUE aSelf );
+    // RenderTarget#initialize(*args)
+    static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
 	
 	// RenderTarget#clear(color=SFML::Color::Black)
 	static VALUE Clear( int argc, VALUE* args, VALUE aSelf );

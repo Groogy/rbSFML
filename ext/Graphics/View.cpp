@@ -28,7 +28,7 @@
 
 void rbView::Init( VALUE SFML )
 {
-    rbView::Class = rb_define_module_under( SFML, "View" );
+    rbView::Class = rb_define_class_under( SFML, "View", rb_cObject );
 	
 	// Class methods
 	rb_define_alloc_func( rbView::Class, rbMacros::Allocate< sf::View > );

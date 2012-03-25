@@ -89,4 +89,7 @@ void Init_graphics()
 	rbVertex::Init( SFML );
 	rbShader::Init( SFML );
 	rbRenderStates::Init( SFML );
+	rbView::Init( SFML );
+	rbRenderTarget::Init( SFML );
+	rbRenderWindow::Init( SFML );
 }

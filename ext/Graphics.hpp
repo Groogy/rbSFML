@@ -38,5 +38,8 @@
 #include "Graphics/Vertex.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/RenderStates.hpp"
+#include "Graphics/View.hpp"
+#include "Graphics/RenderTarget.hpp"
+#include "Graphics/RenderWindow.hpp"
 
 #endif // GRAPHICS_HPP

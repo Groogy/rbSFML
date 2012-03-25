@@ -118,7 +118,7 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_define_module_function( rbRenderTarget::Module, "included", rbInternalIncludedRenderTarget, 1 );
 
     // Instance methods
-	rb_define_method( rbRenderTarget::Module, "initialize",                  rbRenderTarget::Initialize,               0 );
+	//rb_define_method( rbRenderTarget::Module, "initialize",                  rbRenderTarget::Initialize,              -1 );
 	rb_define_method( rbRenderTarget::Module, "clear",                       rbRenderTarget::Clear,                   -1 );
 	rb_define_method( rbRenderTarget::Module, "set_view",                    rbRenderTarget::SetView,                  1 );
 	rb_define_method( rbRenderTarget::Module, "get_view",                    rbRenderTarget::GetView,                  0 );
@@ -164,21 +164,23 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_define_alias( rbRenderTarget::Module, "internalInitialize",       "internal_initialize"         );
 	rb_define_alias( rbRenderTarget::Module, "internalApplyCurrentView", "internal_apply_current_view" );
 	rb_define_alias( rbRenderTarget::Module, "internalApplyBlendMode",   "internal_apply_blend_mode"   );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyTransform",   "internal_apply_tranform"     );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyTexture",     "internal_apply_yexture"      );
+	rb_define_alias( rbRenderTarget::Module, "internalApplyTransform",   "internal_apply_transform"    );
+	rb_define_alias( rbRenderTarget::Module, "internalApplyTexture",     "internal_apply_texture"      );
 	rb_define_alias( rbRenderTarget::Module, "internalApplyShader",      "internal_apply_shader"       );
 }
 
+#include <iostream>
+
 // RenderTarget#initialize
-VALUE rbRenderTarget::Initialize( VALUE aSelf )
+VALUE rbRenderTarget::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
+	std::cout << "RenderTarget#initialize" << std::endl;
 	if( rb_iv_get( aSelf, "@__internal__render_target_offset" ) == Qnil )
 	{
 		rb_iv_set( aSelf, "@__internal__render_target_offset", INT2FIX( 0 ) );
 	}
 	
-	rb_call_super( 0, NULL );
-	return Qnil;
+	return rb_call_super( argc, args );
 }
 
 // RenderTarget#clear(color=SFML::Color::Black)

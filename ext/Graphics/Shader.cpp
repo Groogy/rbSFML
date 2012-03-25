@@ -66,7 +66,6 @@ void rbShader::Init( VALUE SFML )
 	rb_define_alias( rbShader::Class, "loadFromFile",        "load_from_file"         );
 	rb_define_alias( rbShader::Class, "loadFromMemory",      "load_from_memory"       );
 	rb_define_alias( rbShader::Class, "loadFromStream",      "load_from_stream"       );
-	rb_define_alias( rbShader::Class, "saveToFile",          "save_to_file"           );
 	rb_define_alias( rbShader::Class, "setParameter",        "set_parameter"          );
 	rb_define_alias( rbShader::Class, "[]=",                 "set_parameter"          );
     rb_define_alias( rbShader::Class, "to_s",                "inspect"                );

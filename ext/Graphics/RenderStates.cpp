@@ -52,7 +52,7 @@ void rbRenderStates::Init( VALUE SFML )
     // Instance aliases
 	rb_define_alias( rbRenderStates::Class, "blendMode",    "blend_mode"  );
     rb_define_alias( rbRenderStates::Class, "blendMode=",   "blend_mode=" );
-	rb_define_alias( rbRenderStates::Class, "to_s",         "inspect="    );
+	rb_define_alias( rbRenderStates::Class, "to_s",         "inspect"     );
 	
 	// Constants
 	rb_define_const( rbRenderStates::Class, "Default", rbMacros::ToConstRuby( &sf::RenderStates::Default, rbRenderStates::Class ) );
