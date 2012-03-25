@@ -52,7 +52,6 @@ void rbRenderWindow::Init( VALUE SFML )
 // RenderWindow#initialize
 VALUE rbRenderWindow::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
-	std::cout << "RenderWindow#initialize" << std::endl;
 	rb_iv_set( aSelf, "@__internal__render_target_offset", INT2FIX( sizeof( sf::Window ) ) );
     return rb_call_super( argc, args );
 }

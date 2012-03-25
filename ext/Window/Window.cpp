@@ -99,8 +99,6 @@ void rbWindow::Init( VALUE SFML )
 // Window#initialize(...)
 VALUE rbWindow::Initialize( int argc, VALUE argv[], VALUE aSelf )
 {
-	std::cout << "Window#initialize" << std::endl;
-	
     if( argc > 0 )
         Create( argc, argv, aSelf );
     

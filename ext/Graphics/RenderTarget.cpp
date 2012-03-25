@@ -174,7 +174,6 @@ void rbRenderTarget::Init( VALUE SFML )
 // RenderTarget#initialize
 VALUE rbRenderTarget::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
-	std::cout << "RenderTarget#initialize" << std::endl;
 	if( rb_iv_get( aSelf, "@__internal__render_target_offset" ) == Qnil )
 	{
 		rb_iv_set( aSelf, "@__internal__render_target_offset", INT2FIX( 0 ) );
