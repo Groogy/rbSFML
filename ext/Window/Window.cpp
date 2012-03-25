@@ -102,7 +102,7 @@ VALUE rbWindow::Initialize( int argc, VALUE argv[], VALUE aSelf )
     if( argc > 0 )
         Create( argc, argv, aSelf );
     
-    return Qnil;
+    return rb_call_super( argc, argv );
 }
 
 // Window#marshal_dump
