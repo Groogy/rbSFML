@@ -92,4 +92,5 @@ void Init_graphics()
 	rbView::Init( SFML );
 	rbRenderTarget::Init( SFML );
 	rbRenderWindow::Init( SFML );
+	rbRenderTexture::Init( SFML );
 }
