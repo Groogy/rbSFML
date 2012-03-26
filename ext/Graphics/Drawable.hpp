@@ -70,7 +70,10 @@ sf::Drawable* rbDrawable::ToSFML( VALUE aValue )
 {
 	aValue = rbMacros::ToRuby( aValue, rbDrawable::Module );
 	char* compensationPtr = reinterpret_cast< char* >( DATA_PTR( aValue ) );
-    unsigned int ptrOffset = FIX2UINT( rb_iv_get( aValue, "@__internal__drawable_offset" ) );
+	unsigned int ptrOffset = 0;
+	VALUE offset = rb_iv_get( aValue, "@__internal__drawable_offset" );
+	if( offset != Qnil )
+		ptrOffset = FIX2UINT( offset );
 	return reinterpret_cast< sf::Drawable* >( compensationPtr + ptrOffset );
 }
 

@@ -69,7 +69,7 @@ void rbDrawable::Init( VALUE SFML )
 	rb_define_module_function( rbDrawable::Module, "included", rbInternalIncludedDrawable, 1 );
 
     // Instance methods
-	rb_define_method( rbDrawable::Module, "initialize",             rbDrawable::Initialize,           0 );
+	//rb_define_method( rbDrawable::Module, "initialize",             rbDrawable::Initialize,           0 );
     rb_define_method( rbDrawable::Module, "initialize_copy",        rbDrawable::InitializeCopy,       1 );
 	rb_define_method( rbDrawable::Module, "draw",                   rbDrawable::Draw,                 2 );
 	rb_define_method( rbDrawable::Module, "marshal_dump",           rbDrawable::MarshalDump,          0 );

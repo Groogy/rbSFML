@@ -39,7 +39,7 @@ void rbTransformable::Init( VALUE SFML )
 	rb_define_module_function( rbTransformable::Module, "included", rbInternalIncludedTransformable, 1 );
 
     // Instance methods
-	rb_define_method( rbTransformable::Module, "initialize",             rbTransformable::Initialize,           0 );
+	//rb_define_method( rbTransformable::Module, "initialize",             rbTransformable::Initialize,           0 );
     rb_define_method( rbTransformable::Module, "initialize_copy",        rbTransformable::InitializeCopy,       1 );
 	rb_define_method( rbTransformable::Module, "set_position",           rbTransformable::SetPosition,         -1 );
 	rb_define_method( rbTransformable::Module, "set_rotation",           rbTransformable::SetRotation,          1 );

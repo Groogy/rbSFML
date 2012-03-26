@@ -142,7 +142,10 @@ sf::RenderTarget* rbRenderTarget::ToSFML( VALUE aValue )
 {
 	aValue = rbMacros::ToRuby( aValue, rbRenderTarget::Module );
 	char* compensationPtr = reinterpret_cast< char* >( DATA_PTR( aValue ) );
-    unsigned int ptrOffset = FIX2UINT( rb_iv_get( aValue, "@__internal__render_target_offset" ) );
+	unsigned int ptrOffset = 0;
+	VALUE offset = rb_iv_get( aValue, "@__internal__render_target_offset" );
+	if( offset != Qnil )
+		ptrOffset = FIX2UINT( offset );
 	return reinterpret_cast< sf::RenderTarget* >( compensationPtr + ptrOffset );
 }
 
