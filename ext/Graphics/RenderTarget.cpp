@@ -268,12 +268,15 @@ VALUE rbRenderTarget::ConvertCoords( int argc, VALUE* args, VALUE aSelf )
 	return coords;
 }
 
-// RenderTarget#draw(drawable, render_state)
+// RenderTarget#draw(drawable, render_state=SFML::RenderStates::Default)
 // RenderTarget#draw(vertices, primitive_type, render_state)
 VALUE rbRenderTarget::Draw( int argc, VALUE* args, VALUE aSelf )
 {
 	switch( argc )
 	{
+	case 1:
+		rbRenderTarget::ToSFML( aSelf )->draw( *rbDrawable::ToSFML( args[ 0 ] ) );
+		break;
 	case 2:
 		rbRenderTarget::ToSFML( aSelf )->draw( *rbDrawable::ToSFML( args[ 0 ] ), *rbMacros::ToSFML< sf::RenderStates >( args[ 1 ], rbRenderStates::Class ) );
 		break;
@@ -294,7 +297,7 @@ VALUE rbRenderTarget::Draw( int argc, VALUE* args, VALUE aSelf )
 		}
 		break;
 	default:
-		INVALID_ARGUMENT_LIST( argc, "2 or 3" );
+		INVALID_ARGUMENT_LIST( argc, "1..3" );
 	}
 	
 	return Qnil;
