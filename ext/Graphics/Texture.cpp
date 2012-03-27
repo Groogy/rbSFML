@@ -287,6 +287,7 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 		{
 			INVALID_EXPECTED_TYPES3( rb_cArray, rbImage::Class, rbWindow::Class );
 		}
+		break;
 	case 3:
 		if( rb_obj_is_kind_of( args[ 0 ], rbImage::Class ) )
 		{
@@ -302,6 +303,7 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 		{
 			INVALID_EXPECTED_TYPES( rbImage::Class, rbWindow::Class );
 		}
+		break;
 	case 5:
 		if( rb_obj_is_kind_of( args[ 0 ], rb_cArray ) )
 		{
@@ -318,6 +320,7 @@ static VALUE rbTexture::Update( int argc, VALUE* args, VALUE aSelf )
 		{
 			INVALID_EXPECTED_TYPE( rb_cArray );
 		}
+		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "1, 3, or 5" );
 	}
