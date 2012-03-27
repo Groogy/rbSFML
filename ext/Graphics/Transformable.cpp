@@ -185,7 +185,7 @@ VALUE rbTransformable::SetOrigin( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
 	
-	rbTransformable::ToSFML( aSelf )->setScale( origin );
+	rbTransformable::ToSFML( aSelf )->setOrigin( origin );
 	return Qnil;
 }
 
