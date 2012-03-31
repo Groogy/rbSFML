@@ -79,26 +79,26 @@ void rbShape::Init( VALUE SFML )
 	rb_define_alloc_func( rbShape::Class, rbInternalAllocateShape );
 
     // Instance methods
-    rb_define_method( rbShape::Class, "initialize",           rbShape::Initialize,         -1 );
-    rb_define_method( rbShape::Class, "initialize_copy",      rbShape::InitializeCopy,      1 );
-	rb_define_method( rbShape::Class, "get_texture",          rbShape::GetTexture,	        0 );
-	rb_define_method( rbShape::Class, "set_texture",	      rbShape::SetTexture,	       -1 );
-	rb_define_method( rbShape::Class, "get_texture_rect",     rbShape::GetTextureRect,      0 );
-	rb_define_method( rbShape::Class, "set_texture_rect",     rbShape::SetTextureRect,      1 );
-	rb_define_method( rbShape::Class, "get_fill_color",       rbShape::GetFillColor,        0 );
-	rb_define_method( rbShape::Class, "set_fill_color",       rbShape::SetFillColor,        1 );
-	rb_define_method( rbShape::Class, "get_outline_color",    rbShape::GetOutlineColor,     0 );
-	rb_define_method( rbShape::Class, "set_outline_color",    rbShape::SetOutlineColor,     1 );
-	rb_define_method( rbShape::Class, "get_outline_tickness", rbShape::GetOutlineThickness, 0 );
-	rb_define_method( rbShape::Class, "set_outline_tickness", rbShape::SetOutlineThickness, 1 );
-	rb_define_method( rbShape::Class, "get_point_count",      rbShape::GetPointCount,       0 );
-	rb_define_method( rbShape::Class, "get_point",            rbShape::GetPoint,            1 );
-	rb_define_method( rbShape::Class, "get_local_bounds",     rbShape::GetLocalBounds,      0 );
-	rb_define_method( rbShape::Class, "get_global_bounds",    rbShape::GetGlobalBounds,     0 );
-    rb_define_method( rbShape::Class, "marshal_dump",         rbShape::MarshalDump,         0 );
-    rb_define_method( rbShape::Class, "==",                   rbShape::Equal,               1 );
-    rb_define_method( rbShape::Class, "inspect",              rbShape::Inspect,             0 );
-    rb_define_method( rbShape::Class, "memory_usage",         rbShape::GetMemoryUsage,      0 );
+    rb_define_method( rbShape::Class, "initialize",            rbShape::Initialize,         -1 );
+    rb_define_method( rbShape::Class, "initialize_copy",       rbShape::InitializeCopy,      1 );
+	rb_define_method( rbShape::Class, "get_texture",           rbShape::GetTexture,	         0 );
+	rb_define_method( rbShape::Class, "set_texture",	       rbShape::SetTexture,	        -1 );
+	rb_define_method( rbShape::Class, "get_texture_rect",      rbShape::GetTextureRect,      0 );
+	rb_define_method( rbShape::Class, "set_texture_rect",      rbShape::SetTextureRect,      1 );
+	rb_define_method( rbShape::Class, "get_fill_color",        rbShape::GetFillColor,        0 );
+	rb_define_method( rbShape::Class, "set_fill_color",        rbShape::SetFillColor,        1 );
+	rb_define_method( rbShape::Class, "get_outline_color",     rbShape::GetOutlineColor,     0 );
+	rb_define_method( rbShape::Class, "set_outline_color",     rbShape::SetOutlineColor,     1 );
+	rb_define_method( rbShape::Class, "get_outline_thickness", rbShape::GetOutlineThickness, 0 );
+	rb_define_method( rbShape::Class, "set_outline_thickness", rbShape::SetOutlineThickness, 1 );
+	rb_define_method( rbShape::Class, "get_point_count",       rbShape::GetPointCount,       0 );
+	rb_define_method( rbShape::Class, "get_point",             rbShape::GetPoint,            1 );
+	rb_define_method( rbShape::Class, "get_local_bounds",      rbShape::GetLocalBounds,      0 );
+	rb_define_method( rbShape::Class, "get_global_bounds",     rbShape::GetGlobalBounds,     0 );
+    rb_define_method( rbShape::Class, "marshal_dump",          rbShape::MarshalDump,         0 );
+    rb_define_method( rbShape::Class, "==",                    rbShape::Equal,               1 );
+    rb_define_method( rbShape::Class, "inspect",               rbShape::Inspect,             0 );
+    rb_define_method( rbShape::Class, "memory_usage",          rbShape::GetMemoryUsage,      0 );
 
     // Instance aliases
 	rb_define_alias( rbShape::Class, "to_s",                "inspect"               );
