@@ -45,5 +45,6 @@
 #include "Graphics/Sprite.hpp"
 #include "Graphics/Text.hpp"
 #include "Graphics/Shape.hpp"
+#include "Graphics/CircleShape.hpp"
 
 #endif // GRAPHICS_HPP
