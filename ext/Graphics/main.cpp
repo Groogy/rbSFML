@@ -97,4 +97,5 @@ void Init_graphics()
 	rbText::Init( SFML );
 	rbShape::Init( SFML );
 	rbCircleShape::Init( SFML );
+	rbConvexShape::Init( SFML );
 }

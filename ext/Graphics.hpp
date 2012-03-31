@@ -46,5 +46,6 @@
 #include "Graphics/Text.hpp"
 #include "Graphics/Shape.hpp"
 #include "Graphics/CircleShape.hpp"
+#include "Graphics/ConvexShape.hpp"
 
 #endif // GRAPHICS_HPP
