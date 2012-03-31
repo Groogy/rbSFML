@@ -60,6 +60,8 @@ void rbImage::Init( VALUE SFML )
 	rb_define_alias( rbImage::Class, "loadFromMemory",      "load_from_memory"       );
 	rb_define_alias( rbImage::Class, "loadFromStream",      "load_from_stream"       );
 	rb_define_alias( rbImage::Class, "saveToFile",          "save_to_file"           );
+	rb_define_alias( rbImage::Class, "size",                "get_size"               );
+	rb_define_alias( rbImage::Class, "getSize",             "get_size"               );
 	rb_define_alias( rbImage::Class, "createMaskFromColor", "create_mask_from_color" );
 	rb_define_alias( rbImage::Class, "setPixel",            "set_pixel"              );
 	rb_define_alias( rbImage::Class, "getPixel",            "get_pixel"              );
