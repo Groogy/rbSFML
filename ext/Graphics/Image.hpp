@@ -75,11 +75,10 @@ namespace rbImage
 	// Image#save(filename)
 	static VALUE SaveToFile( VALUE aSelf, VALUE aFilename );
 	
-	// Image#width
-	static VALUE GetWidth( VALUE aSelf );
-	
-	// Image#height
-	static VALUE GetHeight( VALUE aSelf );
+	// Image#size
+	// Image#get_size
+	// Image#getSize
+	static VALUE GetSize( VALUE aSelf );
 	
 	// Image#createMaskFromColor(color, alpha=0)
 	// Image#create_mask_from_color(color, alpha=0)

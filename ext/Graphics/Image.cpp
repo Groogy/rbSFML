@@ -25,6 +25,7 @@
 #include "Color.hpp"
 #include "Rect.hpp"
 #include "InputStream.hpp"
+#include "System/Vector2.hpp"
 #include "System/SFML.hpp"
 
 void rbImage::Init( VALUE SFML )
@@ -41,8 +42,7 @@ void rbImage::Init( VALUE SFML )
 	rb_define_method( rbImage::Class, "load_from_memory",       rbImage::LoadFromMemory,       1 );
 	rb_define_method( rbImage::Class, "load_from_stream",       rbImage::LoadFromStream,       1 );
 	rb_define_method( rbImage::Class, "save_to_file",           rbImage::SaveToFile,           1 );
-	rb_define_method( rbImage::Class, "width",                  rbImage::GetWidth,             0 );
-	rb_define_method( rbImage::Class, "height",                 rbImage::GetHeight,            0 );
+	rb_define_method( rbImage::Class, "get_size",               rbImage::GetSize,              0 );
 	rb_define_method( rbImage::Class, "create_mask_from_color", rbImage::CreateMaskFromColor, -1 );
 	rb_define_method( rbImage::Class, "copy",                   rbImage::Copy,                -1 );
 	rb_define_method( rbImage::Class, "set_pixel",              rbImage::SetPixel,             3 );
@@ -192,16 +192,12 @@ VALUE rbImage::SaveToFile( VALUE aSelf, VALUE aFilename )
 	return result ? Qtrue : Qfalse;
 }
 
-// Image#width
-VALUE rbImage::GetWidth( VALUE aSelf )
+// Image#size
+// Image#get_size
+// Image#getSize
+VALUE rbImage::GetSize( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getWidth() );
-}
-
-// Image#height
-VALUE rbImage::GetHeight( VALUE aSelf )
-{
-	return INT2NUM( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getHeight() );
+	return rbVector2::ToRuby( rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getSize() );
 }
 
 // Image#createMaskFromColor(color, alpha=0)
@@ -286,7 +282,7 @@ VALUE rbImage::GetPixelsPtr( VALUE aSelf )
 {
 	sf::Image* selfImage = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
 	const sf::Uint8* pixels = selfImage->getPixelsPtr();
-	const unsigned int pixelArraySize = selfImage->getWidth() * selfImage->getHeight() * 4;
+	const unsigned int pixelArraySize = selfImage->getSize().x * selfImage->getSize().y * 4;
 	VALUE pixelsArray = rb_ary_new2( pixelArraySize );
 	
 	for( unsigned int index = 0; index < pixelArraySize; index++ )
@@ -339,8 +335,8 @@ VALUE rbImage::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%ix%i, %p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getWidth(),
-					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getHeight(),
+					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getSize().x,
+					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class ) );
 }
 
@@ -348,5 +344,5 @@ VALUE rbImage::Inspect( VALUE aSelf )
 VALUE rbImage::GetMemoryUsage( VALUE aSelf )
 {
 	sf::Image* image = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
-    return INT2FIX( sizeof( sf::Image ) + image->getWidth() * image->getHeight() );
+    return INT2FIX( sizeof( sf::Image ) + image->getSize().x * image->getSize().y );
 }
