@@ -240,24 +240,24 @@ VALUE rbRenderTarget::GetViewport( VALUE aSelf, VALUE aView )
 	return rbRect::ToRuby( rbRenderTarget::ToSFML( aSelf )->getViewport( *rbMacros::ToSFML< sf::View >( aView, rbView::Class ) ) );
 }
 
-// RenderTarget#convert(x, y)
-// RenderTarget#convert_coords(x, y)
-// RenderTarget#convertCoords(x, y)
-// RenderTarget#convert(x, y, view)
-// RenderTarget#convert_coords(x, y, view)
-// RenderTarget#convertCoords(x, y, view)
+// RenderTarget#convert(vector2)
+// RenderTarget#convert_coords(vector2)
+// RenderTarget#convertCoords(vector2)
+// RenderTarget#convert(vector2, view)
+// RenderTarget#convert_coords(vector2, view)
+// RenderTarget#convertCoords(vector2, view)
 VALUE rbRenderTarget::ConvertCoords( int argc, VALUE* args, VALUE aSelf )
 {
 	VALUE coords = Qnil;
 	switch( argc )
 	{
-	case 2:
-		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->convertCoords( NUM2UINT( args[ 0 ] ), NUM2UINT( args[ 1 ] ) ) );
+	case 1:
+		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->convertCoords( rbVector2::ToSFMLi( args[ 0 ] ) ) );
 		break;
-	case 3:
+	case 2:
 		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->convertCoords( 
-				NUM2UINT( args[ 0 ] ), NUM2UINT( args[ 1 ] ), 
-				*rbMacros::ToSFML< sf::View >( args[ 2 ], rbView::Class ) 
+				rbVector2::ToSFMLi( args[ 0 ] ),
+				*rbMacros::ToSFML< sf::View >( args[ 1 ], rbView::Class ) 
 			) 
 		);
 		break;

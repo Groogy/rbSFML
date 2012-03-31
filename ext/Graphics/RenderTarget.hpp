@@ -67,12 +67,12 @@ namespace rbRenderTarget
 	// RenderTarget#getViewport(view)
 	static VALUE GetViewport( VALUE aSelf, VALUE aView );
 	
-	// RenderTarget#convert(x, y)
-	// RenderTarget#convert_coords(x, y)
-	// RenderTarget#convertCoords(x, y)
-	// RenderTarget#convert(x, y, view)
-	// RenderTarget#convert_coords(x, y, view)
-	// RenderTarget#convertCoords(x, y, view)
+	// RenderTarget#convert(vector2)
+	// RenderTarget#convert_coords(vector2)
+	// RenderTarget#convertCoords(vector2)
+	// RenderTarget#convert(vector2, view)
+	// RenderTarget#convert_coords(vector2, view)
+	// RenderTarget#convertCoords(vector2, view)
 	static VALUE ConvertCoords( int argc, VALUE* args, VALUE aSelf );
 	
 	// RenderTarget#draw(drawable, render_state)
