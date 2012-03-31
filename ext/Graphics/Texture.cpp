@@ -44,8 +44,7 @@ void rbTexture::Init( VALUE SFML )
 	rb_define_method( rbTexture::Class, "load_from_memory",       rbTexture::LoadFromMemory,      -1 );
 	rb_define_method( rbTexture::Class, "load_from_stream",       rbTexture::LoadFromStream,      -1 );
 	rb_define_method( rbTexture::Class, "load_from_image" ,       rbTexture::LoadFromImage,       -1 );
-	rb_define_method( rbTexture::Class, "width",                  rbTexture::GetWidth,             0 );
-	rb_define_method( rbTexture::Class, "height",                 rbTexture::GetHeight,            0 );
+	rb_define_method( rbTexture::Class, "size",                   rbTexture::GetSize,              0 );
 	rb_define_method( rbTexture::Class, "copy_to_image",          rbTexture::CopyToImage,          0 );
 	rb_define_method( rbTexture::Class, "update",                 rbTexture::Update,              -1 );
 	rb_define_method( rbTexture::Class, "bind",                   rbTexture::Bind,                -1 );
@@ -66,6 +65,8 @@ void rbTexture::Init( VALUE SFML )
     rb_define_alias( rbTexture::Class, "to_s",         "inspect"       );
 	rb_define_alias( rbTexture::Class, "to_image",     "copy_to_image" );
 	rb_define_alias( rbTexture::Class, "copyToImage",  "copy_to_image" );
+	rb_define_alias( rbTexture::Class, "get_size",     "size"          );
+	rb_define_alias( rbTexture::Class, "getSize",      "size"          );
 	rb_define_alias( rbTexture::Class, "smooth",       "smooth?"       );
 	rb_define_alias( rbTexture::Class, "isSmooth",     "smooth?"       );
 	rb_define_alias( rbTexture::Class, "is_smooth?",   "smooth?"       );
@@ -226,16 +227,12 @@ VALUE rbTexture::LoadFromImage( int argc, VALUE* args, VALUE aSelf )
 	return result ? Qtrue : Qfalse;
 }
 
-// Texture#width
-VALUE rbTexture::GetWidth( VALUE aSelf )
+// Texture#size
+// Texture#get_size
+// Texture#getSize
+VALUE rbTexture::GetSize( VALUE aSelf )
 {
-	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getWidth() );
-}
-
-// Texture#height
-VALUE rbTexture::GetHeight( VALUE aSelf )
-{
-	return INT2NUM( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getHeight() );
+	return rbVector2::ToRuby( rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getSize() );
 }
 
 // Texture#copy_to_image
@@ -407,8 +404,8 @@ VALUE rbTexture::Inspect( VALUE aSelf )
 {
 	return rb_sprintf( "%s(%ix%i, %p)",
 					   rb_obj_classname( aSelf ),
-					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getWidth(),
-					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getHeight(),
+					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getSize().x,
+					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class ) );
 }
 

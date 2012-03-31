@@ -70,11 +70,10 @@ namespace rbTexture
 	// Texture#loadFromImage(image, area = nil)
 	static VALUE LoadFromImage( int argc, VALUE* args, VALUE aSelf );
 	
-	// Texture#width
-	static VALUE GetWidth( VALUE aSelf );
-	
-	// Texture#height
-	static VALUE GetHeight( VALUE aSelf );
+	// Texture#size
+	// Texture#get_size
+	// Texture#getSize
+	static VALUE GetSize( VALUE aSelf );
 	
 	// Texture#copy_to_image
 	// Texture#to_image
