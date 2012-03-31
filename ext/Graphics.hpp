@@ -43,5 +43,6 @@
 #include "Graphics/RenderWindow.hpp"
 #include "Graphics/RenderTexture.hpp"
 #include "Graphics/Sprite.hpp"
+#include "Graphics/Text.hpp"
 
 #endif // GRAPHICS_HPP
