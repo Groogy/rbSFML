@@ -116,8 +116,8 @@ VALUE rbTexture::Create( VALUE aSelf, VALUE aWidth, VALUE aHeight )
 	rb_check_frozen( aSelf );
 	
 	rbSFML::PrepareErrorStream();
-	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->create( NUM2INT( aWidth ), NUM2INT( aHeight ) );
-	rbSFML::CheckWarn();
+	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->create( NUM2UINT( aWidth ), NUM2UINT( aHeight ) );
+	rbSFML::CheckRaise();
 	return result ? Qtrue : Qfalse;
 }
 
@@ -143,7 +143,7 @@ VALUE rbTexture::LoadFromFile( int argc, VALUE* args, VALUE aSelf )
 	
 	rbSFML::PrepareErrorStream();
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromFile( StringValueCStr( filename ), rbRect::ToSFMLi( area ) );
-	rbSFML::CheckWarn();
+	rbSFML::CheckRaise();
 	return result ? Qtrue : Qfalse;
 }
 
@@ -170,7 +170,7 @@ VALUE rbTexture::LoadFromMemory( int argc, VALUE* args, VALUE aSelf )
 	rbSFML::PrepareErrorStream();
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromMemory( RSTRING_PTR( data ),
 																						  RSTRING_LEN( data ), rbRect::ToSFMLi( area ) );
-	rbSFML::CheckWarn();
+	rbSFML::CheckRaise();
 	return result ? Qtrue : Qfalse;
 }
 
