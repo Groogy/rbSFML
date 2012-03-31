@@ -45,16 +45,16 @@ void rbCircleShape::Init( VALUE SFML )
     rb_define_method( rbCircleShape::Class, "memory_usage",         rbCircleShape::GetMemoryUsage,      0 );
 
     // Instance aliases
-	rb_define_alias( rbShape::Class, "to_s",                "inspect"               );
-	rb_define_alias( rbShape::Class, "radius=",             "set_radius"            );
-	rb_define_alias( rbShape::Class, "setRadius",           "set_radius"            );
-	rb_define_alias( rbShape::Class, "radius",              "get_radius"            );
-	rb_define_alias( rbShape::Class, "getRadius",           "get_radius"            );
-	rb_define_alias( rbShape::Class, "point_count=",        "set_point_count"       );
-	rb_define_alias( rbShape::Class, "setPointCount",       "set_point_count"       );
-	rb_define_alias( rbShape::Class, "point_count",         "get_point_count"       );
-	rb_define_alias( rbShape::Class, "getPointCount",       "get_point_count"       );
-	rb_define_alias( rbShape::Class, "getPoint",            "get_point"             );
+	rb_define_alias( rbCircleShape::Class, "to_s",                "inspect"               );
+	rb_define_alias( rbCircleShape::Class, "radius=",             "set_radius"            );
+	rb_define_alias( rbCircleShape::Class, "setRadius",           "set_radius"            );
+	rb_define_alias( rbCircleShape::Class, "radius",              "get_radius"            );
+	rb_define_alias( rbCircleShape::Class, "getRadius",           "get_radius"            );
+	rb_define_alias( rbCircleShape::Class, "point_count=",        "set_point_count"       );
+	rb_define_alias( rbCircleShape::Class, "setPointCount",       "set_point_count"       );
+	rb_define_alias( rbCircleShape::Class, "point_count",         "get_point_count"       );
+	rb_define_alias( rbCircleShape::Class, "getPointCount",       "get_point_count"       );
+	rb_define_alias( rbCircleShape::Class, "getPoint",            "get_point"             );
 }
 
 // CircleShape#initialize
