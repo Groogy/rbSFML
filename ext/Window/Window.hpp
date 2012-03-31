@@ -97,11 +97,21 @@ namespace rbWindow
 	// Window#set_position(vector2)
 	// Window#setPosition(vector2)
     static VALUE SetPosition( VALUE aSelf, VALUE aPosition );
+	
+	// Window#position()
+	// Window#get_position()
+	// Window#getPosition()
+    static VALUE GetPosition( VALUE aSelf );
     
     // Window#size=(vector2)
 	// Window#set_size(vector2)
 	// Window#setSize(vector2)
     static VALUE SetSize( VALUE aSelf, VALUE aSize );
+	
+	// Window#size()
+	// Window#get_size()
+	// Window#getSize()
+    static VALUE GetSize( VALUE aSelf );
     
     // Window#title=(title)
     // Window#set_title(title)

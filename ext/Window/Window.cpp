@@ -44,7 +44,9 @@ void rbWindow::Init( VALUE SFML )
     rb_define_method( rbWindow::Class, "vertical_sync_enabled=", rbWindow::SetVerticalSyncEnabled,  1 );
     rb_define_method( rbWindow::Class, "mouse_cursor_visible=",  rbWindow::SetMouseCursorVisible,   1 );
     rb_define_method( rbWindow::Class, "position=",              rbWindow::SetPosition,             1 );
+	rb_define_method( rbWindow::Class, "position",              rbWindow::GetPosition,             0 );
     rb_define_method( rbWindow::Class, "size=",                  rbWindow::SetSize,                 1 );
+	rb_define_method( rbWindow::Class, "size",                  rbWindow::GetSize,                 0 );
     rb_define_method( rbWindow::Class, "title=",                 rbWindow::SetTitle,                1 );
     rb_define_method( rbWindow::Class, "visible=",               rbWindow::SetVisible,              1 );
     rb_define_method( rbWindow::Class, "key_repeat_enabled=",    rbWindow::SetKeyRepeatEnabled,     1 );
@@ -73,8 +75,12 @@ void rbWindow::Init( VALUE SFML )
     rb_define_alias( rbWindow::Class, "setMouseCursorVisible",     "mouse_cursor_visible="  );
 	rb_define_alias( rbWindow::Class, "set_position",              "position="              );
     rb_define_alias( rbWindow::Class, "setPosition",               "position="              );
+	rb_define_alias( rbWindow::Class, "get_position",              "position"               );
+    rb_define_alias( rbWindow::Class, "getPosition",               "position"               );
 	rb_define_alias( rbWindow::Class, "set_size",                  "size="                  );
     rb_define_alias( rbWindow::Class, "setSize",                   "size="                  );
+	rb_define_alias( rbWindow::Class, "get_size",                  "size"                   );
+    rb_define_alias( rbWindow::Class, "getSize",                   "size"                   );
 	rb_define_alias( rbWindow::Class, "set_title",                 "title="                 );
     rb_define_alias( rbWindow::Class, "setTitle",                  "title="                 );
 	rb_define_alias( rbWindow::Class, "set_visible",               "visible="               );
@@ -317,6 +323,14 @@ VALUE rbWindow::SetPosition( VALUE aSelf, VALUE aPosition )
     return Qnil;
 }
 
+// Window#position()
+// Window#get_position()
+// Window#getPosition()
+VALUE rbWindow::GetPosition( VALUE aSelf )
+{
+    return rbVector2::ToRuby( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getPosition() );
+}
+
 // Window#size=(vector2)
 // Window#set_size(vector2)
 // Window#setSize(vector2)
@@ -325,6 +339,14 @@ VALUE rbWindow::SetSize( VALUE aSelf, VALUE aSize )
     rb_check_frozen( aSelf );
     rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->setSize( rbVector2::ToSFMLu( aSize ) );
     return Qnil;
+}
+
+// Window#size()
+// Window#get_size()
+// Window#getSize()
+VALUE rbWindow::GetSize( VALUE aSelf )
+{
+    return rbVector2::ToRuby( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSize() );
 }
 
 // Window#title=(title)
