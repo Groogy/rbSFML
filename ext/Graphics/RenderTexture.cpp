@@ -87,7 +87,11 @@ VALUE rbRenderTexture::Create( int argc, VALUE* args, VALUE aSelf )
 	case 3:
 		useDepth = RTEST( args[ 2 ] );
 	case 2:
+#ifdef SFML_GROOGY_EXTENSION
+		result = rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->create( NUM2UINT( args[ 0 ] ), NUM2UINT( args[ 1 ] ), sf::TextureFormat::RGBA8, useDepth );
+#else
 		result = rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->create( NUM2UINT( args[ 0 ] ), NUM2UINT( args[ 1 ] ), useDepth );
+#endif
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "2 or 3" );

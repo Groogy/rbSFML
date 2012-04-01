@@ -142,7 +142,11 @@ VALUE rbTexture::LoadFromFile( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
+#ifdef SFML_GROOGY_EXTENSION
+  bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromFile( StringValueCStr( filename ), sf::TextureFormat::RGBA8, rbRect::ToSFMLi( area ) );
+#else
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromFile( StringValueCStr( filename ), rbRect::ToSFMLi( area ) );
+#endif
 	rbSFML::CheckRaise();
 	return result ? Qtrue : Qfalse;
 }
@@ -168,8 +172,13 @@ VALUE rbTexture::LoadFromMemory( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
+#ifdef SFML_GROOGY_EXTENSION
+  bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromMemory( RSTRING_PTR( data ),
+																						  RSTRING_LEN( data ), sf::TextureFormat::RGBA8, rbRect::ToSFMLi( area ) );
+#else
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromMemory( RSTRING_PTR( data ),
 																						  RSTRING_LEN( data ), rbRect::ToSFMLi( area ) );
+#endif
 	rbSFML::CheckRaise();
 	return result ? Qtrue : Qfalse;
 }
@@ -196,7 +205,11 @@ VALUE rbTexture::LoadFromStream( int argc, VALUE* args, VALUE aSelf )
 	
 	rbInputStream stream( streamObj );
 	rbSFML::PrepareErrorStream();
+#ifdef SFML_GROOGY_EXTENSION
+  bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromStream( stream, sf::TextureFormat::RGBA8, rbRect::ToSFMLi( area ) );
+#else
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromStream( stream, rbRect::ToSFMLi( area ) );
+#endif
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
@@ -222,7 +235,11 @@ VALUE rbTexture::LoadFromImage( int argc, VALUE* args, VALUE aSelf )
 	}
 	
 	rbSFML::PrepareErrorStream();
+#ifdef SFML_GROOGY_EXTENSION
+  bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromImage( *rbMacros::ToSFML< sf::Image >( image, rbImage::Class ), sf::TextureFormat::RGBA8, rbRect::ToSFMLi( area ) );
+#else
 	bool result = rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->loadFromImage( *rbMacros::ToSFML< sf::Image >( image, rbImage::Class ), rbRect::ToSFMLi( area ) );
+#endif
 	rbSFML::CheckWarn();
 	return result ? Qtrue : Qfalse;
 }
