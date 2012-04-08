@@ -181,7 +181,8 @@ VALUE rbVector2::Divide( VALUE aSelf, VALUE anOther )
 // Vector2#==(other)
 VALUE rbVector2::Equal( VALUE aSelf, VALUE anOther )
 {
-    if( !rb_obj_is_kind_of( anOther, rbVector2::Class ) ) return Qfalse;
+    if( !rb_obj_is_kind_of( anOther, rbVector2::Class ) && !( rb_obj_is_kind_of( anOther, rb_cArray ) && RARRAY_LEN( anOther ) == 2 ) ) return Qfalse;
+    anOther = rbVector2::ToRuby( anOther );
     if( !RTEST( rb_equal( rbVector2::GetX( aSelf ), rbVector2::GetX( anOther ) ) ) ) return Qfalse;
     if( !RTEST( rb_equal( rbVector2::GetY( aSelf ), rbVector2::GetY( anOther ) ) ) ) return Qfalse;
     return Qtrue;

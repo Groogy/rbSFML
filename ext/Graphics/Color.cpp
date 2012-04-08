@@ -170,11 +170,12 @@ VALUE rbColor::Multiply( VALUE aLeft, VALUE aRight )
 // Color#==(other)
 VALUE rbColor::Equal( VALUE aSelf, VALUE anOther )
 {
-    if( !rb_obj_is_kind_of( anOther, rbColor::Class ) ) return Qfalse;
+    if( !rb_obj_is_kind_of( anOther, rbColor::Class ) && !( rb_obj_is_kind_of( anOther, rb_cArray ) && ( RARRAY_LEN( anOther ) == 3 || RARRAY_LEN( anOther ) == 4 ) ) ) return Qfalse;
+    anOther = rbColor::ToRuby( anOther );
     if( !RTEST( rb_equal( rbColor::GetRed( aSelf ), rbColor::GetRed( anOther ) ) ) ) return Qfalse;
     if( !RTEST( rb_equal( rbColor::GetGreen( aSelf ), rbColor::GetGreen( anOther ) ) ) ) return Qfalse;
     if( !RTEST( rb_equal( rbColor::GetBlue( aSelf ), rbColor::GetBlue( anOther ) ) ) ) return Qfalse;
-	if( !RTEST( rb_equal( rbColor::GetAlpha( aSelf ), rbColor::GetAlpha( anOther ) ) ) ) return Qfalse;
+    if( !RTEST( rb_equal( rbColor::GetAlpha( aSelf ), rbColor::GetAlpha( anOther ) ) ) ) return Qfalse;
     return Qtrue;
 }
 

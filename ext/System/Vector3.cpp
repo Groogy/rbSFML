@@ -192,7 +192,8 @@ VALUE rbVector3::Divide( VALUE aSelf, VALUE anOther )
 // Vector3#==(other)
 VALUE rbVector3::Equal( VALUE aSelf, VALUE anOther )
 {
-    if( !rb_obj_is_kind_of( anOther, rbVector3::Class ) ) return Qfalse;
+    if( !rb_obj_is_kind_of( anOther, rbVector3::Class ) && !( rb_obj_is_kind_of( anOther, rb_cArray ) && RARRAY_LEN( anOther ) == 3 ) ) return Qfalse;
+    anOther = rbVector3::ToRuby( anOther );
     if( !RTEST( rb_equal( rbVector3::GetX( aSelf ), rbVector3::GetX( anOther ) ) ) ) return Qfalse;
     if( !RTEST( rb_equal( rbVector3::GetY( aSelf ), rbVector3::GetY( anOther ) ) ) ) return Qfalse;
     if( !RTEST( rb_equal( rbVector3::GetZ( aSelf ), rbVector3::GetZ( anOther ) ) ) ) return Qfalse;
