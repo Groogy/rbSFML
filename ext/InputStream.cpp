@@ -28,7 +28,7 @@ rbInputStream::rbInputStream( VALUE anInputObject )
     self = anInputObject;
 }
 
-sf::Int64 rbInputStream::read( char* aBuffer, sf::Int64 aSize )
+sf::Int64 rbInputStream::read( void* aBuffer, sf::Int64 aSize )
 {
     VALUE str = rb_funcall( self, rb_intern( "read" ), 1, INT2NUM( aSize ) );
     memcpy( aBuffer, RSTRING_PTR( str ), RSTRING_LEN( str ) );

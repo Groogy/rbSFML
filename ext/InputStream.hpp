@@ -31,7 +31,7 @@ class rbInputStream : public sf::InputStream
 {
 public:
     rbInputStream( VALUE anInputObject );
-    sf::Int64 read( char* aBuffer, sf::Int64 aSize );
+    sf::Int64 read( void* aBuffer, sf::Int64 aSize );
     sf::Int64 seek( sf::Int64 aPosition );
     sf::Int64 tell();
     sf::Int64 getSize();

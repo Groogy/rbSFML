@@ -34,7 +34,7 @@ static inline void InitDependencies( VALUE SFML )
 #if !defined( RBSFML_SFML )
     rbVector3::Class        = rb_const_get( SFML, rb_intern( "Vector3" ) );
     rbNonCopyable::Module   = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
-    rbTime::Class           = rb_const_get( SFML, rb_intern( "rbTime" ) );
+    rbTime::Class           = rb_const_get( SFML, rb_intern( "Time" ) );
 #endif
 }
 
@@ -43,10 +43,10 @@ void Init_audio()
 {
     VALUE SFML = rbSFML::Module();
 
-    if( !rb_const_get( SFML, rb_intern( "System" ) ) )
+    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) )
         rb_require( "sfml/system" );
 
-    rb_define_const( SFML, "Audio", Qtrue );
+    rb_cv_set( SFML, "@@graphics", Qtrue );
 
     InitDependencies( SFML );
 
