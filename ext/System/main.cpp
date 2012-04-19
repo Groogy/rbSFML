@@ -26,11 +26,41 @@
 std::stringstream globalErrorStream;
 #endif
 
+VALUE rbSFML_Seconds( VALUE aSelf, VALUE someTime )
+{
+	VALUE time = rbMacros::RubyAllocate( rbTime::Class );
+	*rbMacros::ToSFML< sf::Time >( time, rbTime::Class ) = sf::seconds( NUM2DBL( someTime ) );
+	return time;
+}
+
+VALUE rbSFML_Milliseconds( VALUE aSelf, VALUE someTime )
+{
+	VALUE time = rbMacros::RubyAllocate( rbTime::Class );
+	*rbMacros::ToSFML< sf::Time >( time, rbTime::Class ) = sf::milliseconds( NUM2INT( someTime ) );
+	return time;
+}
+
+VALUE rbSFML_Microseconds( VALUE aSelf, VALUE someTime )
+{
+	VALUE time = rbMacros::RubyAllocate( rbTime::Class );
+	*rbMacros::ToSFML< sf::Time >( time, rbTime::Class ) = sf::milliseconds( NUM2LONG( someTime ) );
+	return time;
+}
+
+void DefineTimeConstructionMethods( VALUE SFML )
+{
+	rb_define_module_function( SFML, "seconds",      rbSFML_Seconds, 1      );
+	rb_define_module_function( SFML, "milliseconds", rbSFML_Milliseconds, 1 );
+	rb_define_module_function( SFML, "microseconds", rbSFML_Microseconds, 1 );
+}
+
 extern "C"
 void Init_system()
 {
     VALUE SFML = rbSFML::Module();
 	rb_define_const( SFML, "System", Qtrue );
+	
+	DefineTimeConstructionMethods( SFML );
 
     rbSFML::Init( SFML );
     rbNonCopyable::Init( SFML );
