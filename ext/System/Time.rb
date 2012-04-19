@@ -66,6 +66,7 @@ module SFML
     # @param [Time] right Time value to subtract with.
     # @return [Time] The difference of the Time values.
     def -( right )
+    end
     
     # Multiply the time value with a factor.
     # @overload *( right )

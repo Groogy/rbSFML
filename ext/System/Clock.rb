@@ -15,7 +15,6 @@ module SFML
     # @return [Time] The elapsed Time
     def elapsed_time
     end
-    alias elapsedTime elapsed_time
     alias getElapsedTime elapsed_time
     alias get_elapsed_time elapsed_time
     alias time elapsed_time

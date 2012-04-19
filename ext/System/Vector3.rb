@@ -22,6 +22,7 @@ module SFML
   #
   # @example
   #   v1 = Vector3.new(16.5, 24, -8.2)
+  #   v1 == [16.5, 24, -8.2]
   #   v1.x = 18.2
   #   y = v1.y
   #   z = v1.z

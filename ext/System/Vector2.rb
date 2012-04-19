@@ -21,7 +21,8 @@ module SFML
   # @note for 3-dimensional vectors, see <tt>Vector3</tt>. 
   #
   # @example
-  #   v1 = Vector2.new(16.5, 24)
+  #   v1 = SFML::Vector2.new(16.5, 24)
+  #   v1 == [16.5, 24]
   #   v1.x = 18.2
   #   y = v1.y
   #   v2 = v1 * 5
