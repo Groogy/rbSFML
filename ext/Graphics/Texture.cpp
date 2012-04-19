@@ -62,19 +62,23 @@ void rbTexture::Init( VALUE SFML )
 	rb_define_alias( rb_singleton_class( rbTexture::Class ), "getMaximumSize", "maximum_size" );
 
     // Instance aliases
-    rb_define_alias( rbTexture::Class, "to_s",         "inspect"       );
-	rb_define_alias( rbTexture::Class, "to_image",     "copy_to_image" );
-	rb_define_alias( rbTexture::Class, "copyToImage",  "copy_to_image" );
-	rb_define_alias( rbTexture::Class, "get_size",     "size"          );
-	rb_define_alias( rbTexture::Class, "getSize",      "size"          );
-	rb_define_alias( rbTexture::Class, "smooth",       "smooth?"       );
-	rb_define_alias( rbTexture::Class, "isSmooth",     "smooth?"       );
-	rb_define_alias( rbTexture::Class, "is_smooth?",   "smooth?"       );
-	rb_define_alias( rbTexture::Class, "is_smooth",    "smooth?"       );
-	rb_define_alias( rbTexture::Class, "repeated",     "repeated?"     );
-	rb_define_alias( rbTexture::Class, "is_repeated?", "repeated?"     );
-	rb_define_alias( rbTexture::Class, "is_repeated",  "repeated?"     );
-	rb_define_alias( rbTexture::Class, "isRepeated",   "repeated?"     );
+    rb_define_alias( rbTexture::Class, "to_s",           "inspect"          );
+	rb_define_alias( rbTexture::Class, "loadFromFile",   "load_from_file"   );
+	rb_define_alias( rbTexture::Class, "loadFromMemory", "load_from_memory" );
+	rb_define_alias( rbTexture::Class, "loadFromStream", "load_from_tream"  );
+	rb_define_alias( rbTexture::Class, "loadFromImage",  "load_from_image"  );
+	rb_define_alias( rbTexture::Class, "to_image",       "copy_to_image"    );
+	rb_define_alias( rbTexture::Class, "copyToImage",    "copy_to_image"    );
+	rb_define_alias( rbTexture::Class, "get_size",       "size"             );
+	rb_define_alias( rbTexture::Class, "getSize",        "size"             );
+	rb_define_alias( rbTexture::Class, "smooth",         "smooth?"          );
+	rb_define_alias( rbTexture::Class, "isSmooth",       "smooth?"          );
+	rb_define_alias( rbTexture::Class, "is_smooth?",     "smooth?"          );
+	rb_define_alias( rbTexture::Class, "is_smooth",      "smooth?"          );
+	rb_define_alias( rbTexture::Class, "repeated",       "repeated?"        );
+	rb_define_alias( rbTexture::Class, "is_repeated?",   "repeated?"        );
+	rb_define_alias( rbTexture::Class, "is_repeated",    "repeated?"        );
+	rb_define_alias( rbTexture::Class, "isRepeated",     "repeated?"        );
 	
 	rb_define_const( rbTexture::Class, "Normalized", INT2NUM( sf::Texture::Normalized ) );
 	rb_define_const( rbTexture::Class, "Pixels",     INT2NUM( sf::Texture::Pixels ) );
