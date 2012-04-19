@@ -9,6 +9,7 @@ Dependencies
 Of course this means this library depends on SFML so you'll have to install SFML2 on your development machine in order to compile rbSFML. rbSFML comes with a cloned module from the SFML Github repository that rbSFML is known to compile against but you can try and use the latest version of SFML as long as SFML has not come with anything API breaking. If that is the case then you don't even need to recompile rbSFML but only replace the SFML shared libraries.
 
 Recommended is this setup: (lowers or highers versions might work too)
+
 - [SFML - commit 459bc291f5](https://github.com/LaurentGomila/SFML/tree/459bc291f5743f2a5fc722eb26f8c4867e30e61f)
 - [Ruby 1.9.3p0](http://www.ruby-lang.org/en/downloads/)
 - [Rake 0.9.2.2](https://rubygems.org/gems/rake)
