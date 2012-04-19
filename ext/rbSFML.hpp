@@ -25,8 +25,8 @@
 #include <ruby.h>
 #include <new>
 
-#define SFML_VERSION    "2.0"
-#define BINDING_VERSION "development-unstable"
+#define SFML_VERSION    "2.0-RC"
+#define BINDING_VERSION "1.0-RC"
 
 namespace rbMacros
 {
