@@ -87,12 +87,11 @@ VALUE rbSprite::Initialize( int argc, VALUE* args, VALUE aSelf )
 		rbMacros::ToSFML< sf::Sprite >( aSelf, rbSprite::Class )->setTextureRect( rbRect::ToSFMLi( args[ 1 ] ) );
 	case 1:
 		rbMacros::ToSFML< sf::Sprite >( aSelf, rbSprite::Class )->setTexture( *rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class ) );
+		rb_iv_set( aSelf, "@__ref__texture", args[ 0 ] );
 		break;
 	default:
 		INVALID_ARGUMENT_LIST( argc, "0..2" );
 	}
-	
-	rb_iv_set( aSelf, "@__ref__texture", args[ 0 ] );
 	
 	rb_iv_set( aSelf, "@__internal__drawable_offset", INT2FIX( 0 ) );
 	rb_iv_set( aSelf, "@__internal__transformable_offset", INT2FIX( sizeof( sf::Drawable ) ) );
