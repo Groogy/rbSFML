@@ -31,11 +31,9 @@ module SFML
     
     # @return [Fixnum, Float]
     attr_accessor :x
-    alias X x
     
     # @return [Fixnum, Float]
     attr_accessor :y
-    alias Y y
     
     # @overload initialize()
     #   Creates a <tt>Vector(0, 0)</tt>.
