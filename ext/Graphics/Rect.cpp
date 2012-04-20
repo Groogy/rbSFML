@@ -73,8 +73,6 @@ VALUE rbRect::Initialize( int argc, VALUE argv[], VALUE aSelf )
 		case 2:
 			position = rbVector2::ToRuby( argv[ 0 ] );
 			size = rbVector2::ToRuby( argv[ 1 ] );
-			if( rbVector2::Type( position ) != rbVector2::Type( size ) )
-				rb_raise( rb_eTypeError, "Vectors must be of same numeric type!" );
 				
 			rbRect::SetLeft( aSelf, rbVector2::GetX( position ) );
 			rbRect::SetTop( aSelf, rbVector2::GetY( position ) );
@@ -82,24 +80,10 @@ VALUE rbRect::Initialize( int argc, VALUE argv[], VALUE aSelf )
 			rbRect::SetHeight( aSelf, rbVector2::GetY( size ) );
 			break;
         case 4:
-            if( FIXNUM_P( argv[ 0 ] ) and FIXNUM_P( argv[ 1 ] ) and FIXNUM_P( argv[ 2 ] ) and FIXNUM_P( argv[ 3 ] ) )
-            {
-                rbRect::SetLeft( aSelf, argv[ 0 ] );
-                rbRect::SetTop( aSelf, argv[ 1 ] );
-                rbRect::SetWidth( aSelf, argv[ 2 ] );
-				rbRect::SetHeight( aSelf, argv[ 3 ] );
-            }
-            else if( ISFLOAT( argv[ 0 ] ) and ISFLOAT( argv[ 1 ] ) and ISFLOAT( argv[ 2 ] ) and FIXNUM_P( argv[ 3 ] ) )
-            {
-                rbRect::SetLeft( aSelf, rb_to_float( argv[ 0 ] ) );
-                rbRect::SetTop( aSelf, rb_to_float( argv[ 1 ] ) );
-                rbRect::SetWidth( aSelf, rb_to_float( argv[ 2 ] ) );
-				rbRect::SetHeight( aSelf, rb_to_float( argv[ 3 ] ) );
-            }
-            else
-            {
-                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            }
+			rbRect::SetLeft( aSelf, argv[ 0 ] );
+			rbRect::SetTop( aSelf, argv[ 1 ] );
+			rbRect::SetWidth( aSelf, argv[ 2 ] );
+			rbRect::SetHeight( aSelf, argv[ 3 ] );
             break;
         default:
             INVALID_ARGUMENT_LIST( argc, "0, 1, 2 or 4" );
@@ -144,23 +128,10 @@ VALUE rbRect::Contains( int argc, VALUE* args, VALUE aSelf )
 	{
 		case 1:
 			point = rbVector2::ToRuby( args[ 0 ] );
-			if( rbVector2::Type( point ) != rbRect::Type( aSelf ) )
-				rb_raise( rb_eTypeError, "Vector and rect must be of same numeric type!" );
 			
 			return internalContains( aSelf, rbVector2::GetX( point ), rbVector2::GetY( point ) );
 		case 2:
-			if( rbRect::Type( aSelf ) == T_FIXNUM and FIXNUM_P( args[ 0 ] ) and FIXNUM_P( args[ 1 ] ) )
-            {
-				return internalContains( aSelf, args[ 0 ], args[ 1 ] );
-            }
-            else if( rbRect::Type( aSelf ) == T_FLOAT and ISFLOAT( args[ 0 ] ) and ISFLOAT( args[ 1 ] ) )
-            {
-				return internalContains( aSelf, args[ 0 ], args[ 1 ] );
-            }
-            else
-            {
-                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            }
+			return internalContains( aSelf, args[ 0 ], args[ 1 ] );
 		default:
             INVALID_ARGUMENT_LIST( argc, "1 or 2" );
 	}
@@ -202,19 +173,10 @@ VALUE rbRect::Intersects( int argc, VALUE* args, VALUE aSelf )
 	{
 		case 1:
 			rect = rbRect::ToRuby( args[ 0 ] );
-			if( rbRect::Type( aSelf ) != rbRect::Type( rect ) )
-				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
-				
 			return internalIntersects( aSelf, rect, Qnil );
 		case 2:
 			rect = rbRect::ToRuby( args[ 0 ] );
-			if( rbRect::Type( aSelf ) != rbRect::Type( rect ) )
-				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
-				
 			intersection = rbRect::ToRuby( args[ 1 ] );
-			if( rbRect::Type( aSelf ) != rbRect::Type( intersection ) )
-				rb_raise( rb_eTypeError, "Rects must be of same numeric type!" );
-				
 			return internalIntersects( aSelf, rect, intersection );
 		default:
             INVALID_ARGUMENT_LIST( argc, "1 or 2" );
@@ -268,24 +230,16 @@ VALUE rbRect::StrictEqual( VALUE aSelf, VALUE anOther )
 // Rect#to_s
 VALUE rbRect::Inspect( VALUE aSelf )
 {
-    switch( rbRect::Type( aSelf ) )
-    {
-        case T_FIXNUM:
-            return rb_sprintf( "%s(%i, %i, %i, %i)",
-                               rb_obj_classname( aSelf ),
-                               FIX2INT( rbRect::GetLeft( aSelf ) ),
-                               FIX2INT( rbRect::GetTop( aSelf ) ),
-                               FIX2INT( rbRect::GetWidth( aSelf ) ),
-							   FIX2INT( rbRect::GetHeight( aSelf ) ) );
-        case T_FLOAT:
-            return rb_sprintf( "%s(%lg, %lg, %lg, %lg)",
-                              rb_obj_classname( aSelf ),
-                              NUM2DBL( rbRect::GetLeft( aSelf ) ),
-                              NUM2DBL( rbRect::GetTop( aSelf ) ),
-                              NUM2DBL( rbRect::GetWidth( aSelf ) ),
-							  NUM2DBL( rbRect::GetHeight( aSelf ) ) );
-    }
-    return Qnil;
+	VALUE left = rb_funcall( rbRect::GetLeft( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE top = rb_funcall( rbRect::GetTop( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE width = rb_funcall( rbRect::GetWidth( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE height = rb_funcall( rbRect::GetHeight( aSelf ), rb_intern( "inspect" ), 0 );
+	return rb_sprintf( "%s(%s, %s, %s, %s)",
+					   rb_obj_classname( aSelf ),
+					   StringValueCStr( left ),
+					   StringValueCStr( top ),
+					   StringValueCStr( width ),
+					   StringValueCStr( height ) );
 }
 
 // Rect#memory_usage
