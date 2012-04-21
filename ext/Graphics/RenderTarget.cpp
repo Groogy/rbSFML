@@ -284,7 +284,7 @@ VALUE rbRenderTarget::Draw( int argc, VALUE* args, VALUE aSelf )
 		if( TYPE( args[ 0 ] ) == T_ARRAY )
 		{
 			unsigned int vertexCount = RARRAY_LEN( args[ 0 ] );
-			VALUE* vertexPtr         = RARRAY_PTR( args[ 1 ] );
+			VALUE* vertexPtr         = RARRAY_PTR( args[ 0 ] );
 			sf::Vertex* vertices     = new sf::Vertex[ vertexCount ];
 			for( unsigned int index = 0; index < vertexCount; index++ )
 			{
