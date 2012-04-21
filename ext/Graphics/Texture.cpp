@@ -65,7 +65,7 @@ void rbTexture::Init( VALUE SFML )
     rb_define_alias( rbTexture::Class, "to_s",           "inspect"          );
 	rb_define_alias( rbTexture::Class, "loadFromFile",   "load_from_file"   );
 	rb_define_alias( rbTexture::Class, "loadFromMemory", "load_from_memory" );
-	rb_define_alias( rbTexture::Class, "loadFromStream", "load_from_stream"  );
+	rb_define_alias( rbTexture::Class, "loadFromStream", "load_from_stream" );
 	rb_define_alias( rbTexture::Class, "loadFromImage",  "load_from_image"  );
 	rb_define_alias( rbTexture::Class, "to_image",       "copy_to_image"    );
 	rb_define_alias( rbTexture::Class, "copyToImage",    "copy_to_image"    );
