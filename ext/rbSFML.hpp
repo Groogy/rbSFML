@@ -34,16 +34,19 @@ namespace rbMacros
     static inline void Free( void *someMemory )
     {
         T* object = static_cast< T* >( someMemory );
-        object->~T();
-        xfree( someMemory );
+		delete object;
+        /*object->~T();
+        xfree( someMemory );*/
+		
     }
 	
 	template< typename T >
 	static inline T* Allocate()
 	{
-		void* memory = xmalloc( sizeof( T ) );
+		/*void* memory = xmalloc( sizeof( T ) );
         if( memory == NULL ) rb_memerror();
-        T* object = new( memory ) T;
+        T* object = new( memory ) T;*/
+		T* object = new T();
 		return object;
 	}
 
