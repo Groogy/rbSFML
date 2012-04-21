@@ -46,18 +46,18 @@ static inline void InitEnumerations( VALUE SFML )
 {
 	if( rb_const_defined( SFML, rb_intern( "BlendAlpha" ) ) == Qfalse )
 	{
-		rb_define_const( SFML, "BlendAlpha",    sf::BlendAlpha    );
-		rb_define_const( SFML, "BlendAdd",      sf::BlendAdd      );
-		rb_define_const( SFML, "BlendMultiply", sf::BlendMultiply );
-		rb_define_const( SFML, "BlendNone",     sf::BlendNone     );
+		rb_define_const( SFML, "BlendAlpha",    INT2FIX( sf::BlendAlpha    ) );
+		rb_define_const( SFML, "BlendAdd",      INT2FIX( sf::BlendAdd      ) );
+		rb_define_const( SFML, "BlendMultiply", INT2FIX( sf::BlendMultiply ) );
+		rb_define_const( SFML, "BlendNone",     INT2FIX( sf::BlendNone     ) );
 	
-		rb_define_const( SFML, "Points",         sf::Points         );
-		rb_define_const( SFML, "Lines",          sf::Lines          );
-		rb_define_const( SFML, "LinesStrip",     sf::LinesStrip     );
-		rb_define_const( SFML, "Triangles",      sf::Triangles      );
-		rb_define_const( SFML, "TrianglesStrip", sf::TrianglesStrip );
-		rb_define_const( SFML, "TrianglesFan",   sf::TrianglesFan   );
-		rb_define_const( SFML, "Quads",          sf::Quads          );
+		rb_define_const( SFML, "Points",         INT2FIX( sf::Points         ) );
+		rb_define_const( SFML, "Lines",          INT2FIX( sf::Lines          ) );
+		rb_define_const( SFML, "LinesStrip",     INT2FIX( sf::LinesStrip     ) );
+		rb_define_const( SFML, "Triangles",      INT2FIX( sf::Triangles      ) );
+		rb_define_const( SFML, "TrianglesStrip", INT2FIX( sf::TrianglesStrip ) );
+		rb_define_const( SFML, "TrianglesFan",   INT2FIX( sf::TrianglesFan   ) );
+		rb_define_const( SFML, "Quads",          INT2FIX( sf::Quads          ) );
 	}
 }
 
