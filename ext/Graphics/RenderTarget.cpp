@@ -285,7 +285,7 @@ VALUE rbRenderTarget::Draw( int argc, VALUE* args, VALUE aSelf )
 		{
 			unsigned int vertexCount = RARRAY_LEN( args[ 0 ] );
 			VALUE* vertexPtr         = RARRAY_PTR( args[ 0 ] );
-			sf::Vertex* vertices     = xmalloc( sizeof( sf::Vertex ) * vertexCount );
+			sf::Vertex* vertices     = static_cast< sf::Vertex* >( xmalloc( sizeof( sf::Vertex ) * vertexCount ) );
 			for( unsigned int index = 0; index < vertexCount; index++ )
 			{
 				vertices[ index ] = rbVertex::ToSFML( vertexPtr[ index ] );
