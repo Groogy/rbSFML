@@ -111,17 +111,17 @@ VALUE rbRenderStates::Initialize( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "0, 1 or 4" );
 	}
 	
-	VALUE transform = rbMacros::ToRuby( &states->transform, rbTransform::Class );
+	VALUE transform = rbMacros::ToRubyNoGC( &states->transform, rbTransform::Class );
 	rb_iv_set( aSelf, "@__ref__transform", transform );
 	rb_iv_set( transform, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( transform );
 	
-	VALUE texture = rbMacros::ToRuby( const_cast< sf::Texture* >( states->texture ), rbTexture::Class );
+	VALUE texture = rbMacros::ToRubyNoGC( const_cast< sf::Texture* >( states->texture ), rbTexture::Class );
 	rb_iv_set( aSelf, "@__ref__texture", texture );
 	rb_iv_set( texture, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( texture );
 	
-	VALUE shader = rbMacros::ToRuby( const_cast< sf::Shader* >( states->shader ), rbShader::Class );
+	VALUE shader = rbMacros::ToRubyNoGC( const_cast< sf::Shader* >( states->shader ), rbShader::Class );
 	rb_iv_set( aSelf, "@__ref__shader", shader );
 	rb_iv_set( shader, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( shader );
@@ -135,17 +135,17 @@ VALUE rbRenderStates::InitializeCopy( VALUE aSelf, VALUE aState )
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
     *states = *rbRenderStates::ToSFML( aState );
 	
-	VALUE transform = rbMacros::ToRuby( &states->transform, rbTransform::Class );
+	VALUE transform = rbMacros::ToRubyNoGC( &states->transform, rbTransform::Class );
 	rb_iv_set( aSelf, "@__ref__transform", transform );
 	rb_iv_set( transform, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( transform );
 	
-	VALUE texture = rbMacros::ToRuby( const_cast< sf::Texture* >( states->texture ), rbTexture::Class );
+	VALUE texture = rbMacros::ToRubyNoGC( const_cast< sf::Texture* >( states->texture ), rbTexture::Class );
 	rb_iv_set( aSelf, "@__ref__texture", texture );
 	rb_iv_set( texture, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( texture );
 	
-	VALUE shader = rbMacros::ToRuby( const_cast< sf::Shader* >( states->shader ), rbShader::Class );
+	VALUE shader = rbMacros::ToRubyNoGC( const_cast< sf::Shader* >( states->shader ), rbShader::Class );
 	rb_iv_set( aSelf, "@__ref__shader", shader );
 	rb_iv_set( shader, "@__ref__state_owner", aSelf );
 	rb_obj_freeze( shader );
@@ -191,10 +191,9 @@ VALUE rbRenderStates::SetTexture( VALUE aSelf, VALUE aTexture )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
 	states->texture = rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class );
-	VALUE texture = rbMacros::ToRuby( const_cast< sf::Texture* >( states->texture ), rbTexture::Class );
-	rb_iv_set( aSelf, "@__ref__texture", texture );
-	rb_iv_set( texture, "@__ref__state_owner", aSelf );
-	rb_obj_freeze( texture );
+	rb_iv_set( aSelf, "@__ref__texture", aTexture );
+	rb_iv_set( aTexture, "@__ref__state_owner", aSelf );
+	return Qnil;
 }
 
 // RenderStates#shader
@@ -208,10 +207,9 @@ VALUE rbRenderStates::SetShader( VALUE aSelf, VALUE aShader )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
 	states->shader = rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class );
-	VALUE shader = rbMacros::ToRuby( const_cast< sf::Shader* >( states->shader ), rbShader::Class );
-	rb_iv_set( aSelf, "@__ref__shader", shader );
-	rb_iv_set( shader, "@__ref__state_owner", aSelf );
-	rb_obj_freeze( shader );
+	rb_iv_set( aSelf, "@__ref__shader", aShader );
+	rb_iv_set( aShader, "@__ref__state_owner", aSelf );
+	return Qnil;
 }
  
 // RenderStates#marshal_dump
