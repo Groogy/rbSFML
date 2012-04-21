@@ -67,20 +67,8 @@ VALUE rbVector2::Initialize( int argc, VALUE argv[], VALUE aSelf )
             rbVector2::InitializeCopy( aSelf, rbVector2::ToRuby( argv[ 0 ] ) );
             break;
         case 2:
-            if( FIXNUM_P( argv[ 0 ] ) and FIXNUM_P( argv[ 1 ] ) )
-            {
-                rbVector2::SetX( aSelf, argv[ 0 ] );
-                rbVector2::SetY( aSelf, argv[ 1 ] );
-            }
-            else if( ISFLOAT( argv[ 0 ] ) and ISFLOAT( argv[ 1 ] ) )
-            {
-                rbVector2::SetX( aSelf, rb_to_float( argv[ 0 ] ) );
-                rbVector2::SetY( aSelf, rb_to_float( argv[ 1 ] ) );
-            }
-            else
-            {
-                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            }
+            rbVector2::SetX( aSelf, argv[ 0 ] );
+            rbVector2::SetY( aSelf, argv[ 1 ] );
             break;
         default:
             INVALID_ARGUMENT_LIST( argc, "0..2" );
@@ -92,23 +80,8 @@ VALUE rbVector2::Initialize( int argc, VALUE argv[], VALUE aSelf )
 // Vector2#initialize_copy(vector2)
 VALUE rbVector2::InitializeCopy( VALUE aSelf, VALUE aVector2 )
 {
-    VALUE x = rbVector2::GetX( aVector2 );
-    VALUE y = rbVector2::GetY( aVector2 );
-
-    switch( rbVector2::Type( aVector2 ) )
-    {
-        case T_FIXNUM:
-            rbVector2::SetX( aSelf, x );
-            rbVector2::SetY( aSelf, y );
-            break;
-        case T_FLOAT:
-            rbVector2::SetX( aSelf, rb_float_new( NUM2DBL(x) ) );
-            rbVector2::SetY( aSelf, rb_float_new( NUM2DBL(y) ) );
-            break;
-        default:
-            INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            break;
-    }
+	rbVector2::SetX( aSelf, rbVector2::GetX( aVector2 ) );
+	rbVector2::SetY( aSelf, rbVector2::GetY( aVector2 ) );
 
     return aSelf;
 }
@@ -200,20 +173,11 @@ VALUE rbVector2::StrictEqual( VALUE aSelf, VALUE anOther )
 // Vector2#to_s
 VALUE rbVector2::Inspect( VALUE aSelf )
 {
-    switch( rbVector2::Type( aSelf ) )
-    {
-        case T_FIXNUM:
-            return rb_sprintf( "%s(%i, %i)",
-                               rb_obj_classname( aSelf ),
-                               FIX2INT( rbVector2::GetX( aSelf ) ),
-                               FIX2INT( rbVector2::GetY( aSelf ) ) );
-        case T_FLOAT:
-            return rb_sprintf( "%s(%lg, %lg)",
-                               rb_obj_classname( aSelf),
-                               NUM2DBL( rbVector2::GetX( aSelf ) ),
-                               NUM2DBL( rbVector2::GetY( aSelf ) ) );
-    }
-    return Qnil;
+	VALUE x = rb_funcall( rbVector2::GetX( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE y = rb_funcall( rbVector2::GetY( aSelf ), rb_intern( "inspect" ), 0 );
+	return rb_sprintf(  "%s(%s, %s)", rb_obj_classname( aSelf ),
+						StringValueCStr( x ),
+						StringValueCStr( y ) );
 }
 
 // Vector2#memory_usage

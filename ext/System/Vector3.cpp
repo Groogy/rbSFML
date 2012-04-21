@@ -69,22 +69,9 @@ VALUE rbVector3::Initialize( int argc, VALUE argv[], VALUE aSelf )
             rbVector3::InitializeCopy( aSelf, rbVector3::ToRuby( argv[ 0 ] ) );
             break;
         case 3:
-            if( FIXNUM_P( argv[ 0 ] ) and FIXNUM_P( argv[ 1 ] ) and FIXNUM_P( argv[ 2 ] ) )
-            {
-                rbVector3::SetX( aSelf, argv[ 0 ] );
-                rbVector3::SetY( aSelf, argv[ 1 ] );
-                rbVector3::SetZ( aSelf, argv[ 2 ] );
-            }
-            else if( ISFLOAT( argv[ 0 ] ) and ISFLOAT( argv[ 1 ] ) and ISFLOAT( argv[ 2 ] ) )
-            {
-                rbVector3::SetX( aSelf, rb_to_float( argv[ 0 ] ) );
-                rbVector3::SetY( aSelf, rb_to_float( argv[ 1 ] ) );
-                rbVector3::SetZ( aSelf, rb_to_float( argv[ 2 ] ) );
-            }
-            else
-            {
-                INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            }
+			rbVector3::SetX( aSelf, argv[ 0 ] );
+			rbVector3::SetY( aSelf, argv[ 1 ] );
+			rbVector3::SetZ( aSelf, argv[ 2 ] );
             break;
         default:
             INVALID_ARGUMENT_LIST( argc, "0, 1 or 3" );
@@ -96,26 +83,9 @@ VALUE rbVector3::Initialize( int argc, VALUE argv[], VALUE aSelf )
 // Vector3#initialize_copy(vector3)
 VALUE rbVector3::InitializeCopy( VALUE aSelf, VALUE aVector3 )
 {
-    VALUE x = rbVector3::GetX( aVector3 );
-    VALUE y = rbVector3::GetY( aVector3 );
-    VALUE z = rbVector3::GetZ( aVector3 );
-
-    switch( rbVector3::Type( aVector3 ) )
-    {
-        case T_FIXNUM:
-            rbVector3::SetX( aSelf, x );
-            rbVector3::SetY( aSelf, y );
-            rbVector3::SetZ( aSelf, z );
-            break;
-        case T_FLOAT:
-            rbVector3::SetX( aSelf, rb_float_new( NUM2DBL( x ) ) );
-            rbVector3::SetY( aSelf, rb_float_new( NUM2DBL( y ) ) );
-            rbVector3::SetZ( aSelf, rb_float_new( NUM2DBL( z ) ) );
-            break;
-        default:
-            INVALID_EXPECTED_TYPES( rb_cFixnum, rb_cFloat );
-            break;
-    }
+	rbVector3::SetX( aSelf, rbVector3::GetX( aVector3 ) );
+	rbVector3::SetY( aSelf, rbVector3::GetY( aVector3 ) );
+	rbVector3::SetZ( aSelf, rbVector3::GetZ( aVector3 ) );
 
     return aSelf;
 }
@@ -212,22 +182,13 @@ VALUE rbVector3::StrictEqual( VALUE aSelf, VALUE anOther )
 // Vector3#to_s
 VALUE rbVector3::Inspect( VALUE aSelf )
 {
-    switch( rbVector3::Type( aSelf ) )
-    {
-        case T_FIXNUM:
-            return rb_sprintf( "%s(%i, %i, %i)",
-                               rb_obj_classname( aSelf ),
-                               FIX2INT( rbVector3::GetX( aSelf ) ),
-                               FIX2INT( rbVector3::GetY( aSelf ) ),
-                               FIX2INT( rbVector3::GetZ( aSelf ) ) );
-        case T_FLOAT:
-            return rb_sprintf( "%s(%lg, %lg, %lg)",
-                              rb_obj_classname( aSelf ),
-                              NUM2DBL( rbVector3::GetX( aSelf ) ),
-                              NUM2DBL( rbVector3::GetY( aSelf ) ),
-                              NUM2DBL( rbVector3::GetZ( aSelf ) ) );
-    }
-    return Qnil;
+    VALUE x = rb_funcall( rbVector3::GetX( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE y = rb_funcall( rbVector3::GetY( aSelf ), rb_intern( "inspect" ), 0 );
+	VALUE z = rb_funcall( rbVector3::GetZ( aSelf ), rb_intern( "inspect" ), 0 );
+	return rb_sprintf(  "%s(%s, %s)", rb_obj_classname( aSelf ),
+						StringValueCStr( x ),
+						StringValueCStr( y ),
+						StringValueCStr( z ) );
 }
 
 // Vector3#memory_usage
