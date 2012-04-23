@@ -30,8 +30,35 @@
 
 namespace rbMacros
 {
+	template< typename T >
+	static inline void Free( void* someMemory );
+	
+	template< typename T >
+	static inline T* Allocate();
+
+	template< typename T >
+	static inline VALUE Allocate( VALUE aKlass );
+	
+	static inline VALUE RubyAllocate( VALUE aKlass );
+
+    static inline VALUE AbstractAllocate( VALUE aKlass );
+
+    static inline VALUE ToRuby( VALUE anOther, VALUE aKlass );
+
     template< typename T >
-    static inline void Free( void *someMemory )
+    static inline VALUE ToRuby( T* anObject, VALUE aKlass );
+	
+	template< typename T >
+    static inline VALUE ToRubyNoGC( T* anObject, VALUE aKlass );
+
+    template< typename T >
+    static inline VALUE ToConstRuby( const T* anObject, VALUE aKlass );
+
+    template< typename T >
+    static inline T* ToSFML( VALUE anObject, VALUE aKlass );
+	
+    template< typename T >
+    static inline void Free( void* someMemory )
     {
         T* object = static_cast< T* >( someMemory );
         object->~T();
