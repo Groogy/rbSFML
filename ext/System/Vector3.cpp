@@ -185,7 +185,7 @@ VALUE rbVector3::Inspect( VALUE aSelf )
     VALUE x = rb_funcall( rbVector3::GetX( aSelf ), rb_intern( "inspect" ), 0 );
 	VALUE y = rb_funcall( rbVector3::GetY( aSelf ), rb_intern( "inspect" ), 0 );
 	VALUE z = rb_funcall( rbVector3::GetZ( aSelf ), rb_intern( "inspect" ), 0 );
-	return rb_sprintf(  "%s(%s, %s)", rb_obj_classname( aSelf ),
+	return rb_sprintf(  "%s(%s, %s, %s)", rb_obj_classname( aSelf ),
 						StringValueCStr( x ),
 						StringValueCStr( y ),
 						StringValueCStr( z ) );
