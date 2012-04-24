@@ -114,7 +114,7 @@ VALUE rbMusic::Inspect( VALUE aSelf )
     return rb_sprintf( "%s(%p: %fs)",
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
-                      rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->getDuration() );
+                      rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->getDuration().asSeconds() );
 }
 
 // Music#memory_usage
