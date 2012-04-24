@@ -395,7 +395,7 @@ VALUE rbWindow::SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE somePix
     if( pixels == NULL ) rb_memerror();
     
     VALUE* pixelsPtr = RARRAY_PTR( somePixels );
-    for( size_t index = 0; index < size; index++ )
+    for( unsigned long index = 0; index < size; index++ )
     {
         pixels[ index ] = NUM2CHR( pixelsPtr[ index ] );
     }
