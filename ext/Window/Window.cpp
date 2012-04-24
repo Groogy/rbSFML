@@ -389,7 +389,7 @@ VALUE rbWindow::SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE somePix
     
     unsigned long size = width * height * 4;
     if( RARRAY_LEN( somePixels ) != size )
-        rb_raise( rb_eTypeError, "expected array lenght to be %ul", size );
+        rb_raise( rb_eTypeError, "expected array lenght to be %lu", size );
     
 	sf::Uint8* pixels = static_cast< sf::Uint8 * >( xmalloc( sizeof( sf::Uint8 ) * size ) );
     if( pixels == NULL ) rb_memerror();
@@ -469,7 +469,7 @@ VALUE rbWindow::SetJoystickThreshold( VALUE aSelf, VALUE aThreshold )
 // Window#handle
 VALUE rbWindow::GetSystemHandle( VALUE aSelf )
 {
-    return UINT2NUM( reinterpret_cast< unsigned int >( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSystemHandle() ) );
+    return ULONG2NUM( reinterpret_cast< unsigned long >( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSystemHandle() ) );
 }
 
 // Window#inspect
