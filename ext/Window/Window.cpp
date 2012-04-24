@@ -387,9 +387,9 @@ VALUE rbWindow::SetIcon( VALUE aSelf, VALUE aWidth, VALUE aHeight, VALUE somePix
     unsigned int height = NUM2UINT( aHeight );
     somePixels = rb_ary_to_ary( somePixels );
     
-    size_t size = width * height * 4;
+    unsigned long size = width * height * 4;
     if( RARRAY_LEN( somePixels ) != size )
-        rb_raise( rb_eTypeError, "expected array lenght to be %d", size );
+        rb_raise( rb_eTypeError, "expected array lenght to be %ul", size );
     
 	sf::Uint8* pixels = static_cast< sf::Uint8 * >( xmalloc( sizeof( sf::Uint8 ) * size ) );
     if( pixels == NULL ) rb_memerror();
