@@ -179,7 +179,7 @@ VALUE rbSoundBuffer::LoadFromSamples( int argc, VALUE argv[], VALUE aSelf )
     VALUE* samplesPtr = RARRAY_PTR( samplesAry );
     if( argc == 4 and sampleCount != NUM2UINT( argv[ 1 ] ) )
     {
-        rb_raise( rb_eArgError, "expected array size to be %d", sampleCount );
+        rb_raise( rb_eArgError, "expected array size to be %lu", sampleCount );
     }
     sf::Int16* samples = new sf::Int16[ sampleCount ];
     for( std::size_t index = 0; index < sampleCount; index++ )
@@ -285,7 +285,7 @@ VALUE rbSoundBuffer::Inspect( VALUE aSelf )
     return rb_sprintf("%s(%p: %ims)",
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
-                      rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getDuration() );
+                      rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getDuration().asMilliseconds() );
 }
 
 // SoundBuffer#memory_usage
