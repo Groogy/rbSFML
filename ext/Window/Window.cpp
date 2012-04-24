@@ -469,7 +469,7 @@ VALUE rbWindow::SetJoystickThreshold( VALUE aSelf, VALUE aThreshold )
 // Window#handle
 VALUE rbWindow::GetSystemHandle( VALUE aSelf )
 {
-    return UINT2NUM( reinterpret_cast< unsigned int > rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSystemHandle() );
+    return UINT2NUM( reinterpret_cast< unsigned int >( rbMacros::ToSFML< sf::Window >( aSelf, rbWindow::Class )->getSystemHandle() ) );
 }
 
 // Window#inspect
