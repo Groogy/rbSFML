@@ -44,7 +44,7 @@ SHARED = ["#{EXT_DIR}/InputStream.cpp"]
 
 LIBS = []
 OBJS = {}
-SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.so"}
+SRCS.each_key {|file| LIBS << "#{SO_DIR}/#{file}.#{CONFIG['DLEXT']}"}
 
 CLEAN.include(OBJ_DIR)
 CLOBBER.include(SO_DIR)
@@ -121,7 +121,7 @@ def create_so(src)
   unless File.exist?(SFML_LIB)
     raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
   end
-  so = "#{SO_DIR}/#{src}.so"
+  so = "#{SO_DIR}/#{src}.#{CONFIG['DLEXT']}"
   mkdir_p SO_DIR
   puts "Creating #{so}"
   objs = OBJS[src].join(" ")
@@ -152,35 +152,35 @@ task :all => [:system, :window, :graphics, :audio] do
   create_so(:all)
 end
 
-desc "Build audio module (audio.so)."
+desc "Build audio module (audio.#{CONFIG['DLEXT']})."
 task :audio => [:system] do
   SRCS[:audio] += SHARED
   compile_o(:audio)
   create_so(:audio)
 end
 
-desc "Build graphics module (graphics.so)."
+desc "Build graphics module (graphics.#{CONFIG['DLEXT']})."
 task :graphics => [:system, :window] do
   SRCS[:graphics] += SHARED
   compile_o(:graphics)
   create_so(:graphics)
 end
 
-desc "Build window module (window.so)."
+desc "Build window module (window.#{CONFIG['DLEXT']})."
 task :window => [:system] do
   SRCS[:window] += SHARED
   compile_o(:window)
   create_so(:window)
 end
 
-desc "Build system module (system.so)."
+desc "Build system module (system.#{CONFIG['DLEXT']})."
 task :system do
   SRCS[:system] += SHARED
   compile_o(:system)
   create_so(:system)
 end
 
-desc "Build all modules as a single file (sfml.so)."
+desc "Build all modules as a single file (sfml.#{CONFIG['DLEXT']})."
 task :sfml do
   SRCS[:sfml] += SHARED
   compile_o(:system)
@@ -220,7 +220,7 @@ end
 desc "Install rbSFML."
 task :install => [:uninstall] do
   mkdir_p SO_DIR
-  list = FileList.new("#{SO_DIR}/*.so")
+  list = FileList.new("#{SO_DIR}/*.#{CONFIG['DLEXT']}")
   if list.size == 0
     puts "Nothing to install."
   else
