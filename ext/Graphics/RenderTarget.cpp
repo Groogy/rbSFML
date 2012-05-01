@@ -215,7 +215,7 @@ VALUE rbRenderTarget::SetView( VALUE aSelf, VALUE aView )
 VALUE rbRenderTarget::GetView( VALUE aSelf )
 {
 	const sf::View& view = rbRenderTarget::ToSFML( aSelf )->getView();
-	VALUE obj = rbMacros::ToRuby( const_cast< sf::View* >( &view ), rbView::Class );
+	VALUE obj = rbMacros::ToRubyNoGC( const_cast< sf::View* >( &view ), rbView::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
 	rb_obj_freeze( obj );
 	return obj;
@@ -227,7 +227,7 @@ VALUE rbRenderTarget::GetView( VALUE aSelf )
 VALUE rbRenderTarget::GetDefaultView( VALUE aSelf )
 {
 	const sf::View& view = rbRenderTarget::ToSFML( aSelf )->getDefaultView();
-	VALUE obj = rbMacros::ToRuby( const_cast< sf::View* >( &view ), rbView::Class );
+	VALUE obj = rbMacros::ToRubyNoGC( const_cast< sf::View* >( &view ), rbView::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
 	rb_obj_freeze( obj );
 	return obj;
