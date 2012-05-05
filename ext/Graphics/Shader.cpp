@@ -183,6 +183,7 @@ VALUE rbShader::LoadFromStream( VALUE aSelf, VALUE anArg1, VALUE anArg2 )
 // Shader#[]=(name, current_texture)
 VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 {
+	rb_check_frozen( aSelf );
 	if( argc <= 1 )
 		INVALID_ARGUMENT_LIST( argc, "2..4" );
 		
