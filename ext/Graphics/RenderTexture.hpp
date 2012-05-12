@@ -71,6 +71,11 @@ namespace rbRenderTexture
 	// RenderTexture#display
 	static VALUE Display( VALUE aSelf );
 	
+	// RenderTexture#texture
+	// RenderTexture#get_texture
+	// RenderTexture#getTexture
+	static VALUE GetTexture( VALUE aSelf );
+	
     // RenderTexture#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
 

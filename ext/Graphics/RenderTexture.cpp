@@ -23,6 +23,7 @@
 
 #include "RenderTexture.hpp"
 #include "Graphics/RenderTarget.hpp"
+#include "Graphics/Texture.hpp"
 #include "System/Vector2.hpp"
 
 void rbRenderTexture::Init( VALUE SFML )
@@ -41,6 +42,7 @@ void rbRenderTexture::Init( VALUE SFML )
 	rb_define_method( rbRenderTexture::Class, "is_smooth?",             rbRenderTexture::IsSmooth,             0 );
 	rb_define_method( rbRenderTexture::Class, "set_active",             rbRenderTexture::SetActive,           -1 );
 	rb_define_method( rbRenderTexture::Class, "display",                rbRenderTexture::Display,              0 );
+	rb_define_method( rbRenderTexture::Class, "get_texture",            rbRenderTexture::GetTexture,           0 );
     rb_define_method( rbRenderTexture::Class, "marshal_dump",           rbRenderTexture::MarshalDump,          0 );
     rb_define_method( rbRenderTexture::Class, "==",                     rbRenderTexture::Equal,                1 );
     rb_define_method( rbRenderTexture::Class, "inspect",                rbRenderTexture::Inspect,              0 );
@@ -57,6 +59,8 @@ void rbRenderTexture::Init( VALUE SFML )
 	rb_define_alias( rbRenderTexture::Class, "isSmooth",     "is_smooth?"    );
 	rb_define_alias( rbRenderTexture::Class, "active=",      "set_active"    );
 	rb_define_alias( rbRenderTexture::Class, "setActive",    "set_active"    );
+	rb_define_alias( rbRenderTexture::Class, "getTexture",   "get_texture"   );
+	rb_define_alias( rbRenderTexture::Class, "texture",      "get_texture"   );
 }
 
 // RenderTexture#initialize
@@ -143,6 +147,18 @@ VALUE rbRenderTexture::Display( VALUE aSelf )
 {
 	rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->display();
 	return Qnil;
+}
+
+// RenderTexture#texture
+// RenderTexture#get_texture
+// RenderTexture#getTexture
+VALUE rbRenderTexture::GetTexture( VALUE aSelf )
+{
+	const sf::Texture& texture = rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->getTexture();
+	VALUE object = rbMacros::ToRubyNoGC( const_cast< sf::Texture* >( &texture ), rbTexture::Class );
+	rb_iv_set( object, "@__ref__owner", aSelf );
+	rb_obj_freeze( object );
+	return object;
 }
 
 // RenderTexture#marshal_dump
