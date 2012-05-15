@@ -38,9 +38,9 @@ void rbFont::Init( VALUE SFML )
     // Instance methods
     rb_define_method( rbFont::Class, "initialize",             rbFont::Initialize,          -1 );
     rb_define_method( rbFont::Class, "initialize_copy",        rbFont::InitializeCopy,       1 );
-	rb_define_method( rbFont::Class, "load_from_file",	       rbFont::LoadFromFile,        -1 );
-	rb_define_method( rbFont::Class, "load_from_memory",       rbFont::LoadFromMemory,      -1 );
-	rb_define_method( rbFont::Class, "load_from_stream",       rbFont::LoadFromStream,      -1 );
+	rb_define_method( rbFont::Class, "load_from_file",	       rbFont::LoadFromFile,         1 );
+	rb_define_method( rbFont::Class, "load_from_memory",       rbFont::LoadFromMemory,       1 );
+	rb_define_method( rbFont::Class, "load_from_stream",       rbFont::LoadFromStream,       1 );
 	rb_define_method( rbFont::Class, "get_glyph",              rbFont::GetGlyph,             3 );
 	rb_define_method( rbFont::Class, "get_kerning",            rbFont::GetKerning,           3 );
 	rb_define_method( rbFont::Class, "get_line_spacing",       rbFont::GetLineSpacing,       1 );
