@@ -54,6 +54,7 @@ void rbTransform::Init( VALUE SFML )
     rb_define_alias( rbTransform::Class, "to_s",           "inspect"         );
 	rb_define_alias( rbTransform::Class, "get_matrix",     "matrix"          );
 	rb_define_alias( rbTransform::Class, "getMatrix",      "matrix"          );
+	rb_define_alias( rbTransform::Class, "to_a",           "matrix"          );
 	rb_define_alias( rbTransform::Class, "get_inverse",    "inverse"         );
 	rb_define_alias( rbTransform::Class, "getInverse",     "inverse"         );
 	rb_define_alias( rbTransform::Class, "transformPoint", "transform_point" );
