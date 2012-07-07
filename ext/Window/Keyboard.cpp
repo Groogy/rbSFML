@@ -85,7 +85,7 @@ void rbKeyboard::Init( VALUE SFML )
     rb_define_const( rbKeyboard::Module, "Dash",      INT2FIX( sf::Keyboard::Dash     ) );
     rb_define_const( rbKeyboard::Module, "Space",     INT2FIX( sf::Keyboard::Space    ) );
     rb_define_const( rbKeyboard::Module, "Return",    INT2FIX( sf::Keyboard::Return   ) );
-    rb_define_const( rbKeyboard::Module, "Back",      INT2FIX( sf::Keyboard::Back     ) );
+    rb_define_const( rbKeyboard::Module, "BackSpace", INT2FIX( sf::Keyboard::BackSpace) );
     rb_define_const( rbKeyboard::Module, "Tab",       INT2FIX( sf::Keyboard::Tab      ) );
     rb_define_const( rbKeyboard::Module, "PageUp",    INT2FIX( sf::Keyboard::PageUp   ) );
     rb_define_const( rbKeyboard::Module, "PageDown",  INT2FIX( sf::Keyboard::PageDown ) );
