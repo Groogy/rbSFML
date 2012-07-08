@@ -28,7 +28,6 @@ void rbEvent::Init( VALUE SFML )
     
     // Subclasses
     rbEvent::Class_Size            = rb_define_class_under( rbEvent::Class, "Size",            rb_cObject );
-    rbEvent::Class_Type            = rb_define_class_under( rbEvent::Class, "Type",            rb_cObject );
     rbEvent::Class_Key             = rb_define_class_under( rbEvent::Class, "Key",             rb_cObject );
     rbEvent::Class_Text            = rb_define_class_under( rbEvent::Class, "Text",            rb_cObject );
     rbEvent::Class_MouseMove       = rb_define_class_under( rbEvent::Class, "MouseMove",       rb_cObject );
@@ -37,9 +36,6 @@ void rbEvent::Init( VALUE SFML )
     rbEvent::Class_JoystickMove    = rb_define_class_under( rbEvent::Class, "JoystickMove",    rb_cObject );
     rbEvent::Class_JoystickButton  = rb_define_class_under( rbEvent::Class, "JoystickButton",  rb_cObject );
     rbEvent::Class_JoystickConnect = rb_define_class_under( rbEvent::Class, "JoystickConnect", rb_cObject );
-    rb_define_method( rbEvent::Class_Type, "===", rbEvent::EventTypeCaseEqual, 1 );
-	
-	rb_define_alias( rbEvent::Class_Type, "==", "===" );
     
     // Event::Size accessors
     rb_define_attr( rbEvent::Class_Size, "width",  true, false );
@@ -87,24 +83,24 @@ void rbEvent::Init( VALUE SFML )
     rb_define_alias( rbEvent::Class_JoystickButton, "joystickId", "id"    );
     
     // Constants
-    rb_define_const( rbEvent::Class, "Closed",                 EventType( sf::Event::Closed                 ) );
-    rb_define_const( rbEvent::Class, "Resized",                EventType( sf::Event::Resized                ) );
-    rb_define_const( rbEvent::Class, "LostFocus",              EventType( sf::Event::LostFocus              ) );
-    rb_define_const( rbEvent::Class, "GainedFocus",            EventType( sf::Event::GainedFocus            ) );
-    rb_define_const( rbEvent::Class, "TextEntered",            EventType( sf::Event::TextEntered            ) );
-    rb_define_const( rbEvent::Class, "KeyPressed",             EventType( sf::Event::KeyPressed             ) );
-    rb_define_const( rbEvent::Class, "KeyReleased",            EventType( sf::Event::KeyReleased            ) );
-    rb_define_const( rbEvent::Class, "MouseWheelMoved",        EventType( sf::Event::MouseWheelMoved        ) );
-    rb_define_const( rbEvent::Class, "MouseButtonPressed",     EventType( sf::Event::MouseButtonPressed     ) );
-    rb_define_const( rbEvent::Class, "MouseButtonReleased",    EventType( sf::Event::MouseButtonReleased    ) );
-    rb_define_const( rbEvent::Class, "MouseMoved",             EventType( sf::Event::MouseMoved             ) );
-    rb_define_const( rbEvent::Class, "MouseEntered",           EventType( sf::Event::MouseEntered           ) );
-    rb_define_const( rbEvent::Class, "MouseLeft",              EventType( sf::Event::MouseLeft              ) );
-    rb_define_const( rbEvent::Class, "JoystickButtonPressed",  EventType( sf::Event::JoystickButtonPressed  ) );
-    rb_define_const( rbEvent::Class, "JoystickButtonReleased", EventType( sf::Event::JoystickButtonReleased ) );
-    rb_define_const( rbEvent::Class, "JoystickMoved",          EventType( sf::Event::JoystickMoved          ) );
-    rb_define_const( rbEvent::Class, "JoystickConnected",      EventType( sf::Event::JoystickConnected      ) );
-    rb_define_const( rbEvent::Class, "JoystickDisconnected",   EventType( sf::Event::JoystickDisconnected   ) );
+    rb_define_const( rbEvent::Class, "Closed",                 INT2NUM( sf::Event::Closed                 ) );
+    rb_define_const( rbEvent::Class, "Resized",                INT2NUM( sf::Event::Resized                ) );
+    rb_define_const( rbEvent::Class, "LostFocus",              INT2NUM( sf::Event::LostFocus              ) );
+    rb_define_const( rbEvent::Class, "GainedFocus",            INT2NUM( sf::Event::GainedFocus            ) );
+    rb_define_const( rbEvent::Class, "TextEntered",            INT2NUM( sf::Event::TextEntered            ) );
+    rb_define_const( rbEvent::Class, "KeyPressed",             INT2NUM( sf::Event::KeyPressed             ) );
+    rb_define_const( rbEvent::Class, "KeyReleased",            INT2NUM( sf::Event::KeyReleased            ) );
+    rb_define_const( rbEvent::Class, "MouseWheelMoved",        INT2NUM( sf::Event::MouseWheelMoved        ) );
+    rb_define_const( rbEvent::Class, "MouseButtonPressed",     INT2NUM( sf::Event::MouseButtonPressed     ) );
+    rb_define_const( rbEvent::Class, "MouseButtonReleased",    INT2NUM( sf::Event::MouseButtonReleased    ) );
+    rb_define_const( rbEvent::Class, "MouseMoved",             INT2NUM( sf::Event::MouseMoved             ) );
+    rb_define_const( rbEvent::Class, "MouseEntered",           INT2NUM( sf::Event::MouseEntered           ) );
+    rb_define_const( rbEvent::Class, "MouseLeft",              INT2NUM( sf::Event::MouseLeft              ) );
+    rb_define_const( rbEvent::Class, "JoystickButtonPressed",  INT2NUM( sf::Event::JoystickButtonPressed  ) );
+    rb_define_const( rbEvent::Class, "JoystickButtonReleased", INT2NUM( sf::Event::JoystickButtonReleased ) );
+    rb_define_const( rbEvent::Class, "JoystickMoved",          INT2NUM( sf::Event::JoystickMoved          ) );
+    rb_define_const( rbEvent::Class, "JoystickConnected",      INT2NUM( sf::Event::JoystickConnected      ) );
+    rb_define_const( rbEvent::Class, "JoystickDisconnected",   INT2NUM( sf::Event::JoystickDisconnected   ) );
     
     // Class methods
     rb_define_alloc_func( rbEvent::Class, rbMacros::Allocate< sf::Event > );
@@ -139,30 +135,7 @@ void rbEvent::Init( VALUE SFML )
     rb_define_alias( rbEvent::Class, "to_s",            "inspect"          );
 }
 
-// Internal
-VALUE rbEvent::EventType( int anID )
-{
-    VALUE type = rb_obj_alloc( rbEvent::Class_Type );
-    rb_iv_set( type, "@id", INT2FIX( anID ) );
-    return type;
-}
-
 #include <iostream>
-
-// Internal
-VALUE rbEvent::EventTypeCaseEqual( VALUE aSelf, VALUE anOther )
-{
-	if( rb_obj_is_kind_of( anOther, rbEvent::Class_Type ) )
-	{
-		VALUE id1 = rb_iv_get( aSelf, "@id" );
-		VALUE id2 = rb_iv_get( anOther, "@id" );
-		return RBOOL( id1 == id2 );
-	}
-	else
-	{
-		return Qfalse;
-	}
-}
 
 // Event#initialize_copy(event)
 VALUE rbEvent::InitializeCopy( VALUE aSelf, VALUE anEvent )
@@ -181,7 +154,7 @@ VALUE rbEvent::MarshalDump( VALUE aSelf )
 // Event#type
 VALUE rbEvent::Type( VALUE aSelf )
 {
-    return EventType( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->type );
+    return INT2NUM( rbMacros::ToSFML< sf::Event >( aSelf, rbEvent::Class )->type );
 }
 
 // Event#info

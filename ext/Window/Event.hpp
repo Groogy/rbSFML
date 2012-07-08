@@ -33,7 +33,6 @@ namespace rbEvent
 {
 #if defined(WINDOW_EVENT_CPP)
     VALUE Class;
-    VALUE Class_Type;
     VALUE Class_Size;
     VALUE Class_Key;
     VALUE Class_Text;
@@ -45,7 +44,6 @@ namespace rbEvent
     VALUE Class_JoystickConnect;
 #else
     extern VALUE Class;
-    extern VALUE Class_Type;
     extern VALUE Class_Size;
     extern VALUE Class_Key;
     extern VALUE Class_Text;
@@ -61,10 +59,7 @@ namespace rbEvent
     void Init( VALUE SFML );
 #endif
     
-#if defined( WINDOW_EVENT_CPP )
-    static VALUE EventType( int anID );
-    static VALUE EventTypeCaseEqual( VALUE aSelf, VALUE anOther );
-    
+#if defined( WINDOW_EVENT_CPP )    
     // Event#initialize_copy(event)
     static VALUE InitializeCopy( VALUE aSelf, VALUE anEvent );
     
