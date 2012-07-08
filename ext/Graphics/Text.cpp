@@ -98,7 +98,7 @@ VALUE rbText::Initialize( int argc, VALUE* args, VALUE aSelf )
 	switch( argc )
 	{
 	case 3:
-		rbMacros::ToSFML< sf::Text >( aSelf, rbText::Class )->setCharacterSize( NUM2INT( args[ 1 ] ) );
+		rbMacros::ToSFML< sf::Text >( aSelf, rbText::Class )->setCharacterSize( NUM2INT( args[ 2 ] ) );
 	case 2:
 		rbMacros::ToSFML< sf::Text >( aSelf, rbText::Class )->setFont( *rbMacros::ToSFML< sf::Font >( args[ 1 ], rbFont::Class ) );
 		rb_iv_set( aSelf, "@__ref__font", args[ 1 ] );
