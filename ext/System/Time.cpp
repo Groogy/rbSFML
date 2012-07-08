@@ -74,14 +74,14 @@ VALUE rbTime::AsSeconds( VALUE aSelf )
 // Time#asMilliseconds
 VALUE rbTime::AsMilliseconds( VALUE aSelf )
 {
-	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMilliseconds() );
+	return INT2NUM( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMilliseconds() );
 }
 
 // Time#as_microseconds
 // Time#asMicroseconds
 VALUE rbTime::AsMicroseconds( VALUE aSelf )
 {
-	return rb_float_new( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMicroseconds() );
+	return LONG2NUM( rbMacros::ToSFML< sf::Time >( aSelf, rbTime::Class )->asMicroseconds() );
 }
 
 // Time#marshal_dump
