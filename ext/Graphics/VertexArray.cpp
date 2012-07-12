@@ -45,7 +45,6 @@ void rbVertexArray::Init( VALUE SFML )
 	rb_define_method( rbVertexArray::Class, "primitive_type=",		  rbVertexArray::SetPrimitiveType,	   1 );
 	rb_define_method( rbVertexArray::Class, "primitive_type",		  rbVertexArray::GetPrimitiveType,	   0 );
 	rb_define_method( rbVertexArray::Class, "bounds",				  rbVertexArray::GetBounds,	 		   0 );
-	rb_define_method( rbVertexArray::Class, "draw",                   rbVertexArray::Draw,                 2 );
 	rb_define_method( rbVertexArray::Class, "marshal_dump",           rbVertexArray::MarshalDump,          0 );
     rb_define_method( rbVertexArray::Class, "==",                     rbVertexArray::Equal,                1 );
     rb_define_method( rbVertexArray::Class, "inspect",                rbVertexArray::Inspect,              0 );
@@ -143,13 +142,6 @@ VALUE rbVertexArray::GetPrimitiveType( VALUE aSelf )
 VALUE rbVertexArray::GetBounds( VALUE aSelf )
 {
 	return rbRect::ToRuby( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->getBounds() );
-}
-
-// VertexArray#draw(render_target, render_states)
-VALUE rbVertexArray::Draw( VALUE aSelf, VALUE aRenderTarget, VALUE aRenderStates )
-{
-	rb_raise( rb_eRuntimeError, "Call to abstract method '#draw'. Please override the method to use it." );
-	return Qnil;
 }
 
 // VertexArray#marshal_dump
