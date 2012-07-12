@@ -22,6 +22,8 @@
 #define GRAPHICS_VERTEX_ARRAY_CPP
 
 #include "VertexArray.hpp"
+#include "Vertex.hpp"
+#include "Rect.hpp"
 #include "Graphics/Drawable.hpp"
 
 void rbVertexArray::Init( VALUE SFML )
@@ -35,6 +37,14 @@ void rbVertexArray::Init( VALUE SFML )
     // Instance methods
 	rb_define_method( rbVertexArray::Class, "initialize",             rbVertexArray::Initialize,          -1 );
     rb_define_method( rbVertexArray::Class, "initialize_copy",        rbVertexArray::InitializeCopy,       1 );
+	rb_define_method( rbVertexArray::Class, "vertex_count",			  rbVertexArray::GetVertexCount,	   0 );
+	rb_define_method( rbVertexArray::Class, "append", 				  rbVertexArray::Append,			   1 );
+	rb_define_method( rbVertexArray::Class, "[]", 					  rbVertexArray::IndexOperator,		   1 );
+	rb_define_method( rbVertexArray::Class, "clear", 				  rbVertexArray::Clear,				   0 );
+	rb_define_method( rbVertexArray::Class, "resize", 				  rbVertexArray::Resize,			   1 );
+	rb_define_method( rbVertexArray::Class, "primitive_type=",		  rbVertexArray::SetPrimitiveType,	   1 );
+	rb_define_method( rbVertexArray::Class, "primitive_type",		  rbVertexArray::GetPrimitiveType,	   0 );
+	rb_define_method( rbVertexArray::Class, "bounds",				  rbVertexArray::GetBounds,	 		   0 );
 	rb_define_method( rbVertexArray::Class, "draw",                   rbVertexArray::Draw,                 2 );
 	rb_define_method( rbVertexArray::Class, "marshal_dump",           rbVertexArray::MarshalDump,          0 );
     rb_define_method( rbVertexArray::Class, "==",                     rbVertexArray::Equal,                1 );
@@ -42,7 +52,18 @@ void rbVertexArray::Init( VALUE SFML )
     rb_define_method( rbVertexArray::Class, "memory_usage",           rbVertexArray::GetMemoryUsage,       0 );
 
     // Instance aliases
-    rb_define_alias( rbVertexArray::Class, "to_s",       "inspect" );
+    rb_define_alias( rbVertexArray::Class, "to_s",               "inspect"         );
+	rb_define_alias( rbVertexArray::Class, "vertexCount",        "vertex_count"    );
+	rb_define_alias( rbVertexArray::Class, "getVertexCount",     "vertex_count"    );
+	rb_define_alias( rbVertexArray::Class, "get_vertex_count",   "vertex_count"    );
+	rb_define_alias( rbVertexArray::Class, "set_primitive_type", "primitive_type=" );
+	rb_define_alias( rbVertexArray::Class, "setPrimitiveType",   "primitive_type=" );
+	rb_define_alias( rbVertexArray::Class, "primitiveType=",     "primitive_type=" );
+	rb_define_alias( rbVertexArray::Class, "get_primitive_type", "primitive_type"  );
+	rb_define_alias( rbVertexArray::Class, "getPrimitiveType",   "primitive_type"  );
+	rb_define_alias( rbVertexArray::Class, "primitiveType",      "primitive_type"  );
+	rb_define_alias( rbVertexArray::Class, "get_bounds",         "bounds"          );
+	rb_define_alias( rbVertexArray::Class, "getBounds",          "bounds"          );
 }
 
 // VertexArray#initialize
@@ -70,6 +91,58 @@ VALUE rbVertexArray::InitializeCopy( VALUE aSelf, VALUE aSource )
 	rb_iv_set( aSelf, "@__internal__drawable_offset", INT2FIX( 0 ) );
 	*rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) = *rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class );
     return aSelf;
+}
+
+// VertexArray#vertex_count
+VALUE rbVertexArray::GetVertexCount( VALUE aSelf )
+{
+	return UINT2NUM( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->getVertexCount() );
+}
+
+// VertexArray#append(vertex)
+VALUE rbVertexArray::Append( VALUE aSelf, VALUE aVertex )
+{
+	rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->append( rbVertex::ToSFML( aVertex ) );
+	return Qnil;
+}
+
+// VertexArray#[index]
+VALUE rbVertexArray::IndexOperator( VALUE aSelf, VALUE anIndex )
+{
+	return rbVertex::ToRuby( ( *rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) )[ NUM2UINT( anIndex ) ] );
+}
+
+// VertexArray#clear
+VALUE rbVertexArray::Clear( VALUE aSelf )
+{
+	rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->clear();
+	return Qnil;
+}
+
+// VertexArray#resize(vertex_count)
+VALUE rbVertexArray::Resize( VALUE aSelf, VALUE aVertexCount )
+{
+	rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->resize( NUM2UINT( aVertexCount ) );
+	return Qnil;
+}
+
+// VertexArray#primitive_type=(type)
+VALUE rbVertexArray::SetPrimitiveType( VALUE aSelf, VALUE aType )
+{
+	rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->setPrimitiveType( static_cast< sf::PrimitiveType >( NUM2UINT( aType ) ) );
+	return Qnil;
+}
+
+// VertexArray#primitive_type
+VALUE rbVertexArray::GetPrimitiveType( VALUE aSelf )
+{
+	return UINT2NUM( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->getPrimitiveType() );
+}
+
+// VertexArray#bounds
+VALUE rbVertexArray::GetBounds( VALUE aSelf )
+{
+	return rbRect::ToRuby( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class )->getBounds() );
 }
 
 // VertexArray#draw(render_target, render_states)
