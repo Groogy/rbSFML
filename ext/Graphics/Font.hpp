@@ -40,11 +40,6 @@ namespace rbFont
 #endif
 
 #if defined( GRAPHICS_FONT_CPP )
-	// Font.default_font()
-	// Font.get_default_font()
-	// Font.getDefaultFont()
-	static VALUE GetDefaultFont( VALUE aSelf );
-
     // Font#initialize
 	// Font#initialize(filename)
     static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );

@@ -87,6 +87,10 @@ VALUE rbShader::IsAvailable( VALUE aSelf )
 // Shader#initialize(shader_filename, shader_type)
 VALUE rbShader::Initialize( int argc, VALUE* args, VALUE aSelf )
 {	
+	if( argc > 0 )
+	{
+		rb_funcall2( aSelf, rb_intern("load_from_file"), argc, args );
+	}
     return Qnil;
 }
 

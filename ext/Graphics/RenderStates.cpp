@@ -190,9 +190,16 @@ VALUE rbRenderStates::GetTexture( VALUE aSelf )
 VALUE rbRenderStates::SetTexture( VALUE aSelf, VALUE aTexture )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
-	states->texture = rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class );
+	if( aTexture == Qnil )
+	{
+		states->texture = NULL;
+	}
+	else
+	{
+		states->texture = rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class );
+		rb_iv_set( aTexture, "@__ref__state_owner", aSelf );
+	}
 	rb_iv_set( aSelf, "@__ref__texture", aTexture );
-	rb_iv_set( aTexture, "@__ref__state_owner", aSelf );
 	return Qnil;
 }
 
@@ -206,9 +213,17 @@ VALUE rbRenderStates::GetShader( VALUE aSelf )
 VALUE rbRenderStates::SetShader( VALUE aSelf, VALUE aShader )
 {
 	sf::RenderStates* states = rbRenderStates::ToSFML( aSelf );
-	states->shader = rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class );
+	if( aShader == Qnil )
+	{
+		states->shader = NULL;
+	}
+	else
+	{
+		states->shader = rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class );
+		rb_iv_set( aShader, "@__ref__state_owner", aSelf );
+	}
+	
 	rb_iv_set( aSelf, "@__ref__shader", aShader );
-	rb_iv_set( aShader, "@__ref__state_owner", aSelf );
 	return Qnil;
 }
  

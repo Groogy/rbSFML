@@ -33,7 +33,6 @@ void rbFont::Init( VALUE SFML )
 	
 	// Class methods
 	rb_define_alloc_func( rbFont::Class, rbMacros::Allocate< sf::Font > );
-	rb_define_class_method( rbFont::Class, "default_font", rbFont::GetDefaultFont, 0 );
 
     // Instance methods
     rb_define_method( rbFont::Class, "initialize",             rbFont::Initialize,          -1 );
@@ -49,10 +48,6 @@ void rbFont::Init( VALUE SFML )
     rb_define_method( rbFont::Class, "==",                     rbFont::Equal,                1 );
     rb_define_method( rbFont::Class, "inspect",                rbFont::Inspect,              0 );
     rb_define_method( rbFont::Class, "memory_usage",           rbFont::GetMemoryUsage,       0 );
-	
-	// Class aliases
-	rb_define_alias( rb_singleton_class( rbFont::Class ), "get_default_font", "default_font" );
-	rb_define_alias( rb_singleton_class( rbFont::Class ), "getDefaultFont",   "default_font" );
 
     // Instance aliases
 	rb_define_alias( rbFont::Class, "loadFromFile",   "load_from_file"   );
@@ -67,14 +62,6 @@ void rbFont::Init( VALUE SFML )
 	rb_define_alias( rbFont::Class, "getLineSpacing", "get_line_spacing" );
 	rb_define_alias( rbFont::Class, "getTexture",     "get_texture"      );
     rb_define_alias( rbFont::Class, "to_s",           "inspect"          );
-}
-
-// Font.default_font()
-// Font.get_default_font()
-// Font.getDefaultFont()
-VALUE rbFont::GetDefaultFont( VALUE aSelf )
-{
-	return rbMacros::ToConstRuby( &sf::Font::getDefaultFont(), rbFont::Class );	
 }
 
 // Font#initialize
