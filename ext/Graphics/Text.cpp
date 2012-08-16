@@ -93,7 +93,7 @@ void rbText::Init( VALUE SFML )
 // Text#initialize(string, font=SFML::Font.default_font, character_size=30)
 VALUE rbText::Initialize( int argc, VALUE* args, VALUE aSelf )
 {
-	rb_iv_set( aSelf, "@__ref__font", rb_funcall( rbFont::Class, rb_intern( "default_font" ), 0 ) );
+	rb_iv_set( aSelf, "@__ref__font", Qnil );
 	
 	switch( argc )
 	{
