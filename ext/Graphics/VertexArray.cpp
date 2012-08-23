@@ -49,6 +49,7 @@ void rbVertexArray::Init( VALUE SFML )
     rb_define_method( rbVertexArray::Class, "==",                     rbVertexArray::Equal,                1 );
     rb_define_method( rbVertexArray::Class, "inspect",                rbVertexArray::Inspect,              0 );
     rb_define_method( rbVertexArray::Class, "memory_usage",           rbVertexArray::GetMemoryUsage,       0 );
+	rb_define_method( rbVertexArray::Class, "to_i",             	  rbVertexArray::ToInteger,            0 );
 
     // Instance aliases
     rb_define_alias( rbVertexArray::Class, "to_s",               "inspect"         );
@@ -175,4 +176,10 @@ VALUE rbVertexArray::Inspect( VALUE aSelf )
 VALUE rbVertexArray::GetMemoryUsage( VALUE aSelf )
 {
     return INT2FIX( sizeof( sf::VertexArray ) );
+}
+
+// VertexArray#to_i
+VALUE rbVertexArray::ToInteger( VALUE aSelf )
+{
+	return ULONG2NUM( reinterpret_cast< uintptr_t >( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) ) );
 }
