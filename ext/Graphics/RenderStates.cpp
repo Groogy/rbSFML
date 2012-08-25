@@ -38,8 +38,8 @@ void rbRenderStates::Init( VALUE SFML )
     rb_define_method( rbRenderStates::Class, "initialize_copy", rbRenderStates::InitializeCopy,  1 );
 	rb_define_method( rbRenderStates::Class, "blend_mode", 		rbRenderStates::GetBlendMode,	 0 );
 	rb_define_method( rbRenderStates::Class, "blend_mode=", 	rbRenderStates::SetBlendMode,	 1 );
-	rb_define_method( rbRenderStates::Class, "tranform", 		rbRenderStates::GetTransform,	 0 );
-	rb_define_method( rbRenderStates::Class, "tranform=",	 	rbRenderStates::SetTransform,	 1 );
+	rb_define_method( rbRenderStates::Class, "transform", 		rbRenderStates::GetTransform,	 0 );
+	rb_define_method( rbRenderStates::Class, "transform=",	 	rbRenderStates::SetTransform,	 1 );
 	rb_define_method( rbRenderStates::Class, "texture", 		rbRenderStates::GetTexture,		 0 );
 	rb_define_method( rbRenderStates::Class, "texture=",	 	rbRenderStates::SetTexture,		 1 );
 	rb_define_method( rbRenderStates::Class, "shader",	 		rbRenderStates::GetShader,		 0 );
