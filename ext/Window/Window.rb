@@ -96,9 +96,9 @@ module SFML
     # (<tt>window.show = false</tt>) will return true.
     # @return [Boolean] <tt>true</tt> if the window is opened, <tt>false</tt>
     #   if it has been closed 
-    def opened?
+    def open?
     end
-    alias IsOpened opened?
+    alias IsOpen open?
     
     # Get the width of the rendering region of the window. The width doesn't
     # include the titlebar and borders of the window.
