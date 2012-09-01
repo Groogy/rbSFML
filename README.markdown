@@ -3,6 +3,9 @@ This is the Ruby bindings of the [SFML library](https://github.com/LaurentGomila
 I hope you enjoy using rbSFML. If you make anything in it then we are very interested in hearing about it.  
 We can always be reached at http://www.sfml-dev.org/forum for support, ideas or just have a nice chat.
 
+If you have questions or need help then please post it on the forum or write us an email. The issue tracker is for bugs
+and suggestions only please. If you are uncertain then write it on the forum instead.
+
 Dependencies
 ============
 
