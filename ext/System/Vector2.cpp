@@ -116,7 +116,8 @@ VALUE rbVector2::Negate( VALUE aSelf )
 {
     VALUE x = rb_funcall( rbVector2::GetX( aSelf ), rb_intern( "-@" ), 0 );
     VALUE y = rb_funcall( rbVector2::GetY( aSelf ), rb_intern( "-@" ), 0 );
-    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+    VALUE array[] = { x, y };
+    return rb_class_new_instance( 2, array, rbVector2::Class );
 }
 
 // Internal
@@ -124,7 +125,8 @@ static inline VALUE DoMath( VALUE aLeft, const char* anOperator, VALUE aRight )
 {
     VALUE x = rb_funcall( rbVector2::GetX( aLeft ), rb_intern( anOperator ), 1, rbVector2::GetX( aRight ) );
     VALUE y = rb_funcall( rbVector2::GetY( aLeft ), rb_intern( anOperator ), 1, rbVector2::GetY( aRight ) );
-    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+    VALUE array[] = { x, y };
+    return rb_class_new_instance( 2, array, rbVector2::Class );
 }
 
 // Vector2#+(other)

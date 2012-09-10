@@ -98,7 +98,8 @@ VALUE rbVertex::ToRuby( const sf::Vertex& aVertex )
 	VALUE position  = rbVector2::ToRuby( aVertex.position );
 	VALUE color     = rbColor::ToRuby( aVertex.color );
 	VALUE texCoords = rbVector2::ToRuby( aVertex.texCoords );
-    return rb_class_new_instance( 3, ( VALUE[] ){ position, color, texCoords }, rbVertex::Class );
+    VALUE array[] = { position, color, texCoords };
+    return rb_class_new_instance( 3, array, rbVertex::Class );
 }
 
 sf::Vertex rbVertex::ToSFML( VALUE aVertex )

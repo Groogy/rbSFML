@@ -123,7 +123,8 @@ VALUE rbVector3::Negate( VALUE aSelf )
     VALUE x = rb_funcall( rbVector3::GetX( aSelf ), rb_intern( "-@" ), 0 );
     VALUE y = rb_funcall( rbVector3::GetY( aSelf ), rb_intern( "-@" ), 0 );
     VALUE z = rb_funcall( rbVector3::GetZ( aSelf ), rb_intern( "-@" ), 0 );
-    return rb_class_new_instance( 3, ( VALUE[] ){ x, y, z }, rbVector3::Class );
+    VALUE array[] = { x, y, z };
+    return rb_class_new_instance( 3, array, rbVector3::Class );
 }
 
 // Internal
@@ -132,7 +133,8 @@ static inline VALUE DoMath( VALUE aLeft, const char* anOperator, VALUE aRight )
     VALUE x = rb_funcall( rbVector3::GetX( aLeft ), rb_intern( anOperator ), 1, rbVector3::GetX( aRight ) );
     VALUE y = rb_funcall( rbVector3::GetY( aLeft ), rb_intern( anOperator ), 1, rbVector3::GetY( aRight ) );
     VALUE z = rb_funcall( rbVector3::GetZ( aLeft ), rb_intern( anOperator ), 1, rbVector3::GetZ( aRight ) );
-    return rb_class_new_instance( 3, ( VALUE[] ){ x, y, z }, rbVector3::Class );
+    VALUE array[] = { x, y, z };
+    return rb_class_new_instance( 3, array, rbVector3::Class );
 }
 
 // Vector3#+(other)

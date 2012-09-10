@@ -92,8 +92,10 @@ VALUE rbColor::ToRuby( VALUE anOther )
         return anOther;
 
     if( rb_obj_is_kind_of( anOther, rb_cNumeric ) )
-        return rb_class_new_instance( 3, ( VALUE[] ){ anOther, anOther, anOther },
-                                      rbColor::Class );
+    {
+        VALUE array[] = { anOther, anOther, anOther };
+        return rb_class_new_instance( 3, array, rbColor::Class );
+    }
 
     if( rb_type( anOther ) == T_ARRAY )
         return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
@@ -109,7 +111,8 @@ VALUE rbColor::ToRuby( const sf::Color& aColor )
     VALUE g = INT2FIX( aColor.g );
     VALUE b = INT2FIX( aColor.b );
 	VALUE a = INT2FIX( aColor.a );
-    return rb_class_new_instance( 4, ( VALUE[] ){ r, g, b, a }, rbColor::Class );
+    VALUE array[] = { r, g, b, a };
+    return rb_class_new_instance( 4, array, rbColor::Class );
 }
 
 sf::Color rbColor::ToSFML( VALUE aColor )

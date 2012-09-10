@@ -153,7 +153,8 @@ VALUE rbColor::Add( VALUE aLeft, VALUE aRight )
     VALUE g = MAX( rb_funcall( rbColor::GetGreen( aLeft ), rb_intern( "+" ), 1, rbColor::GetGreen( aRight ) ), maxValue );
     VALUE b = MAX( rb_funcall( rbColor::GetBlue( aLeft ), rb_intern( "+" ), 1, rbColor::GetBlue( aRight ) ), maxValue );
 	VALUE a = MAX( rb_funcall( rbColor::GetAlpha( aLeft ), rb_intern( "+" ), 1, rbColor::GetAlpha( aRight ) ), maxValue );
-    return rb_class_new_instance( 4, ( VALUE[] ){ r, g, b, a }, rbColor::Class );
+    VALUE array[] = { r, g, b, a };
+    return rb_class_new_instance( 4, array, rbColor::Class );
 }
 
 // Color#*(other)
@@ -164,7 +165,8 @@ VALUE rbColor::Multiply( VALUE aLeft, VALUE aRight )
     VALUE g = rb_funcall( rb_funcall( rbColor::GetGreen( aLeft ), rb_intern( "*" ), 1, rbColor::GetGreen( aRight ) ), rb_intern( "/" ), 1, maxValue );
     VALUE b = rb_funcall( rb_funcall( rbColor::GetBlue( aLeft ), rb_intern( "*" ), 1, rbColor::GetBlue( aRight ) ), rb_intern( "/" ), 1, maxValue );
 	VALUE a = rb_funcall( rb_funcall( rbColor::GetAlpha( aLeft ), rb_intern( "*" ), 1, rbColor::GetAlpha( aRight ) ), rb_intern( "/" ), 1, maxValue );
-    return rb_class_new_instance( 4, ( VALUE[] ){ r, g, b, a }, rbColor::Class );
+    VALUE array[] = { r, g, b, a };
+    return rb_class_new_instance( 4, array, rbColor::Class );
 }
 
 // Color#==(other)

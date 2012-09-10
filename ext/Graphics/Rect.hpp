@@ -108,8 +108,10 @@ VALUE rbRect::ToRuby( VALUE anOther )
         return anOther;
 
     if( rb_obj_is_kind_of( anOther, rb_cNumeric ) )
-        return rb_class_new_instance( 4, ( VALUE[] ){ anOther, anOther, anOther, anOther },
-                                      rbRect::Class );
+    {
+        VALUE array[] = { anOther, anOther, anOther, anOther };
+        return rb_class_new_instance( 4, array, rbRect::Class );
+    }
 
     if( rb_type( anOther ) == T_ARRAY )
         return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
@@ -125,7 +127,8 @@ VALUE rbRect::ToRuby( const sf::IntRect& aRect )
     VALUE top = INT2FIX( aRect.top );
     VALUE width = INT2FIX( aRect.width );
 	VALUE height = INT2FIX( aRect.height );
-    return rb_class_new_instance( 4, ( VALUE[] ){ left, top, width, height }, rbRect::Class );
+    VALUE array[] = { left, top, width, height };
+    return rb_class_new_instance( 4, array, rbRect::Class );
 }
 
 VALUE rbRect::ToRuby( const sf::FloatRect& aRect )
@@ -134,7 +137,8 @@ VALUE rbRect::ToRuby( const sf::FloatRect& aRect )
     VALUE top = rb_float_new( aRect.top );
     VALUE width = rb_float_new( aRect.width );
 	VALUE height = rb_float_new( aRect.height );
-    return rb_class_new_instance( 4, ( VALUE[] ){ left, top, width, height }, rbRect::Class );
+    VALUE array[] = { left, top, width, height };
+    return rb_class_new_instance( 4, array, rbRect::Class );
 }
 
 sf::IntRect rbRect::ToSFMLi( VALUE aRect )

@@ -116,7 +116,10 @@ VALUE rbVector2::ToRuby( VALUE anOther )
         return anOther;
 
     if( rb_obj_is_kind_of( anOther, rb_cNumeric ) )
-        return rb_class_new_instance( 2, ( VALUE[] ){ anOther, anOther }, rbVector2::Class );
+    {
+        VALUE array[] = { anOther, anOther };
+        return rb_class_new_instance( 2, array, rbVector2::Class );
+    }
 
     if(rb_type( anOther ) == T_ARRAY)
         return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
@@ -130,21 +133,24 @@ VALUE rbVector2::ToRuby( const sf::Vector2i& aVector2 )
 {
     VALUE x = INT2FIX( aVector2.x );
     VALUE y = INT2FIX( aVector2.y );
-    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+    VALUE array[] = { x, y };
+    return rb_class_new_instance( 2, array, rbVector2::Class );
 }
 
 VALUE rbVector2::ToRuby( const sf::Vector2u& aVector2 )
 {
     VALUE x = INT2FIX( aVector2.x );
     VALUE y = INT2FIX( aVector2.y );
-    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+    VALUE array[] = { x, y };
+    return rb_class_new_instance( 2, array, rbVector2::Class );
 }
 
 VALUE rbVector2::ToRuby( const sf::Vector2f& aVector2 )
 {
     VALUE x = rb_float_new( aVector2.x );
     VALUE y = rb_float_new( aVector2.y );
-    return rb_class_new_instance( 2, ( VALUE[] ){ x, y }, rbVector2::Class );
+    VALUE array[] = { x, y };
+    return rb_class_new_instance( 2, array, rbVector2::Class );
 }
 
 sf::Vector2i rbVector2::ToSFMLi( VALUE aVector2 )

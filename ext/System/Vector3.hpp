@@ -116,8 +116,10 @@ VALUE rbVector3::ToRuby( VALUE anOther )
         return anOther;
 
     if( rb_obj_is_kind_of( anOther, rb_cNumeric ) )
-        return rb_class_new_instance( 3, ( VALUE[] ){ anOther, anOther, anOther },
-                                      rbVector3::Class );
+    {
+        VALUE array[] = { anOther, anOther, anOther };
+        return rb_class_new_instance( 3, array, rbVector3::Class );
+    }
 
     if( rb_type( anOther ) == T_ARRAY )
         return rb_class_new_instance( RARRAY_LEN( anOther ), RARRAY_PTR( anOther ),
@@ -132,7 +134,8 @@ VALUE rbVector3::ToRuby( const sf::Vector3i& aVector3 )
     VALUE x = INT2FIX( aVector3.x );
     VALUE y = INT2FIX( aVector3.y );
     VALUE z = INT2FIX( aVector3.z );
-    return rb_class_new_instance( 3, ( VALUE[] ){ x, y, z }, rbVector3::Class );
+    VALUE array[] = { x, y, z };
+    return rb_class_new_instance( 3, array, rbVector3::Class );
 }
 
 VALUE rbVector3::ToRuby( const sf::Vector3f& aVector3 )
@@ -140,7 +143,8 @@ VALUE rbVector3::ToRuby( const sf::Vector3f& aVector3 )
     VALUE x = rb_float_new( aVector3.x );
     VALUE y = rb_float_new( aVector3.y );
     VALUE z = rb_float_new( aVector3.z );
-    return rb_class_new_instance( 3, ( VALUE[] ){ x, y, z }, rbVector3::Class );
+    VALUE array[] = { x, y, z };
+    return rb_class_new_instance( 3, array, rbVector3::Class );
 }
 
 sf::Vector3i rbVector3::ToSFMLi( VALUE aVector3 )
