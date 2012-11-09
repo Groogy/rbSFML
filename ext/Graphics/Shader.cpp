@@ -51,7 +51,6 @@ void rbShader::Init( VALUE SFML )
 	rb_define_method( rbShader::Class, "load_from_stream",       rbShader::LoadFromStream,       2 );
 	rb_define_method( rbShader::Class, "set_parameter",          rbShader::SetParameter,        -1 );
 	rb_define_method( rbShader::Class, "bind",                   rbShader::Bind,                 0 );
-	rb_define_method( rbShader::Class, "unbind",                 rbShader::Unbind,               0 );
     rb_define_method( rbShader::Class, "marshal_dump",           rbShader::MarshalDump,          0 );
     rb_define_method( rbShader::Class, "==",                     rbShader::Equal,                1 );
     rb_define_method( rbShader::Class, "inspect",                rbShader::Inspect,              0 );
@@ -244,13 +243,6 @@ VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 VALUE rbShader::Bind( VALUE aSelf )
 {
 	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->bind();
-	return Qnil;
-}
-
-// Shader#unbind()
-VALUE rbShader::Unbind( VALUE aSelf )
-{
-	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->unbind();
 	return Qnil;
 }
 

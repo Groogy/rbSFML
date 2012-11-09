@@ -101,9 +101,6 @@ namespace rbShader
 	// Shader#bind()
 	static VALUE Bind( VALUE aSelf );
 	
-	// Shader#unbind()
-	static VALUE Unbind( VALUE aSelf );
-	
     // Shader#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
 
