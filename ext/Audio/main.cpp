@@ -43,10 +43,10 @@ void Init_audio()
 {
     VALUE SFML = rbSFML::Module();
 
-    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) )
+    if( !RBOOL( rb_cv_get( SFML, "@@system" ) ) )
         rb_require( "sfml/system" );
 
-    rb_cv_set( SFML, "@@graphics", Qtrue );
+    rb_cv_set( SFML, "@@audio", Qtrue );
 
     InitDependencies( SFML );
 

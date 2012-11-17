@@ -41,7 +41,7 @@ void Init_window()
 {
     VALUE SFML = rbSFML::Module();
     
-    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) )
+    if( !RBOOL( rb_cv_get( SFML, "@@system" ) ) )
         rb_require( "sfml/system" );
     
     rb_cv_set( SFML, "@@window", Qtrue );

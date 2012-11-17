@@ -66,7 +66,7 @@ void Init_graphics()
 {
     VALUE SFML = rbSFML::Module();
     
-    if( !rb_cvar_defined( SFML, rb_intern( "@@system" ) ) || !rb_cvar_defined( SFML, rb_intern( "@@window" ) ) )
+    if( !RBOOL( rb_cv_get( SFML, "@@system" ) ) || !RBOOL( rb_cv_get( SFML, "@@window" ) ) )
 	{
         rb_require( "sfml/system" );
 		rb_require( "sfml/window" );

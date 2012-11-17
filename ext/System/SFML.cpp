@@ -66,19 +66,19 @@ VALUE rbSFML::SystemLoaded( VALUE aSelf )
 // SFML.window?
 VALUE rbSFML::WindowLoaded( VALUE aSelf )
 {
-    return RBOOL( rb_const_get( aSelf, rb_intern( "Window" ) ) );
+    return RBOOL( rb_cv_get( aSelf, "@@window" ) );
 }
 
 // SFML.graphics?
 VALUE rbSFML::GraphicsLoaded( VALUE aSelf )
 {
-    return RBOOL( rb_const_get( aSelf, rb_intern( "Graphics" ) ) );
+    return RBOOL( rb_cv_get( aSelf, "@@graphics" ) );
 }
 
 // SFML.audio?
 VALUE rbSFML::AudioLoaded( VALUE aSelf )
 {
-    return RBOOL( rb_const_get( aSelf, rb_intern( "Audio" ) ) );
+    return RBOOL( rb_cv_get( aSelf, "@@audio" ) );
 }
 
 // Internal
