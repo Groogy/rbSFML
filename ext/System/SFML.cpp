@@ -63,22 +63,46 @@ VALUE rbSFML::SystemLoaded( VALUE aSelf )
     return Qtrue; // You can't call this method without system.
 }
 
-// SFML.window?
-VALUE rbSFML::WindowLoaded( VALUE aSelf )
+// Internal
+static VALUE False( VALUE aSelf )
+{
+	return Qfalse;
+}
+
+// Internal
+static VALUE GetWindow( VALUE aSelf )
 {
     return RBOOL( rb_const_get( aSelf, rb_intern( "Window" ) ) );
 }
 
-// SFML.graphics?
-VALUE rbSFML::GraphicsLoaded( VALUE aSelf )
+// SFML.window?
+VALUE rbSFML::WindowLoaded( VALUE aSelf )
+{
+	return rb_rescue( (VALUE (*)(...))GetWindow, aSelf, (VALUE (*)(...))False, Qnil );
+}
+
+// Internal
+static VALUE GetGraphics( VALUE aSelf )
 {
     return RBOOL( rb_const_get( aSelf, rb_intern( "Graphics" ) ) );
 }
 
-// SFML.audio?
-VALUE rbSFML::AudioLoaded( VALUE aSelf )
+// SFML.window?
+VALUE rbSFML::GraphicsLoaded( VALUE aSelf )
+{
+	return rb_rescue( (VALUE (*)(...))GetGraphics, aSelf, (VALUE (*)(...))False, Qnil );
+}
+
+// Internal
+static VALUE GetAudio( VALUE aSelf )
 {
     return RBOOL( rb_const_get( aSelf, rb_intern( "Audio" ) ) );
+}
+
+// SFML.window?
+VALUE rbSFML::AudioLoaded( VALUE aSelf )
+{
+	return rb_rescue( (VALUE (*)(...))GetAudio, aSelf, (VALUE (*)(...))False, Qnil );
 }
 
 // Internal
