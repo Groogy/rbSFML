@@ -17,7 +17,7 @@ def play_sound
   
   # Display sound informations
   puts "canary.wav:"
-  puts "  %.2f seconds" % buffer.duration.as_seconds 
+  puts "  %.2f seconds" % buffer.duration.as_seconds
   puts "  #{buffer.sample_rate} samples / sec"
   puts "  #{buffer.channel_count} channels"
   
@@ -43,7 +43,7 @@ def play_music
   
   # Display music informations
   puts "orchestral.ogg:"
-  puts "  %.2f seconds" % music.duration.as_seconds 
+  puts "  %.2f seconds" % music.duration.as_seconds
   puts "  #{music.sample_rate} samples / sec"
   puts "  #{music.channel_count} channels"
 
