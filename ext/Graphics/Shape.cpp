@@ -218,7 +218,7 @@ VALUE rbShape::GetFillColor( VALUE aSelf )
 // Shape#setOutlineColor(color)
 VALUE rbShape::SetOutlineColor( VALUE aSelf, VALUE aColor )
 {
-	rbMacros::ToSFML< sf::Shape >( aSelf, rbShape::Class )->setFillColor( rbColor::ToSFML( aColor ) );
+	rbMacros::ToSFML< sf::Shape >( aSelf, rbShape::Class )->setOutlineColor( rbColor::ToSFML( aColor ) );
 	return Qnil;
 }
 
