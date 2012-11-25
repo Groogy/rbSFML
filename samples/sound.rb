@@ -17,9 +17,9 @@ def play_sound
   
   # Display sound informations
   puts "canary.wav:"
-  puts "  #{buffer.duration / 1000.0} seconds"
+  puts "  %.2f seconds" % buffer.duration.as_seconds
   puts "  #{buffer.sample_rate} samples / sec"
-  puts "  #{buffer.channels} channels"
+  puts "  #{buffer.channel_count} channels"
   
   # Create a sound instance and play it
   sound = Sound.new(buffer)
@@ -28,7 +28,7 @@ def play_sound
   # Loop while the sound is playing
   while sound.status == Sound::Playing
     # Display the playing position
-    print "\rPlaying... #{"%.2f" % (sound.offset / 1000.0)} sec"
+    print "\rPlaying... %.2f sec" % sound.offset.as_seconds
     
     # Leave some CPU time for other processes
     sleep(0.1)
@@ -43,9 +43,9 @@ def play_music
   
   # Display music informations
   puts "orchestral.ogg:"
-  puts "  #{music.duration / 1000.0} seconds"
+  puts "  %.2f seconds" % music.duration.as_seconds
   puts "  #{music.sample_rate} samples / sec"
-  puts "  #{music.channels} channels"
+  puts "  #{music.channel_count} channels"
 
   # Play it
   music.play
@@ -53,7 +53,7 @@ def play_music
   # Loop while the music is playing
   while music.status == Music::Playing
     # Display the playing position
-    print "\rPlaying... #{"%.2f" % (music.offset / 1000.0)} sec"
+    print "\rPlaying... %.2f sec" % music.offset.as_seconds
     
     # Leave some CPU time for other processes
     sleep(0.1)
