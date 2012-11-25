@@ -34,9 +34,9 @@ class TestSoundBuffer < Test::Unit::TestCase
     refute_equal(sound_buffer1, sound_buffer4)
     
     samples = sound_buffer1.samples
-    channels_count = sound_buffer1.channels_count
+    channel_count = sound_buffer1.channel_count
     sample_rate = sound_buffer1.sample_rate
-    sound_buffer3.load_samples(samples, channels_count, sample_rate)
+    sound_buffer3.load_samples(samples, channel_count, sample_rate)
     assert_equal(sound_buffer1, sound_buffer1)
     assert_equal(sound_buffer1, sound_buffer2)
     assert_equal(sound_buffer1, sound_buffer3)
