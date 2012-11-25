@@ -58,10 +58,7 @@ extern "C"
 void Init_system()
 {
     VALUE SFML = rbSFML::Module();
-	rb_cv_set( SFML, "@@system", Qtrue );
-	rb_cv_set( SFML, "@@audio", Qfalse );
-	rb_cv_set( SFML, "@@window", Qfalse );
-	rb_cv_set( SFML, "@@graphics", Qfalse );
+	rb_define_const( SFML, "SYSTEM_LOADED", Qtrue );
 	
 	DefineTimeConstructionMethods( SFML );
 

@@ -41,10 +41,10 @@ void Init_window()
 {
     VALUE SFML = rbSFML::Module();
     
-    if( !RBOOL( rb_cv_get( SFML, "@@system" ) ) )
+    if( !RBOOL( rb_const_defined( SFML, rb_intern( "SYSTEM_LOADED" ) ) ) )
         rb_require( "sfml/system" );
     
-    rb_cv_set( SFML, "@@window", Qtrue );
+    rb_define_const( SFML, "WINDOW_LOADED", Qtrue );
     
     InitDependencies( SFML );
     

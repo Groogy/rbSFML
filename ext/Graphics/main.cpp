@@ -66,13 +66,13 @@ void Init_graphics()
 {
     VALUE SFML = rbSFML::Module();
     
-    if( !RBOOL( rb_cv_get( SFML, "@@system" ) ) || !RBOOL( rb_cv_get( SFML, "@@window" ) ) )
+    if( !RBOOL( rb_const_defined( SFML, rb_intern( "SYSTEM_LOADED" ) ) ) || !RBOOL( rb_const_defined( SFML, rb_intern( "WINDOW_LOADED" ) ) ) )
 	{
         rb_require( "sfml/system" );
 		rb_require( "sfml/window" );
 	}
     
-    rb_cv_set( SFML, "@@graphics", Qtrue );
+    rb_define_const( SFML, "GRAPHICS_LOADED", Qtrue );
     
     InitDependencies( SFML );
 	InitEnumerations( SFML );
