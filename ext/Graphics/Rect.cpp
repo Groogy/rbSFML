@@ -153,7 +153,7 @@ static VALUE internalIntersects( VALUE aSelf, VALUE aRect, VALUE anIntersection 
 			rbRect::SetLeft( anIntersection, left );
 			rbRect::SetTop( anIntersection, top );
 			rbRect::SetWidth( anIntersection, rb_funcall( right, rb_intern( "-" ), 1, left ) );
-			rbRect::SetHeight( anIntersection, rb_funcall( top, rb_intern( "-" ), 1, bottom ) );
+			rbRect::SetHeight( anIntersection, rb_funcall( bottom, rb_intern( "-" ), 1, top ) );
 		}
 		return Qtrue;
 	}
