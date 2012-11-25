@@ -32,17 +32,15 @@ glLoadIdentity()
 gluPerspective(90.0, 1.0, 1.0, 500.0)
 
 # Start the game loop
-while window.opened?
+while window.open?
   
   # Process events
   window.each_event do |event|
-    case event
+    case event.type
     when Event::Closed # Close window : exit
       window.close
     when Event::KeyPressed # Escape key : exit
-      if event.key.code == Keyboard::Escape
-        window.close
-      end
+      window.close if event.key.code == Keyboard::Escape
     when Event::Resized # Resize event : adjust viewport
       glViewport(0, 0, event.size.width, event.size.height)
     end
@@ -51,7 +49,7 @@ while window.opened?
   # Activate the window before using OpenGL commands.
   # This is useless here because we have only one window which is
   # always the active one, but don't forget it if you use multiple windows
-  window.active
+  window.set_active
   
   # Clear color and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -60,9 +58,9 @@ while window.opened?
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   glTranslatef(0.0, 0.0, -200.0)
-  glRotatef(clock.time * 0.05, 1.0, 0.0, 0.0)
-  glRotatef(clock.time * 0.03, 0.0, 1.0, 0.0)
-  glRotatef(clock.time * 0.09, 0.0, 0.0, 1.0)
+  glRotatef(clock.time.as_milliseconds * 0.05, 1.0, 0.0, 0.0)
+  glRotatef(clock.time.as_milliseconds * 0.03, 0.0, 1.0, 0.0)
+  glRotatef(clock.time.as_milliseconds * 0.09, 0.0, 0.0, 1.0)
   
   # Draw a cube
   glBegin(GL_QUADS)
@@ -106,5 +104,5 @@ while window.opened?
   glEnd()
   
   # Finally, display the rendered frame on screen
-  window.Display
+  window.display
 end
