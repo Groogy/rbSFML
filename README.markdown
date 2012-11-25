@@ -1,4 +1,4 @@
-This is the Ruby bindings of the [SFML library](https://github.com/LaurentGomila/SFML) developed and maintained by Groogy, Trickster and LBg. 
+This is the Ruby bindings of the [SFML library](https://github.com/LaurentGomila/SFML) developed and maintained by Groogy
 
 I hope you enjoy using rbSFML. If you make anything in it then we are very interested in hearing about it.  
 We can always be reached at http://www.sfml-dev.org/forum for support, ideas or just have a nice chat.
@@ -86,14 +86,3 @@ Contact
 - E-mail: groogy@groogy.se
 - Forum:  http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=921
 - Github: https://github.com/Groogy
-
-**Trickster:**
-
-- Forum:  http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=869
-- Github: https://github.com/TricksterGuy
-
-**LBg:**
-
-- E-mail: lb-guilherme@live.com
-- Forum:  http://www.sfml-dev.org/forum/profile.php?mode=viewprofile&u=4527
-- Github: https://github.com/LBg
