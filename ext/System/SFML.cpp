@@ -128,3 +128,4 @@ VALUE rbSFML::GetMemoryUsage( VALUE aSelf )
 
     return SIZET2NUM( info.memoryUsage );
 }
+
