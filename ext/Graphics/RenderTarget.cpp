@@ -64,31 +64,6 @@ public:
 		sf::RenderTarget::initialize();
 	}
 	
-	void applyCurrentView()
-	{
-		sf::RenderTarget::applyCurrentView();
-	}
-	
-	void applyBlendMode( const sf::BlendMode aBlendMode )
-	{
-		sf::RenderTarget::applyBlendMode( aBlendMode );
-	}
-	
-	void applyTransform( const sf::Transform& aTransform )
-	{
-		sf::RenderTarget::applyTransform( aTransform );
-	}
-	
-	void applyTexture( const sf::Texture* aTexture )
-	{
-		sf::RenderTarget::applyTexture( aTexture );
-	}
-	
-	void applyShader( const sf::Shader* aShader )
-	{
-		sf::RenderTarget::applyShader( aShader );
-	}
-	
 private:
 	ID myGetSizeSym;
 	ID myActivateSym;
@@ -118,24 +93,19 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_define_module_function( rbRenderTarget::Module, "included", rbInternalIncludedRenderTarget, 1 );
 
     // Instance methods
-	//rb_define_method( rbRenderTarget::Module, "initialize",                  rbRenderTarget::Initialize,              -1 );
 	rb_define_method( rbRenderTarget::Module, "clear",                       rbRenderTarget::Clear,                   -1 );
 	rb_define_method( rbRenderTarget::Module, "set_view",                    rbRenderTarget::SetView,                  1 );
 	rb_define_method( rbRenderTarget::Module, "get_view",                    rbRenderTarget::GetView,                  0 );
 	rb_define_method( rbRenderTarget::Module, "get_default_view",            rbRenderTarget::GetDefaultView,           0 );
 	rb_define_method( rbRenderTarget::Module, "get_viewport",                rbRenderTarget::GetViewport,              1 );
-	rb_define_method( rbRenderTarget::Module, "convert_coords",              rbRenderTarget::ConvertCoords,           -1 );
+	rb_define_method( rbRenderTarget::Module, "map_pixel_to_coords",         rbRenderTarget::MapPixelToCoords,        -1 );
+	rb_define_method( rbRenderTarget::Module, "map_coords_to_pixel",         rbRenderTarget::MapCoordsToPixel,        -1 );
 	rb_define_method( rbRenderTarget::Module, "draw",                        rbRenderTarget::Draw,                    -1 );
 	rb_define_method( rbRenderTarget::Module, "get_size",                    rbRenderTarget::GetSize,                  0 );
 	rb_define_method( rbRenderTarget::Module, "push_gl_states",              rbRenderTarget::PushGLStates,             0 );
 	rb_define_method( rbRenderTarget::Module, "pop_gl_states",               rbRenderTarget::PopGLStates,              0 );
 	rb_define_method( rbRenderTarget::Module, "reset_gl_states",             rbRenderTarget::ResetGLStates,            0 );
 	rb_define_method( rbRenderTarget::Module, "internal_initialize",         rbRenderTarget::InternalInitialize,       0 );
-	rb_define_method( rbRenderTarget::Module, "internal_apply_current_view", rbRenderTarget::InternalApplyCurrentView, 0 );
-	rb_define_method( rbRenderTarget::Module, "internal_apply_blend_mode",   rbRenderTarget::InternalApplyBlendMode,   1 );
-	rb_define_method( rbRenderTarget::Module, "internal_apply_transform",    rbRenderTarget::InternalApplyTransform,   1 );
-	rb_define_method( rbRenderTarget::Module, "internal_apply_texture",      rbRenderTarget::InternalApplyTexture,     1 );
-	rb_define_method( rbRenderTarget::Module, "internal_apply_shader",       rbRenderTarget::InternalApplyShader,      1 );
 	rb_define_method( rbRenderTarget::Module, "marshal_dump",                rbRenderTarget::MarshalDump,              0 );
     rb_define_method( rbRenderTarget::Module, "==",                          rbRenderTarget::Equal,                    1 );
     rb_define_method( rbRenderTarget::Module, "inspect",                     rbRenderTarget::Inspect,                  0 );
@@ -151,8 +121,10 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_define_alias( rbRenderTarget::Module, "getDefaultView",           "get_default_view"            );
 	rb_define_alias( rbRenderTarget::Module, "get_viewport",             "get_viewport"                );
 	rb_define_alias( rbRenderTarget::Module, "getViewport",              "get_viewport"                );
-	rb_define_alias( rbRenderTarget::Module, "convert",                  "convert_coords"              );
-	rb_define_alias( rbRenderTarget::Module, "convertCoords",            "convert_coords"              );
+	rb_define_alias( rbRenderTarget::Module, "map_coords",               "map_pixel_to_coords"         );
+	rb_define_alias( rbRenderTarget::Module, "mapPixelToCoords",         "map_pixel_to_coords"         );
+	rb_define_alias( rbRenderTarget::Module, "map_pixel",                "map_coords_to_pixel"         );
+	rb_define_alias( rbRenderTarget::Module, "mapCoordsToPixel",         "map_coords_to_pixel"         );
 	rb_define_alias( rbRenderTarget::Module, "size",                     "get_size"                    );
 	rb_define_alias( rbRenderTarget::Module, "getSize",                  "get_size"                    );
 	rb_define_alias( rbRenderTarget::Module, "push_states",              "push_gl_states"              );
@@ -162,26 +134,9 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_define_alias( rbRenderTarget::Module, "reset_states",             "reset_gl_states"             );
 	rb_define_alias( rbRenderTarget::Module, "resetGLStates",            "reset_gl_states"             );
 	rb_define_alias( rbRenderTarget::Module, "internalInitialize",       "internal_initialize"         );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyCurrentView", "internal_apply_current_view" );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyBlendMode",   "internal_apply_blend_mode"   );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyTransform",   "internal_apply_transform"    );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyTexture",     "internal_apply_texture"      );
-	rb_define_alias( rbRenderTarget::Module, "internalApplyShader",      "internal_apply_shader"       );
 }
 
 #include <iostream>
-
-// RenderTarget#initialize
-VALUE rbRenderTarget::Initialize( int argc, VALUE* args, VALUE aSelf )
-{
-	if( rb_iv_get( aSelf, "@__internal__render_target_offset" ) == Qnil )
-	{
-		rb_iv_set( aSelf, "@__internal__render_target_offset", INT2FIX( 0 ) );
-	}
-	
-	return rb_call_super( argc, args );
-}
-
 // RenderTarget#clear(color=SFML::Color::Black)
 VALUE rbRenderTarget::Clear( int argc, VALUE* args, VALUE aSelf )
 {
@@ -240,23 +195,47 @@ VALUE rbRenderTarget::GetViewport( VALUE aSelf, VALUE aView )
 	return rbRect::ToRuby( rbRenderTarget::ToSFML( aSelf )->getViewport( *rbMacros::ToSFML< sf::View >( aView, rbView::Class ) ) );
 }
 
-// RenderTarget#convert(vector2)
-// RenderTarget#convert_coords(vector2)
-// RenderTarget#convertCoords(vector2)
-// RenderTarget#convert(vector2, view)
-// RenderTarget#convert_coords(vector2, view)
-// RenderTarget#convertCoords(vector2, view)
-VALUE rbRenderTarget::ConvertCoords( int argc, VALUE* args, VALUE aSelf )
+// RenderTarget#map_coords(vector2)
+// RenderTarget#mapPixelToCoords(vector2)
+// RenderTarget#map_coords(vector2, view)
+// RenderTarget#mapPixelToCoords(vector2, view)
+VALUE rbRenderTarget::MapPixelToCoords( int argc, VALUE* args, VALUE aSelf )
 {
 	VALUE coords = Qnil;
 	switch( argc )
 	{
 	case 1:
-		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->convertCoords( rbVector2::ToSFMLi( args[ 0 ] ) ) );
+		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->mapPixelToCoords( rbVector2::ToSFMLi( args[ 0 ] ) ) );
 		break;
 	case 2:
-		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->convertCoords( 
+		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->mapPixelToCoords( 
 				rbVector2::ToSFMLi( args[ 0 ] ),
+				*rbMacros::ToSFML< sf::View >( args[ 1 ], rbView::Class ) 
+			) 
+		);
+		break;
+	default:
+		INVALID_ARGUMENT_LIST( argc, "2 or 3" );
+	}
+	
+	return coords;
+}
+
+// RenderTarget#map_pixel(vector2)
+// RenderTarget#mapCoordsToPixel(vector2)
+// RenderTarget#map_pixel(vector2, view)
+// RenderTarget#mapCoordsToPixel(vector2, view)
+VALUE rbRenderTarget::MapCoordsToPixel( int argc, VALUE* args, VALUE aSelf )
+{
+	VALUE coords = Qnil;
+	switch( argc )
+	{
+	case 1:
+		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->mapCoordsToPixel( rbVector2::ToSFMLf( args[ 0 ] ) ) );
+		break;
+	case 2:
+		coords = rbVector2::ToRuby( rbRenderTarget::ToSFML( aSelf )->mapCoordsToPixel( 
+				rbVector2::ToSFMLf( args[ 0 ] ),
 				*rbMacros::ToSFML< sf::View >( args[ 1 ], rbView::Class ) 
 			) 
 		);
@@ -317,6 +296,7 @@ VALUE rbRenderTarget::GetSize( VALUE aSelf )
 VALUE rbRenderTarget::PushGLStates( VALUE aSelf )
 {
 	rbRenderTarget::ToSFML( aSelf )->pushGLStates();
+	return Qnil;
 }
 
 // RenderTarget#pop_states
@@ -325,6 +305,7 @@ VALUE rbRenderTarget::PushGLStates( VALUE aSelf )
 VALUE rbRenderTarget::PopGLStates( VALUE aSelf )
 {
 	rbRenderTarget::ToSFML( aSelf )->popGLStates();
+	return Qnil;
 }
 
 // RenderTarget#reset_states
@@ -333,6 +314,7 @@ VALUE rbRenderTarget::PopGLStates( VALUE aSelf )
 VALUE rbRenderTarget::ResetGLStates( VALUE aSelf )
 {
 	rbRenderTarget::ToSFML( aSelf )->resetGLStates();
+	return Qnil;
 }
 
 // RenderTarget#internal_initialize
@@ -345,76 +327,6 @@ VALUE rbRenderTarget::InternalInitialize( VALUE aSelf )
 		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
 		
 	derivedTarget->initialize();
-	
-	return Qnil;
-}
-
-// RenderTarget#internal_apply_current_view
-// RenderTarget#internalApplyCurrentView
-VALUE rbRenderTarget::InternalApplyCurrentView( VALUE aSelf )
-{
-	sf::RenderTarget* targetBase = rbRenderTarget::ToSFML( aSelf );
-	rbInternalRenderTarget* derivedTarget = dynamic_cast< rbInternalRenderTarget* >( targetBase );
-	if( derivedTarget == NULL )
-		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
-		
-	derivedTarget->applyCurrentView();
-	
-	return Qnil;
-}
-
-// RenderTarget#internal_apply_blend_mode(mode)
-// RenderTarget#internalApplyBlendMode(mode)
-VALUE rbRenderTarget::InternalApplyBlendMode( VALUE aSelf, VALUE aMode )
-{
-	sf::RenderTarget* targetBase = rbRenderTarget::ToSFML( aSelf );
-	rbInternalRenderTarget* derivedTarget = dynamic_cast< rbInternalRenderTarget* >( targetBase );
-	if( derivedTarget == NULL )
-		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
-		
-	derivedTarget->applyBlendMode( static_cast< sf::BlendMode >( NUM2INT( aMode ) ) );
-	
-	return Qnil;
-}
-
-// RenderTarget#internal_apply_transform(transform)
-// RenderTarget#internalApplyTransform(transform)
-VALUE rbRenderTarget::InternalApplyTransform( VALUE aSelf, VALUE aTransformation )
-{
-	sf::RenderTarget* targetBase = rbRenderTarget::ToSFML( aSelf );
-	rbInternalRenderTarget* derivedTarget = dynamic_cast< rbInternalRenderTarget* >( targetBase );
-	if( derivedTarget == NULL )
-		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
-		
-	derivedTarget->applyTransform( *rbMacros::ToSFML< sf::Transform >( aTransformation, rbTransform::Class ) );
-	
-	return Qnil;
-}
-
-// RenderTarget#internal_apply_texture(texture)
-// RenderTarget#internalApplyTexture(texture)
-VALUE rbRenderTarget::InternalApplyTexture( VALUE aSelf, VALUE aTexture )
-{
-	sf::RenderTarget* targetBase = rbRenderTarget::ToSFML( aSelf );
-	rbInternalRenderTarget* derivedTarget = dynamic_cast< rbInternalRenderTarget* >( targetBase );
-	if( derivedTarget == NULL )
-		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
-		
-	derivedTarget->applyTexture( rbMacros::ToSFML< sf::Texture >( aTexture, rbTexture::Class ) );
-	
-	return Qnil;
-}
-
-// RenderTarget#internal_apply_shader(shader)
-// RenderTarget#internalApplyShader(shader)
-VALUE rbRenderTarget::InternalApplyShader( VALUE aSelf, VALUE aShader )
-{
-	sf::RenderTarget* targetBase = rbRenderTarget::ToSFML( aSelf );
-	rbInternalRenderTarget* derivedTarget = dynamic_cast< rbInternalRenderTarget* >( targetBase );
-	if( derivedTarget == NULL )
-		rb_raise( rb_eRuntimeError, "Called internal method on non-custom render target" );
-		
-	derivedTarget->applyShader( rbMacros::ToSFML< sf::Shader >( aShader, rbShader::Class ) );
 	
 	return Qnil;
 }

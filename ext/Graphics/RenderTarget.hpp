@@ -42,9 +42,6 @@ namespace rbRenderTarget
 #endif
 
 #if defined( GRAPHICS_RENDER_TARGET_CPP )
-    // RenderTarget#initialize(*args)
-    static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
-	
 	// RenderTarget#clear(color=SFML::Color::Black)
 	static VALUE Clear( int argc, VALUE* args, VALUE aSelf );
 	
@@ -67,13 +64,17 @@ namespace rbRenderTarget
 	// RenderTarget#getViewport(view)
 	static VALUE GetViewport( VALUE aSelf, VALUE aView );
 	
-	// RenderTarget#convert(vector2)
-	// RenderTarget#convert_coords(vector2)
-	// RenderTarget#convertCoords(vector2)
-	// RenderTarget#convert(vector2, view)
-	// RenderTarget#convert_coords(vector2, view)
-	// RenderTarget#convertCoords(vector2, view)
-	static VALUE ConvertCoords( int argc, VALUE* args, VALUE aSelf );
+	// RenderTarget#map_coords(vector2)
+	// RenderTarget#mapPixelToCoords(vector2)
+	// RenderTarget#map_coords(vector2, view)
+	// RenderTarget#mapPixelToCoords(vector2, view)
+	static VALUE MapPixelToCoords( int argc, VALUE* args, VALUE aSelf );
+	
+	// RenderTarget#map_pixel(vector2)
+	// RenderTarget#mapCoordsToPixel(vector2)
+	// RenderTarget#map_pixel(vector2, view)
+	// RenderTarget#mapCoordsToPixel(vector2, view)
+	static VALUE MapCoordsToPixel( int argc, VALUE* args, VALUE aSelf );
 	
 	// RenderTarget#draw(drawable, render_state)
 	// RenderTarget#draw(vertices, primitive_type, render_state)
@@ -102,26 +103,6 @@ namespace rbRenderTarget
 	// RenderTarget#internal_initialize
 	// RenderTarget#internalInitialize
 	static VALUE InternalInitialize( VALUE aSelf );
-	
-	// RenderTarget#internal_apply_current_view
-	// RenderTarget#internalApplyCurrentView
-	static VALUE InternalApplyCurrentView( VALUE aSelf );
-	
-	// RenderTarget#internal_apply_blend_mode(mode)
-	// RenderTarget#internalApplyBlendMode(mode)
-	static VALUE InternalApplyBlendMode( VALUE aSelf, VALUE aMode );
-	
-	// RenderTarget#internal_apply_transform(transform)
-	// RenderTarget#internalApplyTransform(transform)
-	static VALUE InternalApplyTransform( VALUE aSelf, VALUE aTransformation );
-	
-	// RenderTarget#internal_apply_texture(texture)
-	// RenderTarget#internalApplyTexture(texture)
-	static VALUE InternalApplyTexture( VALUE aSelf, VALUE aTexture );
-	
-	// RenderTarget#internal_apply_shader(shader)
-	// RenderTarget#internalApplyShader(shader)
-	static VALUE InternalApplyShader( VALUE aSelf, VALUE aShader );
 	
     // RenderTarget#marshal_dump
     static VALUE MarshalDump( VALUE aSelf );
