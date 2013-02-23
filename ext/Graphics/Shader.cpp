@@ -87,7 +87,7 @@ VALUE rbShader::Bind( int argc, VALUE* args, VALUE aSelf )
 	if ( argc == 0 )
 		sf::Shader::bind( NULL );
 	else if ( argc == 1 )
-		sf::Shader::bind( rbMacros::ToSFML< sf::Shader >( args[0], rbShader::Class ) );
+		sf::Shader::bind( rbMacros::ToSFML< sf::Shader >( args[ 0 ], rbShader::Class ) );
 	else
 		INVALID_ARGUMENT_LIST( argc, "0..1" );
 	return Qnil;
