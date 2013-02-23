@@ -2,13 +2,21 @@
 # https://github.com/LaurentGomila/SFML/blob/master/examples/window/Window.cpp
 
 begin
-  require 'sfml/sfml'
+  require '../sfml/sfml'
 rescue LoadError
-  require 'sfml/system'
-  require 'sfml/window'
+  require '../sfml/system'
+  require '../sfml/window'
 end
 
-require 'opengl' # from ruby-opengl gem
+begin
+  require 'opengl' # from ruby-opengl gem
+rescue LoadError
+  puts "This sample requires the opengl gem"
+  print "Press enter to exit..."
+  gets
+  exit(1)
+end
+
 
 include SFML
 
