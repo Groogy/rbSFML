@@ -92,9 +92,6 @@ def calc_md5(src)
 end
 
 def compile_o(src)
-  unless File.exist?(SFML_INC)
-    raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
-  end
   calc_md5(src)
   mkdir_p OBJ_DIR
   defines = []
@@ -118,9 +115,6 @@ def compile_o(src)
 end
 
 def create_so(src)
-  unless File.exist?(SFML_LIB)
-    raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
-  end
   so = "#{SO_DIR}/#{src}.#{CONFIG['DLEXT']}"
   mkdir_p SO_DIR
   puts "Creating #{so}"
