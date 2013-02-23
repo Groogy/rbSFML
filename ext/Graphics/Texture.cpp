@@ -98,18 +98,16 @@ VALUE rbTexture::Bind( int argc, VALUE* args, VALUE aSelf )
 
 	switch( argc )
 	{
-		case 0:
-			sf::Texture::bind( NULL );
-			break;
-		case 1:
-			sf::Texture::bind( rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class ) );
-			break;
-		case 2:
-			type = static_cast< sf::Texture::CoordinateType >( NUM2INT( args[ 1 ] ) );
-			sf::Texture::bind( rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class ), type );
-			break;
-		default:
-			INVALID_ARGUMENT_LIST( argc, "0..2" );
+	case 0:
+		sf::Texture::bind( NULL );
+		break;
+	case 2:
+		type = static_cast< sf::Texture::CoordinateType >( NUM2INT( args[ 1 ] ) );
+	case 1:
+		sf::Texture::bind( rbMacros::ToSFML< sf::Texture >( args[ 0 ], rbTexture::Class ), type );
+		break;
+	default:
+		INVALID_ARGUMENT_LIST( argc, "0..2" );
 	}
 
 	return Qnil;
