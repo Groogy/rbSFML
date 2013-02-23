@@ -68,5 +68,5 @@ play_sound
 play_music
 
 # Wait until the user presses 'enter' key
-puts "Press enter to exit..."
+print "Press enter to exit..."
 gets

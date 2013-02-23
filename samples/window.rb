@@ -9,7 +9,7 @@ rescue LoadError
 end
 
 begin
-  require 'opengl' # from ruby-opengl gem
+  require 'opengl'
 rescue LoadError
   puts "This sample requires the opengl gem"
   print "Press enter to exit..."
