@@ -40,8 +40,12 @@ namespace rbTexture
 #endif
 
 #if defined( GRAPHICS_TEXTURE_CPP )
-	// Texture.maximum_size()
+	// Texture.maximum_size
 	static VALUE GetMaximumSize( VALUE aSelf );
+
+	// Texture.bind
+	// Texture.bind(coordinate_type = Normalized)
+	static VALUE Bind( int argc, VALUE* args, VALUE aSelf );
 
     // Texture#initialize
 	// Texture#initialize(filename)
@@ -87,9 +91,6 @@ namespace rbTexture
 	// Texture#update(window)
 	// Texture#update(window, x, y)
 	static VALUE Update( int argc, VALUE* args, VALUE aSelf );
-	
-	// Texture#bind(coordinate_type = Normalized)
-	static VALUE Bind( int argc, VALUE* args, VALUE aSelf );
 	
 	// Texture#smooth=(flag)
 	// Texture#setSmooth=(flag)

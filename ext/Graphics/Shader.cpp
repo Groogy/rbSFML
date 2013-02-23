@@ -43,6 +43,7 @@ void rbShader::Init( VALUE SFML )
 	// Class methods
 	rb_define_alloc_func( rbShader::Class, rbMacros::Allocate< sf::Shader > );
 	rb_define_class_method( rbShader::Class, "available?", rbShader::IsAvailable, 0 );
+	rb_define_class_method( rbShader::Class, "bind",       rbShader::Bind,       -1 );
 
     // Instance methods
     rb_define_method( rbShader::Class, "initialize",             rbShader::Initialize,          -1 );
@@ -50,7 +51,6 @@ void rbShader::Init( VALUE SFML )
 	rb_define_method( rbShader::Class, "load_from_memory",       rbShader::LoadFromMemory,       2 );
 	rb_define_method( rbShader::Class, "load_from_stream",       rbShader::LoadFromStream,       2 );
 	rb_define_method( rbShader::Class, "set_parameter",          rbShader::SetParameter,        -1 );
-	rb_define_method( rbShader::Class, "bind",                   rbShader::Bind,                 0 );
     rb_define_method( rbShader::Class, "marshal_dump",           rbShader::MarshalDump,          0 );
     rb_define_method( rbShader::Class, "==",                     rbShader::Equal,                1 );
     rb_define_method( rbShader::Class, "inspect",                rbShader::Inspect,              0 );
@@ -79,6 +79,18 @@ void rbShader::Init( VALUE SFML )
 VALUE rbShader::IsAvailable( VALUE aSelf )
 {
 	return RBOOL( sf::Shader::isAvailable() );	
+}
+
+// Shader.bind()
+VALUE rbShader::Bind( int argc, VALUE* args, VALUE aSelf )
+{
+	if ( argc == 0 )
+		sf::Shader::bind( NULL );
+	else if ( argc == 1 )
+		sf::Shader::bind( rbMacros::ToSFML< sf::Shader >( args[ 0 ], rbShader::Class ) );
+	else
+		INVALID_ARGUMENT_LIST( argc, "0..1" );
+	return Qnil;
 }
 
 // Shader#initialize
@@ -236,13 +248,6 @@ VALUE rbShader::SetParameter( int argc, VALUE* args, VALUE aSelf )
 	default:
 		INVALID_ARGUMENT_LIST( argc, "2..4" );
 	}
-	return Qnil;
-}
-
-// Shader#bind()
-VALUE rbShader::Bind( VALUE aSelf )
-{
-	rbMacros::ToSFML< sf::Shader >( aSelf, rbShader::Class )->bind();
 	return Qnil;
 }
 
