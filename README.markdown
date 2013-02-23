@@ -52,7 +52,7 @@ Linux
 
 1.  You must have a development build of Ruby installed (i.e. one that includes the Ruby C headers and libraries). If your flavor of Linux does not provide a package for this (which is unlikely), you can compile Ruby from [source](http://www.ruby-lang.org/pt/downloads/) and follow its instructions for installation.
 
-2.  You must have a recent development build of SFML installed. If your flavor of Linux does not provide a package for this (which **is** likely), you will need to compile SFML from [source](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php) and follow its instructions for installation.
+2.  You must have a recent development build of SFML installed. If your flavor of Linux does not provide a package for this (which **is** likely), you will need to compile SFML from [source](https://github.com/LaurentGomila/SFML) and follow its [instructions](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php) for installation.
 
 3.  Ensure that the SFML headers and libraries are in your C++ compiler's search paths. The easiest way is to try compiling and running a simple SFML app.
 
