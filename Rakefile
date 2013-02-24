@@ -15,7 +15,7 @@ end
 RakeFileUtils.verbose_flag = false
 
 OBJ_DIR = 'obj'
-SO_DIR = 'sfml'
+SO_DIR = 'lib/sfml'
 DOC_DIR = 'doc'
 EXT_DIR = 'ext'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
@@ -263,10 +263,5 @@ end
 
 desc "Build Ruby Gem."
 task :gem => [:all] do
-	mkdir_p 'lib/sfml'
-	LIBS.each do |lib|
-		cp(lib, 'lib/sfml') if lib !~ /sfml.so$/
-	end
-	sh 'gem build sfml.gemspec'
-	rm_rf 'lib'
+  sh 'gem build sfml.gemspec'
 end
