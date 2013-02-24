@@ -1,9 +1,8 @@
 Gem::Specification.new do |s|
-  s.name = 'SFML'
+  s.name = 'sfml'
   s.version = '0.0.0'
   s.date = '2013-02-23'
-  s.summary = 'rbSFML'
-  s.description = 'Ruby bindings for SFML2'
+  s.summary = 'Ruby bindings for SFML2'
   s.authors = ['Groogy']
   s.email = 'groogy@groogy.se'
   s.files = [
