@@ -2,10 +2,10 @@
 # https://github.com/LaurentGomila/SFML/blob/master/examples/sound/Sound.cpp
 
 begin
-  require '../sfml/sfml'
+  require '../lib/sfml/sfml'
 rescue LoadError
-  require '../sfml/system'
-  require '../sfml/audio'
+  require '../lib/sfml/system'
+  require '../lib/sfml/audio'
 end
 
 include SFML
