@@ -1,32 +1,15 @@
 require 'test/unit'
 
 begin
-  require './sfml/sfml'
-  puts "Loaded 'sfml/sfml'"
+  require './lib/sfml/sfml'
+  puts "Loaded 'lib/sfml/sfml'"
 rescue LoadError
-  begin
-    require './sfml/system'
-    puts "Loaded 'sfml/system'"
-  rescue LoadError
-    warn "Warning: Cannot load 'sfml/system'"
-  end
-  begin
-    require './sfml/window'
-    puts "Loaded 'sfml/window'"
-  rescue LoadError
-    warn "Warning: Cannot load 'sfml/window'"
-  end
-  begin
-    require './sfml/graphics'
-    puts "Loaded 'sfml/graphics'"
-  rescue LoadError
-    warn "Warning: Cannot load 'sfml/graphics'"
-  end
-  begin
-    require './sfml/audio'
-    puts "Loaded 'sfml/audio'"
-  rescue LoadError
-    warn "Warning: Cannot load 'sfml/audio'"
+  ['system', 'window', 'graphics', 'audio'].each do |lib|
+    begin
+      require "./lib/sfml/#{lib}"
+    rescue LoadError
+      warn "Warning: Cannot load 'lib/sfml/#{lib}'"
+    end
   end
 end
 

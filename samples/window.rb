@@ -2,10 +2,10 @@
 # https://github.com/LaurentGomila/SFML/blob/master/examples/window/Window.cpp
 
 begin
-  require '../sfml/sfml'
+  require '../lib/sfml/sfml'
 rescue LoadError
-  require '../sfml/system'
-  require '../sfml/window'
+  require '../lib/sfml/system'
+  require '../lib/sfml/window'
 end
 
 begin
