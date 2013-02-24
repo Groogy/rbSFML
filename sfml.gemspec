@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
     'lib/sfml/graphics.so',
     'lib/sfml/window.so',
     'lib/sfml/system.so',
-    'lib/sfml/sfml.so',
+    'lib/sfml/sfml.rb',
   ]
   s.homepage = 'http://github.com/Groogy/rbSFML'
 end
