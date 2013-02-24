@@ -263,10 +263,11 @@ end
 
 desc "Build Ruby Gem."
 task :gem => [:all] do
-	rm_rf 'lib'
 	mkdir_p 'lib/sfml'
 	LIBS.each do |lib|
-		cp lib, 'lib/sfml' if lib !~ /(sfml|all)/
+		cp(lib, 'lib/sfml') if lib !~ /(sfml|all).so$/
 	end
-	cp 'ext/sfml.rb' 'lib/sfml'
+	cp 'ext/sfml.rb', 'lib/sfml'
+	`gem build sfml.gemspec`
+	rm_rf 'lib'
 end
