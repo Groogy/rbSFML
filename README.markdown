@@ -25,34 +25,34 @@ Installation
 Windows
 -------
 
-1.  Open `cmd` and navigate to a folder where you want to install rbSFML source files.
+1.  Install Ruby. The simple [Ruby Installer](http://rubyinstaller.org/downloads) works fine.
 
-2.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
+2.  [Download](https://github.com/LaurentGomila/SFML) and [compile](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php) SFML.
 
-3.  Download and compile SFML. (you can find how to do it [here](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php))
+3.  Open `cmd` and navigate to a folder where you want to install rbSFML source files.
 
-4.  Copy the `include` and `lib` folders from SFML to the rbSFML folder. If you built SFML as a shared library, move all `.dll` files from `lib` to your `ruby\bin` directory Wor any directory you find fitting that places in the environment variable PATH.
+4.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-5.  Run one of the following commands in your terminal:
+5.  Ensure that your C++ compiler's location is in your PATH environment variable. Run `rake verbose` to see what compiler Ruby thinks you have. If the SFML headers and libraries are not in your compiler's default search paths, set the `SFML_INCLUDE` and `SFML_LIB` environment variables to their locations.
+
+6.  Run one of the following commands in your terminal:
 
   * `rake` - Build all SFML as shared libraries (need DLLs) - recommended.
   * `rake static` - Build all SFML as static libraries (don't need DLLs).
   * `rake graphics` - Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it. You can also add `static`.
 
-6.  Run `rake install`. (Needs administrative permission to access ruby installation directory)
+7.  If you built SFML as a shared library, you will need the SFML DLLs in your PATH in order to `require` any of the rbSFML files (this can be accomplished by copying them to the directory where rbSFML is being `require`d).
 
-7.  You can now use rbSFML in any ruby application.
+8.  Run `rake test` to ensure everything is working and then `rake gem` to package rbSFML as a Ruby gem.
 
-8.  You can run `rake test` to ensure everything is working and `rake doc` to build and open the documentation (at `doc/frames.html`).
-
-9.  To run samples run `rake samples`. All samples are in `samples` folder.
+9.  You can build the documentation (at doc/frames.html) with `rake doc` and run the samples with `rake samples`.
 
 Linux
 -----
 
-1.  You must have a development build of Ruby installed (i.e. one that includes the Ruby C headers and libraries). If your flavor of Linux does not provide a package for this (which is unlikely), you can compile Ruby from [source](http://www.ruby-lang.org/pt/downloads/) and follow its instructions for installation.
+1.  Install Ruby. If your flavor of Linux does not provide a package for this (which is unlikely), you can compile Ruby from [source](http://www.ruby-lang.org/pt/downloads/) and follow its instructions for installation.
 
-2.  You must have a recent development build of SFML installed. If your flavor of Linux does not provide a package for this (which **is** likely), you will need to compile SFML from [source](https://github.com/LaurentGomila/SFML) and follow its [instructions](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php) for installation.
+2.  You must have a recent build of SFML installed. If your flavor of Linux does not provide a package for this (which **is** likely), you will need to compile SFML from [source](https://github.com/LaurentGomila/SFML) and follow its [instructions](http://sfml-dev.org/tutorials/2.0/compile-with-cmake.php) for installation.
 
 3.  Ensure that the SFML headers and libraries are in your C++ compiler's search paths. The easiest way is to try compiling and running a simple SFML app.
 
@@ -65,11 +65,9 @@ Linux
   * `rake` - Build all SFML as shared libraries.
   * `rake graphics` - Build only the graphics module (and its dependencies). You can use any other module (`audio`, `system` and `window`) with it.
 
-7.  Run `rake test` to ensure everything is working and then `rake install` (as root).
+7.  Run `rake test` to ensure everything is working and then `rake gem` to package rbSFML as a Ruby gem.
 
-8.  You can now use rbSFML in any ruby application.
-
-9.  You can build the documentation (at doc/frames.html) with `rake doc` and run the samples with `rake samples`.
+8.  You can build the documentation (at doc/frames.html) with `rake doc` and run the samples with `rake samples`.
 
 Questions?
 ==========
