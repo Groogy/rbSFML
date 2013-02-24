@@ -28,7 +28,7 @@ RUBY_LIB = CONFIG['libdir']
 RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
 
 CXX = CONFIG['CXX']
-CXXFLAGS = "#{CONFIG['CXXFLAGS']} -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
+CXXFLAGS = "#{CONFIG['CXXFLAGS']} -fPIC -I#{SFML_INC} -I#{EXT_DIR} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
 
 LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
 LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']} -L#{SFML_LIB} -L#{RUBY_LIB} #{RUBY_LINK}".sub("$(DEFFILE)", "")
@@ -92,9 +92,6 @@ def calc_md5(src)
 end
 
 def compile_o(src)
-  unless File.exist?(SFML_INC)
-    raise RuntimeError, "Unable to find SFML include files at '#{SFML_INC}'"
-  end
   calc_md5(src)
   mkdir_p OBJ_DIR
   defines = []
@@ -118,9 +115,6 @@ def compile_o(src)
 end
 
 def create_so(src)
-  unless File.exist?(SFML_LIB)
-    raise RuntimeError, "Unable to find SFML lib files at '#{SFML_LIB}'"
-  end
   so = "#{SO_DIR}/#{src}.#{CONFIG['DLEXT']}"
   mkdir_p SO_DIR
   puts "Creating #{so}"
