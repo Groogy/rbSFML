@@ -1,29 +1,29 @@
 require 'test/unit'
 
 begin
-  require 'sfml/sfml'
+  require './sfml/sfml'
   puts "Loaded 'sfml/sfml'"
 rescue LoadError
   begin
-    require 'sfml/system'
+    require './sfml/system'
     puts "Loaded 'sfml/system'"
   rescue LoadError
     warn "Warning: Cannot load 'sfml/system'"
   end
   begin
-    require 'sfml/window'
+    require './sfml/window'
     puts "Loaded 'sfml/window'"
   rescue LoadError
     warn "Warning: Cannot load 'sfml/window'"
   end
   begin
-    require 'sfml/graphics'
+    require './sfml/graphics'
     puts "Loaded 'sfml/graphics'"
   rescue LoadError
     warn "Warning: Cannot load 'sfml/graphics'"
   end
   begin
-    require 'sfml/audio'
+    require './sfml/audio'
     puts "Loaded 'sfml/audio'"
   rescue LoadError
     warn "Warning: Cannot load 'sfml/audio'"
