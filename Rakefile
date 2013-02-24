@@ -15,7 +15,7 @@ end
 RakeFileUtils.verbose_flag = false
 
 OBJ_DIR = 'obj'
-SO_DIR = 'sfml'
+SO_DIR = 'lib/sfml'
 DOC_DIR = 'doc'
 EXT_DIR = 'ext'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
@@ -259,4 +259,9 @@ task :samples do
   Dir.entries(".").select{|e| e =~ /\.rb$/ }.each do |sample|
     ruby("#{sample}", verbose: true) { }
   end
+end
+
+desc "Build Ruby Gem."
+task :gem => [:all] do
+  sh 'gem build sfml.gemspec'
 end

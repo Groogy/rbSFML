@@ -2,10 +2,10 @@
 # https://github.com/LaurentGomila/SFML/blob/master/examples/sound/Sound.cpp
 
 begin
-  require 'sfml/sfml'
+  require '../sfml/sfml'
 rescue LoadError
-  require 'sfml/system'
-  require 'sfml/audio'
+  require '../sfml/system'
+  require '../sfml/audio'
 end
 
 include SFML
@@ -68,5 +68,5 @@ play_sound
 play_music
 
 # Wait until the user presses 'enter' key
-puts "Press enter to exit..."
+print "Press enter to exit..."
 gets
