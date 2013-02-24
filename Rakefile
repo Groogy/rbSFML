@@ -260,3 +260,11 @@ task :samples do
     ruby("#{sample}", verbose: true) { }
   end
 end
+
+desc "Build Ruby Gem."
+task :gem => [:all] do
+	rm_rf 'lib'
+	mkdir_p 'lib/sfml'
+	LIBS.each { |lib| cp lib, 'lib/sfml' }
+	cp 'ext/sfml.rb' 'lib/sfml'
+end
