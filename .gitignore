@@ -4,3 +4,4 @@ obj/*
 sfml/*
 *.cbp
 rbSFML.layout
+*.gem
