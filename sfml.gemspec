@@ -7,11 +7,11 @@ Gem::Specification.new do |s|
   s.authors = ['Groogy']
   s.email = 'groogy@groogy.se'
   s.files = [
-    'lib/sfml/audio.so',
-    'lib/sfml/graphics.so',
-    'lib/sfml/window.so',
     'lib/sfml/system.so',
-    'lib/sfml/sfml.rb',
+    'lib/sfml/window.so',
+    'lib/sfml/graphics.so',
+    'lib/sfml/audio.so',
+    'lib/sfml/all.so',
   ]
   s.homepage = 'http://github.com/Groogy/rbSFML'
 end
