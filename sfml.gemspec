@@ -2,7 +2,8 @@ Gem::Specification.new do |s|
   s.name = 'sfml'
   s.version = '0.0.0'
   s.date = '2013-02-23'
-  s.summary = 'Ruby bindings for SFML2'
+  s.summary = 'Bindings for SFML2'
+  s.description = 'Bindings for the C++ multimedia library SFML2.'
   s.authors = ['Groogy']
   s.email = 'groogy@groogy.se'
   s.files = [
