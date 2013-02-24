@@ -1,6 +1,8 @@
+doc/*
 include/*
 lib/*
 obj/*
 sfml/*
 *.cbp
 rbSFML.layout
+*.gem
