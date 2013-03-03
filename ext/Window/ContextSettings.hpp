@@ -23,6 +23,7 @@
 #define WINDOW_CONTEXTSETTINGS_HPP
 
 #include <ruby.h>
+#include <ruby/st.h>
 #include <rbSFML.hpp>
 #include <System/SFML.hpp>
 
@@ -107,9 +108,6 @@ namespace rbContextSettings
     // ContextSettings#inspect
     // ContextSettings#to_s
     static VALUE Inspect( VALUE aSelf );
-    
-    // ContextSettings#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
 }

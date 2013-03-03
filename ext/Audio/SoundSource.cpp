@@ -34,20 +34,20 @@ void rbSoundSource::Init( VALUE SFML )
     rb_define_alloc_func( rbSoundSource::Class, rbMacros::AbstractAllocate );
     
     // Instance methods
-    rb_define_method( rbSoundSource::Class, "marshal_dump",          rbSoundSource::MarshalDump,            0 );
-    rb_define_method( rbSoundSource::Class, "marshal_load",          rbSoundSource::MarshalLoad,            1 );
-    rb_define_method( rbSoundSource::Class, "get_pitch",             rbSoundSource::GetPitch,               0 );
-    rb_define_method( rbSoundSource::Class, "set_pitch",             rbSoundSource::SetPitch,               1 );
-    rb_define_method( rbSoundSource::Class, "get_volume",            rbSoundSource::GetVolume,              0 );
-    rb_define_method( rbSoundSource::Class, "set_volume",            rbSoundSource::SetVolume,              1 );
-    rb_define_method( rbSoundSource::Class, "get_position",          rbSoundSource::GetPosition,            0 );
-    rb_define_method( rbSoundSource::Class, "set_position",          rbSoundSource::SetPosition,           -1 );
-    rb_define_method( rbSoundSource::Class, "relative_to_listener=", rbSoundSource::SetRelativeToListener,  1 );
-    rb_define_method( rbSoundSource::Class, "relative_to_listener?", rbSoundSource::IsRelativeToListener,   0 );
-    rb_define_method( rbSoundSource::Class, "get_min_distance",      rbSoundSource::GetMinDistance,         0 );
-    rb_define_method( rbSoundSource::Class, "set_min_distance",      rbSoundSource::SetMinDistance,         1 );
-    rb_define_method( rbSoundSource::Class, "get_attenuation",       rbSoundSource::GetAttenuation,         0 );
-    rb_define_method( rbSoundSource::Class, "set_attenuation",       rbSoundSource::SetAttenuation,         1 );
+    ext_define_method( rbSoundSource::Class, "marshal_dump",          rbSoundSource::MarshalDump,            0 );
+    ext_define_method( rbSoundSource::Class, "marshal_load",          rbSoundSource::MarshalLoad,            1 );
+    ext_define_method( rbSoundSource::Class, "get_pitch",             rbSoundSource::GetPitch,               0 );
+    ext_define_method( rbSoundSource::Class, "set_pitch",             rbSoundSource::SetPitch,               1 );
+    ext_define_method( rbSoundSource::Class, "get_volume",            rbSoundSource::GetVolume,              0 );
+    ext_define_method( rbSoundSource::Class, "set_volume",            rbSoundSource::SetVolume,              1 );
+    ext_define_method( rbSoundSource::Class, "get_position",          rbSoundSource::GetPosition,            0 );
+    ext_define_method( rbSoundSource::Class, "set_position",          rbSoundSource::SetPosition,           -1 );
+    ext_define_method( rbSoundSource::Class, "relative_to_listener=", rbSoundSource::SetRelativeToListener,  1 );
+    ext_define_method( rbSoundSource::Class, "relative_to_listener?", rbSoundSource::IsRelativeToListener,   0 );
+    ext_define_method( rbSoundSource::Class, "get_min_distance",      rbSoundSource::GetMinDistance,         0 );
+    ext_define_method( rbSoundSource::Class, "set_min_distance",      rbSoundSource::SetMinDistance,         1 );
+    ext_define_method( rbSoundSource::Class, "get_attenuation",       rbSoundSource::GetAttenuation,         0 );
+    ext_define_method( rbSoundSource::Class, "set_attenuation",       rbSoundSource::SetAttenuation,         1 );
     
     // Instance aliasses
 	rb_define_alias( rbSoundSource::Class, "pitch", 				"get_pitch"				);

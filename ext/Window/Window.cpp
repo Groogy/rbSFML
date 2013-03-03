@@ -32,32 +32,31 @@ void rbWindow::Init( VALUE SFML )
     rb_define_alloc_func( rbWindow::Class, rbMacros::Allocate< sf::Window > );
     
     // Instance methods
-    rb_define_method( rbWindow::Class, "initialize",             rbWindow::Initialize,             -1 );
-    rb_define_method( rbWindow::Class, "marshal_dump",           rbWindow::MarshalDump,             0 );
-    rb_define_method( rbWindow::Class, "create",                 rbWindow::Create,                 -1 );
-    rb_define_method( rbWindow::Class, "close",                  rbWindow::Close,                   0 );
-    rb_define_method( rbWindow::Class, "open?",                  rbWindow::IsOpen,                  0 );
-    rb_define_method( rbWindow::Class, "settings",               rbWindow::GetSettings,             0 );
-    rb_define_method( rbWindow::Class, "poll_event",             rbWindow::PollEvent,              -1 );
-    rb_define_method( rbWindow::Class, "wait_event",             rbWindow::WaitEvent,              -1 );
-    rb_define_method( rbWindow::Class, "each_event",             rbWindow::EachEvent,               0 );
-    rb_define_method( rbWindow::Class, "vertical_sync_enabled=", rbWindow::SetVerticalSyncEnabled,  1 );
-    rb_define_method( rbWindow::Class, "mouse_cursor_visible=",  rbWindow::SetMouseCursorVisible,   1 );
-    rb_define_method( rbWindow::Class, "position=",              rbWindow::SetPosition,             1 );
-	rb_define_method( rbWindow::Class, "position",              rbWindow::GetPosition,             0 );
-    rb_define_method( rbWindow::Class, "size=",                  rbWindow::SetSize,                 1 );
-	rb_define_method( rbWindow::Class, "size",                  rbWindow::GetSize,                 0 );
-    rb_define_method( rbWindow::Class, "title=",                 rbWindow::SetTitle,                1 );
-    rb_define_method( rbWindow::Class, "visible=",               rbWindow::SetVisible,              1 );
-    rb_define_method( rbWindow::Class, "key_repeat_enabled=",    rbWindow::SetKeyRepeatEnabled,     1 );
-    rb_define_method( rbWindow::Class, "set_icon",               rbWindow::SetIcon,                 3 );
-    rb_define_method( rbWindow::Class, "set_active",             rbWindow::SetActive,              -1 );
-    rb_define_method( rbWindow::Class, "display",                rbWindow::Display,                 0 );
-    rb_define_method( rbWindow::Class, "framerate=",             rbWindow::SetFramerateLimit,       1 );
-    rb_define_method( rbWindow::Class, "joystick_threshold=",    rbWindow::SetJoystickThreshold,    1 );
-    rb_define_method( rbWindow::Class, "system_handle",          rbWindow::GetSystemHandle,         0 );
-    rb_define_method( rbWindow::Class, "inspect",                rbWindow::Inspect,                 0 );
-    rb_define_method( rbWindow::Class, "memory_usage",           rbWindow::GetMemoryUsage,          0 );
+    ext_define_method( rbWindow::Class, "initialize",             rbWindow::Initialize,             -1 );
+    ext_define_method( rbWindow::Class, "marshal_dump",           rbWindow::MarshalDump,             0 );
+    ext_define_method( rbWindow::Class, "create",                 rbWindow::Create,                 -1 );
+    ext_define_method( rbWindow::Class, "close",                  rbWindow::Close,                   0 );
+    ext_define_method( rbWindow::Class, "open?",                  rbWindow::IsOpen,                  0 );
+    ext_define_method( rbWindow::Class, "settings",               rbWindow::GetSettings,             0 );
+    ext_define_method( rbWindow::Class, "poll_event",             rbWindow::PollEvent,              -1 );
+    ext_define_method( rbWindow::Class, "wait_event",             rbWindow::WaitEvent,              -1 );
+    ext_define_method( rbWindow::Class, "each_event",             rbWindow::EachEvent,               0 );
+    ext_define_method( rbWindow::Class, "vertical_sync_enabled=", rbWindow::SetVerticalSyncEnabled,  1 );
+    ext_define_method( rbWindow::Class, "mouse_cursor_visible=",  rbWindow::SetMouseCursorVisible,   1 );
+    ext_define_method( rbWindow::Class, "position=",              rbWindow::SetPosition,             1 );
+	ext_define_method( rbWindow::Class, "position",              rbWindow::GetPosition,             0 );
+    ext_define_method( rbWindow::Class, "size=",                  rbWindow::SetSize,                 1 );
+	ext_define_method( rbWindow::Class, "size",                  rbWindow::GetSize,                 0 );
+    ext_define_method( rbWindow::Class, "title=",                 rbWindow::SetTitle,                1 );
+    ext_define_method( rbWindow::Class, "visible=",               rbWindow::SetVisible,              1 );
+    ext_define_method( rbWindow::Class, "key_repeat_enabled=",    rbWindow::SetKeyRepeatEnabled,     1 );
+    ext_define_method( rbWindow::Class, "set_icon",               rbWindow::SetIcon,                 3 );
+    ext_define_method( rbWindow::Class, "set_active",             rbWindow::SetActive,              -1 );
+    ext_define_method( rbWindow::Class, "display",                rbWindow::Display,                 0 );
+    ext_define_method( rbWindow::Class, "framerate=",             rbWindow::SetFramerateLimit,       1 );
+    ext_define_method( rbWindow::Class, "joystick_threshold=",    rbWindow::SetJoystickThreshold,    1 );
+    ext_define_method( rbWindow::Class, "system_handle",          rbWindow::GetSystemHandle,         0 );
+    ext_define_method( rbWindow::Class, "inspect",                rbWindow::Inspect,                 0 );
     
     // Instance aliasses
     rb_define_alias( rbWindow::Class, "Create",                    "create"                 );
@@ -486,10 +485,4 @@ VALUE rbWindow::Inspect( VALUE aSelf )
                            rb_obj_classname( aSelf ),
                            (void*)aSelf,
                            StringValueCStr( title ) );
-}
-
-// Window#memory_usage
-VALUE rbWindow::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Window ) );
 }

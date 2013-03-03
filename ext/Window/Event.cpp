@@ -106,22 +106,21 @@ void rbEvent::Init( VALUE SFML )
     rb_define_alloc_func( rbEvent::Class, rbMacros::Allocate< sf::Event > );
     
     // Instance methods
-    rb_define_method( rbEvent::Class, "initialize_copy",  rbEvent::InitializeCopy,  1 );
-    rb_define_method( rbEvent::Class, "marshal_dump",     rbEvent::MarshalDump,     0 );
-    rb_define_method( rbEvent::Class, "type",             rbEvent::Type,            0 );
-    rb_define_method( rbEvent::Class, "info",             rbEvent::Info,            0 );
-    rb_define_method( rbEvent::Class, "size",             rbEvent::Size,            0 );
-    rb_define_method( rbEvent::Class, "key",              rbEvent::Key,             0 );
-    rb_define_method( rbEvent::Class, "text",             rbEvent::Text,            0 );
-    rb_define_method( rbEvent::Class, "mouse_move",       rbEvent::MouseMove,       0 );
-    rb_define_method( rbEvent::Class, "mouse_button",     rbEvent::MouseButton,     0 );
-    rb_define_method( rbEvent::Class, "mouse_wheel",      rbEvent::MouseWheel,      0 );
-    rb_define_method( rbEvent::Class, "joystick_move",    rbEvent::JoystickMove,    0 );
-    rb_define_method( rbEvent::Class, "joystick_button",  rbEvent::JoystickButton,  0 );
-    rb_define_method( rbEvent::Class, "joystick_connect", rbEvent::JoystickConnect, 0 );
-    rb_define_method( rbEvent::Class, "==",               rbEvent::Equal,           1 );
-    rb_define_method( rbEvent::Class, "inspect",          rbEvent::Inspect,         0 );
-    rb_define_method( rbEvent::Class, "memory_usage",     rbEvent::GetMemoryUsage,  0 );
+    ext_define_method( rbEvent::Class, "initialize_copy",  rbEvent::InitializeCopy,  1 );
+    ext_define_method( rbEvent::Class, "marshal_dump",     rbEvent::MarshalDump,     0 );
+    ext_define_method( rbEvent::Class, "type",             rbEvent::Type,            0 );
+    ext_define_method( rbEvent::Class, "info",             rbEvent::Info,            0 );
+    ext_define_method( rbEvent::Class, "size",             rbEvent::Size,            0 );
+    ext_define_method( rbEvent::Class, "key",              rbEvent::Key,             0 );
+    ext_define_method( rbEvent::Class, "text",             rbEvent::Text,            0 );
+    ext_define_method( rbEvent::Class, "mouse_move",       rbEvent::MouseMove,       0 );
+    ext_define_method( rbEvent::Class, "mouse_button",     rbEvent::MouseButton,     0 );
+    ext_define_method( rbEvent::Class, "mouse_wheel",      rbEvent::MouseWheel,      0 );
+    ext_define_method( rbEvent::Class, "joystick_move",    rbEvent::JoystickMove,    0 );
+    ext_define_method( rbEvent::Class, "joystick_button",  rbEvent::JoystickButton,  0 );
+    ext_define_method( rbEvent::Class, "joystick_connect", rbEvent::JoystickConnect, 0 );
+    ext_define_method( rbEvent::Class, "==",               rbEvent::Equal,           1 );
+    ext_define_method( rbEvent::Class, "inspect",          rbEvent::Inspect,         0 );
     
     // Instance aliasses
     rb_define_alias( rbEvent::Class, "mouseMove",       "mouse_move"       );
@@ -390,10 +389,4 @@ VALUE rbEvent::Inspect( VALUE aSelf )
     }
     rb_str_cat2( ret, ")" );
     return ret;
-}
-
-// Event#memory_usage
-VALUE rbEvent::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Event ) );
 }

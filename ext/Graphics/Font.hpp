@@ -88,9 +88,6 @@ namespace rbFont
     // Font#inspect
     // Font#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Font#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

@@ -120,9 +120,6 @@ namespace rbText
     // Text#inspect
     // Text#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Text#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

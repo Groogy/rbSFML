@@ -35,19 +35,18 @@ void rbFont::Init( VALUE SFML )
 	rb_define_alloc_func( rbFont::Class, rbMacros::Allocate< sf::Font > );
 
     // Instance methods
-    rb_define_method( rbFont::Class, "initialize",             rbFont::Initialize,          -1 );
-    rb_define_method( rbFont::Class, "initialize_copy",        rbFont::InitializeCopy,       1 );
-	rb_define_method( rbFont::Class, "load_from_file",	       rbFont::LoadFromFile,         1 );
-	rb_define_method( rbFont::Class, "load_from_memory",       rbFont::LoadFromMemory,       1 );
-	rb_define_method( rbFont::Class, "load_from_stream",       rbFont::LoadFromStream,       1 );
-	rb_define_method( rbFont::Class, "get_glyph",              rbFont::GetGlyph,             3 );
-	rb_define_method( rbFont::Class, "get_kerning",            rbFont::GetKerning,           3 );
-	rb_define_method( rbFont::Class, "get_line_spacing",       rbFont::GetLineSpacing,       1 );
-	rb_define_method( rbFont::Class, "get_texture",            rbFont::GetTexture,           1 );
-    rb_define_method( rbFont::Class, "marshal_dump",           rbFont::MarshalDump,          0 );
-    rb_define_method( rbFont::Class, "==",                     rbFont::Equal,                1 );
-    rb_define_method( rbFont::Class, "inspect",                rbFont::Inspect,              0 );
-    rb_define_method( rbFont::Class, "memory_usage",           rbFont::GetMemoryUsage,       0 );
+    ext_define_method( rbFont::Class, "initialize",             rbFont::Initialize,          -1 );
+    ext_define_method( rbFont::Class, "initialize_copy",        rbFont::InitializeCopy,       1 );
+	ext_define_method( rbFont::Class, "load_from_file",	       rbFont::LoadFromFile,         1 );
+	ext_define_method( rbFont::Class, "load_from_memory",       rbFont::LoadFromMemory,       1 );
+	ext_define_method( rbFont::Class, "load_from_stream",       rbFont::LoadFromStream,       1 );
+	ext_define_method( rbFont::Class, "get_glyph",              rbFont::GetGlyph,             3 );
+	ext_define_method( rbFont::Class, "get_kerning",            rbFont::GetKerning,           3 );
+	ext_define_method( rbFont::Class, "get_line_spacing",       rbFont::GetLineSpacing,       1 );
+	ext_define_method( rbFont::Class, "get_texture",            rbFont::GetTexture,           1 );
+    ext_define_method( rbFont::Class, "marshal_dump",           rbFont::MarshalDump,          0 );
+    ext_define_method( rbFont::Class, "==",                     rbFont::Equal,                1 );
+    ext_define_method( rbFont::Class, "inspect",                rbFont::Inspect,              0 );
 
     // Instance aliases
 	rb_define_alias( rbFont::Class, "loadFromFile",   "load_from_file"   );
@@ -183,10 +182,4 @@ VALUE rbFont::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::Font >( aSelf, rbFont::Class ) );
-}
-
-// Font#memory_usage
-VALUE rbFont::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Font ) );
 }

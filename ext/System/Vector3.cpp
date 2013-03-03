@@ -28,20 +28,19 @@ void rbVector3::Init( VALUE SFML )
     rbVector3::Class = rb_define_class_under( SFML, "Vector3", rb_cObject );
 
     // Instance methods
-    rb_define_method(rbVector3::Class, "initialize",      rbVector3::Initialize,     -1);
-    rb_define_method(rbVector3::Class, "initialize_copy", rbVector3::InitializeCopy,  1);
-    rb_define_method(rbVector3::Class, "marshal_dump",    rbVector3::MarshalDump,     0);
-    rb_define_method(rbVector3::Class, "marshal_load",    rbVector3::MarshalLoad,     1);
-    rb_define_method(rbVector3::Class, "coerce",          rbVector3::Coerce,          1);
-    rb_define_method(rbVector3::Class, "-@",              rbVector3::Negate,          0);
-    rb_define_method(rbVector3::Class, "+",               rbVector3::Add,             1);
-    rb_define_method(rbVector3::Class, "-",               rbVector3::Subtract,        1);
-    rb_define_method(rbVector3::Class, "*",               rbVector3::Multiply,        1);
-    rb_define_method(rbVector3::Class, "/",               rbVector3::Divide,          1);
-    rb_define_method(rbVector3::Class, "==",              rbVector3::Equal,           1);
-    rb_define_method(rbVector3::Class, "eql?",            rbVector3::StrictEqual,     1);
-    rb_define_method(rbVector3::Class, "inspect",         rbVector3::Inspect,         0);
-    rb_define_method(rbVector3::Class, "memory_usage",    rbVector3::GetMemoryUsage,  0);
+    ext_define_method(rbVector3::Class, "initialize",      rbVector3::Initialize,     -1);
+    ext_define_method(rbVector3::Class, "initialize_copy", rbVector3::InitializeCopy,  1);
+    ext_define_method(rbVector3::Class, "marshal_dump",    rbVector3::MarshalDump,     0);
+    ext_define_method(rbVector3::Class, "marshal_load",    rbVector3::MarshalLoad,     1);
+    ext_define_method(rbVector3::Class, "coerce",          rbVector3::Coerce,          1);
+    ext_define_method(rbVector3::Class, "-@",              rbVector3::Negate,          0);
+    ext_define_method(rbVector3::Class, "+",               rbVector3::Add,             1);
+    ext_define_method(rbVector3::Class, "-",               rbVector3::Subtract,        1);
+    ext_define_method(rbVector3::Class, "*",               rbVector3::Multiply,        1);
+    ext_define_method(rbVector3::Class, "/",               rbVector3::Divide,          1);
+    ext_define_method(rbVector3::Class, "==",              rbVector3::Equal,           1);
+    ext_define_method(rbVector3::Class, "eql?",            rbVector3::StrictEqual,     1);
+    ext_define_method(rbVector3::Class, "inspect",         rbVector3::Inspect,         0);
 
     // Attribute accessors
     rb_define_attr(rbVector3::Class, "x", true, true);
@@ -191,10 +190,4 @@ VALUE rbVector3::Inspect( VALUE aSelf )
 						StringValueCStr( x ),
 						StringValueCStr( y ),
 						StringValueCStr( z ) );
-}
-
-// Vector3#memory_usage
-VALUE rbVector3::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

@@ -124,9 +124,6 @@ namespace rbShape
     // Shape#inspect
     // Shape#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Shape#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

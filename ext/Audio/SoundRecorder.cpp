@@ -31,7 +31,7 @@ void rbSoundRecorder::Init(VALUE SFML)
     
     // Class methods
     rb_define_alloc_func( rbSoundRecorder::Class, rbMacros::AbstractAllocate );
-    rb_define_class_method( rbSoundRecorder::Class, "available?", rbSoundRecorder::IsAvailable, 0 );
+    ext_define_class_method( rbSoundRecorder::Class, "available?", rbSoundRecorder::IsAvailable, 0 );
 	
 	// Class aliases
 	VALUE sListener = rb_singleton_class( rbSoundRecorder::Class );
@@ -41,10 +41,10 @@ void rbSoundRecorder::Init(VALUE SFML)
 
     
     // Instance methods
-    rb_define_method( rbSoundRecorder::Class, "marshal_dump", rbSoundRecorder::MarshalDump,    0 );
-    rb_define_method( rbSoundRecorder::Class, "start",        rbSoundRecorder::Start,         -1 );
-    rb_define_method( rbSoundRecorder::Class, "stop",         rbSoundRecorder::Stop,           0 );
-    rb_define_method( rbSoundRecorder::Class, "sample_rate",  rbSoundRecorder::GetSampleRate,  0 );
+    ext_define_method( rbSoundRecorder::Class, "marshal_dump", rbSoundRecorder::MarshalDump,    0 );
+    ext_define_method( rbSoundRecorder::Class, "start",        rbSoundRecorder::Start,         -1 );
+    ext_define_method( rbSoundRecorder::Class, "stop",         rbSoundRecorder::Stop,           0 );
+    ext_define_method( rbSoundRecorder::Class, "sample_rate",  rbSoundRecorder::GetSampleRate,  0 );
 	
 	// Instance aliasses
     rb_define_alias( rbSoundRecorder::Class, "getSampleRate",      "sample_rate"    );

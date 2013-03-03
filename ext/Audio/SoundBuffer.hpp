@@ -112,10 +112,6 @@ namespace rbSoundBuffer
     // SoundBuffer#inspect
     // SoundBuffer#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // SoundBuffer#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
-
 #endif
 
 };

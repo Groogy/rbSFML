@@ -85,9 +85,6 @@ namespace rbRenderTexture
     // RenderTexture#inspect
     // RenderTexture#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // RenderTexture#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

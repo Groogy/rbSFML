@@ -66,16 +66,15 @@ void rbDrawable::Init( VALUE SFML )
     rbDrawable::Module = rb_define_module_under( SFML, "Drawable" );
 	
 	// Class methods
-	rb_define_module_function( rbDrawable::Module, "included", rbInternalIncludedDrawable, 1 );
+	ext_define_module_function( rbDrawable::Module, "included", rbInternalIncludedDrawable, 1 );
 
     // Instance methods
 	//rb_define_method( rbDrawable::Module, "initialize",             rbDrawable::Initialize,           0 );
-    rb_define_method( rbDrawable::Module, "initialize_copy",        rbDrawable::InitializeCopy,       1 );
-	rb_define_method( rbDrawable::Module, "draw",                   rbDrawable::Draw,                 2 );
-	rb_define_method( rbDrawable::Module, "marshal_dump",           rbDrawable::MarshalDump,          0 );
-    rb_define_method( rbDrawable::Module, "==",                     rbDrawable::Equal,                1 );
-    rb_define_method( rbDrawable::Module, "inspect",                rbDrawable::Inspect,              0 );
-    rb_define_method( rbDrawable::Module, "memory_usage",           rbDrawable::GetMemoryUsage,       0 );
+    ext_define_method( rbDrawable::Module, "initialize_copy",        rbDrawable::InitializeCopy,       1 );
+	ext_define_method( rbDrawable::Module, "draw",                   rbDrawable::Draw,                 2 );
+	ext_define_method( rbDrawable::Module, "marshal_dump",           rbDrawable::MarshalDump,          0 );
+    ext_define_method( rbDrawable::Module, "==",                     rbDrawable::Equal,                1 );
+    ext_define_method( rbDrawable::Module, "inspect",                rbDrawable::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbDrawable::Module, "to_s",       "inspect" );
@@ -131,10 +130,4 @@ VALUE rbDrawable::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbDrawable::ToSFML( aSelf ) );
-}
-
-// Drawable#memory_usage
-VALUE rbDrawable::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( rbInternalDrawable ) );
 }

@@ -40,25 +40,24 @@ void rbText::Init( VALUE SFML )
 	rb_define_alloc_func( rbText::Class, rbMacros::Allocate< sf::Text > );
 
     // Instance methods
-    rb_define_method( rbText::Class, "initialize",         rbText::Initialize,      -1 );
-    rb_define_method( rbText::Class, "initialize_copy",    rbText::InitializeCopy,   1 );
-	rb_define_method( rbText::Class, "get_color",          rbText::GetColor,         0 );
-	rb_define_method( rbText::Class, "set_color",          rbText::SetColor,         1 );
-	rb_define_method( rbText::Class, "get_string",         rbText::GetString,        0 );
-	rb_define_method( rbText::Class, "set_string",         rbText::SetString,        1 );
-	rb_define_method( rbText::Class, "get_font",           rbText::GetFont,          0 );
-	rb_define_method( rbText::Class, "set_font",           rbText::SetFont,          1 );
-	rb_define_method( rbText::Class, "get_character_size", rbText::GetCharacterSize, 0 );
-	rb_define_method( rbText::Class, "set_character_size", rbText::SetCharacterSize, 1 );
-	rb_define_method( rbText::Class, "get_style",          rbText::GetStyle,         0 );
-	rb_define_method( rbText::Class, "set_style",          rbText::SetStyle,         1 );
-	rb_define_method( rbText::Class, "find_character_pos", rbText::FindCharacterPos, 1 );
-	rb_define_method( rbText::Class, "get_local_bounds",   rbText::GetLocalBounds,   0 );
-	rb_define_method( rbText::Class, "get_global_bounds",  rbText::GetGlobalBounds,  0 );
-    rb_define_method( rbText::Class, "marshal_dump",       rbText::MarshalDump,      0 );
-    rb_define_method( rbText::Class, "==",                 rbText::Equal,            1 );
-    rb_define_method( rbText::Class, "inspect",            rbText::Inspect,          0 );
-    rb_define_method( rbText::Class, "memory_usage",       rbText::GetMemoryUsage,   0 );
+    ext_define_method( rbText::Class, "initialize",         rbText::Initialize,      -1 );
+    ext_define_method( rbText::Class, "initialize_copy",    rbText::InitializeCopy,   1 );
+	ext_define_method( rbText::Class, "get_color",          rbText::GetColor,         0 );
+	ext_define_method( rbText::Class, "set_color",          rbText::SetColor,         1 );
+	ext_define_method( rbText::Class, "get_string",         rbText::GetString,        0 );
+	ext_define_method( rbText::Class, "set_string",         rbText::SetString,        1 );
+	ext_define_method( rbText::Class, "get_font",           rbText::GetFont,          0 );
+	ext_define_method( rbText::Class, "set_font",           rbText::SetFont,          1 );
+	ext_define_method( rbText::Class, "get_character_size", rbText::GetCharacterSize, 0 );
+	ext_define_method( rbText::Class, "set_character_size", rbText::SetCharacterSize, 1 );
+	ext_define_method( rbText::Class, "get_style",          rbText::GetStyle,         0 );
+	ext_define_method( rbText::Class, "set_style",          rbText::SetStyle,         1 );
+	ext_define_method( rbText::Class, "find_character_pos", rbText::FindCharacterPos, 1 );
+	ext_define_method( rbText::Class, "get_local_bounds",   rbText::GetLocalBounds,   0 );
+	ext_define_method( rbText::Class, "get_global_bounds",  rbText::GetGlobalBounds,  0 );
+    ext_define_method( rbText::Class, "marshal_dump",       rbText::MarshalDump,      0 );
+    ext_define_method( rbText::Class, "==",                 rbText::Equal,            1 );
+    ext_define_method( rbText::Class, "inspect",            rbText::Inspect,          0 );
 
     // Instance aliases
 	rb_define_alias( rbText::Class, "to_s",             "inspect"            );
@@ -256,10 +255,4 @@ VALUE rbText::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::Text >( aSelf, rbText::Class ) );
-}
-
-// Text#memory_usage
-VALUE rbText::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Text ) );
 }

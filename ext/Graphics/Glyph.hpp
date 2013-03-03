@@ -70,9 +70,6 @@ namespace rbGlyph
     // Glyph#inspect
     // Glyph#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Glyph#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

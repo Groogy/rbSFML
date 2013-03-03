@@ -33,15 +33,14 @@ void rbConvexShape::Init( VALUE SFML )
 	rb_define_alloc_func( rbConvexShape::Class, rbMacros::Allocate< sf::ConvexShape > );
 
     // Instance methods
-    rb_define_method( rbConvexShape::Class, "initialize",           rbConvexShape::Initialize,         -1 );
-    rb_define_method( rbConvexShape::Class, "initialize_copy",      rbConvexShape::InitializeCopy,      1 );
-	rb_define_method( rbConvexShape::Class, "set_point_count",      rbConvexShape::SetPointCount,       1 );
-	rb_define_method( rbConvexShape::Class, "get_point_count",      rbConvexShape::GetPointCount,       0 );
-	rb_define_method( rbConvexShape::Class, "set_point",            rbConvexShape::SetPoint,            2 );
-	rb_define_method( rbConvexShape::Class, "get_point",            rbConvexShape::GetPoint,            1 );
-    rb_define_method( rbConvexShape::Class, "==",                   rbConvexShape::Equal,               1 );
-    rb_define_method( rbConvexShape::Class, "inspect",              rbConvexShape::Inspect,             0 );
-    rb_define_method( rbConvexShape::Class, "memory_usage",         rbConvexShape::GetMemoryUsage,      0 );
+    ext_define_method( rbConvexShape::Class, "initialize",           rbConvexShape::Initialize,         -1 );
+    ext_define_method( rbConvexShape::Class, "initialize_copy",      rbConvexShape::InitializeCopy,      1 );
+	ext_define_method( rbConvexShape::Class, "set_point_count",      rbConvexShape::SetPointCount,       1 );
+	ext_define_method( rbConvexShape::Class, "get_point_count",      rbConvexShape::GetPointCount,       0 );
+	ext_define_method( rbConvexShape::Class, "set_point",            rbConvexShape::SetPoint,            2 );
+	ext_define_method( rbConvexShape::Class, "get_point",            rbConvexShape::GetPoint,            1 );
+    ext_define_method( rbConvexShape::Class, "==",                   rbConvexShape::Equal,               1 );
+    ext_define_method( rbConvexShape::Class, "inspect",              rbConvexShape::Inspect,             0 );
 
     // Instance aliases
 	rb_define_alias( rbConvexShape::Class, "to_s",                "inspect"               );
@@ -122,10 +121,4 @@ VALUE rbConvexShape::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::ConvexShape >( aSelf, rbConvexShape::Class ) );
-}
-
-// ConvexShape#memory_usage
-VALUE rbConvexShape::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::ConvexShape ) );
 }

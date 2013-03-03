@@ -34,28 +34,27 @@ void rbTexture::Init( VALUE SFML )
 	
 	// Class methods
 	rb_define_alloc_func( rbTexture::Class, rbMacros::Allocate< sf::Texture > );
-	rb_define_class_method( rbTexture::Class, "maximum_size", rbTexture::GetMaximumSize, 0 );
-	rb_define_class_method( rbTexture::Class, "bind",         rbTexture::Bind,          -1 );
+	ext_define_class_method( rbTexture::Class, "maximum_size", rbTexture::GetMaximumSize, 0 );
+	ext_define_class_method( rbTexture::Class, "bind",         rbTexture::Bind,          -1 );
 
     // Instance methods
-    rb_define_method( rbTexture::Class, "initialize",             rbTexture::Initialize,          -1 );
-    rb_define_method( rbTexture::Class, "initialize_copy",        rbTexture::InitializeCopy,       1 );
-	rb_define_method( rbTexture::Class, "create",			      rbTexture::Create,               2 );
-	rb_define_method( rbTexture::Class, "load_from_file",	      rbTexture::LoadFromFile,        -1 );
-	rb_define_method( rbTexture::Class, "load_from_memory",       rbTexture::LoadFromMemory,      -1 );
-	rb_define_method( rbTexture::Class, "load_from_stream",       rbTexture::LoadFromStream,      -1 );
-	rb_define_method( rbTexture::Class, "load_from_image" ,       rbTexture::LoadFromImage,       -1 );
-	rb_define_method( rbTexture::Class, "size",                   rbTexture::GetSize,              0 );
-	rb_define_method( rbTexture::Class, "copy_to_image",          rbTexture::CopyToImage,          0 );
-	rb_define_method( rbTexture::Class, "update",                 rbTexture::Update,              -1 );
-	rb_define_method( rbTexture::Class, "smooth=",                rbTexture::SetSmooth,            1 );
-	rb_define_method( rbTexture::Class, "smooth?",                rbTexture::GetSmooth,            0 );
-	rb_define_method( rbTexture::Class, "repeated=",              rbTexture::SetRepeated,          1 );
-	rb_define_method( rbTexture::Class, "repeated?",              rbTexture::GetRepeated,          0 );
-    rb_define_method( rbTexture::Class, "marshal_dump",           rbTexture::MarshalDump,          0 );
-    rb_define_method( rbTexture::Class, "==",                     rbTexture::Equal,                1 );
-    rb_define_method( rbTexture::Class, "inspect",                rbTexture::Inspect,              0 );
-    rb_define_method( rbTexture::Class, "memory_usage",           rbTexture::GetMemoryUsage,       0 );
+    ext_define_method( rbTexture::Class, "initialize",             rbTexture::Initialize,          -1 );
+    ext_define_method( rbTexture::Class, "initialize_copy",        rbTexture::InitializeCopy,       1 );
+	ext_define_method( rbTexture::Class, "create",			      rbTexture::Create,               2 );
+	ext_define_method( rbTexture::Class, "load_from_file",	      rbTexture::LoadFromFile,        -1 );
+	ext_define_method( rbTexture::Class, "load_from_memory",       rbTexture::LoadFromMemory,      -1 );
+	ext_define_method( rbTexture::Class, "load_from_stream",       rbTexture::LoadFromStream,      -1 );
+	ext_define_method( rbTexture::Class, "load_from_image" ,       rbTexture::LoadFromImage,       -1 );
+	ext_define_method( rbTexture::Class, "size",                   rbTexture::GetSize,              0 );
+	ext_define_method( rbTexture::Class, "copy_to_image",          rbTexture::CopyToImage,          0 );
+	ext_define_method( rbTexture::Class, "update",                 rbTexture::Update,              -1 );
+	ext_define_method( rbTexture::Class, "smooth=",                rbTexture::SetSmooth,            1 );
+	ext_define_method( rbTexture::Class, "smooth?",                rbTexture::GetSmooth,            0 );
+	ext_define_method( rbTexture::Class, "repeated=",              rbTexture::SetRepeated,          1 );
+	ext_define_method( rbTexture::Class, "repeated?",              rbTexture::GetRepeated,          0 );
+    ext_define_method( rbTexture::Class, "marshal_dump",           rbTexture::MarshalDump,          0 );
+    ext_define_method( rbTexture::Class, "==",                     rbTexture::Equal,                1 );
+    ext_define_method( rbTexture::Class, "inspect",                rbTexture::Inspect,              0 );
 	
 	// Class aliases
 	rb_define_alias( rb_singleton_class( rbTexture::Class ), "get_maximum_size", "maximum_size" );
@@ -434,10 +433,4 @@ VALUE rbTexture::Inspect( VALUE aSelf )
 					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getSize().x,
 					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::Texture >( aSelf, rbTexture::Class ) );
-}
-
-// Texture#memory_usage
-VALUE rbTexture::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Texture ) );
 }

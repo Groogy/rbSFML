@@ -36,27 +36,26 @@ void rbTransformable::Init( VALUE SFML )
     rbTransformable::Module = rb_define_module_under( SFML, "Transformable" );
 	
 	// Class methods
-	rb_define_module_function( rbTransformable::Module, "included", rbInternalIncludedTransformable, 1 );
+	ext_define_module_function( rbTransformable::Module, "included", rbInternalIncludedTransformable, 1 );
 
     // Instance methods
 	//rb_define_method( rbTransformable::Module, "initialize",             rbTransformable::Initialize,           0 );
-    rb_define_method( rbTransformable::Module, "initialize_copy",        rbTransformable::InitializeCopy,       1 );
-	rb_define_method( rbTransformable::Module, "set_position",           rbTransformable::SetPosition,         -1 );
-	rb_define_method( rbTransformable::Module, "set_rotation",           rbTransformable::SetRotation,          1 );
-	rb_define_method( rbTransformable::Module, "set_scale",              rbTransformable::SetScale,            -1 );
-	rb_define_method( rbTransformable::Module, "set_origin",             rbTransformable::SetOrigin,           -1 );
-	rb_define_method( rbTransformable::Module, "get_position",           rbTransformable::GetPosition,          0 );
-	rb_define_method( rbTransformable::Module, "get_rotation",           rbTransformable::GetRotation,          0 );
-	rb_define_method( rbTransformable::Module, "get_scale",              rbTransformable::GetScale,            -1 );
-	rb_define_method( rbTransformable::Module, "get_origin",             rbTransformable::GetOrigin,            0 );
-	rb_define_method( rbTransformable::Module, "move",                   rbTransformable::Move,                -1 );
-	rb_define_method( rbTransformable::Module, "rotate",                 rbTransformable::Rotate,               1 );
-	rb_define_method( rbTransformable::Module, "get_transform",          rbTransformable::GetTransform,         0 );
-	rb_define_method( rbTransformable::Module, "get_inverse_transform",  rbTransformable::GetInverseTransform,  0 );
-	rb_define_method( rbTransformable::Module, "marshal_dump",           rbTransformable::MarshalDump,          0 );
-    rb_define_method( rbTransformable::Module, "==",                     rbTransformable::Equal,                1 );
-    rb_define_method( rbTransformable::Module, "inspect",                rbTransformable::Inspect,              0 );
-    rb_define_method( rbTransformable::Module, "memory_usage",           rbTransformable::GetMemoryUsage,       0 );
+    ext_define_method( rbTransformable::Module, "initialize_copy",        rbTransformable::InitializeCopy,       1 );
+	ext_define_method( rbTransformable::Module, "set_position",           rbTransformable::SetPosition,         -1 );
+	ext_define_method( rbTransformable::Module, "set_rotation",           rbTransformable::SetRotation,          1 );
+	ext_define_method( rbTransformable::Module, "set_scale",              rbTransformable::SetScale,            -1 );
+	ext_define_method( rbTransformable::Module, "set_origin",             rbTransformable::SetOrigin,           -1 );
+	ext_define_method( rbTransformable::Module, "get_position",           rbTransformable::GetPosition,          0 );
+	ext_define_method( rbTransformable::Module, "get_rotation",           rbTransformable::GetRotation,          0 );
+	ext_define_method( rbTransformable::Module, "get_scale",              rbTransformable::GetScale,            -1 );
+	ext_define_method( rbTransformable::Module, "get_origin",             rbTransformable::GetOrigin,            0 );
+	ext_define_method( rbTransformable::Module, "move",                   rbTransformable::Move,                -1 );
+	ext_define_method( rbTransformable::Module, "rotate",                 rbTransformable::Rotate,               1 );
+	ext_define_method( rbTransformable::Module, "get_transform",          rbTransformable::GetTransform,         0 );
+	ext_define_method( rbTransformable::Module, "get_inverse_transform",  rbTransformable::GetInverseTransform,  0 );
+	ext_define_method( rbTransformable::Module, "marshal_dump",           rbTransformable::MarshalDump,          0 );
+    ext_define_method( rbTransformable::Module, "==",                     rbTransformable::Equal,                1 );
+    ext_define_method( rbTransformable::Module, "inspect",                rbTransformable::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbTransformable::Module, "to_s",                "inspect"               );
@@ -319,10 +318,4 @@ VALUE rbTransformable::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbTransformable::ToSFML( aSelf ) );
-}
-
-// Transformable#memory_usage
-VALUE rbTransformable::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Transformable ) );
 }

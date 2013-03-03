@@ -122,9 +122,6 @@ namespace rbTransformable
     // Transformable#inspect
     // Transformable#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Transformable#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

@@ -71,9 +71,6 @@ namespace rbRectangleShape
     // RectangleShape#inspect
     // RectangleShape#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // CircleShape#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

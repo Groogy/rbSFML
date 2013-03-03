@@ -111,9 +111,6 @@ namespace rbShader
     // Shader#inspect
     // Shader#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Shader#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

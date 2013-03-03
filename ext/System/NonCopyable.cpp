@@ -28,7 +28,7 @@ void rbNonCopyable::Init( VALUE SFML )
     rbNonCopyable::Module = rb_define_module_under( SFML, "NonCopyable" );
 
     // Instance methods
-    rb_define_method( rbNonCopyable::Module, "initialize_copy", rbNonCopyable::InitializeCopy,  1 );
+    ext_define_method( rbNonCopyable::Module, "initialize_copy", rbNonCopyable::InitializeCopy,  1 );
 }
 
 // NonCopyable#initialize_copy(source)

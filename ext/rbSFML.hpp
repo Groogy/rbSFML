@@ -158,16 +158,16 @@ static inline VALUE RBOOL( bool value )
 
 typedef VALUE ( *RubyFunctionPtr )( ... );
 
-#define rb_define_module_function( klass, name, func, argc, ... ) \
+#define ext_define_module_function( klass, name, func, argc, ... ) \
         rb_define_module_function( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 
-#define rb_define_singleton_method( klass, name, func, argc, ... ) \
+#define ext_define_singleton_method( klass, name, func, argc, ... ) \
         rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 
-#define rb_define_class_method( klass, name, func, argc, ... ) \
+#define ext_define_class_method( klass, name, func, argc, ... ) \
 		rb_define_singleton_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 
-#define rb_define_method( klass, name, func, argc, ... ) \
+#define ext_define_method( klass, name, func, argc, ... ) \
         rb_define_method( klass, name, reinterpret_cast< RubyFunctionPtr >( func ), argc, ##__VA_ARGS__ )
 
 #define INVALID_EXPECTED_TYPE( type ) \

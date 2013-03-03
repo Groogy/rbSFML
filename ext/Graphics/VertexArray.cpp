@@ -35,21 +35,19 @@ void rbVertexArray::Init( VALUE SFML )
 	rb_define_alloc_func( rbVertexArray::Class, rbMacros::Allocate< sf::VertexArray > );
 
     // Instance methods
-	rb_define_method( rbVertexArray::Class, "initialize",             rbVertexArray::Initialize,          -1 );
-    rb_define_method( rbVertexArray::Class, "initialize_copy",        rbVertexArray::InitializeCopy,       1 );
-	rb_define_method( rbVertexArray::Class, "vertex_count",			  rbVertexArray::GetVertexCount,	   0 );
-	rb_define_method( rbVertexArray::Class, "append", 				  rbVertexArray::Append,			   1 );
-	rb_define_method( rbVertexArray::Class, "[]", 					  rbVertexArray::IndexOperator,		   1 );
-	rb_define_method( rbVertexArray::Class, "clear", 				  rbVertexArray::Clear,				   0 );
-	rb_define_method( rbVertexArray::Class, "resize", 				  rbVertexArray::Resize,			   1 );
-	rb_define_method( rbVertexArray::Class, "primitive_type=",		  rbVertexArray::SetPrimitiveType,	   1 );
-	rb_define_method( rbVertexArray::Class, "primitive_type",		  rbVertexArray::GetPrimitiveType,	   0 );
-	rb_define_method( rbVertexArray::Class, "bounds",				  rbVertexArray::GetBounds,	 		   0 );
-	rb_define_method( rbVertexArray::Class, "marshal_dump",           rbVertexArray::MarshalDump,          0 );
-    rb_define_method( rbVertexArray::Class, "==",                     rbVertexArray::Equal,                1 );
-    rb_define_method( rbVertexArray::Class, "inspect",                rbVertexArray::Inspect,              0 );
-    rb_define_method( rbVertexArray::Class, "memory_usage",           rbVertexArray::GetMemoryUsage,       0 );
-	rb_define_method( rbVertexArray::Class, "to_i",             	  rbVertexArray::ToInteger,            0 );
+	ext_define_method( rbVertexArray::Class, "initialize",		rbVertexArray::Initialize,			-1 );
+    ext_define_method( rbVertexArray::Class, "initialize_copy",	rbVertexArray::InitializeCopy,		 1 );
+	ext_define_method( rbVertexArray::Class, "vertex_count",	rbVertexArray::GetVertexCount,		 0 );
+	ext_define_method( rbVertexArray::Class, "append", 			rbVertexArray::Append,				 1 );
+	ext_define_method( rbVertexArray::Class, "[]", 				rbVertexArray::IndexOperator,		 1 );
+	ext_define_method( rbVertexArray::Class, "clear", 			rbVertexArray::Clear,				 0 );
+	ext_define_method( rbVertexArray::Class, "resize", 			rbVertexArray::Resize,				 1 );
+	ext_define_method( rbVertexArray::Class, "primitive_type=",	rbVertexArray::SetPrimitiveType,	 1 );
+	ext_define_method( rbVertexArray::Class, "primitive_type",	rbVertexArray::GetPrimitiveType,	 0 );
+	ext_define_method( rbVertexArray::Class, "bounds",			rbVertexArray::GetBounds,			 0 );
+	ext_define_method( rbVertexArray::Class, "marshal_dump",    rbVertexArray::MarshalDump,			 0 );
+    ext_define_method( rbVertexArray::Class, "==",              rbVertexArray::Equal,				 1 );
+    ext_define_method( rbVertexArray::Class, "inspect",         rbVertexArray::Inspect,				 0 );
 
     // Instance aliases
     rb_define_alias( rbVertexArray::Class, "to_s",               "inspect"         );
@@ -170,16 +168,4 @@ VALUE rbVertexArray::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) );
-}
-
-// Drawable#memory_usage
-VALUE rbVertexArray::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::VertexArray ) );
-}
-
-// VertexArray#to_i
-VALUE rbVertexArray::ToInteger( VALUE aSelf )
-{
-	return ULONG2NUM( reinterpret_cast< uintptr_t >( rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) ) );
 }

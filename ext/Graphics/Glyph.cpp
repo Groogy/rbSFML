@@ -28,13 +28,12 @@ void rbGlyph::Init( VALUE SFML )
     rbGlyph::Class = rb_define_class_under( SFML, "Glyph", rb_cObject );
 
     // Instance methods
-    rb_define_method( rbGlyph::Class, "initialize",      rbGlyph::Initialize,      0 );
-    rb_define_method( rbGlyph::Class, "initialize_copy", rbGlyph::InitializeCopy,  1 );
-    rb_define_method( rbGlyph::Class, "marshal_dump",    rbGlyph::MarshalDump,     0 );
-    rb_define_method( rbGlyph::Class, "marshal_load",    rbGlyph::MarshalLoad,     1 );
-    rb_define_method( rbGlyph::Class, "==",              rbGlyph::Equal,           1 );
-    rb_define_method( rbGlyph::Class, "inspect",         rbGlyph::Inspect,         0 );
-    rb_define_method( rbGlyph::Class, "memory_usage",    rbGlyph::GetMemoryUsage,  0 );
+    ext_define_method( rbGlyph::Class, "initialize",      rbGlyph::Initialize,      0 );
+    ext_define_method( rbGlyph::Class, "initialize_copy", rbGlyph::InitializeCopy,  1 );
+    ext_define_method( rbGlyph::Class, "marshal_dump",    rbGlyph::MarshalDump,     0 );
+    ext_define_method( rbGlyph::Class, "marshal_load",    rbGlyph::MarshalLoad,     1 );
+    ext_define_method( rbGlyph::Class, "==",              rbGlyph::Equal,           1 );
+    ext_define_method( rbGlyph::Class, "inspect",         rbGlyph::Inspect,         0 );
 
     // Attribute accessors
     rb_define_attr( rbGlyph::Class, "advance", true, true );
@@ -107,10 +106,4 @@ VALUE rbGlyph::Inspect( VALUE aSelf )
 					   FIX2INT( rbGlyph::GetAdvance( aSelf ) ),
 					   rb_funcall( rbGlyph::GetBounds( aSelf ), rb_intern( "inspect" ), 0 ),
 					   rb_funcall( rbGlyph::GetTextureRect( aSelf ), rb_intern( "inspect" ), 0 ) );
-}
-
-// Glyph#memory_usage
-VALUE rbGlyph::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

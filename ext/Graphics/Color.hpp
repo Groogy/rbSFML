@@ -79,9 +79,7 @@ namespace rbColor
     // Color#inspect
     // Color#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Color#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
+    
 #endif
 
 }

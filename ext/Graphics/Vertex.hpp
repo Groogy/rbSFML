@@ -73,9 +73,6 @@ namespace rbVertex
     // Vertex#inspect
     // Vertex#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Vertex#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

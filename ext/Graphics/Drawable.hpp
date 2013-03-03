@@ -60,9 +60,6 @@ namespace rbDrawable
     // Drawable#inspect
     // Drawable#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Drawable#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

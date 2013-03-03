@@ -28,15 +28,14 @@ void rbColor::Init( VALUE SFML )
     rbColor::Class = rb_define_class_under( SFML, "Color", rb_cObject );
 
     // Instance methods
-    rb_define_method( rbColor::Class, "initialize",      rbColor::Initialize,     -1 );
-    rb_define_method( rbColor::Class, "initialize_copy", rbColor::InitializeCopy,  1 );
-    rb_define_method( rbColor::Class, "marshal_dump",    rbColor::MarshalDump,     0 );
-    rb_define_method( rbColor::Class, "marshal_load",    rbColor::MarshalLoad,     1 );
-    rb_define_method( rbColor::Class, "+",               rbColor::Add,             1 );
-    rb_define_method( rbColor::Class, "*",               rbColor::Multiply,        1 );
-    rb_define_method( rbColor::Class, "==",              rbColor::Equal,           1 );
-    rb_define_method( rbColor::Class, "inspect",         rbColor::Inspect,         0 );
-    rb_define_method( rbColor::Class, "memory_usage",    rbColor::GetMemoryUsage,  0 );
+    ext_define_method( rbColor::Class, "initialize",      rbColor::Initialize,     -1 );
+    ext_define_method( rbColor::Class, "initialize_copy", rbColor::InitializeCopy,  1 );
+    ext_define_method( rbColor::Class, "marshal_dump",    rbColor::MarshalDump,     0 );
+    ext_define_method( rbColor::Class, "marshal_load",    rbColor::MarshalLoad,     1 );
+    ext_define_method( rbColor::Class, "+",               rbColor::Add,             1 );
+    ext_define_method( rbColor::Class, "*",               rbColor::Multiply,        1 );
+    ext_define_method( rbColor::Class, "==",              rbColor::Equal,           1 );
+    ext_define_method( rbColor::Class, "inspect",         rbColor::Inspect,         0 );
 
     // Attribute accessors
     rb_define_attr( rbColor::Class, "r", true, true );
@@ -191,10 +190,4 @@ VALUE rbColor::Inspect( VALUE aSelf )
 					   FIX2INT( rbColor::GetGreen( aSelf ) ),
 					   FIX2INT( rbColor::GetBlue( aSelf ) ),
 					   FIX2INT( rbColor::GetAlpha( aSelf ) ) );
-}
-
-// Color#memory_usage
-VALUE rbColor::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

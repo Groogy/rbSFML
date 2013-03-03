@@ -97,9 +97,6 @@ namespace rbSprite
     // Sprite#inspect
     // Sprite#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Sprite-#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

@@ -29,16 +29,15 @@ void rbRect::Init( VALUE SFML )
     rbRect::Class = rb_define_class_under( SFML, "Rect", rb_cObject );
 
     // Instance methods
-    rb_define_method( rbRect::Class, "initialize",      rbRect::Initialize,     -1 );
-    rb_define_method( rbRect::Class, "initialize_copy", rbRect::InitializeCopy,  1 );
-	rb_define_method( rbRect::Class, "contains?",		rbRect::Contains,		-1 );
-	rb_define_method( rbRect::Class, "intersects?",		rbRect::Intersects,		-1 );
-    rb_define_method( rbRect::Class, "marshal_dump",    rbRect::MarshalDump,     0 );
-    rb_define_method( rbRect::Class, "marshal_load",    rbRect::MarshalLoad,     1 );
-    rb_define_method( rbRect::Class, "==",              rbRect::Equal,           1 );
-    rb_define_method( rbRect::Class, "eql?",            rbRect::StrictEqual,     1 );
-    rb_define_method( rbRect::Class, "inspect",         rbRect::Inspect,         0 );
-    rb_define_method( rbRect::Class, "memory_usage",    rbRect::GetMemoryUsage,  0 );
+    ext_define_method( rbRect::Class, "initialize",      rbRect::Initialize,     	-1 );
+    ext_define_method( rbRect::Class, "initialize_copy", rbRect::InitializeCopy,  	 1 );
+	ext_define_method( rbRect::Class, "contains?",		 rbRect::Contains,			-1 );
+	ext_define_method( rbRect::Class, "intersects?",	 rbRect::Intersects,		-1 );
+    ext_define_method( rbRect::Class, "marshal_dump",    rbRect::MarshalDump,     	 0 );
+    ext_define_method( rbRect::Class, "marshal_load",    rbRect::MarshalLoad,    	 1 );
+    ext_define_method( rbRect::Class, "==",              rbRect::Equal,          	 1 );
+    ext_define_method( rbRect::Class, "eql?",            rbRect::StrictEqual,    	 1 );
+    ext_define_method( rbRect::Class, "inspect",         rbRect::Inspect,       	 0 );
 
     // Attribute accessors
     rb_define_attr( rbRect::Class, "left", true, true );
@@ -240,10 +239,4 @@ VALUE rbRect::Inspect( VALUE aSelf )
 					   StringValueCStr( top ),
 					   StringValueCStr( width ),
 					   StringValueCStr( height ) );
-}
-
-// Rect#memory_usage
-VALUE rbRect::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

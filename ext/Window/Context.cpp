@@ -33,10 +33,9 @@ void rbContext::Init( VALUE SFML )
     rb_define_alloc_func( rbContext::Class, rbMacros::Allocate< sf::Context > );
     
     // Instance methods
-    rb_define_method( rbContext::Class, "initialize",   rbContext::Initialize,     -1 );
-    rb_define_method( rbContext::Class, "marshal_dump", rbContext::MarshalDump,     0 );
-    rb_define_method( rbContext::Class, "active=",      rbContext::SetActive,       1 );
-    rb_define_method( rbContext::Class, "memory_usage", rbContext::GetMemoryUsage,  0 );
+    ext_define_method( rbContext::Class, "initialize",   rbContext::Initialize,     -1 );
+    ext_define_method( rbContext::Class, "marshal_dump", rbContext::MarshalDump,     0 );
+    ext_define_method( rbContext::Class, "active=",      rbContext::SetActive,       1 );
 	
 	// Instance aliasses
     rb_define_alias( rbContext::Class, "setActive", "active=" );
@@ -80,10 +79,4 @@ VALUE rbContext::SetActive( VALUE aSelf, VALUE anActiveFlag )
     bool ret = rbMacros::ToSFML< sf::Context >( aSelf, rbContext::Class )->setActive( RTEST( anActiveFlag ) );
     rbSFML::CheckRaise();	
     return RBOOL(ret);
-}
-
-// VideoMode#memory_usage
-VALUE rbContext::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Context ) );
 }

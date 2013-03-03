@@ -32,12 +32,11 @@ void rbClock::Init( VALUE SFML )
     rb_define_alloc_func( rbClock::Class, rbMacros::Allocate< sf::Clock > );
 
     // Instance methods
-    rb_define_method( rbClock::Class, "initialize_copy", rbClock::InitializeCopy, 1 );
-    rb_define_method( rbClock::Class, "marshal_dump",    rbClock::MarshalDump,    0 );
-    rb_define_method( rbClock::Class, "elapsed_time",    rbClock::GetElapsedTime, 0 );
-    rb_define_method( rbClock::Class, "restart",         rbClock::Restart,        0 );
-    rb_define_method( rbClock::Class, "inspect",         rbClock::Inspect,        0 );
-    rb_define_method( rbClock::Class, "memory_usage",    rbClock::GetMemoryUsage, 0 );
+    ext_define_method( rbClock::Class, "initialize_copy", rbClock::InitializeCopy, 1 );
+    ext_define_method( rbClock::Class, "marshal_dump",    rbClock::MarshalDump,    0 );
+    ext_define_method( rbClock::Class, "elapsed_time",    rbClock::GetElapsedTime, 0 );
+    ext_define_method( rbClock::Class, "restart",         rbClock::Restart,        0 );
+    ext_define_method( rbClock::Class, "inspect",         rbClock::Inspect,        0 );
 
     // Instance aliasses
     rb_define_alias( rbClock::Class, "getElapsedTime",   "elapsed_time" );
@@ -89,8 +88,3 @@ VALUE rbClock::Inspect( VALUE aSelf )
                        clock->getElapsedTime().asSeconds() );
 }
 
-// Clock#memory_usage
-VALUE rbClock::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Clock ) );
-}

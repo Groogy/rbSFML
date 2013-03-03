@@ -91,9 +91,6 @@ namespace rbRenderStates
     // RenderStates#inspect
     // RenderStates#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // RenderStates#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

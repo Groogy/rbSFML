@@ -31,16 +31,16 @@ void rbSoundStream::Init( VALUE SFML )
     rb_define_alloc_func(rbSoundStream::Class, rbMacros::AbstractAllocate );
 
     // Instance methods
-    rb_define_method( rbSoundStream::Class, "play",            rbSoundStream::Play,             0 );
-    rb_define_method( rbSoundStream::Class, "pause",           rbSoundStream::Pause,            0 );
-    rb_define_method( rbSoundStream::Class, "stop",            rbSoundStream::Stop,             0 );
-    rb_define_method( rbSoundStream::Class, "loop=",           rbSoundStream::SetLoop,          1 );
-    rb_define_method( rbSoundStream::Class, "playing_offset=", rbSoundStream::SetPlayingOffset, 1 );
-    rb_define_method( rbSoundStream::Class, "loop",            rbSoundStream::GetLoop,          0 );
-    rb_define_method( rbSoundStream::Class, "playing_offset",  rbSoundStream::GetPlayingOffset, 0 );
-    rb_define_method( rbSoundStream::Class, "sample_rate",     rbSoundStream::GetSampleRate,    0 );
-    rb_define_method( rbSoundStream::Class, "channel_count",   rbSoundStream::GetChannelCount,  0 );
-    rb_define_method( rbSoundStream::Class, "status",          rbSoundStream::GetStatus,        0 );
+    ext_define_method( rbSoundStream::Class, "play",            rbSoundStream::Play,             0 );
+    ext_define_method( rbSoundStream::Class, "pause",           rbSoundStream::Pause,            0 );
+    ext_define_method( rbSoundStream::Class, "stop",            rbSoundStream::Stop,             0 );
+    ext_define_method( rbSoundStream::Class, "loop=",           rbSoundStream::SetLoop,          1 );
+    ext_define_method( rbSoundStream::Class, "playing_offset=", rbSoundStream::SetPlayingOffset, 1 );
+    ext_define_method( rbSoundStream::Class, "loop",            rbSoundStream::GetLoop,          0 );
+    ext_define_method( rbSoundStream::Class, "playing_offset",  rbSoundStream::GetPlayingOffset, 0 );
+    ext_define_method( rbSoundStream::Class, "sample_rate",     rbSoundStream::GetSampleRate,    0 );
+    ext_define_method( rbSoundStream::Class, "channel_count",   rbSoundStream::GetChannelCount,  0 );
+    ext_define_method( rbSoundStream::Class, "status",          rbSoundStream::GetStatus,        0 );
 
     // Instance aliasses
     rb_define_alias( rbSoundStream::Class, "setLoop",            "loop="           );

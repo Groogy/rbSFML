@@ -129,7 +129,7 @@ void rbKeyboard::Init( VALUE SFML )
     rb_define_const( rbKeyboard::Module, "Pause",     INT2FIX( sf::Keyboard::Pause    ) );
     
     // Singleton methods
-    rb_define_class_method( rbKeyboard::Module, "key_pressed?", rbKeyboard::IsKeyPressed, 1 );
+    ext_define_class_method( rbKeyboard::Module, "key_pressed?", rbKeyboard::IsKeyPressed, 1 );
     
     // Singleton aliasses
     VALUE sKeyboard = rb_singleton_class( rbKeyboard::Module );

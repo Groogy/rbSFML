@@ -60,9 +60,7 @@ namespace rbClock
     // Clock#inspect
     // Clock#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Clock#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
+    
 #endif
 
 };

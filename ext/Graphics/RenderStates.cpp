@@ -34,20 +34,19 @@ void rbRenderStates::Init( VALUE SFML )
 	rb_define_alloc_func( rbRenderStates::Class, rbMacros::Allocate< sf::RenderStates > );
 
     // Instance methods
-    rb_define_method( rbRenderStates::Class, "initialize",      rbRenderStates::Initialize,     -1 );
-    rb_define_method( rbRenderStates::Class, "initialize_copy", rbRenderStates::InitializeCopy,  1 );
-	rb_define_method( rbRenderStates::Class, "blend_mode", 		rbRenderStates::GetBlendMode,	 0 );
-	rb_define_method( rbRenderStates::Class, "blend_mode=", 	rbRenderStates::SetBlendMode,	 1 );
-	rb_define_method( rbRenderStates::Class, "transform", 		rbRenderStates::GetTransform,	 0 );
-	rb_define_method( rbRenderStates::Class, "transform=",	 	rbRenderStates::SetTransform,	 1 );
-	rb_define_method( rbRenderStates::Class, "texture", 		rbRenderStates::GetTexture,		 0 );
-	rb_define_method( rbRenderStates::Class, "texture=",	 	rbRenderStates::SetTexture,		 1 );
-	rb_define_method( rbRenderStates::Class, "shader",	 		rbRenderStates::GetShader,		 0 );
-	rb_define_method( rbRenderStates::Class, "shader=", 		rbRenderStates::SetShader,	 	 1 );
-    rb_define_method( rbRenderStates::Class, "marshal_dump",    rbRenderStates::MarshalDump,     0 );
-    rb_define_method( rbRenderStates::Class, "==",              rbRenderStates::Equal,           1 );
-    rb_define_method( rbRenderStates::Class, "inspect",         rbRenderStates::Inspect,         0 );
-    rb_define_method( rbRenderStates::Class, "memory_usage",    rbRenderStates::GetMemoryUsage,  0 );
+    ext_define_method( rbRenderStates::Class, "initialize",      rbRenderStates::Initialize,     	-1 );
+    ext_define_method( rbRenderStates::Class, "initialize_copy", rbRenderStates::InitializeCopy, 	 1 );
+	ext_define_method( rbRenderStates::Class, "blend_mode", 	 rbRenderStates::GetBlendMode,		 0 );
+	ext_define_method( rbRenderStates::Class, "blend_mode=", 	 rbRenderStates::SetBlendMode,		 1 );
+	ext_define_method( rbRenderStates::Class, "transform", 		 rbRenderStates::GetTransform,		 0 );
+	ext_define_method( rbRenderStates::Class, "transform=",	 	 rbRenderStates::SetTransform,		 1 );
+	ext_define_method( rbRenderStates::Class, "texture", 		 rbRenderStates::GetTexture,		 0 );
+	ext_define_method( rbRenderStates::Class, "texture=",	 	 rbRenderStates::SetTexture,		 1 );
+	ext_define_method( rbRenderStates::Class, "shader",	 		 rbRenderStates::GetShader,			 0 );
+	ext_define_method( rbRenderStates::Class, "shader=", 		 rbRenderStates::SetShader,	 		 1 );
+    ext_define_method( rbRenderStates::Class, "marshal_dump",    rbRenderStates::MarshalDump,    	 0 );
+    ext_define_method( rbRenderStates::Class, "==",              rbRenderStates::Equal,          	 1 );
+    ext_define_method( rbRenderStates::Class, "inspect",         rbRenderStates::Inspect,        	 0 );
 
     // Instance aliases
 	rb_define_alias( rbRenderStates::Class, "blendMode",    "blend_mode"  );
@@ -249,10 +248,4 @@ VALUE rbRenderStates::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbRenderStates::ToSFML( aSelf ) );
-}
-
-// RenderStates#memory_usage
-VALUE rbRenderStates::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::RenderStates ) );
 }

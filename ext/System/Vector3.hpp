@@ -98,8 +98,6 @@ namespace rbVector3
     // Vector3#to_s
     static VALUE Inspect( VALUE aSelf );
 
-    // Vector3#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

@@ -89,9 +89,6 @@ namespace rbRect
     // Rect#inspect
     // Rect#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Rect#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

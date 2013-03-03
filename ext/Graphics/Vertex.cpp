@@ -28,13 +28,12 @@ void rbVertex::Init( VALUE SFML )
     rbVertex::Class = rb_define_class_under( SFML, "Vertex", rb_cObject );
 
     // Instance methods
-    rb_define_method( rbVertex::Class, "initialize",      rbVertex::Initialize,     -1 );
-    rb_define_method( rbVertex::Class, "initialize_copy", rbVertex::InitializeCopy,  1 );
-    rb_define_method( rbVertex::Class, "marshal_dump",    rbVertex::MarshalDump,     0 );
-    rb_define_method( rbVertex::Class, "marshal_load",    rbVertex::MarshalLoad,     1 );
-    rb_define_method( rbVertex::Class, "==",              rbVertex::Equal,           1 );
-    rb_define_method( rbVertex::Class, "inspect",         rbVertex::Inspect,         0 );
-    rb_define_method( rbVertex::Class, "memory_usage",    rbVertex::GetMemoryUsage,  0 );
+    ext_define_method( rbVertex::Class, "initialize",      rbVertex::Initialize,     -1 );
+    ext_define_method( rbVertex::Class, "initialize_copy", rbVertex::InitializeCopy,  1 );
+    ext_define_method( rbVertex::Class, "marshal_dump",    rbVertex::MarshalDump,     0 );
+    ext_define_method( rbVertex::Class, "marshal_load",    rbVertex::MarshalLoad,     1 );
+    ext_define_method( rbVertex::Class, "==",              rbVertex::Equal,           1 );
+    ext_define_method( rbVertex::Class, "inspect",         rbVertex::Inspect,         0 );
 
     // Attribute accessors
     rb_define_attr( rbVertex::Class, "position", true, true );
@@ -144,10 +143,4 @@ VALUE rbVertex::Inspect( VALUE aSelf )
 					   StringValueCStr( position ), 
 					   StringValueCStr( color ), 
 					   StringValueCStr( texCoords ) );
-}
-
-// Vertex#memory_usage
-VALUE rbVertex::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

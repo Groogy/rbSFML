@@ -28,12 +28,12 @@ void rbListener::Init( VALUE SFML )
     rbListener::Module = rb_define_module_under( SFML, "Listener" );
 
     // Singleton methods
-    rb_define_module_function( rbListener::Module, "get_global_volumen", rbListener::GetGlobalVolume,  0 );
-    rb_define_module_function( rbListener::Module, "set_global_volume",  rbListener::SetGlobalVolume,  1 );
-    rb_define_module_function( rbListener::Module, "get_position",       rbListener::GetPosition,      0 );
-    rb_define_module_function( rbListener::Module, "set_position",       rbListener::SetPosition,     -1 );
-    rb_define_module_function( rbListener::Module, "get_direction",      rbListener::GetDirection,     0 );
-    rb_define_module_function( rbListener::Module, "set_direction",      rbListener::SetDirection,    -1 );
+    ext_define_module_function( rbListener::Module, "get_global_volumen", rbListener::GetGlobalVolume,  0 );
+    ext_define_module_function( rbListener::Module, "set_global_volume",  rbListener::SetGlobalVolume,  1 );
+    ext_define_module_function( rbListener::Module, "get_position",       rbListener::GetPosition,      0 );
+    ext_define_module_function( rbListener::Module, "set_position",       rbListener::SetPosition,     -1 );
+    ext_define_module_function( rbListener::Module, "get_direction",      rbListener::GetDirection,     0 );
+    ext_define_module_function( rbListener::Module, "set_direction",      rbListener::SetDirection,    -1 );
 
     // Singleton aliasses
     VALUE sListener = rb_singleton_class( rbListener::Module );

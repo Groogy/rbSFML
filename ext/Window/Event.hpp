@@ -111,8 +111,6 @@ namespace rbEvent
     // Event#inspect
     static VALUE Inspect( VALUE aSelf );
     
-    // Event#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif   
 }
 

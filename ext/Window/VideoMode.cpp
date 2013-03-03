@@ -29,24 +29,23 @@ void rbVideoMode::Init( VALUE SFML )
     
     // Class methods
     rb_define_alloc_func( rbVideoMode::Class, rbMacros::Allocate< sf::VideoMode > );
-    rb_define_class_method( rbVideoMode::Class, "desktop_mode",     rbVideoMode::GetDesktopMode,     0 );
-    rb_define_class_method( rbVideoMode::Class, "fullscreen_modes", rbVideoMode::GetFullscreenModes, 0 );
+    ext_define_class_method( rbVideoMode::Class, "desktop_mode",     rbVideoMode::GetDesktopMode,     0 );
+    ext_define_class_method( rbVideoMode::Class, "fullscreen_modes", rbVideoMode::GetFullscreenModes, 0 );
     
     // Instance methods
-    rb_define_method( rbVideoMode::Class, "initialize",      rbVideoMode::Initialize,     -1 );
-    rb_define_method( rbVideoMode::Class, "initialize_copy", rbVideoMode::InitializeCopy,  1 );
-    rb_define_method( rbVideoMode::Class, "marshal_dump",    rbVideoMode::MarshalDump,     0 );
-    rb_define_method( rbVideoMode::Class, "marshal_load",    rbVideoMode::MarshalLoad,     1 );
-    rb_define_method( rbVideoMode::Class, "valid?",          rbVideoMode::IsValid,         0 );
-    rb_define_method( rbVideoMode::Class, "width",           rbVideoMode::GetWidth,        0 );
-    rb_define_method( rbVideoMode::Class, "height",          rbVideoMode::GetHeight,       0 );
-    rb_define_method( rbVideoMode::Class, "bpp",             rbVideoMode::GetBitsPerPixel, 0 );
-    rb_define_method( rbVideoMode::Class, "width=",          rbVideoMode::SetWidth,        1 );
-    rb_define_method( rbVideoMode::Class, "height=",         rbVideoMode::SetHeight,       1 );
-    rb_define_method( rbVideoMode::Class, "bpp=",            rbVideoMode::SetBitsPerPixel, 1 );
-    rb_define_method( rbVideoMode::Class, "<=>",             rbVideoMode::Compare,         1 );
-    rb_define_method( rbVideoMode::Class, "inspect",         rbVideoMode::Inspect,         0 );
-    rb_define_method( rbVideoMode::Class, "memory_usage",    rbVideoMode::GetMemoryUsage,  0 );
+    ext_define_method( rbVideoMode::Class, "initialize",      rbVideoMode::Initialize,     -1 );
+    ext_define_method( rbVideoMode::Class, "initialize_copy", rbVideoMode::InitializeCopy,  1 );
+    ext_define_method( rbVideoMode::Class, "marshal_dump",    rbVideoMode::MarshalDump,     0 );
+    ext_define_method( rbVideoMode::Class, "marshal_load",    rbVideoMode::MarshalLoad,     1 );
+    ext_define_method( rbVideoMode::Class, "valid?",          rbVideoMode::IsValid,         0 );
+    ext_define_method( rbVideoMode::Class, "width",           rbVideoMode::GetWidth,        0 );
+    ext_define_method( rbVideoMode::Class, "height",          rbVideoMode::GetHeight,       0 );
+    ext_define_method( rbVideoMode::Class, "bpp",             rbVideoMode::GetBitsPerPixel, 0 );
+    ext_define_method( rbVideoMode::Class, "width=",          rbVideoMode::SetWidth,        1 );
+    ext_define_method( rbVideoMode::Class, "height=",         rbVideoMode::SetHeight,       1 );
+    ext_define_method( rbVideoMode::Class, "bpp=",            rbVideoMode::SetBitsPerPixel, 1 );
+    ext_define_method( rbVideoMode::Class, "<=>",             rbVideoMode::Compare,         1 );
+    ext_define_method( rbVideoMode::Class, "inspect",         rbVideoMode::Inspect,         0 );
     
     // Class aliasses
     VALUE sVideoMode = rb_singleton_class( rbVideoMode::Class );
@@ -236,10 +235,4 @@ VALUE rbVideoMode::Inspect( VALUE aSelf )
                        videoMode->width,
                        videoMode->height,
                        videoMode->bitsPerPixel );
-}
-
-// VideoMode#memory_usage
-VALUE rbVideoMode::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::VideoMode ) );
 }

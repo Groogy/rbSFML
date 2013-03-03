@@ -33,22 +33,21 @@ void rbTransform::Init( VALUE SFML )
 	rb_define_alloc_func( rbTransform::Class, rbMacros::Allocate< sf::Transform > );
 
     // Instance methods
-    rb_define_method( rbTransform::Class, "initialize",             rbTransform::Initialize,          -1 );
-    rb_define_method( rbTransform::Class, "initialize_copy",        rbTransform::InitializeCopy,       1 );
-	rb_define_method( rbTransform::Class, "matrix",                 rbTransform::GetMatrix,            0 );
-	rb_define_method( rbTransform::Class, "inverse",                rbTransform::GetInverse,           0 );
-	rb_define_method( rbTransform::Class, "transform_point",        rbTransform::TransformPoint,      -1 );
-	rb_define_method( rbTransform::Class, "transform_rect",         rbTransform::TransformRect,        1 );
-	rb_define_method( rbTransform::Class, "combine",                rbTransform::Combine,              1 );
-	rb_define_method( rbTransform::Class, "translate",              rbTransform::Translate,           -1 );
-	rb_define_method( rbTransform::Class, "rotate",                 rbTransform::Rotate,              -1 );
-	rb_define_method( rbTransform::Class, "scale",                  rbTransform::Scale,               -1 );
-	rb_define_method( rbTransform::Class, "*",                      rbTransform::MultiplyOperator,     1 );
-    rb_define_method( rbTransform::Class, "marshal_dump",           rbTransform::MarshalDump,          0 );
-	rb_define_method( rbTransform::Class, "marshal_load",           rbTransform::MarshalLoad,          1 );
-    rb_define_method( rbTransform::Class, "==",                     rbTransform::Equal,                1 );
-    rb_define_method( rbTransform::Class, "inspect",                rbTransform::Inspect,              0 );
-    rb_define_method( rbTransform::Class, "memory_usage",           rbTransform::GetMemoryUsage,       0 );
+    ext_define_method( rbTransform::Class, "initialize",             rbTransform::Initialize,          -1 );
+    ext_define_method( rbTransform::Class, "initialize_copy",        rbTransform::InitializeCopy,       1 );
+	ext_define_method( rbTransform::Class, "matrix",                 rbTransform::GetMatrix,            0 );
+	ext_define_method( rbTransform::Class, "inverse",                rbTransform::GetInverse,           0 );
+	ext_define_method( rbTransform::Class, "transform_point",        rbTransform::TransformPoint,      -1 );
+	ext_define_method( rbTransform::Class, "transform_rect",         rbTransform::TransformRect,        1 );
+	ext_define_method( rbTransform::Class, "combine",                rbTransform::Combine,              1 );
+	ext_define_method( rbTransform::Class, "translate",              rbTransform::Translate,           -1 );
+	ext_define_method( rbTransform::Class, "rotate",                 rbTransform::Rotate,              -1 );
+	ext_define_method( rbTransform::Class, "scale",                  rbTransform::Scale,               -1 );
+	ext_define_method( rbTransform::Class, "*",                      rbTransform::MultiplyOperator,     1 );
+    ext_define_method( rbTransform::Class, "marshal_dump",           rbTransform::MarshalDump,          0 );
+	ext_define_method( rbTransform::Class, "marshal_load",           rbTransform::MarshalLoad,          1 );
+    ext_define_method( rbTransform::Class, "==",                     rbTransform::Equal,                1 );
+    ext_define_method( rbTransform::Class, "inspect",                rbTransform::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbTransform::Class, "to_s",           "inspect"         );
@@ -300,10 +299,4 @@ VALUE rbTransform::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::Transform >( aSelf, rbTransform::Class ) );
-}
-
-// Transform#memory_usage
-VALUE rbTransform::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Transform ) );
 }

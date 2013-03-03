@@ -101,9 +101,6 @@ namespace rbTransform
     // Transform#inspect
     // Transform#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Transform#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

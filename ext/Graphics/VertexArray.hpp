@@ -83,12 +83,6 @@ namespace rbVertexArray
     // VertexArray#inspect
     // VertexArray#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // VertexArray#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
-	
-	// VertexArray#to_i
-	static VALUE ToInteger( VALUE aSelf );
 #endif
 }
 

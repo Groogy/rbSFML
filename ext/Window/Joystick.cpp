@@ -39,12 +39,12 @@ void rbJoystick::Init( VALUE SFML )
 	rb_define_const( rbJoystick::Module, "ButtonCount", INT2FIX( sf::Joystick::ButtonCount ) );
     
     // Singleton methods
-    rb_define_class_method( rbJoystick::Module, "connected?",      rbJoystick::IsConnected,     1 );
-    rb_define_class_method( rbJoystick::Module, "button_count",    rbJoystick::GetButtonCount,  1 );
-    rb_define_class_method( rbJoystick::Module, "axis?",           rbJoystick::HasAxis,         2 );
-    rb_define_class_method( rbJoystick::Module, "button_pressed?", rbJoystick::IsButtonPressed, 2 );
-    rb_define_class_method( rbJoystick::Module, "axis_position",   rbJoystick::GetAxisPosition, 2 );
-    rb_define_class_method( rbJoystick::Module, "update",          rbJoystick::Update,          0 );
+    ext_define_class_method( rbJoystick::Module, "connected?",      rbJoystick::IsConnected,     1 );
+    ext_define_class_method( rbJoystick::Module, "button_count",    rbJoystick::GetButtonCount,  1 );
+    ext_define_class_method( rbJoystick::Module, "axis?",           rbJoystick::HasAxis,         2 );
+    ext_define_class_method( rbJoystick::Module, "button_pressed?", rbJoystick::IsButtonPressed, 2 );
+    ext_define_class_method( rbJoystick::Module, "axis_position",   rbJoystick::GetAxisPosition, 2 );
+    ext_define_class_method( rbJoystick::Module, "update",          rbJoystick::Update,          0 );
     
     // Singleton aliasses
     VALUE sJoystick = rb_singleton_class( rbJoystick::Module );

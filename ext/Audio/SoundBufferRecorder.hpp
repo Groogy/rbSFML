@@ -47,9 +47,6 @@ namespace rbSoundBufferRecorder
 	// SoundBufferRecorder#get_buffer
     // SoundBufferRecorder#getBuffer
     static VALUE GetBuffer( VALUE aSelf );
-    
-    // SoundBufferRecorder#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 };

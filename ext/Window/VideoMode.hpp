@@ -103,9 +103,6 @@ namespace rbVideoMode
     // VideoMode#inspect
     // VideoMode#to_s
     static VALUE Inspect( VALUE aSelf );
-    
-    // VideoMode#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
 }

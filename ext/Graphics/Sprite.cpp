@@ -39,20 +39,19 @@ void rbSprite::Init( VALUE SFML )
 	rb_define_alloc_func( rbSprite::Class, rbMacros::Allocate< sf::Sprite > );
 
     // Instance methods
-    rb_define_method( rbSprite::Class, "initialize",        rbSprite::Initialize,     -1 );
-    rb_define_method( rbSprite::Class, "initialize_copy",   rbSprite::InitializeCopy,  1 );
-	rb_define_method( rbSprite::Class, "get_texture",       rbSprite::GetTexture,	   0 );
-	rb_define_method( rbSprite::Class, "set_texture",	    rbSprite::SetTexture,	  -1 );
-	rb_define_method( rbSprite::Class, "get_texture_rect",  rbSprite::GetTextureRect,  0 );
-	rb_define_method( rbSprite::Class, "set_texture_rect",  rbSprite::SetTextureRect,  1 );
-	rb_define_method( rbSprite::Class, "get_color",         rbSprite::GetColor,        0 );
-	rb_define_method( rbSprite::Class, "set_color",         rbSprite::SetColor,        1 );
-	rb_define_method( rbSprite::Class, "get_local_bounds",  rbSprite::GetLocalBounds,  0 );
-	rb_define_method( rbSprite::Class, "get_global_bounds", rbSprite::GetGlobalBounds, 0 );
-    rb_define_method( rbSprite::Class, "marshal_dump",      rbSprite::MarshalDump,     0 );
-    rb_define_method( rbSprite::Class, "==",                rbSprite::Equal,           1 );
-    rb_define_method( rbSprite::Class, "inspect",           rbSprite::Inspect,         0 );
-    rb_define_method( rbSprite::Class, "memory_usage",      rbSprite::GetMemoryUsage,  0 );
+    ext_define_method( rbSprite::Class, "initialize",        rbSprite::Initialize,     	-1 );
+    ext_define_method( rbSprite::Class, "initialize_copy",   rbSprite::InitializeCopy, 	 1 );
+	ext_define_method( rbSprite::Class, "get_texture",       rbSprite::GetTexture, 		 0 );
+	ext_define_method( rbSprite::Class, "set_texture",	     rbSprite::SetTexture,		-1 );
+	ext_define_method( rbSprite::Class, "get_texture_rect",  rbSprite::GetTextureRect, 	 0 );
+	ext_define_method( rbSprite::Class, "set_texture_rect",  rbSprite::SetTextureRect, 	 1 );
+	ext_define_method( rbSprite::Class, "get_color",         rbSprite::GetColor,       	 0 );
+	ext_define_method( rbSprite::Class, "set_color",         rbSprite::SetColor,       	 1 );
+	ext_define_method( rbSprite::Class, "get_local_bounds",  rbSprite::GetLocalBounds, 	 0 );
+	ext_define_method( rbSprite::Class, "get_global_bounds", rbSprite::GetGlobalBounds,	 0 );
+    ext_define_method( rbSprite::Class, "marshal_dump",      rbSprite::MarshalDump,    	 0 );
+    ext_define_method( rbSprite::Class, "==",                rbSprite::Equal,          	 1 );
+    ext_define_method( rbSprite::Class, "inspect",           rbSprite::Inspect,        	 0 );
 
     // Instance aliases
 	rb_define_alias( rbSprite::Class, "to_s",            "inspect"           );
@@ -207,10 +206,4 @@ VALUE rbSprite::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::Sprite >( aSelf, rbSprite::Class ) );
-}
-
-// Sprite#memory_usage
-VALUE rbSprite::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::Sprite ) );
 }

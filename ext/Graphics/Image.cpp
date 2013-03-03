@@ -35,25 +35,24 @@ void rbImage::Init( VALUE SFML )
 	rb_define_alloc_func( rbImage::Class, rbMacros::Allocate< sf::Image > );
 
     // Instance methods
-    rb_define_method( rbImage::Class, "initialize",             rbImage::Initialize,          -1 );
-    rb_define_method( rbImage::Class, "initialize_copy",        rbImage::InitializeCopy,       1 );
-	rb_define_method( rbImage::Class, "create",			        rbImage::Create,              -1 );
-	rb_define_method( rbImage::Class, "load_from_file",	        rbImage::LoadFromFile,         1 );
-	rb_define_method( rbImage::Class, "load_from_memory",       rbImage::LoadFromMemory,       1 );
-	rb_define_method( rbImage::Class, "load_from_stream",       rbImage::LoadFromStream,       1 );
-	rb_define_method( rbImage::Class, "save_to_file",           rbImage::SaveToFile,           1 );
-	rb_define_method( rbImage::Class, "get_size",               rbImage::GetSize,              0 );
-	rb_define_method( rbImage::Class, "create_mask_from_color", rbImage::CreateMaskFromColor, -1 );
-	rb_define_method( rbImage::Class, "copy",                   rbImage::Copy,                -1 );
-	rb_define_method( rbImage::Class, "set_pixel",              rbImage::SetPixel,             3 );
-	rb_define_method( rbImage::Class, "get_pixel",              rbImage::GetPixel,             2 );
-	rb_define_method( rbImage::Class, "pixels",                 rbImage::GetPixelsPtr,         0 );
-	rb_define_method( rbImage::Class, "flip_horizontally",      rbImage::FlipHorizontally,     0 );
-	rb_define_method( rbImage::Class, "flip_vertically",        rbImage::FlipVertically,       0 );
-    rb_define_method( rbImage::Class, "marshal_dump",           rbImage::MarshalDump,          0 );
-    rb_define_method( rbImage::Class, "==",                     rbImage::Equal,                1 );
-    rb_define_method( rbImage::Class, "inspect",                rbImage::Inspect,              0 );
-    rb_define_method( rbImage::Class, "memory_usage",           rbImage::GetMemoryUsage,       0 );
+    ext_define_method( rbImage::Class, "initialize",             rbImage::Initialize,          -1 );
+    ext_define_method( rbImage::Class, "initialize_copy",        rbImage::InitializeCopy,       1 );
+	ext_define_method( rbImage::Class, "create",			     rbImage::Create,          	   -1 );
+	ext_define_method( rbImage::Class, "load_from_file",	     rbImage::LoadFromFile,         1 );
+	ext_define_method( rbImage::Class, "load_from_memory",       rbImage::LoadFromMemory,       1 );
+	ext_define_method( rbImage::Class, "load_from_stream",       rbImage::LoadFromStream,       1 );
+	ext_define_method( rbImage::Class, "save_to_file",           rbImage::SaveToFile,           1 );
+	ext_define_method( rbImage::Class, "get_size",               rbImage::GetSize,              0 );
+	ext_define_method( rbImage::Class, "create_mask_from_color", rbImage::CreateMaskFromColor, -1 );
+	ext_define_method( rbImage::Class, "copy",                   rbImage::Copy,                -1 );
+	ext_define_method( rbImage::Class, "set_pixel",              rbImage::SetPixel,             3 );
+	ext_define_method( rbImage::Class, "get_pixel",              rbImage::GetPixel,             2 );
+	ext_define_method( rbImage::Class, "pixels",                 rbImage::GetPixelsPtr,         0 );
+	ext_define_method( rbImage::Class, "flip_horizontally",      rbImage::FlipHorizontally,     0 );
+	ext_define_method( rbImage::Class, "flip_vertically",        rbImage::FlipVertically,       0 );
+    ext_define_method( rbImage::Class, "marshal_dump",           rbImage::MarshalDump,          0 );
+    ext_define_method( rbImage::Class, "==",                     rbImage::Equal,                1 );
+    ext_define_method( rbImage::Class, "inspect",                rbImage::Inspect,              0 );
 
     // Instance aliases
 	rb_define_alias( rbImage::Class, "loadFromFile",        "load_from_file"         );
@@ -340,11 +339,4 @@ VALUE rbImage::Inspect( VALUE aSelf )
 					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getSize().x,
 					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class ) );
-}
-
-// Image#memory_usage
-VALUE rbImage::GetMemoryUsage( VALUE aSelf )
-{
-	sf::Image* image = rbMacros::ToSFML< sf::Image >( aSelf, rbImage::Class );
-    return INT2FIX( sizeof( sf::Image ) + image->getSize().x * image->getSize().y );
 }

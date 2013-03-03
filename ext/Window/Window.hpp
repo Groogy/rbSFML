@@ -162,8 +162,6 @@ namespace rbWindow
     // Window#to_s
     static VALUE Inspect( VALUE aSelf );
 
-    // Window#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

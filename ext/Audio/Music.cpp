@@ -32,13 +32,12 @@ void rbMusic::Init( VALUE SFML )
     rb_define_alloc_func( rbMusic::Class, rbMacros::Allocate< sf::Music > );
 
     // Instance methods
-    rb_define_method( rbMusic::Class, "marshal_dump",      rbMusic::MarshalDump,      0 );
-    rb_define_method( rbMusic::Class, "open_from_file",    rbMusic::OpenFromFile,     1 );
-    rb_define_method( rbMusic::Class, "open_from_memory",  rbMusic::OpenFromMemory,   1 );
-    rb_define_method( rbMusic::Class, "open_from_stream",  rbMusic::OpenFromStream,   1 );
-    rb_define_method( rbMusic::Class, "duration",          rbMusic::GetDuration,      0 );
-    rb_define_method( rbMusic::Class, "inspect",           rbMusic::Inspect,          0 );
-    rb_define_method( rbMusic::Class, "memory_usage",      rbMusic::GetMemoryUsage,   0 );
+    ext_define_method( rbMusic::Class, "marshal_dump",      rbMusic::MarshalDump,      0 );
+    ext_define_method( rbMusic::Class, "open_from_file",    rbMusic::OpenFromFile,     1 );
+    ext_define_method( rbMusic::Class, "open_from_memory",  rbMusic::OpenFromMemory,   1 );
+    ext_define_method( rbMusic::Class, "open_from_stream",  rbMusic::OpenFromStream,   1 );
+    ext_define_method( rbMusic::Class, "duration",          rbMusic::GetDuration,      0 );
+    ext_define_method( rbMusic::Class, "inspect",           rbMusic::Inspect,          0 );
 
     // Instance aliasses
     rb_define_alias( rbMusic::Class, "openFromFile",     "open_from_file"   );
@@ -115,10 +114,4 @@ VALUE rbMusic::Inspect( VALUE aSelf )
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
                       rbMacros::ToSFML< sf::Music >( aSelf, rbMusic::Class )->getDuration().asSeconds() );
-}
-
-// Music#memory_usage
-VALUE rbMusic::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Music ) );
 }

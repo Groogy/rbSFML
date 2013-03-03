@@ -49,9 +49,9 @@ VALUE rbSFML_Microseconds( VALUE aSelf, VALUE someTime )
 
 void DefineTimeConstructionMethods( VALUE SFML )
 {
-	rb_define_module_function( SFML, "seconds",      rbSFML_Seconds, 1      );
-	rb_define_module_function( SFML, "milliseconds", rbSFML_Milliseconds, 1 );
-	rb_define_module_function( SFML, "microseconds", rbSFML_Microseconds, 1 );
+	ext_define_module_function( SFML, "seconds",      rbSFML_Seconds, 1      );
+	ext_define_module_function( SFML, "milliseconds", rbSFML_Milliseconds, 1 );
+	ext_define_module_function( SFML, "microseconds", rbSFML_Microseconds, 1 );
 }
 
 extern "C"

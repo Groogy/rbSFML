@@ -34,26 +34,25 @@ void rbView::Init( VALUE SFML )
 	rb_define_alloc_func( rbView::Class, rbMacros::Allocate< sf::View > );
 
     // Instance methods
-	rb_define_method( rbView::Class, "initialize",             rbView::Initialize,          -1 );
-    rb_define_method( rbView::Class, "initialize_copy",        rbView::InitializeCopy,       1 );
-	rb_define_method( rbView::Class, "set_center",             rbView::SetCenter,           -1 );
-	rb_define_method( rbView::Class, "set_size",               rbView::SetSize,             -1 );
-	rb_define_method( rbView::Class, "set_rotation",           rbView::SetRotation,          1 );
-	rb_define_method( rbView::Class, "set_viewport",           rbView::SetViewport,          1 );
-	rb_define_method( rbView::Class, "reset",                  rbView::Reset,                1 );
-	rb_define_method( rbView::Class, "get_center",             rbView::GetCenter,            0 );
-	rb_define_method( rbView::Class, "get_size",               rbView::GetSize,              0 );
-	rb_define_method( rbView::Class, "get_rotation",           rbView::GetRotation,          0 );
-	rb_define_method( rbView::Class, "get_viewport",           rbView::GetViewport,          0 );
-	rb_define_method( rbView::Class, "move",                   rbView::Move,                -1 );
-	rb_define_method( rbView::Class, "rotate",                 rbView::Rotate,               1 );
-	rb_define_method( rbView::Class, "zoom",                   rbView::Zoom,                 1 );
-	rb_define_method( rbView::Class, "get_transform",          rbView::GetTransform,         0 );
-	rb_define_method( rbView::Class, "get_inverse_transform",  rbView::GetInverseTransform,  0 );
-	rb_define_method( rbView::Class, "marshal_dump",           rbView::MarshalDump,          0 );
-    rb_define_method( rbView::Class, "==",                     rbView::Equal,                1 );
-    rb_define_method( rbView::Class, "inspect",                rbView::Inspect,              0 );
-    rb_define_method( rbView::Class, "memory_usage",           rbView::GetMemoryUsage,       0 );
+	ext_define_method( rbView::Class, "initialize",             rbView::Initialize,          -1 );
+    ext_define_method( rbView::Class, "initialize_copy",        rbView::InitializeCopy,       1 );
+	ext_define_method( rbView::Class, "set_center",             rbView::SetCenter,           -1 );
+	ext_define_method( rbView::Class, "set_size",               rbView::SetSize,             -1 );
+	ext_define_method( rbView::Class, "set_rotation",           rbView::SetRotation,          1 );
+	ext_define_method( rbView::Class, "set_viewport",           rbView::SetViewport,          1 );
+	ext_define_method( rbView::Class, "reset",                  rbView::Reset,                1 );
+	ext_define_method( rbView::Class, "get_center",             rbView::GetCenter,            0 );
+	ext_define_method( rbView::Class, "get_size",               rbView::GetSize,              0 );
+	ext_define_method( rbView::Class, "get_rotation",           rbView::GetRotation,          0 );
+	ext_define_method( rbView::Class, "get_viewport",           rbView::GetViewport,          0 );
+	ext_define_method( rbView::Class, "move",                   rbView::Move,                -1 );
+	ext_define_method( rbView::Class, "rotate",                 rbView::Rotate,               1 );
+	ext_define_method( rbView::Class, "zoom",                   rbView::Zoom,                 1 );
+	ext_define_method( rbView::Class, "get_transform",          rbView::GetTransform,         0 );
+	ext_define_method( rbView::Class, "get_inverse_transform",  rbView::GetInverseTransform,  0 );
+	ext_define_method( rbView::Class, "marshal_dump",           rbView::MarshalDump,          0 );
+    ext_define_method( rbView::Class, "==",                     rbView::Equal,                1 );
+    ext_define_method( rbView::Class, "inspect",                rbView::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbView::Class, "to_s",                "inspect"               );
@@ -304,10 +303,4 @@ VALUE rbView::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%s)",
 					   rb_obj_classname( aSelf ),
 					   StringValueCStr( viewportString ) );
-}
-
-// View#memory_usage
-VALUE rbView::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::View ) );
 }

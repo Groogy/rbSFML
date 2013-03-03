@@ -117,9 +117,6 @@ namespace rbImage
     // Image#inspect
     // Image#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Image#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

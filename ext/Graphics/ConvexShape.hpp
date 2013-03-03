@@ -70,9 +70,6 @@ namespace rbConvexShape
     // ConvexShape#inspect
     // ConvexShape#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // ConvexShape#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

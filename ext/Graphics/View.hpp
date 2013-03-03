@@ -124,9 +124,6 @@ namespace rbView
     // View#inspect
     // View#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // View#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

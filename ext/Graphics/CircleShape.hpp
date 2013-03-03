@@ -76,9 +76,6 @@ namespace rbCircleShape
     // CircleShape#inspect
     // CircleShape#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // CircleShape#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 }

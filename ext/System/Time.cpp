@@ -32,19 +32,18 @@ void rbTime::Init( VALUE SFML )
     rb_define_alloc_func( rbTime::Class, rbMacros::Allocate< sf::Time > );
 
     // Instance methods
-    rb_define_method( rbTime::Class, "initialize_copy", rbTime::InitializeCopy, 1 );
-	rb_define_method( rbTime::Class, "as_seconds",      rbTime::AsSeconds,      0 );
-	rb_define_method( rbTime::Class, "as_milliseconds", rbTime::AsMilliseconds, 0 );
-	rb_define_method( rbTime::Class, "as_microseconds", rbTime::AsMicroseconds, 0 );
-	rb_define_method( rbTime::Class, "-@",				rbTime::Negate, 		0 );
-	rb_define_method( rbTime::Class, "+",				rbTime::Addition,		1 );
-	rb_define_method( rbTime::Class, "-",				rbTime::Subtract,		1 );
-	rb_define_method( rbTime::Class, "*",				rbTime::Multiply,		1 );
-	rb_define_method( rbTime::Class, "/",				rbTime::Divide,			1 );
-    rb_define_method( rbTime::Class, "marshal_dump",    rbTime::MarshalDump,    0 );
-    rb_define_method( rbTime::Class, "<=>",             rbTime::Compare,        1 );
-    rb_define_method( rbTime::Class, "inspect",         rbTime::Inspect,        0 );
-	rb_define_method( rbTime::Class, "memory_usage",    rbTime::GetMemoryUsage, 0 );
+    ext_define_method( rbTime::Class, "initialize_copy", rbTime::InitializeCopy, 1 );
+	ext_define_method( rbTime::Class, "as_seconds",      rbTime::AsSeconds,      0 );
+	ext_define_method( rbTime::Class, "as_milliseconds", rbTime::AsMilliseconds, 0 );
+	ext_define_method( rbTime::Class, "as_microseconds", rbTime::AsMicroseconds, 0 );
+	ext_define_method( rbTime::Class, "-@",				rbTime::Negate, 		0 );
+	ext_define_method( rbTime::Class, "+",				rbTime::Addition,		1 );
+	ext_define_method( rbTime::Class, "-",				rbTime::Subtract,		1 );
+	ext_define_method( rbTime::Class, "*",				rbTime::Multiply,		1 );
+	ext_define_method( rbTime::Class, "/",				rbTime::Divide,			1 );
+    ext_define_method( rbTime::Class, "marshal_dump",    rbTime::MarshalDump,    0 );
+    ext_define_method( rbTime::Class, "<=>",             rbTime::Compare,        1 );
+    ext_define_method( rbTime::Class, "inspect",         rbTime::Inspect,        0 );
 
 	// Class attributes
 	rb_define_const( rbTime::Class, "Zero", rbMacros::ToConstRuby( &sf::Time::Zero, rbTime::Class ) );
@@ -182,10 +181,4 @@ VALUE rbTime::Inspect( VALUE aSelf )
     return rb_sprintf( "%s(%fs)",
                        rb_obj_classname( aSelf ),
                        time->asSeconds() );
-}
-
-// Time.memory_usage
-VALUE rbTime::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Time ) );
 }

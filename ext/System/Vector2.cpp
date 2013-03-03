@@ -28,20 +28,19 @@ void rbVector2::Init( VALUE SFML )
     rbVector2::Class = rb_define_class_under( SFML, "Vector2", rb_cObject );
 
     // Instance methods
-    rb_define_method( rbVector2::Class, "initialize",      rbVector2::Initialize,     -1 );
-    rb_define_method( rbVector2::Class, "initialize_copy", rbVector2::InitializeCopy,  1 );
-    rb_define_method( rbVector2::Class, "marshal_dump",    rbVector2::MarshalDump,     0 );
-    rb_define_method( rbVector2::Class, "marshal_load",    rbVector2::MarshalLoad,     1 );
-    rb_define_method( rbVector2::Class, "coerce",          rbVector2::Coerce,          1 );
-    rb_define_method( rbVector2::Class, "-@",              rbVector2::Negate,          0 );
-    rb_define_method( rbVector2::Class, "+",               rbVector2::Add,             1 );
-    rb_define_method( rbVector2::Class, "-",               rbVector2::Subtract,        1 );
-    rb_define_method( rbVector2::Class, "*",               rbVector2::Multiply,        1 );
-    rb_define_method( rbVector2::Class, "/",               rbVector2::Divide,          1 );
-    rb_define_method( rbVector2::Class, "==",              rbVector2::Equal,           1 );
-    rb_define_method( rbVector2::Class, "eql?",            rbVector2::StrictEqual,     1 );
-    rb_define_method( rbVector2::Class, "inspect",         rbVector2::Inspect,         0 );
-    rb_define_method( rbVector2::Class, "memory_usage",    rbVector2::GetMemoryUsage,  0 );
+    ext_define_method( rbVector2::Class, "initialize",      rbVector2::Initialize,     -1 );
+    ext_define_method( rbVector2::Class, "initialize_copy", rbVector2::InitializeCopy,  1 );
+    ext_define_method( rbVector2::Class, "marshal_dump",    rbVector2::MarshalDump,     0 );
+    ext_define_method( rbVector2::Class, "marshal_load",    rbVector2::MarshalLoad,     1 );
+    ext_define_method( rbVector2::Class, "coerce",          rbVector2::Coerce,          1 );
+    ext_define_method( rbVector2::Class, "-@",              rbVector2::Negate,          0 );
+    ext_define_method( rbVector2::Class, "+",               rbVector2::Add,             1 );
+    ext_define_method( rbVector2::Class, "-",               rbVector2::Subtract,        1 );
+    ext_define_method( rbVector2::Class, "*",               rbVector2::Multiply,        1 );
+    ext_define_method( rbVector2::Class, "/",               rbVector2::Divide,          1 );
+    ext_define_method( rbVector2::Class, "==",              rbVector2::Equal,           1 );
+    ext_define_method( rbVector2::Class, "eql?",            rbVector2::StrictEqual,     1 );
+    ext_define_method( rbVector2::Class, "inspect",         rbVector2::Inspect,         0 );
 
     // Attribute accessors
     rb_define_attr( rbVector2::Class, "x", true, true );
@@ -180,10 +179,4 @@ VALUE rbVector2::Inspect( VALUE aSelf )
 	return rb_sprintf(  "%s(%s, %s)", rb_obj_classname( aSelf ),
 						StringValueCStr( x ),
 						StringValueCStr( y ) );
-}
-
-// Vector2#memory_usage
-VALUE rbVector2::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( 0 );
 }

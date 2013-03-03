@@ -35,13 +35,12 @@ void rbRenderWindow::Init( VALUE SFML )
 	rb_define_alloc_func( rbRenderWindow::Class, rbMacros::Allocate< sf::RenderWindow > );
 
     // Instance methods
-    rb_define_method( rbRenderWindow::Class, "initialize",             rbRenderWindow::Initialize,          -1 );
-	rb_define_method( rbRenderWindow::Class, "get_size",               rbRenderWindow::GetSize,              0 );
-	rb_define_method( rbRenderWindow::Class, "capture",                rbRenderWindow::Capture,              0 );
-    rb_define_method( rbRenderWindow::Class, "marshal_dump",           rbRenderWindow::MarshalDump,          0 );
-    rb_define_method( rbRenderWindow::Class, "==",                     rbRenderWindow::Equal,                1 );
-    rb_define_method( rbRenderWindow::Class, "inspect",                rbRenderWindow::Inspect,              0 );
-    rb_define_method( rbRenderWindow::Class, "memory_usage",           rbRenderWindow::GetMemoryUsage,       0 );
+    ext_define_method( rbRenderWindow::Class, "initialize",             rbRenderWindow::Initialize,          -1 );
+	ext_define_method( rbRenderWindow::Class, "get_size",               rbRenderWindow::GetSize,              0 );
+	ext_define_method( rbRenderWindow::Class, "capture",                rbRenderWindow::Capture,              0 );
+    ext_define_method( rbRenderWindow::Class, "marshal_dump",           rbRenderWindow::MarshalDump,          0 );
+    ext_define_method( rbRenderWindow::Class, "==",                     rbRenderWindow::Equal,                1 );
+    ext_define_method( rbRenderWindow::Class, "inspect",                rbRenderWindow::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbRenderWindow::Class, "to_s",         "inspect"       );
@@ -100,10 +99,4 @@ VALUE rbRenderWindow::Inspect( VALUE aSelf )
 					   rbMacros::ToSFML< sf::RenderWindow >( aSelf, rbRenderWindow::Class )->getSize().x,
 					   rbMacros::ToSFML< sf::RenderWindow >( aSelf, rbRenderWindow::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::RenderWindow >( aSelf, rbRenderWindow::Class ) );
-}
-
-// RenderWindow#memory_usage
-VALUE rbRenderWindow::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::RenderWindow ) );
 }

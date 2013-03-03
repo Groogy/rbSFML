@@ -30,23 +30,22 @@ void rbContextSettings::Init( VALUE SFML )
     rb_define_alloc_func( rbContextSettings::Class, rbMacros::Allocate< sf::ContextSettings > );
     
     // Instance methods
-    rb_define_method( rbContextSettings::Class, "initialize",          rbContextSettings::Initialize,           -1 );
-    rb_define_method( rbContextSettings::Class, "initialize_copy",     rbContextSettings::InitializeCopy,        1 );
-    rb_define_method( rbContextSettings::Class, "marshal_dump",        rbContextSettings::MarshalDump,           0 );
-    rb_define_method( rbContextSettings::Class , "marshal_load",       rbContextSettings::MarshalLoad,           1 );
-    rb_define_method( rbContextSettings::Class, "depth_bits",          rbContextSettings::GetDepthBits,          0 );
-    rb_define_method( rbContextSettings::Class, "stencil_bits",        rbContextSettings::GetStencilBits,        0 );
-    rb_define_method( rbContextSettings::Class, "antialiasing_level",  rbContextSettings::GetAntialiasingLevel,  0 );
-    rb_define_method( rbContextSettings::Class, "major_version",       rbContextSettings::GetMajorVersion,       0 );
-    rb_define_method( rbContextSettings::Class, "minor_version",       rbContextSettings::GetMinorVersion,       0 );
-    rb_define_method( rbContextSettings::Class, "depth_bits=",         rbContextSettings::SetDepthBits,          1 );
-    rb_define_method( rbContextSettings::Class, "stencil_bits=",       rbContextSettings::SetStencilBits,        1 );
-    rb_define_method( rbContextSettings::Class, "antialiasing_level=", rbContextSettings::SetAntialiasingLevel,  1 );
-    rb_define_method( rbContextSettings::Class, "major_version=",      rbContextSettings::SetMajorVersion,       1 );
-    rb_define_method( rbContextSettings::Class, "minor_version=",      rbContextSettings::SetMinorVersion,       1 );
-    rb_define_method( rbContextSettings::Class, "==",                  rbContextSettings::Equal,                 1 );
-    rb_define_method( rbContextSettings::Class, "inspect",             rbContextSettings::Inspect,               0 );
-    rb_define_method( rbContextSettings::Class, "memory_usage",        rbContextSettings::GetMemoryUsage,        0 );
+    ext_define_method( rbContextSettings::Class, "initialize",          rbContextSettings::Initialize,           -1 );
+    ext_define_method( rbContextSettings::Class, "initialize_copy",     rbContextSettings::InitializeCopy,        1 );
+    ext_define_method( rbContextSettings::Class, "marshal_dump",        rbContextSettings::MarshalDump,           0 );
+    ext_define_method( rbContextSettings::Class , "marshal_load",       rbContextSettings::MarshalLoad,           1 );
+    ext_define_method( rbContextSettings::Class, "depth_bits",          rbContextSettings::GetDepthBits,          0 );
+    ext_define_method( rbContextSettings::Class, "stencil_bits",        rbContextSettings::GetStencilBits,        0 );
+    ext_define_method( rbContextSettings::Class, "antialiasing_level",  rbContextSettings::GetAntialiasingLevel,  0 );
+    ext_define_method( rbContextSettings::Class, "major_version",       rbContextSettings::GetMajorVersion,       0 );
+    ext_define_method( rbContextSettings::Class, "minor_version",       rbContextSettings::GetMinorVersion,       0 );
+    ext_define_method( rbContextSettings::Class, "depth_bits=",         rbContextSettings::SetDepthBits,          1 );
+    ext_define_method( rbContextSettings::Class, "stencil_bits=",       rbContextSettings::SetStencilBits,        1 );
+    ext_define_method( rbContextSettings::Class, "antialiasing_level=", rbContextSettings::SetAntialiasingLevel,  1 );
+    ext_define_method( rbContextSettings::Class, "major_version=",      rbContextSettings::SetMajorVersion,       1 );
+    ext_define_method( rbContextSettings::Class, "minor_version=",      rbContextSettings::SetMinorVersion,       1 );
+    ext_define_method( rbContextSettings::Class, "==",                  rbContextSettings::Equal,                 1 );
+    ext_define_method( rbContextSettings::Class, "inspect",             rbContextSettings::Inspect,               0 );
     
     // Instance aliasses
     rb_define_alias( rbContextSettings::Class, "depthBits",          "depth_bits"          );
@@ -245,10 +244,4 @@ VALUE rbContextSettings::Inspect( VALUE aSelf )
                        settings->antialiasingLevel,
                        settings->majorVersion,
                        settings->minorVersion );
-}
-
-// ContextSettings#memory_usage
-VALUE rbContextSettings::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::ContextSettings ) );
 }

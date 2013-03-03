@@ -81,8 +81,6 @@ namespace rbTime
     // Time#to_s
     static VALUE Inspect( VALUE aSelf );
 	
-	// Time#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 
 };

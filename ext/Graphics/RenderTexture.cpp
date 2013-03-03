@@ -35,18 +35,17 @@ void rbRenderTexture::Init( VALUE SFML )
 	rb_define_alloc_func( rbRenderTexture::Class, rbMacros::Allocate< sf::RenderTexture > );
 
     // Instance methods
-    rb_define_method( rbRenderTexture::Class, "initialize",             rbRenderTexture::Initialize,          -1 );
-	rb_define_method( rbRenderTexture::Class, "get_size",               rbRenderTexture::GetSize,              0 );
-	rb_define_method( rbRenderTexture::Class, "create",                 rbRenderTexture::Create,              -1 );
-	rb_define_method( rbRenderTexture::Class, "set_smooth",             rbRenderTexture::SetSmooth,            1 );
-	rb_define_method( rbRenderTexture::Class, "is_smooth?",             rbRenderTexture::IsSmooth,             0 );
-	rb_define_method( rbRenderTexture::Class, "set_active",             rbRenderTexture::SetActive,           -1 );
-	rb_define_method( rbRenderTexture::Class, "display",                rbRenderTexture::Display,              0 );
-	rb_define_method( rbRenderTexture::Class, "get_texture",            rbRenderTexture::GetTexture,           0 );
-    rb_define_method( rbRenderTexture::Class, "marshal_dump",           rbRenderTexture::MarshalDump,          0 );
-    rb_define_method( rbRenderTexture::Class, "==",                     rbRenderTexture::Equal,                1 );
-    rb_define_method( rbRenderTexture::Class, "inspect",                rbRenderTexture::Inspect,              0 );
-    rb_define_method( rbRenderTexture::Class, "memory_usage",           rbRenderTexture::GetMemoryUsage,       0 );
+    ext_define_method( rbRenderTexture::Class, "initialize",             rbRenderTexture::Initialize,          -1 );
+	ext_define_method( rbRenderTexture::Class, "get_size",               rbRenderTexture::GetSize,              0 );
+	ext_define_method( rbRenderTexture::Class, "create",                 rbRenderTexture::Create,              -1 );
+	ext_define_method( rbRenderTexture::Class, "set_smooth",             rbRenderTexture::SetSmooth,            1 );
+	ext_define_method( rbRenderTexture::Class, "is_smooth?",             rbRenderTexture::IsSmooth,             0 );
+	ext_define_method( rbRenderTexture::Class, "set_active",             rbRenderTexture::SetActive,           -1 );
+	ext_define_method( rbRenderTexture::Class, "display",                rbRenderTexture::Display,              0 );
+	ext_define_method( rbRenderTexture::Class, "get_texture",            rbRenderTexture::GetTexture,           0 );
+    ext_define_method( rbRenderTexture::Class, "marshal_dump",           rbRenderTexture::MarshalDump,          0 );
+    ext_define_method( rbRenderTexture::Class, "==",                     rbRenderTexture::Equal,                1 );
+    ext_define_method( rbRenderTexture::Class, "inspect",                rbRenderTexture::Inspect,              0 );
 
     // Instance aliases
     rb_define_alias( rbRenderTexture::Class, "to_s",         "inspect"       );
@@ -188,10 +187,4 @@ VALUE rbRenderTexture::Inspect( VALUE aSelf )
 					   rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->getSize().x,
 					   rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class )->getSize().y,
 					   rbMacros::ToSFML< sf::RenderTexture >( aSelf, rbRenderTexture::Class ) );
-}
-
-// RenderTexture#memory_usage
-VALUE rbRenderTexture::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::RenderTexture ) );
 }

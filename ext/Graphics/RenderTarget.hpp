@@ -113,9 +113,6 @@ namespace rbRenderTarget
     // RenderTarget#inspect
     // RenderTarget#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // RenderTarget#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

@@ -90,26 +90,25 @@ void rbRenderTarget::Init( VALUE SFML )
 	rb_include_module( rbRenderTarget::Module, rbNonCopyable::Module );
 	
 	// Class methods
-	rb_define_module_function( rbRenderTarget::Module, "included", rbInternalIncludedRenderTarget, 1 );
+	ext_define_module_function( rbRenderTarget::Module, "included", rbInternalIncludedRenderTarget, 1 );
 
     // Instance methods
-	rb_define_method( rbRenderTarget::Module, "clear",                       rbRenderTarget::Clear,                   -1 );
-	rb_define_method( rbRenderTarget::Module, "set_view",                    rbRenderTarget::SetView,                  1 );
-	rb_define_method( rbRenderTarget::Module, "get_view",                    rbRenderTarget::GetView,                  0 );
-	rb_define_method( rbRenderTarget::Module, "get_default_view",            rbRenderTarget::GetDefaultView,           0 );
-	rb_define_method( rbRenderTarget::Module, "get_viewport",                rbRenderTarget::GetViewport,              1 );
-	rb_define_method( rbRenderTarget::Module, "map_pixel_to_coords",         rbRenderTarget::MapPixelToCoords,        -1 );
-	rb_define_method( rbRenderTarget::Module, "map_coords_to_pixel",         rbRenderTarget::MapCoordsToPixel,        -1 );
-	rb_define_method( rbRenderTarget::Module, "draw",                        rbRenderTarget::Draw,                    -1 );
-	rb_define_method( rbRenderTarget::Module, "get_size",                    rbRenderTarget::GetSize,                  0 );
-	rb_define_method( rbRenderTarget::Module, "push_gl_states",              rbRenderTarget::PushGLStates,             0 );
-	rb_define_method( rbRenderTarget::Module, "pop_gl_states",               rbRenderTarget::PopGLStates,              0 );
-	rb_define_method( rbRenderTarget::Module, "reset_gl_states",             rbRenderTarget::ResetGLStates,            0 );
-	rb_define_method( rbRenderTarget::Module, "internal_initialize",         rbRenderTarget::InternalInitialize,       0 );
-	rb_define_method( rbRenderTarget::Module, "marshal_dump",                rbRenderTarget::MarshalDump,              0 );
-    rb_define_method( rbRenderTarget::Module, "==",                          rbRenderTarget::Equal,                    1 );
-    rb_define_method( rbRenderTarget::Module, "inspect",                     rbRenderTarget::Inspect,                  0 );
-    rb_define_method( rbRenderTarget::Module, "memory_usage",                rbRenderTarget::GetMemoryUsage,           0 );
+	ext_define_method( rbRenderTarget::Module, "clear",                       rbRenderTarget::Clear,                   -1 );
+	ext_define_method( rbRenderTarget::Module, "set_view",                    rbRenderTarget::SetView,                  1 );
+	ext_define_method( rbRenderTarget::Module, "get_view",                    rbRenderTarget::GetView,                  0 );
+	ext_define_method( rbRenderTarget::Module, "get_default_view",            rbRenderTarget::GetDefaultView,           0 );
+	ext_define_method( rbRenderTarget::Module, "get_viewport",                rbRenderTarget::GetViewport,              1 );
+	ext_define_method( rbRenderTarget::Module, "map_pixel_to_coords",         rbRenderTarget::MapPixelToCoords,        -1 );
+	ext_define_method( rbRenderTarget::Module, "map_coords_to_pixel",         rbRenderTarget::MapCoordsToPixel,        -1 );
+	ext_define_method( rbRenderTarget::Module, "draw",                        rbRenderTarget::Draw,                    -1 );
+	ext_define_method( rbRenderTarget::Module, "get_size",                    rbRenderTarget::GetSize,                  0 );
+	ext_define_method( rbRenderTarget::Module, "push_gl_states",              rbRenderTarget::PushGLStates,             0 );
+	ext_define_method( rbRenderTarget::Module, "pop_gl_states",               rbRenderTarget::PopGLStates,              0 );
+	ext_define_method( rbRenderTarget::Module, "reset_gl_states",             rbRenderTarget::ResetGLStates,            0 );
+	ext_define_method( rbRenderTarget::Module, "internal_initialize",         rbRenderTarget::InternalInitialize,       0 );
+	ext_define_method( rbRenderTarget::Module, "marshal_dump",                rbRenderTarget::MarshalDump,              0 );
+    ext_define_method( rbRenderTarget::Module, "==",                          rbRenderTarget::Equal,                    1 );
+    ext_define_method( rbRenderTarget::Module, "inspect",                     rbRenderTarget::Inspect,                  0 );
 
     // Instance aliases
     rb_define_alias( rbRenderTarget::Module, "to_s",                     "inspect"                     );
@@ -356,10 +355,4 @@ VALUE rbRenderTarget::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbRenderTarget::ToSFML( aSelf ) );
-}
-
-// RenderTarget#memory_usage
-VALUE rbRenderTarget::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( rbInternalRenderTarget ) );
 }

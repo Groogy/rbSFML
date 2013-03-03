@@ -34,22 +34,21 @@ void rbSoundBuffer::Init( VALUE SFML )
     rb_define_alloc_func( rbSoundBuffer::Class, rbMacros::Allocate< sf::SoundBuffer > );
 
     // Instance methods
-    rb_define_method( rbSoundBuffer::Class, "initialize_copy",   rbSoundBuffer::InitializeCopy,   1 );
-    rb_define_method( rbSoundBuffer::Class, "marshal_dump",      rbSoundBuffer::MarshalDump,      0 );
-    rb_define_method( rbSoundBuffer::Class, "marshal_load",      rbSoundBuffer::MarshalLoad,      1 );
-    rb_define_method( rbSoundBuffer::Class, "load_from_file",    rbSoundBuffer::LoadFromFile,     1 );
-    rb_define_method( rbSoundBuffer::Class, "load_from_memory",  rbSoundBuffer::LoadFromMemory,   1 );
-    rb_define_method( rbSoundBuffer::Class, "load_from_stream",  rbSoundBuffer::LoadFromStream,   1 );
-    rb_define_method( rbSoundBuffer::Class, "load_from_samples", rbSoundBuffer::LoadFromSamples, -1 );
-    rb_define_method( rbSoundBuffer::Class, "save_to_file",      rbSoundBuffer::SaveToFile,       1 );
-    rb_define_method( rbSoundBuffer::Class, "samples",           rbSoundBuffer::GetSamples,       0 );
-    rb_define_method( rbSoundBuffer::Class, "sample_count",      rbSoundBuffer::GetSampleCount,   0 );
-    rb_define_method( rbSoundBuffer::Class, "sample_rate",       rbSoundBuffer::GetSampleRate,    0 );
-    rb_define_method( rbSoundBuffer::Class, "channel_count",     rbSoundBuffer::GetChannelCount,  0 );
-    rb_define_method( rbSoundBuffer::Class, "duration",          rbSoundBuffer::GetDuration,      0 );
-    rb_define_method( rbSoundBuffer::Class, "==",                rbSoundBuffer::Equal,            1 );
-    rb_define_method( rbSoundBuffer::Class, "inspect",           rbSoundBuffer::Inspect,          0 );
-    rb_define_method( rbSoundBuffer::Class, "memory_usage",      rbSoundBuffer::GetMemoryUsage,   0 );
+    ext_define_method( rbSoundBuffer::Class, "initialize_copy",   rbSoundBuffer::InitializeCopy,   1 );
+    ext_define_method( rbSoundBuffer::Class, "marshal_dump",      rbSoundBuffer::MarshalDump,      0 );
+    ext_define_method( rbSoundBuffer::Class, "marshal_load",      rbSoundBuffer::MarshalLoad,      1 );
+    ext_define_method( rbSoundBuffer::Class, "load_from_file",    rbSoundBuffer::LoadFromFile,     1 );
+    ext_define_method( rbSoundBuffer::Class, "load_from_memory",  rbSoundBuffer::LoadFromMemory,   1 );
+    ext_define_method( rbSoundBuffer::Class, "load_from_stream",  rbSoundBuffer::LoadFromStream,   1 );
+    ext_define_method( rbSoundBuffer::Class, "load_from_samples", rbSoundBuffer::LoadFromSamples, -1 );
+    ext_define_method( rbSoundBuffer::Class, "save_to_file",      rbSoundBuffer::SaveToFile,       1 );
+    ext_define_method( rbSoundBuffer::Class, "samples",           rbSoundBuffer::GetSamples,       0 );
+    ext_define_method( rbSoundBuffer::Class, "sample_count",      rbSoundBuffer::GetSampleCount,   0 );
+    ext_define_method( rbSoundBuffer::Class, "sample_rate",       rbSoundBuffer::GetSampleRate,    0 );
+    ext_define_method( rbSoundBuffer::Class, "channel_count",     rbSoundBuffer::GetChannelCount,  0 );
+    ext_define_method( rbSoundBuffer::Class, "duration",          rbSoundBuffer::GetDuration,      0 );
+    ext_define_method( rbSoundBuffer::Class, "==",                rbSoundBuffer::Equal,            1 );
+    ext_define_method( rbSoundBuffer::Class, "inspect",           rbSoundBuffer::Inspect,          0 );
 
     // Instance aliasses
     rb_define_alias( rbSoundBuffer::Class, "loadFromFile",      "load_from_file"    );
@@ -286,11 +285,4 @@ VALUE rbSoundBuffer::Inspect( VALUE aSelf )
                       rb_obj_classname( aSelf ),
                       (void*)aSelf,
                       rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getDuration().asMilliseconds() );
-}
-
-// SoundBuffer#memory_usage
-VALUE rbSoundBuffer::GetMemoryUsage( VALUE aSelf )
-{
-    std::size_t samplesCount = rbMacros::ToSFML< sf::SoundBuffer >( aSelf, rbSoundBuffer::Class )->getSampleCount();
-    return SIZET2NUM( sizeof( sf::SoundBuffer ) + samplesCount * 2 );
 }

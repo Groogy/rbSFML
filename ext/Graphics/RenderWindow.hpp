@@ -62,9 +62,6 @@ namespace rbRenderWindow
     // RenderWindow#inspect
     // RenderWindow#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // RenderWindow#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

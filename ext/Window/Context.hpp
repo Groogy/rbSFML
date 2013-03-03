@@ -52,9 +52,6 @@ namespace rbContext
     // Context#active=(active)
     // Context#setActive(active)
     static VALUE SetActive( VALUE aSelf, VALUE anActiveFlag );
-    
-    // Context#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
     
 }

@@ -32,13 +32,12 @@ void rbSFML::Init( VALUE SFML )
 
     SetRaiseExceptions( SFML, Qtrue );
 
-    rb_define_module_function( SFML, "raise_exceptions",  GetRaiseExceptions, 0 );
-    rb_define_module_function( SFML, "raise_exceptions=", SetRaiseExceptions, 1 );
-    rb_define_module_function( SFML, "system?",           SystemLoaded,       0 );
-    rb_define_module_function( SFML, "window?",           WindowLoaded,       0 );
-    rb_define_module_function( SFML, "graphics?",         GraphicsLoaded,     0 );
-    rb_define_module_function( SFML, "audio?",            AudioLoaded,        0 );
-    rb_define_module_function( SFML, "memory_usage",      GetMemoryUsage,     0 );
+    ext_define_module_function( SFML, "raise_exceptions",  GetRaiseExceptions, 0 );
+    ext_define_module_function( SFML, "raise_exceptions=", SetRaiseExceptions, 1 );
+    ext_define_module_function( SFML, "system?",           SystemLoaded,       0 );
+    ext_define_module_function( SFML, "window?",           WindowLoaded,       0 );
+    ext_define_module_function( SFML, "graphics?",         GraphicsLoaded,     0 );
+    ext_define_module_function( SFML, "audio?",            AudioLoaded,        0 );
 }
 
 // SFML.raise_exceptions
@@ -79,52 +78,4 @@ VALUE rbSFML::GraphicsLoaded( VALUE aSelf )
 VALUE rbSFML::AudioLoaded( VALUE aSelf )
 {
     return RBOOL( rb_const_defined( aSelf, rb_intern( "AUDIO_LOADED" ) ) );
-}
-
-// Internal
-struct GetMemoryUsageInfo
-{
-    size_t memoryUsage;
-    VALUE* listPointer;
-    size_t listLength;
-};
-
-// Internal
-static VALUE GetMemoryUsageIterator( VALUE anObject, VALUE aData )
-{
-    GetMemoryUsageInfo* info = (GetMemoryUsageInfo*)aData;
-    for( size_t index = 0; index < info->listLength; index++ )
-    {
-        if( CLASS_OF( anObject ) == info->listPointer[ index ] )
-        {
-            VALUE usage = rb_funcall( anObject, rb_intern( "memory_usage" ), 0 );
-            info->memoryUsage += NUM2SIZET( usage );
-            return Qnil;
-        }
-    }
-
-    return Qnil;
-}
-
-// SFML.memory_usage
-VALUE rbSFML::GetMemoryUsage( VALUE aSelf )
-{
-    void* table = rb_mod_const_at( aSelf, 0 );
-    VALUE list = rb_const_list( table );
-
-    GetMemoryUsageInfo info;
-    info.memoryUsage = 0;
-    info.listPointer = RARRAY_PTR( list );
-    info.listLength  = RARRAY_LEN( list );
-
-    for( size_t index = 0; index < info.listLength; index++ )
-    {
-        info.listPointer[ index ] = rb_const_get( aSelf, SYM2ID( info.listPointer[ index ] ) );
-    }
-
-    VALUE ObjectSpaceModule = rb_const_get( rb_cObject, rb_intern( "ObjectSpace" ) );
-    rb_block_call( ObjectSpaceModule, rb_intern( "each_object" ), 0, NULL,
-                   ( VALUE( * )( ... ) )GetMemoryUsageIterator, ( VALUE )&info );
-
-    return SIZET2NUM( info.memoryUsage );
 }

@@ -74,9 +74,6 @@ namespace rbMusic
     // Music#to_s
     static VALUE Inspect( VALUE aSelf );
 
-    // Music#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
-
 #endif
 
 };

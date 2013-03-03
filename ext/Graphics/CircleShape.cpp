@@ -33,16 +33,15 @@ void rbCircleShape::Init( VALUE SFML )
 	rb_define_alloc_func( rbCircleShape::Class, rbMacros::Allocate< sf::CircleShape > );
 
     // Instance methods
-    rb_define_method( rbCircleShape::Class, "initialize",           rbCircleShape::Initialize,         -1 );
-    rb_define_method( rbCircleShape::Class, "initialize_copy",      rbCircleShape::InitializeCopy,      1 );
-	rb_define_method( rbCircleShape::Class, "set_radius",           rbCircleShape::SetRadius,           1 );
-	rb_define_method( rbCircleShape::Class, "get_radius",           rbCircleShape::GetRadius,           0 );
-	rb_define_method( rbCircleShape::Class, "set_point_count",      rbCircleShape::SetPointCount,       1 );
-	rb_define_method( rbCircleShape::Class, "get_point_count",      rbCircleShape::GetPointCount,       0 );
-	rb_define_method( rbCircleShape::Class, "get_point",            rbCircleShape::GetPoint,            1 );
-    rb_define_method( rbCircleShape::Class, "==",                   rbCircleShape::Equal,               1 );
-    rb_define_method( rbCircleShape::Class, "inspect",              rbCircleShape::Inspect,             0 );
-    rb_define_method( rbCircleShape::Class, "memory_usage",         rbCircleShape::GetMemoryUsage,      0 );
+    ext_define_method( rbCircleShape::Class, "initialize",           rbCircleShape::Initialize,         -1 );
+    ext_define_method( rbCircleShape::Class, "initialize_copy",      rbCircleShape::InitializeCopy,      1 );
+	ext_define_method( rbCircleShape::Class, "set_radius",           rbCircleShape::SetRadius,           1 );
+	ext_define_method( rbCircleShape::Class, "get_radius",           rbCircleShape::GetRadius,           0 );
+	ext_define_method( rbCircleShape::Class, "set_point_count",      rbCircleShape::SetPointCount,       1 );
+	ext_define_method( rbCircleShape::Class, "get_point_count",      rbCircleShape::GetPointCount,       0 );
+	ext_define_method( rbCircleShape::Class, "get_point",            rbCircleShape::GetPoint,            1 );
+    ext_define_method( rbCircleShape::Class, "==",                   rbCircleShape::Equal,               1 );
+    ext_define_method( rbCircleShape::Class, "inspect",              rbCircleShape::Inspect,             0 );
 
     // Instance aliases
 	rb_define_alias( rbCircleShape::Class, "to_s",                "inspect"               );
@@ -137,10 +136,4 @@ VALUE rbCircleShape::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::CircleShape >( aSelf, rbCircleShape::Class ) );
-}
-
-// CircleShape#memory_usage
-VALUE rbCircleShape::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::CircleShape ) );
 }

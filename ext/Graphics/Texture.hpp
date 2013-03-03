@@ -122,9 +122,6 @@ namespace rbTexture
     // Texture#inspect
     // Texture#to_s
     static VALUE Inspect( VALUE aSelf );
-
-    // Texture#memory_usage
-    static VALUE GetMemoryUsage( VALUE aSelf );
 #endif
 }
 

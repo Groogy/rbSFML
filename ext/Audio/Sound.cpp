@@ -31,21 +31,20 @@ void rbSound::Init( VALUE SFML )
     rb_define_alloc_func( rbSound::Class, rbMacros::Allocate< sf::Sound > );
 
     // Instance methods
-    rb_define_method( rbSound::Class, "initialize",      rbSound::Initialize,       -1 );
-    rb_define_method( rbSound::Class, "initialize_copy", rbSound::InitializeCopy,    1 );
-    rb_define_method( rbSound::Class, "marshal_dump",    rbSound::MarshalDump,       0 );
-    rb_define_method( rbSound::Class, "play",            rbSound::Play,              0 );
-    rb_define_method( rbSound::Class, "pause",           rbSound::Pause,             0 );
-    rb_define_method( rbSound::Class, "stop",            rbSound::Stop,              0 );
-    rb_define_method( rbSound::Class, "buffer=",         rbSound::SetBuffer,         1 );
-    rb_define_method( rbSound::Class, "loop=",           rbSound::SetLoop,           1 );
-    rb_define_method( rbSound::Class, "playing_offset=", rbSound::SetPlayingOffset,  1 );
-    rb_define_method( rbSound::Class, "buffer",          rbSound::GetBuffer,         0 );
-    rb_define_method( rbSound::Class, "loop",            rbSound::GetLoop,           0 );
-    rb_define_method( rbSound::Class, "playing_offset",  rbSound::GetPlayingOffset,  0 );
-    rb_define_method( rbSound::Class, "status",          rbSound::GetStatus,         0 );
-    rb_define_method( rbSound::Class, "inspect",         rbSound::Inspect,           0 );
-    rb_define_method( rbSound::Class, "memory_usage",    rbSound::GetMemoryUsage,    0 );
+    ext_define_method( rbSound::Class, "initialize",      rbSound::Initialize,       -1 );
+    ext_define_method( rbSound::Class, "initialize_copy", rbSound::InitializeCopy,    1 );
+    ext_define_method( rbSound::Class, "marshal_dump",    rbSound::MarshalDump,       0 );
+    ext_define_method( rbSound::Class, "play",            rbSound::Play,              0 );
+    ext_define_method( rbSound::Class, "pause",           rbSound::Pause,             0 );
+    ext_define_method( rbSound::Class, "stop",            rbSound::Stop,              0 );
+    ext_define_method( rbSound::Class, "buffer=",         rbSound::SetBuffer,         1 );
+    ext_define_method( rbSound::Class, "loop=",           rbSound::SetLoop,           1 );
+    ext_define_method( rbSound::Class, "playing_offset=", rbSound::SetPlayingOffset,  1 );
+    ext_define_method( rbSound::Class, "buffer",          rbSound::GetBuffer,         0 );
+    ext_define_method( rbSound::Class, "loop",            rbSound::GetLoop,           0 );
+    ext_define_method( rbSound::Class, "playing_offset",  rbSound::GetPlayingOffset,  0 );
+    ext_define_method( rbSound::Class, "status",          rbSound::GetStatus,         0 );
+    ext_define_method( rbSound::Class, "inspect",         rbSound::Inspect,           0 );
 
     // Instance aliasses
     rb_define_alias( rbSound::Class, "setBuffer",          "buffer="         );
@@ -191,10 +190,4 @@ VALUE rbSound::Inspect( VALUE aSelf )
     return rb_sprintf( "%s(%p)",
                        rb_obj_classname( aSelf ),
                        rbMacros::ToSFML< sf::Sound >( aSelf, rbSound::Class ) );
-}
-
-// Sound#memory_usage
-VALUE rbSound::GetMemoryUsage( VALUE aSelf )
-{
-    return SIZET2NUM( sizeof( sf::Sound ) );
 }

@@ -33,15 +33,14 @@ void rbRectangleShape::Init( VALUE SFML )
 	rb_define_alloc_func( rbRectangleShape::Class, rbMacros::Allocate< sf::RectangleShape > );
 
     // Instance methods
-    rb_define_method( rbRectangleShape::Class, "initialize",           rbRectangleShape::Initialize,         -1 );
-    rb_define_method( rbRectangleShape::Class, "initialize_copy",      rbRectangleShape::InitializeCopy,      1 );
-	rb_define_method( rbRectangleShape::Class, "set_size",             rbRectangleShape::SetSize,             1 );
-	rb_define_method( rbRectangleShape::Class, "get_size",             rbRectangleShape::GetSize,             0 );
-	rb_define_method( rbRectangleShape::Class, "get_point_count",      rbRectangleShape::GetPointCount,       0 );
-	rb_define_method( rbRectangleShape::Class, "get_point",            rbRectangleShape::GetPoint,            1 );
-    rb_define_method( rbRectangleShape::Class, "==",                   rbRectangleShape::Equal,               1 );
-    rb_define_method( rbRectangleShape::Class, "inspect",              rbRectangleShape::Inspect,             0 );
-    rb_define_method( rbRectangleShape::Class, "memory_usage",         rbRectangleShape::GetMemoryUsage,      0 );
+    ext_define_method( rbRectangleShape::Class, "initialize",           rbRectangleShape::Initialize,         -1 );
+    ext_define_method( rbRectangleShape::Class, "initialize_copy",      rbRectangleShape::InitializeCopy,      1 );
+	ext_define_method( rbRectangleShape::Class, "set_size",             rbRectangleShape::SetSize,             1 );
+	ext_define_method( rbRectangleShape::Class, "get_size",             rbRectangleShape::GetSize,             0 );
+	ext_define_method( rbRectangleShape::Class, "get_point_count",      rbRectangleShape::GetPointCount,       0 );
+	ext_define_method( rbRectangleShape::Class, "get_point",            rbRectangleShape::GetPoint,            1 );
+    ext_define_method( rbRectangleShape::Class, "==",                   rbRectangleShape::Equal,               1 );
+    ext_define_method( rbRectangleShape::Class, "inspect",              rbRectangleShape::Inspect,             0 );
 
     // Instance aliases
 	rb_define_alias( rbRectangleShape::Class, "to_s",                "inspect"               );
@@ -123,10 +122,4 @@ VALUE rbRectangleShape::Inspect( VALUE aSelf )
 	return rb_sprintf( "%s(%p)",
 					   rb_obj_classname( aSelf ),
 					   rbMacros::ToSFML< sf::RectangleShape >( aSelf, rbRectangleShape::Class ) );
-}
-
-// RectangleShape#memory_usage
-VALUE rbRectangleShape::GetMemoryUsage( VALUE aSelf )
-{
-    return INT2FIX( sizeof( sf::RectangleShape ) );
 }
