@@ -17,7 +17,7 @@ RakeFileUtils.verbose_flag = false
 OBJ_DIR = 'obj'
 SO_DIR = 'lib/sfml'
 DOC_DIR = 'doc'
-EXT_DIR = 'ext'
+EXT_DIR = './ext'
 INST_DIR = File.join(CONFIG['sitearchdir'], SO_DIR)
 
 SFML_INC = ENV['SFML_INCLUDE']
