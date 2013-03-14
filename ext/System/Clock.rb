@@ -1,9 +1,11 @@
 module SFML
   
-  # <tt>Clock</tt> is a lightweight class for measuring time. Its resolution depends on the underlying OS, but you can generally expect a <tt>1</tt> ms resolution.
+  # <tt>Clock</tt> is a lightweight class for measuring time. 
+  #
+  # It provides the most precise time that the underlying OS can achieve (generally microseconds or nanoseconds). It also ensures monotonicity, which means that the returned time can never go backward, even if the system time is changed..
   #
   # @example
-  #   clock = Clock.new
+  #   clock = SFML::Clock.new
   #   # ...
   #   puts clock.elapsed_time
   #   clock.restart
@@ -29,10 +31,5 @@ module SFML
     def inspect
     end
     alias to_s inspect
-    
-    # Returns how much memory in bytes was allocated by this object.
-    # @return [Fixnum]
-    def memory_usage
-    end
   end
 end

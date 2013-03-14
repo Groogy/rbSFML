@@ -1,7 +1,5 @@
-# @note This code doesn't works yet.
 # @example
-#   require "sfml/audio"
-#   require "sfml/graphics"
+#   require "sfml/all"
 #   include SFML
 #   
 #   # Create the main window

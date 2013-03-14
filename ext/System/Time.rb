@@ -105,10 +105,5 @@ module SFML
     def inspect
     end
     alias to_s inspect
-    
-    # Returns how much memory in bytes was allocated by this object.
-    # @return [Fixnum]
-    def memory_usage
-    end
   end
 end
