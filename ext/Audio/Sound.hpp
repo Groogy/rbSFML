@@ -23,11 +23,12 @@
 #define AUDIO_SOUND_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <Audio/SoundSource.hpp>
-#include <Audio/SoundBuffer.hpp>
-#include <System/Time.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "SoundSource.hpp"
+#include "SoundBuffer.hpp"
+#include "../System/Time.hpp"
 
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>

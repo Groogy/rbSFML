@@ -23,12 +23,13 @@
 #define WINDOW_WINDOW_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <System/Vector2.hpp>
-#include <Window/ContextSettings.hpp>
-#include <Window/Event.hpp>
-#include <Window/VideoMode.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "../System/Vector2.hpp"
+#include "ContextSettings.hpp"
+#include "Event.hpp"
+#include "VideoMode.hpp"
 
 #include <SFML/Window/Window.hpp>
 

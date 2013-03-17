@@ -23,9 +23,10 @@
 #define AUDIO_LISTENER_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <System/Vector3.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "../System/Vector3.hpp"
 
 #include <SFML/Audio/Listener.hpp>
 

@@ -23,10 +23,11 @@
 #define WINDOW_MOUSE_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <System/Vector2.hpp>
-#include <Window/Window.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "../System/Vector2.hpp"
+#include "Window.hpp"
 
 #include <SFML/Window/Mouse.hpp>
 

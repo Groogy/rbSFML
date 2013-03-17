@@ -23,8 +23,9 @@
 #define SYSTEM_NONCOPYABLE_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
+
+#include "../rbSFML.hpp"
+#include "SFML.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 

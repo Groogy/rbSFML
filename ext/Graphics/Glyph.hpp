@@ -23,7 +23,8 @@
 #define GRAPHICS_GLYPH_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 #include "Rect.hpp"
 
 #include <SFML/Graphics/Glyph.hpp>

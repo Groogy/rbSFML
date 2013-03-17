@@ -24,8 +24,9 @@
 
 #include <ruby.h>
 #include <ruby/st.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
 
 #include <string>
 

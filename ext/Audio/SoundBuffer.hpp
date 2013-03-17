@@ -23,8 +23,9 @@
 #define AUDIO_SOUNDBUFFER_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <InputStream.hpp>
+
+#include "../rbSFML.hpp"
+#include "../InputStream.hpp"
 
 #include <SFML/Audio/SoundBuffer.hpp>
 

@@ -23,8 +23,9 @@
 #define WINDOW_KEYBOARD_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
 
