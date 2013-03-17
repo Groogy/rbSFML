@@ -22,8 +22,8 @@
 #define GRAPHICS_TRANSFORMABLE_CPP
 
 #include "Transformable.hpp"
-#include "System/Vector2.hpp"
-#include "Graphics/Transform.hpp"
+#include "../System/Vector2.hpp"
+#include "Transform.hpp"
 
 static VALUE rbInternalIncludedTransformable( VALUE aModule, VALUE aBase )
 {

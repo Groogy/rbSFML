@@ -22,9 +22,9 @@
 #define GRAPHICS_RENDER_TEXTURE_CPP
 
 #include "RenderTexture.hpp"
-#include "Graphics/RenderTarget.hpp"
-#include "Graphics/Texture.hpp"
-#include "System/Vector2.hpp"
+#include "RenderTarget.hpp"
+#include "Texture.hpp"
+#include "../System/Vector2.hpp"
 
 void rbRenderTexture::Init( VALUE SFML )
 {

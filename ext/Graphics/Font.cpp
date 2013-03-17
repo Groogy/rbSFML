@@ -24,8 +24,8 @@
 #include "Font.hpp"
 #include "Glyph.hpp"
 #include "Texture.hpp"
-#include "InputStream.hpp"
-#include "System/SFML.hpp"
+#include "../InputStream.hpp"
+#include "../System/SFML.hpp"
 
 void rbFont::Init( VALUE SFML )
 {

@@ -22,9 +22,9 @@
 #define GRAPHICS_VIEW_CPP
 
 #include "View.hpp"
-#include "System/Vector2.hpp"
-#include "Graphics/Rect.hpp"
-#include "Graphics/Transform.hpp"
+#include "../System/Vector2.hpp"
+#include "Rect.hpp"
+#include "Transform.hpp"
 
 void rbView::Init( VALUE SFML )
 {

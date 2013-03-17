@@ -22,7 +22,7 @@
 #define GRAPHICS_RECT_CPP
 
 #include "Rect.hpp"
-#include "System/Vector2.hpp"
+#include "../System/Vector2.hpp"
 
 void rbRect::Init( VALUE SFML )
 {

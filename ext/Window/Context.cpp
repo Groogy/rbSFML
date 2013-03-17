@@ -21,8 +21,8 @@
 
 #define WINDOW_CONTEXT_CPP
 #include "Context.hpp"
-#include "System/SFML.hpp"
-#include "System/NonCopyable.hpp"
+#include "../System/SFML.hpp"
+#include "../System/NonCopyable.hpp"
 
 void rbContext::Init( VALUE SFML )
 {
