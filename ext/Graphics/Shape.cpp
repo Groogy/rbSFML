@@ -28,7 +28,7 @@
 #include "Texture.hpp"
 #include "Rect.hpp"
 #include "Color.hpp"
-#include "System/Vector2.hpp"
+#include "../System/Vector2.hpp"
 
 class rbInternalShape : public sf::Shape
 {

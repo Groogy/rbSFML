@@ -23,9 +23,10 @@
 #define GRAPHICS_VERTEX_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include "System/Vector2.hpp"
-#include "Graphics/Color.hpp"
+
+#include "../rbSFML.hpp"
+#include "../System/Vector2.hpp"
+#include "Color.hpp"
 
 #include <SFML/Graphics/Vertex.hpp>
 

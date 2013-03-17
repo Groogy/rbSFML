@@ -24,9 +24,9 @@
 #include "Image.hpp"
 #include "Color.hpp"
 #include "Rect.hpp"
-#include "InputStream.hpp"
-#include "System/Vector2.hpp"
-#include "System/SFML.hpp"
+#include "../InputStream.hpp"
+#include "../System/Vector2.hpp"
+#include "../System/SFML.hpp"
 
 void rbImage::Init( VALUE SFML )
 {

@@ -23,7 +23,8 @@
 #define SYSTEM_SFML_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 
 #include <iostream>
 #include <string>

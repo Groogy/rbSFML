@@ -21,7 +21,7 @@
 
 #define WINDOW_WINDOW_CPP
 #include "Window.hpp"
-#include "System/NonCopyable.hpp"
+#include "../System/NonCopyable.hpp"
 
 void rbWindow::Init( VALUE SFML )
 {

@@ -23,7 +23,7 @@
 
 #include "CircleShape.hpp"
 #include "Shape.hpp"
-#include "System/Vector2.hpp"
+#include "../System/Vector2.hpp"
 
 void rbCircleShape::Init( VALUE SFML )
 {

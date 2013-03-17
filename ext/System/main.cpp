@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <System.hpp>
+#include "../System.hpp"
 
 #if !defined( RBSFML_SFML )
 #include <sstream>

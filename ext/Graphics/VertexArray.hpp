@@ -23,7 +23,8 @@
 #define GRAPHICS_VERTEX_ARRAY_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 
 #include <SFML/Graphics/VertexArray.hpp>
 

@@ -23,8 +23,9 @@
 #define WINDOW_STYLE_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
 
 #include <SFML/Window/WindowStyle.hpp>
 

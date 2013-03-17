@@ -21,7 +21,7 @@
 
 #define AUDIO_SOUNDSTREAM_CPP
 #include "SoundStream.hpp"
-#include <System/Time.hpp>
+#include "../System/Time.hpp"
 
 void rbSoundStream::Init( VALUE SFML )
 {

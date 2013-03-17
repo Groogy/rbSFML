@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <Audio.hpp>
+#include "../Audio.hpp"
 
 #if !defined( RBSFML_SFML )
 #include <sstream>

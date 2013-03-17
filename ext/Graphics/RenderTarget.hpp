@@ -23,7 +23,8 @@
 #define GRAPHICS_RENDER_TARGET_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 

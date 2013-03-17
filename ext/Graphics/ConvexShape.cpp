@@ -22,8 +22,8 @@
 #define GRAPHICS_CONVEX_SHAPE_CPP
 
 #include "ConvexShape.hpp"
-#include "Graphics/Shape.hpp"
-#include "System/Vector2.hpp"
+#include "Shape.hpp"
+#include "../System/Vector2.hpp"
 
 void rbConvexShape::Init( VALUE SFML )
 {

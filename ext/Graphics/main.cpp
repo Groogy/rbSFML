@@ -19,8 +19,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <Graphics.hpp>
-#include <System/SFML.hpp>
+#include "../Graphics.hpp"
+#include "../System/SFML.hpp"
+
 #include <SFML/Graphics.hpp>
 
 #if !defined( RBSFML_SFML )
