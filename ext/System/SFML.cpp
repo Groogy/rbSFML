@@ -21,7 +21,7 @@
 
 #define SYSTEM_SFML_CPP
 
-#include <System/SFML.hpp>
+#include "SFML.hpp"
 
 void rbSFML::Init( VALUE SFML )
 {

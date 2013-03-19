@@ -23,8 +23,8 @@
 
 #include "Transform.hpp"
 #include "Rect.hpp"
-#include "InputStream.hpp"
-#include "System/Vector2.hpp"
+#include "../InputStream.hpp"
+#include "../System/Vector2.hpp"
 
 void rbTransform::Init( VALUE SFML )
 {

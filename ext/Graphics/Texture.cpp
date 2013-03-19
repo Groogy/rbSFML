@@ -24,9 +24,9 @@
 #include "Texture.hpp"
 #include "Image.hpp"
 #include "Rect.hpp"
-#include "InputStream.hpp"
-#include "System/SFML.hpp"
-#include "Window/Window.hpp"
+#include "../InputStream.hpp"
+#include "../System/SFML.hpp"
+#include "../Window/Window.hpp"
 
 void rbTexture::Init( VALUE SFML )
 {

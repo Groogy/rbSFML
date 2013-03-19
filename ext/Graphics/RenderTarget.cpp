@@ -22,17 +22,17 @@
 #define GRAPHICS_RENDER_TARGET_CPP
 
 #include "RenderTarget.hpp"
-#include "System/Vector2.hpp"
-#include "System/NonCopyable.hpp"
-#include "Graphics/View.hpp"
-#include "Graphics/Color.hpp"
-#include "Graphics/Rect.hpp"
-#include "Graphics/Drawable.hpp"
-#include "Graphics/RenderStates.hpp"
-#include "Graphics/Vertex.hpp"
-#include "Graphics/Transform.hpp"
-#include "Graphics/Texture.hpp"
-#include "Graphics/Shader.hpp"
+#include "../System/Vector2.hpp"
+#include "../System/NonCopyable.hpp"
+#include "View.hpp"
+#include "Color.hpp"
+#include "Rect.hpp"
+#include "Drawable.hpp"
+#include "RenderStates.hpp"
+#include "Vertex.hpp"
+#include "Transform.hpp"
+#include "Texture.hpp"
+#include "Shader.hpp"
 
 class rbInternalRenderTarget : public sf::RenderTarget
 {

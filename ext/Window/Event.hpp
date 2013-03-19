@@ -23,9 +23,10 @@
 #define WINDOW_EVENT_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <Window/VideoMode.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "VideoMode.hpp"
 
 #include <SFML/Window/Event.hpp>
 

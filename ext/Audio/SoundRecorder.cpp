@@ -21,8 +21,8 @@
 
 #define AUDIO_SOUNDRECORDER_CPP
 #include "SoundRecorder.hpp"
-#include <System/Time.hpp>
-#include <System/NonCopyable.hpp>
+#include "../System/Time.hpp"
+#include "../System/NonCopyable.hpp"
 
 void rbSoundRecorder::Init(VALUE SFML)
 {

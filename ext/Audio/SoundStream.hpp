@@ -23,9 +23,10 @@
 #define AUDIO_SOUNDSTREAM_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <Audio/SoundSource.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "SoundSource.hpp"
 
 #include <SFML/Audio/SoundStream.hpp>
 

@@ -23,7 +23,8 @@
 #define GRAPHICS_RENDER_STATES_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 

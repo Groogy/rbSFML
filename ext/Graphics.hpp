@@ -24,8 +24,7 @@
 
 #include <ruby.h>
 
-#include <rbSFML.hpp>
-
+#include "rbSFML.hpp"
 #include "Graphics/Color.hpp"
 #include "Graphics/Rect.hpp"
 #include "Graphics/Glyph.hpp"

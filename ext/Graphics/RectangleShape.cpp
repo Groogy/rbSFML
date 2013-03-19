@@ -22,8 +22,8 @@
 #define GRAPHICS_RECTANGLE_SHAPE_CPP
 
 #include "RectangleShape.hpp"
-#include "Graphics/Shape.hpp"
-#include "System/Vector2.hpp"
+#include "Shape.hpp"
+#include "../System/Vector2.hpp"
 
 void rbRectangleShape::Init( VALUE SFML )
 {

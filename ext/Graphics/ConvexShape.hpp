@@ -23,7 +23,8 @@
 #define GRAPHICS_CONVEX_SHAPE_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
+
+#include "../rbSFML.hpp"
 
 #include <SFML/Graphics/ConvexShape.hpp>
 

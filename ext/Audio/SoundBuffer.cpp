@@ -22,9 +22,9 @@
 #define AUDIO_SOUNDBUFFER_CPP
 
 #include "SoundBuffer.hpp"
-#include <System/SFML.hpp>
-#include <System/Time.hpp>
-#include <System/NonCopyable.hpp>
+#include "../System/SFML.hpp"
+#include "../System/Time.hpp"
+#include "../System/NonCopyable.hpp"
 
 void rbSoundBuffer::Init( VALUE SFML )
 {

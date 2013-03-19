@@ -23,9 +23,10 @@
 #define WINDOW_CONTEXT_HPP
 
 #include <ruby.h>
-#include "rbSFML.hpp"
-#include "System/SFML.hpp"
-#include "Window/ContextSettings.hpp"
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "ContextSettings.hpp"
 
 #include <SFML/Window/Context.hpp>
 

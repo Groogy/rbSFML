@@ -23,12 +23,13 @@
 #define AUDIO_MUSIC_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <InputStream.hpp>
-#include <Audio/SoundStream.hpp>
-#include <System/NonCopyable.hpp>
-#include <System/Time.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "../InputStream.hpp"
+#include "SoundStream.hpp"
+#include "../System/NonCopyable.hpp"
+#include "../System/Time.hpp"
 
 #include <SFML/Audio/Music.hpp>
 

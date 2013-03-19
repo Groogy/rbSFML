@@ -23,10 +23,11 @@
 #define AUDIO_SOUNDBUFFERRECORDER_HPP
 
 #include <ruby.h>
-#include <rbSFML.hpp>
-#include <System/SFML.hpp>
-#include <Audio/SoundBuffer.hpp>
-#include <Audio/SoundRecorder.hpp>
+
+#include "../rbSFML.hpp"
+#include "../System/SFML.hpp"
+#include "../Audio/SoundBuffer.hpp"
+#include "../Audio/SoundRecorder.hpp"
 
 #include <SFML/Audio/SoundBufferRecorder.hpp>
 

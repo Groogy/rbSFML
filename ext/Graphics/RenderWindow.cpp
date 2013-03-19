@@ -22,9 +22,9 @@
 #define GRAPHICS_RENDER_WINDOW_CPP
 
 #include "RenderWindow.hpp"
-#include "Graphics/RenderTarget.hpp"
-#include "Graphics/Image.hpp"
-#include "Window/Window.hpp"
+#include "RenderTarget.hpp"
+#include "Image.hpp"
+#include "../Window/Window.hpp"
 
 void rbRenderWindow::Init( VALUE SFML )
 {

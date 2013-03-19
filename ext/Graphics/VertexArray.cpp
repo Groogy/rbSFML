@@ -24,7 +24,7 @@
 #include "VertexArray.hpp"
 #include "Vertex.hpp"
 #include "Rect.hpp"
-#include "Graphics/Drawable.hpp"
+#include "Drawable.hpp"
 
 void rbVertexArray::Init( VALUE SFML )
 {

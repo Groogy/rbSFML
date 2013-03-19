@@ -22,14 +22,14 @@
 #define GRAPHICS_SHADER_CPP
 
 #include "Shader.hpp"
-#include "InputStream.hpp"
-#include "System/SFML.hpp"
-#include "System/Vector2.hpp"
-#include "System/Vector3.hpp"
-#include "System/NonCopyable.hpp"
-#include "Graphics/Color.hpp"
-#include "Graphics/Transform.hpp"
-#include "Graphics/Texture.hpp"
+#include "../InputStream.hpp"
+#include "../System/SFML.hpp"
+#include "../System/Vector2.hpp"
+#include "../System/Vector3.hpp"
+#include "../System/NonCopyable.hpp"
+#include "Color.hpp"
+#include "Transform.hpp"
+#include "Texture.hpp"
 
 void rbShader::Init( VALUE SFML )
 {

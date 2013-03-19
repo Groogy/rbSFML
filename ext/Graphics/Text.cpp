@@ -28,7 +28,7 @@
 #include "Font.hpp"
 #include "Rect.hpp"
 #include "Color.hpp"
-#include "System/Vector2.hpp"
+#include "../System/Vector2.hpp"
 
 void rbText::Init( VALUE SFML )
 {
