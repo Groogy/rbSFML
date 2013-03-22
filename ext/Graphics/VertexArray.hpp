@@ -31,59 +31,59 @@
 namespace rbVertexArray
 {
 #if defined( GRAPHICS_VERTEX_ARRAY_CPP )
-    VALUE Class;
+	VALUE Class;
 #else
-    extern VALUE Class;
+	extern VALUE Class;
 #endif
 
 #if defined( RBSFML_GRAPHICS )
-    void Init( VALUE SFML );
+	void Init( VALUE SFML );
 #endif
 
 #if defined( GRAPHICS_VERTEX_ARRAY_CPP )
-    // VertexArray#initialize
+	// VertexArray#initialize
 	// VertexArray#initialize(primitive_type, vertex_count = 0)
-    static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
-	
+	static VALUE Initialize( int argc, VALUE* args, VALUE aSelf );
+
 	// VertexArray#initialize_copy(source)
-    static VALUE InitializeCopy( VALUE aSelf, VALUE aSource );
-	
+	static VALUE InitializeCopy( VALUE aSelf, VALUE aSource );
+
 	// VertexArray#vertex_count
 	static VALUE GetVertexCount( VALUE aSelf );
-	
+
 	// VertexArray#append(vertex)
 	static VALUE Append( VALUE aSelf, VALUE aVertex );
-	
+
 	// VertexArray#[index]
 	static VALUE IndexOperator( VALUE aSelf, VALUE anIndex );
-	
+
 	// VertexArray#clear
 	static VALUE Clear( VALUE aSelf );
-	
+
 	// VertexArray#resize(vertex_count)
 	static VALUE Resize( VALUE aSelf, VALUE aVertexCount );
-	
+
 	// VertexArray#primitive_type=(type)
 	static VALUE SetPrimitiveType( VALUE aSelf, VALUE aType );
-	
+
 	// VertexArray#primitive_type
 	static VALUE GetPrimitiveType( VALUE aSelf );
-	
+
 	// VertexArray#bounds
 	static VALUE GetBounds( VALUE aSelf );
-	
+
 	// VertexArray#draw(render_target, render_states)
 	static VALUE Draw( VALUE aSelf, VALUE aRenderTarget, VALUE aRenderStates );
-	
-    // VertexArray#marshal_dump
-    static VALUE MarshalDump( VALUE aSelf );
 
-    // VertexArray#==(other)
-    static VALUE Equal( VALUE aSelf, VALUE anOther );
+	// VertexArray#marshal_dump
+	static VALUE MarshalDump( VALUE aSelf );
 
-    // VertexArray#inspect
-    // VertexArray#to_s
-    static VALUE Inspect( VALUE aSelf );
+	// VertexArray#==(other)
+	static VALUE Equal( VALUE aSelf, VALUE anOther );
+
+	// VertexArray#inspect
+	// VertexArray#to_s
+	static VALUE Inspect( VALUE aSelf );
 #endif
 }
 
