@@ -28,6 +28,7 @@
 #include "Window/Context.hpp"
 #include "Window/ContextSettings.hpp"
 #include "Window/Event.hpp"
+#include "Window/Joystick.hpp"
 #include "Window/Keyboard.hpp"
 #include "Window/Mouse.hpp"
 #include "Window/Style.hpp"
