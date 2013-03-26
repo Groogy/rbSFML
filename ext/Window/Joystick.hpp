@@ -26,10 +26,8 @@
 
 #include "../rbSFML.hpp"
 #include "../System/SFML.hpp"
-#include "../System/Vector2.hpp"
-#include "Window.hpp"
 
-#include <SFML/Window/Mouse.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 namespace rbJoystick
 {
