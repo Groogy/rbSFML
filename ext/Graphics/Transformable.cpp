@@ -275,7 +275,7 @@ VALUE rbTransformable::Rotate( VALUE aSelf, VALUE anAngle )
 VALUE rbTransformable::GetTransform( VALUE aSelf )
 {
 	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->getTransform();
-	VALUE obj = rbMacros::ToRuby( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
+	VALUE obj = rbMacros::ToRubyNoGC( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
 	rb_obj_freeze( obj );
 	return obj;
@@ -287,7 +287,7 @@ VALUE rbTransformable::GetTransform( VALUE aSelf )
 VALUE rbTransformable::GetInverseTransform( VALUE aSelf )
 {
 	const sf::Transform& transform = rbTransformable::ToSFML( aSelf )->getInverseTransform();
-	VALUE obj = rbMacros::ToRuby( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
+	VALUE obj = rbMacros::ToRubyNoGC( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
 	rb_iv_set( obj, "@__ref__owner", aSelf );
 	rb_obj_freeze( obj );
 	return obj;
