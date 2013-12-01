@@ -19,24 +19,33 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <sstream>
-std::stringstream globalErrorStream;
+#ifndef EXTRA_VERTEX_LAYOUT_HPP
+#define EXTRA_VERTEX_LAYOUT_HPP
 
-extern "C"
+#include <ruby.h>
+
+#include "../rbSFML.hpp"
+
+namespace rbVertexLayout
 {
+#if defined( EXTRA_VERTEX_LAYOUT_CPP )
+    VALUE Class;
+#else
+    extern VALUE Class;
+#endif
 
-    void Init_system();
-    void Init_window();
-    void Init_graphics();
-    void Init_audio();
-	void Init_extra();
+#if defined( RBSFML_EXTRA )
+    void Init( VALUE SFML );
+#endif
 
-    void Init_sfml()
-    {
-        Init_system();
-        Init_window();
-        Init_graphics();
-        Init_audio();
-		Init_extra();
-    }
+#if defined( EXTRA_VERTEX_LAYOUT_CPP )
+    // VertexLayout#initialize
+    static VALUE Initialize( VALUE aSelf );
+	
+	// VertexLayout#<<
+	static VALUE Append( VALUE aSelf, VALUE anAttribute );
+#endif
+
 }
+
+#endif // EXTRA_VERTEX_LAYOUT_HPP

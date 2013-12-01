@@ -28,7 +28,7 @@ RUBY_LIB = CONFIG['libdir']
 RUBY_LINK = CONFIG['SOLIBS'] + (CONFIG['ENABLE_SHARED'] == 'yes' ? CONFIG['LIBRUBYARG_SHARED'] : CONFIG['LIBRUBYARG_STATIC'])
 
 CXX = CONFIG['CXX']
-CXXFLAGS = "#{CONFIG['CXXFLAGS']} -fPIC #{SFML_INC ? "-I#{SFML_INC}" : ''} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']}"
+CXXFLAGS = "-std=c++11 #{SFML_INC ? "-I#{SFML_INC}" : ''} -I#{RUBY_INC} -I#{RUBY_INC}/#{CONFIG['arch']} -DGLEW_BUILD"
 
 LINK = CONFIG['LDSHAREDXX'].sub("$(if $(filter-out -g -g0,#{CONFIG['debugflags']}),,-s)", "")
 LINK_FLAGS = "#{CONFIG['DLDFLAGS']} #{CONFIG['LDFLAGS']} #{SFML_LIB ? "-L#{SFML_LIB}" : ''} -L#{RUBY_LIB} #{RUBY_LINK}".sub("$(DEFFILE)", "")
@@ -38,7 +38,8 @@ SRCS = {:audio    => FileList.new("#{EXT_DIR}/Audio/*.cpp"),
         :window   => FileList.new("#{EXT_DIR}/Window/*.cpp"),
         :system   => FileList.new("#{EXT_DIR}/System/*.cpp"),
         :all      => FileList.new("#{EXT_DIR}/all.cpp"),
-        :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp")}
+        :sfml     => FileList.new("#{EXT_DIR}/sfml.cpp"),
+		:extra	  => FileList.new("#{EXT_DIR}/Extra/*.cpp")}
 
 SHARED = ["#{EXT_DIR}/InputStream.cpp"]
 
@@ -102,6 +103,7 @@ def compile_o(src)
     defines << "RBSFML_GRAPHICS"
     defines << "RBSFML_AUDIO"
     defines << "RBSFML_SFML"
+	defines << "RBSFML_EXTRA"
   else
     defines << "RBSFML_#{src.to_s.upcase}"
   end
@@ -126,6 +128,7 @@ def create_so(src)
   when :window;   "-lsfml-window#{s} -lsfml-system#{s}"
   when :system;   "-lsfml-system#{s}"
   when :sfml;     "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s}"
+  when :extra;    "-lsfml-audio#{s} -lsfml-graphics#{s} -lsfml-window#{s} -lsfml-system#{s} -lglew32 -lopengl32"
   end
   sh "#{LINK} #{objs} -o #{so} #{LINK_FLAGS} #{sfml_link}"
 end
@@ -134,14 +137,14 @@ task :default => [:all]
 
 desc "Link statically against SFML."
 task :static do
-  unless ARGV.any? {|arg| ["system", "window", "graphics", "audio", "all"].include? arg }
+  unless ARGV.any? {|arg| ["system", "window", "graphics", "audio", "all", "extra"].include? arg }
     ARGV << "sfml"
     Rake::Task["sfml"].invoke
   end
 end
 
 desc "Build all modules."
-task :all => [:system, :window, :graphics, :audio] do
+task :all => [:system, :window, :graphics, :audio, :extra] do
   compile_o(:all)
   create_so(:all)
 end
@@ -174,6 +177,13 @@ task :system do
   create_so(:system)
 end
 
+desc "Build extra module (extra.#{CONFIG['DLEXT']})."
+task :extra do
+  SRCS[:extra] += SHARED
+  compile_o(:extra)
+  create_so(:extra)
+end
+
 desc "Build all modules as a single file (sfml.#{CONFIG['DLEXT']})."
 task :sfml do
   SRCS[:sfml] += SHARED
@@ -181,6 +191,7 @@ task :sfml do
   compile_o(:window)
   compile_o(:graphics)
   compile_o(:audio)
+  compile_o(:extra)
   compile_o(:sfml)
   create_so(:sfml)
 end

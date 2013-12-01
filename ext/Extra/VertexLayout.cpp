@@ -19,24 +19,30 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <sstream>
-std::stringstream globalErrorStream;
+#define EXTRA_VERTEX_LAYOUT_CPP
 
-extern "C"
+#include "VertexLayout.hpp"
+
+void rbVertexLayout::Init( VALUE SFML )
 {
+  rbVertexLayout::Class = rb_define_class_under( SFML, "VertexLayout", rb_cObject );
+	
+  // Instance methods
+  ext_define_method( rbVertexLayout::Class, "initialize", rbVertexLayout::Initialize, 0 );
+	ext_define_method( rbVertexLayout::Class, "<<", rbVertexLayout::Append, 1 );
+}
 
-    void Init_system();
-    void Init_window();
-    void Init_graphics();
-    void Init_audio();
-	void Init_extra();
+// VertexLayout#initialize
+VALUE rbVertexLayout::Initialize( VALUE aSelf )
+{
+	rb_iv_set( aSelf, "@attributes", rb_ary_new() );
+	return Qnil;
+}
 
-    void Init_sfml()
-    {
-        Init_system();
-        Init_window();
-        Init_graphics();
-        Init_audio();
-		Init_extra();
-    }
+// VertexLayout#<<
+VALUE rbVertexLayout::Append( VALUE aSelf, VALUE anAttribute )
+{
+	VALUE attributes = rb_iv_get( aSelf, "@attributes" );
+	rb_ary_push( attributes, anAttribute );
+	return aSelf;
 }
