@@ -774,3 +774,14 @@ void Shader::bind(bool useSettings) const
         glActiveTexture(GL_TEXTURE0);
     }
 }
+
+void Shader::unbind() const
+{
+  glUseProgram( 0 );
+  sf::Texture::bind(NULL);
+  
+  glDisable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendEquation(GL_FUNC_ADD);
+}

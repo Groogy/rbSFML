@@ -187,6 +187,7 @@ public:
     void setParameter(const std::string& name, const sf::Texture& value);
 
     void bind(bool useSettings = true) const;
+    void unbind() const;
 
 private:
     GLint getUniformLocation(const std::string& name);

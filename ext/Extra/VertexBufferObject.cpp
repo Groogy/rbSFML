@@ -193,6 +193,10 @@ public:
       myEffect->bind();
       
     glDrawArrays(myPrimitive, 0, GetNumVertexes());
+    
+    Unbind();
+    if ( myEffect )
+      myEffect->unbind();
 	}
 	
 	void Bind() const
@@ -221,6 +225,12 @@ public:
 			myNeedVertexLayoutUpdate = false;
 		}
 	}
+  
+  void Unbind() const
+  {
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
+  }
 	
 	void CreateLayoutCache( VALUE aLayout )
 	{

@@ -21,6 +21,10 @@ vbo << [ 0.5, 0.5, 0.0, 1.0 ]
 puts "Hello world!"
 puts vbo.inspect
 
+shape = SFML::CircleShape.new()
+shape.radius = 50
+shape.position = [100, 100]
+
 while window.open?
 	window.each_event do |event|
     window.close() if event.type == SFML::Event::Closed
@@ -28,6 +32,7 @@ while window.open?
 	
 	window.clear(SFML::Color::Red)
 	window.draw(vbo)
+  window.draw(shape)
 	window.display()
 end
 
