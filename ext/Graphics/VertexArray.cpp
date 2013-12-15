@@ -40,6 +40,7 @@ void rbVertexArray::Init( VALUE SFML )
 	ext_define_method( rbVertexArray::Class, "vertex_count",    rbVertexArray::GetVertexCount,    0 );
 	ext_define_method( rbVertexArray::Class, "append",          rbVertexArray::Append,            1 );
 	ext_define_method( rbVertexArray::Class, "[]",              rbVertexArray::IndexOperator,     1 );
+  ext_define_method( rbVertexArray::Class, "[]=",             rbVertexArray::AssignOperator,    2 );
 	ext_define_method( rbVertexArray::Class, "clear",           rbVertexArray::Clear,             0 );
 	ext_define_method( rbVertexArray::Class, "resize",          rbVertexArray::Resize,            1 );
 	ext_define_method( rbVertexArray::Class, "primitive_type=", rbVertexArray::SetPrimitiveType,  1 );
@@ -108,6 +109,14 @@ VALUE rbVertexArray::Append( VALUE aSelf, VALUE aVertex )
 VALUE rbVertexArray::IndexOperator( VALUE aSelf, VALUE anIndex )
 {
 	return rbVertex::ToRuby( ( *rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class ) )[ NUM2UINT( anIndex ) ] );
+}
+
+// VertexArray#[index]=value
+VALUE rbVertexArray::AssignOperator( VALUE aSelf, VALUE anIndex, VALUE aValue )
+{
+  sf::VertexArray* array = rbMacros::ToSFML< sf::VertexArray >( aSelf, rbVertexArray::Class );
+  (*array)[ NUM2UINT( anIndex ) ] = rbVertex::ToSFML( aValue );
+  return Qnil;
 }
 
 // VertexArray#clear
