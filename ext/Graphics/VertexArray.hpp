@@ -56,6 +56,9 @@ namespace rbVertexArray
 
 	// VertexArray#[index]
 	static VALUE IndexOperator( VALUE aSelf, VALUE anIndex );
+  
+  // VertexArray#[index]=value
+	static VALUE AssignOperator( VALUE aSelf, VALUE anIndex, VALUE aValue );
 
 	// VertexArray#clear
 	static VALUE Clear( VALUE aSelf );
