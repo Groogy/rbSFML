@@ -71,6 +71,11 @@ static VALUE LoadOpenGL( VALUE aSelf )
 	return result ? Qtrue : Qfalse;
 }
 
+static VALUE ClearDepthStencilBuffer( VALUE aSelf )
+{
+  glClear( GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+}
+
 extern "C"
 void Init_extra()
 {
@@ -94,4 +99,5 @@ void Init_extra()
   rbEffect::Init( SFML );
 	
 	ext_define_module_function( SFML, "load_opengl", LoadOpenGL, 0 );
+  ext_define_module_function( SFML, "clear_depth_stencil_buffer", ClearDepthStencilBuffer, 0 );
 }

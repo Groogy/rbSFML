@@ -44,6 +44,9 @@ namespace rbVertexBufferObject
 	
 	// VertexBufferObject#<<(data)
   static VALUE Append( VALUE aSelf, VALUE someData );
+  
+  // VertexBufferObject#clear()
+  static VALUE Clear( VALUE aSelf );
     
   // VertexBufferObject#primitive=(primitive)
   static VALUE SetPrimitive( VALUE aSelf, VALUE aPrimitive );

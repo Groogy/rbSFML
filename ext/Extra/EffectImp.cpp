@@ -100,6 +100,30 @@ namespace
             throw ShaderException("Failed to compile boolean value('" + valueStr + "') for setting '" + symbol + "'");
         }
     }
+    
+    void compileSettingParameter(int& value, const std::string& source, const std::string& symbol)
+    {
+        std::string valueStr = getValueForSettingsParameter(source, symbol);
+        try
+        {
+          value = std::strtol( valueStr.c_str(), nullptr, 0 );
+        } catch( std::invalid_argument& error )
+        {
+          throw ShaderException( "Failed to compile int value('" + valueStr + "') for setting '" + symbol + "'" );
+        }
+    }
+    
+    void compileSettingParameter(unsigned int& value, const std::string& source, const std::string& symbol)
+    {
+        std::string valueStr = getValueForSettingsParameter(source, symbol);
+        try
+        {
+          value = std::strtoul( valueStr.c_str(), nullptr, 0 );
+        } catch( std::invalid_argument& error )
+        {
+          throw ShaderException("Failed to compile unsigned int value('" + valueStr + "') for setting '" + symbol + "'");
+        }
+    }
 
     void compileSettingsParameter(ShaderDepthSettings::Function& value, const std::string& source, const std::string& symbol)
     {
@@ -138,7 +162,89 @@ namespace
         }
         else if(valueStr != "")
         {
-            throw ShaderException("Failed to compile boolean value('" + valueStr + "') for setting '" + symbol + "'");
+            throw ShaderException("Failed to compile symbol value('" + valueStr + "') for setting '" + symbol + "'");
+        }
+    }
+    
+    void compileSettingsParameter(ShaderStencilSettings::Function& value, const std::string& source, const std::string& symbol)
+    {
+        std::string valueStr = getValueForSettingsParameter(source, symbol);
+        if(valueStr == "Always")
+        {
+            value = ShaderStencilSettings::Function::Always;
+        }
+        else if(valueStr == "Never")
+        {
+            value = ShaderStencilSettings::Function::Never;
+        }
+        else if(valueStr == "Less")
+        {
+            value = ShaderStencilSettings::Function::Less;
+        }
+        else if(valueStr == "Greater")
+        {
+            value = ShaderStencilSettings::Function::Greater;
+        }
+        else if(valueStr == "LessEqual")
+        {
+            value = ShaderStencilSettings::Function::LessEqual;
+        }
+        else if(valueStr == "GreaterEqual")
+        {
+            value = ShaderStencilSettings::Function::GreaterEqual;
+        }
+        else if(valueStr == "Equal")
+        {
+            value = ShaderStencilSettings::Function::Equal;
+        }
+        else if(valueStr == "NotEqual")
+        {
+            value = ShaderStencilSettings::Function::NotEqual;
+        }
+        else if(valueStr != "")
+        {
+            throw ShaderException("Failed to compile symbol value('" + valueStr + "') for setting '" + symbol + "'");
+        }
+    }
+    
+    void compileSettingsParameter(ShaderStencilSettings::Operation& value, const std::string& source, const std::string& symbol)
+    {
+        std::string valueStr = getValueForSettingsParameter(source, symbol);
+        if(valueStr == "Keep")
+        {
+            value = ShaderStencilSettings::Operation::Keep;
+        }
+        else if(valueStr == "Zero")
+        {
+            value = ShaderStencilSettings::Operation::Zero;
+        }
+        else if(valueStr == "Replace")
+        {
+            value = ShaderStencilSettings::Operation::Replace;
+        }
+        else if(valueStr == "Increase")
+        {
+            value = ShaderStencilSettings::Operation::Increase;
+        }
+        else if(valueStr == "IncreaseWrap")
+        {
+            value = ShaderStencilSettings::Operation::IncreaseWrap;
+        }
+        else if(valueStr == "Decrease")
+        {
+            value = ShaderStencilSettings::Operation::Decrease;
+        }
+        else if(valueStr == "DecreaseWrap")
+        {
+            value = ShaderStencilSettings::Operation::DecreaseWrap;
+        }
+        else if(valueStr == "Invert")
+        {
+            value = ShaderStencilSettings::Operation::Invert;
+        }
+        else if(valueStr != "")
+        {
+            throw ShaderException("Failed to compile symbol value('" + valueStr + "') for setting '" + symbol + "'");
         }
     }
 
@@ -203,7 +309,7 @@ namespace
         }
         else if(valueStr != "")
         {
-            throw ShaderException("Failed to compile boolean value('" + valueStr + "') for setting '" + symbol + "'");
+            throw ShaderException("Failed to compile symbol value('" + valueStr + "') for setting '" + symbol + "'");
         }
     }
 
@@ -232,7 +338,7 @@ namespace
         }
         else if(valueStr != "")
         {
-            throw ShaderException("Failed to compile boolean value('" + valueStr + "') for setting '" + symbol + "'");
+            throw ShaderException("Failed to compile symbol value('" + valueStr + "') for setting '" + symbol + "'");
         }
     }
 }
@@ -259,6 +365,7 @@ ShaderParser::ShaderParser()
 , myPreParseCommands()
 , myShaderSources()
 , myDepthSettings()
+, myStencilSettings()
 , myBlendSettings()
 {
     PreParseCommand command;
@@ -292,6 +399,14 @@ ShaderParser::ShaderParser()
 
     myDepthSettings.enabled = false;
     myDepthSettings.function = ShaderDepthSettings::Function::Always;
+    
+    myStencilSettings.enabled = false;
+    myStencilSettings.function = ShaderStencilSettings::Function::Always;
+    myStencilSettings.reference = 0;
+    myStencilSettings.mask = 0xFF;
+    myStencilSettings.testFail = ShaderStencilSettings::Operation::Keep;
+    myStencilSettings.depthFail = ShaderStencilSettings::Operation::Keep;
+    myStencilSettings.testPass = ShaderStencilSettings::Operation::Keep;
 
     myBlendSettings.enabled = false;
     myBlendSettings.sourceFactor = ShaderBlendSettings::Factor::One;
@@ -316,11 +431,12 @@ void ShaderParser::parseFile(const std::string& path)
 void ShaderParser::parse(const std::string& source)
 {
     mySource = preProcess(source);
-    std::array<std::string, 5> shaderNames = {
+    std::array<std::string, 6> shaderNames = {
         "vertex",
         "geometry",
         "fragment",
         "depth",
+        "stencil",
         "blend"
     };
 
@@ -333,7 +449,7 @@ void ShaderParser::parse(const std::string& source)
         {
             std::string line = mySource.substr(startIndex, endIndex - startIndex);
             ShaderType type = ShaderType::None;
-            for(std::size_t typeIndex = 0; typeIndex < 5; typeIndex++)
+            for(std::size_t typeIndex = 0; typeIndex < 6; typeIndex++)
             {
                 if(line == shaderNames[typeIndex])
                 {
@@ -348,6 +464,11 @@ void ShaderParser::parse(const std::string& source)
                         type = ShaderType::Count;
                     }
                     else if(typeIndex == 4)
+                    {
+                      endIndex = parseStencilSettings(endIndex + 1);
+                      type = ShaderType::Count;
+                    }
+                    else if(typeIndex == 5)
                     {
                         endIndex = parseBlendSettings(endIndex + 1);
                         type = ShaderType::Count;
@@ -416,6 +537,11 @@ std::string ShaderParser::getShaderSource(ShaderType type) const
 const ShaderDepthSettings& ShaderParser::getDepthSettings() const
 {
     return myDepthSettings;
+}
+
+const ShaderStencilSettings& ShaderParser::getStencilSettings() const
+{
+  return myStencilSettings;
 }
 
 const ShaderBlendSettings& ShaderParser::getBlendSettings() const
@@ -524,6 +650,23 @@ std::size_t ShaderParser::parseDepthSettings(std::size_t startIndex)
     return endIndex;
 }
 
+std::size_t ShaderParser::parseStencilSettings(std::size_t startIndex)
+{
+    std::string resultingSource;
+    std::size_t endIndex = parseSourceFrom(startIndex, resultingSource);
+
+    resultingSource = stripWhitespace(resultingSource);
+    compileSettingParameter(myStencilSettings.enabled, resultingSource, "enabled");
+    compileSettingsParameter(myStencilSettings.function, resultingSource, "function");
+    compileSettingParameter(myStencilSettings.reference, resultingSource, "reference");
+    compileSettingParameter(myStencilSettings.mask, resultingSource, "mask");
+    compileSettingsParameter(myStencilSettings.testFail, resultingSource, "testFail");
+    compileSettingsParameter(myStencilSettings.depthFail, resultingSource, "depthFail");
+    compileSettingsParameter(myStencilSettings.testPass, resultingSource, "testPass");
+
+    return endIndex;
+}
+
 std::size_t ShaderParser::parseBlendSettings(std::size_t startIndex)
 {
     std::string resultingSource;
@@ -596,6 +739,7 @@ Shader::Shader()
 , myUniforms()
 , myTextures()
 , myDepthSettings()
+, myStencilSettings()
 , myBlendSettings()
 {
 }
@@ -664,6 +808,7 @@ void Shader::loadFromParser(const ShaderParser& parser)
     	glDetachShader(myShaderProgram, myObjects[index]->getGLIdentifier());
 
     myDepthSettings = parser.getDepthSettings();
+    myStencilSettings = parser.getStencilSettings();
     myBlendSettings = parser.getBlendSettings();
 }
 
@@ -750,6 +895,18 @@ void Shader::bind(bool useSettings) const
         {
             glDisable(GL_DEPTH_TEST);
         }
+        
+        if(myStencilSettings.enabled)
+        {
+          glEnable(GL_STENCIL_TEST);
+          glStencilFunc(myStencilSettings.function, myStencilSettings.reference, myStencilSettings.andMask);
+          glStencilOp(myStencilSettings.testFail, myStencilSettings.depthFail, myStencilSettings.testPass);
+          glStencilMask(myStencilSettings.mask);
+        }
+        else
+        {
+          glDisable(GL_STENCIL_TEST);
+        }
 
         if(myBlendSettings.enabled)
         {
@@ -781,6 +938,7 @@ void Shader::unbind() const
   sf::Texture::bind(NULL);
   
   glDisable(GL_DEPTH_TEST);
+  glDisable(GL_STENCIL_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation(GL_FUNC_ADD);

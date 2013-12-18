@@ -154,6 +154,12 @@ public:
 		}
 		myNeedUpdate = true;
 	}
+  
+  void Clear()
+  {
+    myVertexData.clear();
+    myNeedUpdate = true;
+  }
 	
 	std::size_t GetNumVertexes() const
 	{
@@ -303,6 +309,7 @@ void rbVertexBufferObject::Init( VALUE SFML )
   ext_define_method( rbVertexBufferObject::Class, "effect", rbVertexBufferObject::GetEffect, 0 );
   ext_define_method( rbVertexBufferObject::Class, "num_vertices", rbVertexBufferObject::GetNumVertices, 0 );
   ext_define_method( rbVertexBufferObject::Class, "vertex_size", rbVertexBufferObject::GetVertexSize, 0 );
+  ext_define_method( rbVertexBufferObject::Class, "clear", rbVertexBufferObject::Clear, 0 );
 	ext_define_method( rbVertexBufferObject::Class, "<<", rbVertexBufferObject::Append, 1 );
 }
 
@@ -345,6 +352,12 @@ VALUE rbVertexBufferObject::Append( VALUE aSelf, VALUE someData )
 	
 	rbMacros::ToSFML< VertexBufferObject >( aSelf, rbVertexBufferObject::Class )->AddVertexData( result );
 	return aSelf;
+}
+
+// VertexBufferObject#clear()
+VALUE rbVertexBufferObject::Clear( VALUE aSelf )
+{
+  rbMacros::ToSFML< VertexBufferObject >( aSelf, rbVertexBufferObject::Class )->Clear();
 }
 
 // VertexBufferObject#primitive=(primitive)

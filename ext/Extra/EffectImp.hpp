@@ -66,6 +66,43 @@ struct ShaderDepthSettings
     Function function;
 };
 
+struct ShaderStencilSettings
+{
+  enum Function
+  {
+    Always          = GL_ALWAYS,
+    Never           = GL_NEVER,
+    Less            = GL_LESS,
+    Greater         = GL_GREATER,
+    LessEqual       = GL_LEQUAL,
+    GreaterEqual    = GL_GEQUAL,
+    Equal           = GL_EQUAL,
+    NotEqual        = GL_NOTEQUAL    
+  };
+  
+  enum Operation
+  {
+    Keep            = GL_KEEP,
+    Zero            = GL_ZERO,
+    Replace         = GL_REPLACE,
+    Increase        = GL_INCR,
+    IncreaseWrap    = GL_INCR_WRAP,
+    Decrease        = GL_DECR,
+    DecreaseWrap    = GL_DECR_WRAP,
+    Invert          = GL_INVERT
+  };
+  
+  bool enabled;
+  Function function;
+  int reference;
+  unsigned int andMask;
+  unsigned int mask;
+  Operation testFail;
+  Operation depthFail;
+  Operation testPass;
+  
+};
+
 struct ShaderBlendSettings
 {
     enum Factor
@@ -127,6 +164,7 @@ public:
     std::string getShaderSource(ShaderType type) const;
 
     const ShaderDepthSettings& getDepthSettings() const;
+    const ShaderStencilSettings& getStencilSettings() const;
     const ShaderBlendSettings& getBlendSettings() const;
 
     const std::string& getFilePath() const;
@@ -137,6 +175,7 @@ private:
     std::size_t parseSourceFrom(std::size_t startIndex, std::string& resultingSource);
     std::size_t appendSourceTo(ShaderType type, std::size_t startIndex);
     std::size_t parseDepthSettings(std::size_t startIndex);
+    std::size_t parseStencilSettings(std::size_t startIndex);
     std::size_t parseBlendSettings(std::size_t startIndex);
 
     std::string myFilePath;
@@ -146,6 +185,7 @@ private:
     std::vector<PreParseCommand> myPreParseCommands;
     std::array<std::string, static_cast<std::size_t>(ShaderType::Count)> myShaderSources;
     ShaderDepthSettings myDepthSettings;
+    ShaderStencilSettings myStencilSettings;
     ShaderBlendSettings myBlendSettings;
 };
 
@@ -197,6 +237,7 @@ private:
     std::map<std::string, GLint> myUniforms;
     std::map<GLint, const sf::Texture*> myTextures;
     ShaderDepthSettings myDepthSettings;
+    ShaderStencilSettings myStencilSettings;
     ShaderBlendSettings myBlendSettings;
 
 };
