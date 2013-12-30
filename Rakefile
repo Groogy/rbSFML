@@ -1,5 +1,6 @@
 require 'rake'
 require 'rake/clean'
+require 'rake/testtask'
 require 'rbconfig'
 require 'digest/md5'
 require 'fileutils'
@@ -237,14 +238,9 @@ task :uninstall do
   end
 end
 
-desc "Run tests."
-task :test do
-  ARGV.replace []
-  if $verbose
-    ARGV << "-v"
-  end
-  
-  load "test/test.rb"
+Rake::TestTask.new do |t|
+  t.pattern = 'test/**/*.rb'
+  t.verbose = true
 end
 
 desc "Run samples."
