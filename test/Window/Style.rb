@@ -1,8 +1,9 @@
+require 'minitest/autorun'
+require 'sfml/window'
+include SFML
 
-class TestStyle < Test::Unit::TestCase
-  include SFML
-  
-  def test_constants
+describe Style do
+  it "has presets" do
     assert(defined? Style)
     assert(defined? Style::None)
     assert(defined? Style::Titlebar)
@@ -11,5 +12,4 @@ class TestStyle < Test::Unit::TestCase
     assert(defined? Style::Fullscreen)
     assert(defined? Style::Default)
   end
-  
 end
