@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'sfml/audio'
+require 'sfml/system'
 include SFML
 
 describe Clock do
