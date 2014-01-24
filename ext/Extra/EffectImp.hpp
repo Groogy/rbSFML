@@ -224,6 +224,7 @@ public:
     void setParameter(const std::string& name, float value1, float value2, float value3, float value4);
     void setParameter(const std::string& name, const sf::Vector2f& value);
     void setParameter(const std::string& name, const sf::Vector3f& value);
+	void setParameter(const std::string& name, const sf::Transform& value);
     void setParameter(const std::string& name, const sf::Texture& value);
 
     void bind(bool useSettings = true) const;

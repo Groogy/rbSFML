@@ -860,6 +860,14 @@ void Shader::setParameter(const std::string& name, const sf::Vector3f& value)
     glUniform3f(uniformLocation, value.x, value.y, value.z);
 }
 
+void Shader::setParameter(const std::string& name, const sf::Transform& value)
+{
+	bind(false);
+	
+	GLint uniformLocation = getUniformLocation(name);
+	glUniformMatrix4fvARB(uniformLocation, 1, GL_FALSE, value.getMatrix());
+}
+
 void Shader::setParameter(const std::string& name, const sf::Texture& value)
 {
     bind(false);

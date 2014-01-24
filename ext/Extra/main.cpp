@@ -34,18 +34,20 @@ namespace rbVector3 { VALUE Class; }
 namespace rbNonCopyable { VALUE Module; }
 namespace rbDrawable { VALUE Module; }
 namespace rbTransformable { VALUE Module; }
+namespace rbTransform { VALUE Class; }
 namespace rbTexture { VALUE Class; }
 #endif
 
 static inline void InitDependencies( VALUE SFML )
 {
 #if !defined( RBSFML_SFML )
-  rbVector2::Class = rb_const_get( SFML, rb_intern( "Vector2" ) );
+	rbVector2::Class = rb_const_get( SFML, rb_intern( "Vector2" ) );
 	rbVector3::Class = rb_const_get( SFML, rb_intern( "Vector3" ) );
 	rbNonCopyable::Module = rb_const_get( SFML, rb_intern( "NonCopyable" ) );
 	rbDrawable::Module = rb_const_get( SFML, rb_intern( "Drawable" ) );
 	rbTransformable::Module = rb_const_get( SFML, rb_intern( "Transformable" ) );
-  rbTexture::Class = rb_const_get( SFML, rb_intern( "Texture" ) );
+	rbTransform::Class = rb_const_get( SFML, rb_intern( "Transform" ) );
+	rbTexture::Class = rb_const_get( SFML, rb_intern( "Texture" ) );
 #endif
 }
 

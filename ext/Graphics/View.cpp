@@ -259,9 +259,7 @@ VALUE rbView::Zoom( VALUE aSelf, VALUE aFactor )
 VALUE rbView::GetTransform( VALUE aSelf )
 {
 	const sf::Transform& transform = rbMacros::ToSFML< sf::View >( aSelf, rbView::Class )->getTransform();
-	VALUE obj = rbMacros::ToRuby( const_cast< sf::Transform* >( &transform ), rbTransform::Class );
-	rb_iv_set( obj, "@__ref__owner", aSelf );
-	rb_obj_freeze( obj );
+	VALUE obj = rbMacros::ToConstRuby( &transform , rbTransform::Class );
 	return obj;
 }
 

@@ -30,6 +30,7 @@
 #include "../System/Vector2.hpp"
 #include "../System/Vector3.hpp"
 #include "../Graphics/Texture.hpp"
+#include "../Graphics/Transform.hpp"
 
 void rbEffect::Init( VALUE SFML )
 {
@@ -43,6 +44,8 @@ void rbEffect::Init( VALUE SFML )
   ext_define_method( rbEffect::Class, "initialize", rbEffect::Initialize, 0 );
   ext_define_method( rbEffect::Class, "load_from_file", rbEffect::LoadFromFile, 1 );
   ext_define_method( rbEffect::Class, "set_parameter", rbEffect::SetParameter, -1 );
+  ext_define_method( rbEffect::Class, "bind", rbEffect::Bind, 0 );
+  ext_define_method( rbEffect::Class, "unbind", rbEffect::Unbind, 0 );
   
   rb_define_alias( rbEffect::Class, "[]=", "set_parameter" );
 }
@@ -107,13 +110,17 @@ VALUE rbEffect::SetParameter( int argc, VALUE* args, VALUE aSelf )
 		{
 			rbMacros::ToSFML< Shader >( aSelf, rbEffect::Class )->setParameter( name, rbVector3::ToSFMLf( args[ 1 ] ) );
 		}
+		else if( rb_obj_is_kind_of( args[ 1 ], rbTransform::Class ) == Qtrue )
+		{
+			rbMacros::ToSFML< Shader >( aSelf, rbEffect::Class )->setParameter( name, *rbMacros::ToSFML< sf::Transform >( args[ 1 ], rbTransform::Class ) );
+		}
 		else if( rb_obj_is_kind_of( args[ 1 ], rbTexture::Class ) == Qtrue )
 		{
 			rbMacros::ToSFML< Shader >( aSelf, rbEffect::Class )->setParameter( name, *rbMacros::ToSFML< sf::Texture >( args[ 1 ], rbTexture::Class ) );
 		}
 		else
 		{
-			INVALID_EXPECTED_TYPES4( rb_cNumeric, rbVector2::Class, rbVector3::Class, rbTexture::Class );
+			INVALID_EXPECTED_TYPES5( rb_cNumeric, rbVector2::Class, rbVector3::Class, rbTransform::Class, rbTexture::Class );
 		}
 		break;
 	case 3:
@@ -129,4 +136,18 @@ VALUE rbEffect::SetParameter( int argc, VALUE* args, VALUE aSelf )
 		INVALID_ARGUMENT_LIST( argc, "2..5" );
 	}
 	return Qnil;
+}
+
+// Shader#blind()
+VALUE rbEffect::Bind( VALUE aSelf )
+{
+  rbMacros::ToSFML< Shader >( aSelf, rbEffect::Class )->bind();
+  return Qnil;
+}
+
+// Shader#unbind()
+VALUE rbEffect::Unbind( VALUE aSelf )
+{
+  rbMacros::ToSFML< Shader >( aSelf, rbEffect::Class )->unbind();
+  return Qnil;
 }

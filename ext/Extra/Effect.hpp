@@ -71,6 +71,12 @@ namespace rbEffect
 	// Shader#[]=(name, texture)
 	// Shader#[]=(name, current_texture)
 	static VALUE SetParameter( int argc, VALUE* args, VALUE aSelf );
+  
+  // Shader#bind()
+  static VALUE Bind( VALUE aSelf );
+  
+  // Shader#unbind()
+  static VALUE Unbind( VALUE aSelf );
 #endif
 
 }
