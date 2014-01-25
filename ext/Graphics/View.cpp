@@ -297,7 +297,7 @@ VALUE rbView::Equal( VALUE aSelf, VALUE anOther )
 // View#to_s
 VALUE rbView::Inspect( VALUE aSelf )
 {
-	VALUE viewportString = rb_funcall( rbView::GetViewport( aSelf ), rb_intern( "insepct" ), 0 );
+	VALUE viewportString = rb_funcall( rbView::GetViewport( aSelf ), rb_intern( "inspect" ), 0 );
 	return rb_sprintf( "%s(%s)",
 					   rb_obj_classname( aSelf ),
 					   StringValueCStr( viewportString ) );
