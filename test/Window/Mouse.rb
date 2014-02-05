@@ -1,12 +1,13 @@
+require 'minitest/autorun'
+require 'sfml/window'
+include SFML
 
-class TestMouse < Test::Unit::TestCase
-  include SFML
-  
-  def test_constants
+describe Mouse do
+  it "has button constants" do
     constants = [:Left, :Right, :Middle, :XButton1, :XButton2]
+
     constants.each.with_index do |constant, index|
-      assert_equal(index, SFML::Mouse.const_get(constant))
+      Mouse.const_get(constant).must_equal index
     end
   end
-  
 end

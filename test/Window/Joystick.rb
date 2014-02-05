@@ -1,7 +1,7 @@
+require 'minitest/autorun'
+require 'sfml/window'
+include SFML
 
-class TestJoystick < Test::Unit::TestCase
-  include SFML
-  
+describe Joystick do
   # TODO
-  
 end

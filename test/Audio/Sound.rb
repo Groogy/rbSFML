@@ -1,45 +1,56 @@
+require 'minitest/autorun'
+require 'sfml/audio'
+include SFML
 
-class TestSound < Test::Unit::TestCase
-  include SFML
-  
-  def test_equal
-    sound1 = Sound.new
-    sound2 = Sound.new
-    refute(sound1 == sound2)
-    refute(sound1.eql? sound2)
+describe Sound do
+  before do
+    @sound = Sound.new
   end
-  
-  def test
+
+  it "will create distinct instances" do
     sound = Sound.new
-    sound_buffer = SoundBuffer.new
-    sound_buffer.load("test/canary.wav")
-    assert_equal(nil, sound.buffer)
-    sound.buffer = sound_buffer
-    assert_equal(sound_buffer.object_id, sound.buffer.object_id)
-    dumped = Marshal.dump(sound_buffer)
-    sound_buffer = nil
-    GC.start
-    assert_equal(Marshal.load(dumped), sound.buffer)
+    @sound.wont_equal sound
   end
-  
-  def test_inspect
-    sound = Sound.new
-    assert_match(/SFML::Sound\([0-9a-fx]+\)/, sound.inspect)
-    assert_match(/ SFML::Sound\([0-9a-fx]+\) /, " #{sound} ")
+
+  describe "when loading sound buffers" do
+    before do
+      @sound_buffer = SoundBuffer.new
+      @sound_buffer.load('test/canary.wav')
+    end
+
+    it "will be initially empty" do
+      @sound.buffer.must_be_nil
+    end
+
+    it "will copy the reference of a loaded buffer" do
+      @sound.buffer = @sound_buffer
+      @sound_buffer.object_id.must_equal @sound.buffer.object_id
+    end
+
+    it "will keep its buffer contents if the referenced buffer is destroyed" do
+      @sound.buffer = @sound_buffer
+      dumped = Marshal.dump(@sound_buffer)
+      @sound_buffer = nil
+      GC.start
+      @sound.buffer.must_equal Marshal.load(dumped)
+    end
   end
-  
-  def test_exceptions
-    assert_raise(TypeError) { Marshal.dump(Sound.new) }
+
+  it "can't be marshalled" do
+    proc { Marshal.dump(@sound) }.must_raise TypeError
   end
-  
-  class MySound < Sound
+
+  it "will respond usefully when inspected" do
+    @sound.inspect.must_match /^SFML::Sound\([0-9a-fx]+\)$/
   end
-  
-  def test_subclass
-    my_sound = MySound.new
-    sound = Sound.new
-    
-    assert_equal(my_sound.class, my_sound.dup.class)
+
+  describe "when subclassed" do
+    it "will duplicate correctly" do
+      class MySound < Sound
+      end
+
+      my_sound = MySound.new
+      my_sound.class.must_equal my_sound.dup.class
+    end
   end
-  
 end

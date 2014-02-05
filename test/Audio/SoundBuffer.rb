@@ -1,86 +1,79 @@
+require 'minitest/autorun'
+require 'sfml/audio'
+include SFML
 
-class TestSoundBuffer < Test::Unit::TestCase
-  include SFML
-  
-  def test_equal
-    sound_buffer1 = SoundBuffer.new
-    sound_buffer2 = SoundBuffer.new
-    assert(sound_buffer1 == sound_buffer2)
-    refute(sound_buffer1.eql? sound_buffer2)
+describe SoundBuffer do
+  before do
+    @sound_buffer = SoundBuffer.new
   end
-  
-  def test_load
-    sound_buffer1 = SoundBuffer.new
-    sound_buffer2 = SoundBuffer.new
-    sound_buffer3 = SoundBuffer.new
-    sound_buffer4 = SoundBuffer.new
-    assert_equal(sound_buffer1, sound_buffer1)
-    assert_equal(sound_buffer1, sound_buffer2)
-    assert_equal(sound_buffer1, sound_buffer3)
-    assert_equal(sound_buffer1, sound_buffer4)
-    
-    sound_buffer1.load("test/canary.wav")
-    assert_equal(sound_buffer1, sound_buffer1)
-    refute_equal(sound_buffer1, sound_buffer2)
-    refute_equal(sound_buffer1, sound_buffer3)
-    refute_equal(sound_buffer1, sound_buffer4)
-      
-    file = File.open("test/canary.wav", "rb")
-    sound_buffer2.load_stream(file)
-    file.close
-    assert_equal(sound_buffer1, sound_buffer1)
-    assert_equal(sound_buffer1, sound_buffer2)
-    refute_equal(sound_buffer1, sound_buffer3)
-    refute_equal(sound_buffer1, sound_buffer4)
-    
-    samples = sound_buffer1.samples
-    channels_count = sound_buffer1.channels_count
-    sample_rate = sound_buffer1.sample_rate
-    sound_buffer3.load_samples(samples, channels_count, sample_rate)
-    assert_equal(sound_buffer1, sound_buffer1)
-    assert_equal(sound_buffer1, sound_buffer2)
-    assert_equal(sound_buffer1, sound_buffer3)
-    refute_equal(sound_buffer1, sound_buffer4)
-    
-    file = File.open("test/canary.wav", "rb")
-    sound_buffer4.load_memory(file.read)
-    file.close
-    assert_equal(sound_buffer1, sound_buffer1)
-    assert_equal(sound_buffer1, sound_buffer2)
-    assert_equal(sound_buffer1, sound_buffer3)
-    assert_equal(sound_buffer1, sound_buffer4)
-    
-    assert_equal(sound_buffer1, Marshal.load(Marshal.dump(sound_buffer1)))
-  end
-  
-  def test_save
-    sound_buffer1 = SoundBuffer.new
-    sound_buffer2 = SoundBuffer.new
-    sound_buffer1.load("test/canary.wav")
-    sound_buffer1.save("test/temp.wav")
-    sound_buffer2.load("test/temp.wav")
-    assert_equal(sound_buffer1, sound_buffer2)
-    File.delete("test/temp.wav")
-  end
-  
-  def test_inspect
+
+  it "will have new instances that are distinct but equal" do
     sound_buffer = SoundBuffer.new
-    sound_buffer.load("test/canary.wav")
-    assert_match(/SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\)/, sound_buffer.inspect)
-    assert_match(/ SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\) /, " #{sound_buffer} ")
+    @sound_buffer.wont_be_same_as sound_buffer
+    @sound_buffer.must_equal sound_buffer
   end
-  
-  class MySoundBuffer < SoundBuffer
+
+  describe "when loading audio" do
+    before do
+      @sound_buffer.load('test/canary.wav')
+      @other_buffer = SoundBuffer.new
+    end
+
+    it "will not be equal to a new instance" do
+      @sound_buffer.wont_equal @other_buffer
+    end
+
+    it "will load identically by file name and file stream" do
+      file = File.open('test/canary.wav', 'rb')
+      @other_buffer.load_stream file
+      file.close
+      @sound_buffer.must_equal @other_buffer
+    end
+
+    it "will load identically by file name and samples" do
+      @other_buffer.load_samples(@sound_buffer.samples, @sound_buffer.channel_count, @sound_buffer.sample_rate)
+      @sound_buffer.must_equal @other_buffer
+    end
+
+    it "will load identically by file name and raw bytes" do
+      file = File.open("test/canary.wav", "rb")
+      @other_buffer.load_memory(file.read)
+      file.close
+      @sound_buffer.must_equal @other_buffer
+    end
+
+    it "will be marshallable" do
+      @sound_buffer.must_equal Marshal.load(Marshal.dump(@sound_buffer))
+    end
+
+    it "will be identical after saving and loading" do
+      @sound_buffer.save('test/temp.wav')
+      @other_buffer.load('test/temp.wav')
+      @sound_buffer.must_equal @other_buffer
+      File.delete('test/temp.wav')
+    end
+
+    it "will have useful string representations" do
+     @sound_buffer.inspect.must_match /^SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\)$/
+     @sound_buffer.to_s.must_match /^SFML::SoundBuffer\([0-9a-fx]+: [0-9]+ms\)$/
+    end
   end
-  
-  def test_subclass
-    my_sound_buffer = MySoundBuffer.new
-    sound_buffer = SoundBuffer.new
-    
-    assert_equal(my_sound_buffer, sound_buffer)
-    assert_equal(sound_buffer, my_sound_buffer)
-    
-    assert_equal(my_sound_buffer.class, my_sound_buffer.dup.class)
+
+  describe "when subclassed" do
+    before do
+      class MySoundBuffer < SoundBuffer
+      end
+
+      @other_buffer = MySoundBuffer.new
+    end
+
+    it "will be comparable to regular instances" do
+      @other_buffer = MySoundBuffer.new
+      @sound_buffer.must_equal @other_buffer
+    end
+
+    it "will duplicate correctly" do
+      @other_buffer.class.must_be_same_as @other_buffer.dup.class
+    end
   end
-  
 end

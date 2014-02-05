@@ -1,27 +1,34 @@
+require 'minitest/autorun'
+require 'sfml/audio'
+include SFML
 
-class TestSoundStream < Test::Unit::TestCase
-  include SFML
-  
-  class MySoundStream1 < SoundStream
+describe SoundStream do
+  it "cannot be manually instantiated" do
+    proc { SoundStream.new }.must_raise RuntimeError
   end
-  
-  class MySoundStream2 < SoundStream
-    def self.allocate
-      raise TypeError
+
+  describe "when subclassed" do
+    before do
+      class MySoundStream < SoundStream
+      end
+    end
+
+    it "cannot be manually instantiated" do
+      proc { MySoundStream.new }.must_raise RuntimeError
+    end
+
+    it "cannot be manually instantiated if allocate is redefined" do
+      def MySoundStream.allocate
+        raise TypeError
+      end
+      proc { MySoundStream.new }.must_raise RuntimeError
+    end
+
+    it "cannot be manually instantiated if allocate is undefined in the singleton class" do
+      class << MySoundStream
+        undef allocate
+      end
+      proc { MySoundStream.new }.must_raise RuntimeError
     end
   end
-  
-  class MySoundStream3 < SoundStream
-    class << self
-      undef allocate
-    end
-  end
-  
-  def test_exceptions
-    assert_raise(RuntimeError) { SoundStream.new }
-    assert_raise(RuntimeError) { MySoundStream1.new }
-    assert_raise(RuntimeError) { MySoundStream2.new }
-    assert_raise(RuntimeError) { MySoundStream3.new }
-  end
-  
 end

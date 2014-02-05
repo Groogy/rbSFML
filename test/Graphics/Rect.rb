@@ -1,94 +1,96 @@
+require 'minitest/autorun'
+require 'sfml/graphics'
+include SFML
 
-class TestRect < Test::Unit::TestCase
-  include SFML
-  
-  def test_initialization1
+describe Rect do
+  it "will create a size 0 rect by default" do
     rect = Rect.new
-    assert_equal(0, rect.left)
-    assert_equal(0, rect.top)
-    assert_equal(0, rect.width)
-    assert_equal(0, rect.height)
-    assert_instance_of(Fixnum, rect.left)
-    assert_instance_of(Fixnum, rect.top)
-    assert_instance_of(Fixnum, rect.width)
-    assert_instance_of(Fixnum, rect.height)
+    rect.left.must_equal   0
+    rect.top.must_equal    0
+    rect.width.must_equal  0
+    rect.height.must_equal 0
+    rect.left.must_be_instance_of   Fixnum
+    rect.top.must_be_instance_of    Fixnum
+    rect.width.must_be_instance_of  Fixnum
+    rect.height.must_be_instance_of Fixnum
   end
-  
-  def test_initialization2
+
+  it "can set left/top/width/height using Fixnums" do
     rect = Rect.new(10, 15, 50, 40)
-    assert_equal(10, rect.left)
-    assert_equal(15, rect.top)
-    assert_equal(50, rect.width)
-    assert_equal(40, rect.height)
-    assert_instance_of(Fixnum, rect.left)
-    assert_instance_of(Fixnum, rect.top)
-    assert_instance_of(Fixnum, rect.width)
-    assert_instance_of(Fixnum, rect.height)
-    assert(rect != Rect.new(10.0, 15.0, 50.0, 40.0))
+    rect.left.must_equal   10
+    rect.top.must_equal    15
+    rect.width.must_equal  50
+    rect.height.must_equal 40
+    rect.left.must_be_instance_of   Fixnum
+    rect.top.must_be_instance_of    Fixnum
+    rect.width.must_be_instance_of  Fixnum
+    rect.height.must_be_instance_of Fixnum
+    rect.wont_equal Rect.new(10.0, 15.0, 50.0, 40.0)
   end
-  
-  def test_initialization3
-    rect = Rect.new(10, 15, 50, 40.5)
-    assert_equal(10.0, rect.left)
-    assert_equal(15.0, rect.top)
-    assert_equal(50.0, rect.width)
-    assert_equal(40.5, rect.height)
-    assert_instance_of(Float, rect.left)
-    assert_instance_of(Float, rect.top)
-    assert_instance_of(Float, rect.width)
-    assert_instance_of(Float, rect.height)
+
+  it "can set left/top/width/height using Floats" do
+    rect = Rect.new(10, 15, 50, 40.0)
+    rect.left.must_equal   10.0
+    rect.top.must_equal    15.0
+    rect.width.must_equal  50.0
+    rect.height.must_equal 40.0
+    rect.left.must_be_instance_of   Float
+    rect.top.must_be_instance_of    Float
+    rect.width.must_be_instance_of  Float
+    rect.height.must_be_instance_of Float
+    rect.wont_equal Rect.new(10, 15, 50, 40)
   end
-  
-  def test_initialization4
+
+  it "can be initialized using Vectors" do
     pos = Vector2.new(10, 15)
     size = Vector2.new(20.3, 10.5)
     rect = Rect.new(pos, size)
-    assert_equal(10.0, rect.left)
-    assert_equal(15.0, rect.top)
-    assert_equal(20.3, rect.width)
-    assert_equal(10.5, rect.height)
-    assert_instance_of(Float, rect.left)
-    assert_instance_of(Float, rect.top)
-    assert_instance_of(Float, rect.width)
-    assert_instance_of(Float, rect.height)
-    assert_equal(rect, Rect.new([pos, size]))
+    rect.left.must_equal   10.0
+    rect.top.must_equal    15.0
+    rect.width.must_equal  20.3
+    rect.height.must_equal 10.5
+    rect.left.must_be_instance_of   Float
+    rect.top.must_be_instance_of    Float
+    rect.width.must_be_instance_of  Float
+    rect.height.must_be_instance_of Float
+    rect.must_equal Rect.new([pos, size])
   end
-  
-  def test_contains
+
+  it "can test for containment of points" do
     rect = Rect.new(5, 5, 10, 10)
-    assert(rect.contains?(7.5, 6))
-    assert(rect.contains?(5, 5))
-    assert(rect.contains?(10, 10))
-    assert(rect.contains?(10, 10))
+    rect.must_be :contains?, 7.5, 6
+    rect.must_be :contains?, 5, 5
+    rect.must_be :contains?, 10, 10
+    rect.wont_be :contains?, 4, 5
+    rect.wont_be :contains?, 16, 8
+    proc { Rect.new.contains? nil }.must_raise TypeError
+    proc { Rect.new.contains? "", "" }.must_raise TypeError
   end
-  
-  def test_intersects
+
+  it "can be intersected with other Rects" do
     rect1 = Rect.new(5, 5, 10, 10)
     rect2 = Rect.new(2, 3, 13, 6)
     rect3 = Rect.new(3.5, 0, 1, 10)
-    assert_equal(rect1, rect1 & rect1)
-    assert_equal(Rect.new(5, 5, 10, 4), rect1 & rect2)
-    assert_equal(Rect.new(3.5, 3.0, 1.0, 6.0), rect2 & rect3)
-    assert_equal(nil, rect1 & rect3)
+    rect1.must_equal(rect1 & rect1)
+    Rect.new(5, 5, 10, 4).must_equal(rect1 & rect2)
+    Rect.new(3.5, 3.0, 1.0, 6.0).must_equal(rect2 & rect3)
+    (rect1 & rect3).must_be_nil
+    proc { Rect.new & nil }.must_raise TypeError
   end
-  
-  def test_inspect
+
+  it "has a useful string representation" do
     rect1 = Rect.new(10, 15, 50, 40)
     rect2 = Rect.new(10, 15, 50, 40.5)
-    assert_equal("Rect(10, 15, 50, 40)", rect1.inspect)
-    assert_equal("Rect(10.0, 15.0, 50.0, 40.5)", rect2.inspect)
-    assert_equal(" Rect(10, 15, 50, 40) ", " #{rect1} ")
-    assert_equal(" Rect(10.0, 15.0, 50.0, 40.5) ", " #{rect2} ")
+    rect1.inspect.must_equal "SFML::Rect(10, 15, 50, 40)"
+    rect2.inspect.must_equal "SFML::Rect(10.0, 15.0, 50.0, 40.5)"
+    rect1.to_s.must_equal "SFML::Rect(10, 15, 50, 40)"
+    rect2.to_s.must_equal "SFML::Rect(10.0, 15.0, 50.0, 40.5)"
   end
-  
-  def test_exceptions
-    assert_raise(TypeError)     { Rect.new("aaa") }
-    assert_raise(TypeError)     { Rect.new("aaa", "bbb") }
-    assert_raise(ArgumentError) { Rect.new(1, 2, 3) }
-    assert_raise(TypeError)     { Rect.new(0, 0, 10, "5") }
-    assert_raise(TypeError)     { Rect.new & nil }
-    assert_raise(TypeError)     { Rect.new.contains?(nil) }
-    assert_raise(TypeError)     { Rect.new.contains?("", "") }
+
+  it "is initialized with 0 or 4 numbers" do
+    proc { Rect.new('aaa') }.must_raise TypeError
+    proc { Rect.new('aaa', 'bbb') }.must_raise TypeError
+    proc { Rect.new(1, 2, 3) }.must_raise ArgumentError
+    proc { Rect.new(0, 0, 10, ?5) }.must_raise TypeError
   end
-  
 end

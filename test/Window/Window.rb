@@ -1,42 +1,58 @@
+require 'minitest/autorun'
+require 'sfml/window'
+include SFML
 
-class TestWindow < Test::Unit::TestCase
-  include SFML
-  
+describe Window do
   # TODO: How to test it better?
-  
-  def test1
-    # Initialize without opening
-    w = Window.new
-    refute(w.opened?)
-    assert_match(/SFML::Window\([0-9a-fx]+\)/, w.inspect)
-    assert_match(/ SFML::Window\([0-9a-fx]+\) /, " #{w} ")
-    # Create window
-    w.create([100, 100], "test1")
-    assert_match(/SFML::Window\([0-9a-fx]+: "test1"\)/, w.inspect)
-    assert_match(/ SFML::Window\([0-9a-fx]+: "test1"\) /, " #{w} ")
-    assert(w.opened?)
-    # Check methods (ensure there's no segfalt)
-    assert_instance_of(ContextSettings, w.settings)
-    w.vertical_sync = true
-    w.mouse_cursor = false
-    w.title = "==TEST1=="
-    w.position = [100, 100]
-    assert_match(/SFML::Window\([0-9a-fx]+: "==TEST1=="\)/, w.inspect)
-    assert_match(/ SFML::Window\([0-9a-fx]+: "==TEST1=="\) /, " #{w} ")
-    w.show(false)
-    assert(w.opened?)
-    w.close
-    refute(w.opened?)
-    # Recreate closed window
-    w.create([100, 100], "Test1")
-    assert(w.opened?)
-    w.close
-    refute(w.opened?)
+
+  before do
+    @window = Window.new
   end
-  
-  def test_exceptions
-    assert_raise(TypeError) { Window.new.dup }
-    assert_raise(TypeError) { Window.new.clone }
+
+  it "is not open by default" do
+    @window.wont_be :open?
   end
-  
+
+  it "has useful string represntations" do
+    @window.inspect.must_match /^SFML::Window\([0-9a-fx]+\)$/
+    @window.to_s.must_match /^SFML::Window\([0-9a-fx]+\)$/
+  end
+
+  it "can be created after initialization" do
+    @window.create([100, 100], "test1")
+    @window.inspect.must_match /^SFML::Window\([0-9a-fx]+: "test1"\)$/
+    @window.to_s.must_match /^SFML::Window\([0-9a-fx]+: "test1"\)$/
+    @window.must_be :open?
+
+    @window.show false
+    @window.must_be :open?
+    @window.close
+    @window.wont_be :open?
+
+    @window.create([100, 100], "Test1")
+    @window.must_be :open?
+    @window.close
+    @window.wont_be :open?
+  end
+
+  it "has writable attributes" do
+    @window.settings.must_be_kind_of ContextSettings
+    @window.vertical_sync = true
+    @window.mouse_cursor = false
+    @window.position = [100, 100]
+  end
+
+  it "can change its title after initialization" do
+    @window.title = "==TEST1=="
+    @window.inspect.must_match /^SFML::Window\([0-9a-fx]+: "==TEST1=="\)$/
+    @window.inspect.must_match /^SFML::Window\([0-9a-fx]+: "==TEST1=="\)$/
+  end
+
+  it "cannot be duped" do
+    proc { @window.dup }.must_raise TypeError
+  end
+
+  it "cannot be cloned" do
+    proc { @window.clone }.must_raise TypeError
+  end
 end
