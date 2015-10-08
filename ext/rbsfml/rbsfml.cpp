@@ -5,14 +5,20 @@
 class rbSFML
 {
 public:
-	static VALUE Blah(VALUE self)
+	static void blah()
 	{
 		std::cout << "EEEY!" << std::endl;
-		return Qnil;
+	}
+
+	static std::string say(const std::string& arg)
+	{
+		std::cout << arg << std::endl;
+		return "Leol!";
 	}
 };
 
 extern "C" void Init_rbsfml() {
 	rb::Module<rbSFML> sfml("SFML");
-	sfml.defineFunction("blah", &rbSFML::Blah);
+	sfml.defineFunction<0>("blah", &rbSFML::blah);
+	sfml.defineFunction<1>("say", &rbSFML::say);
 }
