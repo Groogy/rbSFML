@@ -52,6 +52,21 @@ namespace rb
 		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1>
 		static VALUE wrapperFunction(VALUE self, VALUE arg1);
 
+		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2>
+		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2);
+
+		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3>
+		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3);
+
+		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4);
+
+		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
+		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5);
+
+		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6>
+		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6);
+
 		static std::array<void*, MaxFunctions> ourFunctions;
 
 		VALUE myModule;
