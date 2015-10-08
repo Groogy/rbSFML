@@ -7,8 +7,8 @@ namespace rb
 	{
 	public:
 		Value();
-		Value(VALUE value);
-		Value(const std::string& value);
+		explicit Value(VALUE value);
+		explicit Value(const std::string& value);
 		~Value();
 
 		template<typename Type>
