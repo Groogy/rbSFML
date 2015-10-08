@@ -22,20 +22,29 @@ namespace rb
 		template<typename ReturnType, typename ...Args>
 		struct FunctionCaller
 		{
-			void operator()(Args... args) { returnValue = function(args...); }
+			VALUE operator()(Args... args) 
+			{ 
+				Value returnValue(function(args...));
+				return returnValue.to<VALUE>();
+			}
 
 			ReturnType(*function)(Args... args);
-			ReturnType returnValue;
 		};
 
 		template<typename ...Args>
 		struct FunctionCaller<void, Args...>
 		{
-			void operator()(Args... args) { function(args...); returnValue = Qnil; }
+			VALUE operator()(Args... args)
+			{
+				function(args...);
+				return Qnil;
+			}
 
 			void(*function)(Args... args);
-			VALUE returnValue;
 		};
+
+		template<int ID, typename FunctionSignature, typename CallerSignature>
+		static CallerSignature createCaller();
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>
 		static VALUE wrapperFunction(VALUE self);

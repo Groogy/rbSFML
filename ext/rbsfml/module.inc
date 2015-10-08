@@ -36,24 +36,28 @@ void Module<Base, MaxFunctions>::defineFunction(const std::string& name, ReturnT
 
 template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature>
-VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self)
+CallerSignature Module<Base, MaxFunctions>::createCaller()
 {
 	void* rawPointer = ourFunctions[ID];
 	FunctionSignature functionPointer = reinterpret_cast<FunctionSignature>(rawPointer);
 	CallerSignature caller = { functionPointer };
-	caller();
-	return Value(caller.returnValue).to<VALUE>();
+	return caller;
+}
+
+template<typename Base, int MaxFunctions>
+template<int ID, typename FunctionSignature, typename CallerSignature>
+VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self)
+{
+	CallerSignature caller = createCaller<ID, FunctionSignature, CallerSignature>();
+	return caller();
 }
 
 template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1)
 {
-	void* rawPointer = ourFunctions[ID];
-	FunctionSignature functionPointer = reinterpret_cast<FunctionSignature>(rawPointer);
-	CallerSignature caller = { functionPointer };
-	caller(Value(arg1).to<Arg1>());
-	return Value(caller.returnValue).to<VALUE>();
+	CallerSignature caller = createCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(arg1).to<Arg1>());
 }
 
 }
