@@ -15,6 +15,8 @@ namespace rb
 		Type to() const;
 
 	private:
+		void errorHandling(int rubyType) const;
+
 		VALUE myValue;
 		mutable std::string myCachedStr;
 	};
