@@ -34,7 +34,7 @@ public:
 	static std::string say(const std::string& arg)
 	{
 		std::cout << arg << std::endl;
-		return "Leol!";
+		return "Something something";
 	}
 };
 

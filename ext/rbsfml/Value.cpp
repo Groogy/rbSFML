@@ -80,6 +80,38 @@ Value::~Value()
 {
 }
 
+ValueType Value::getType() const
+{
+	switch(TYPE(myValue))
+	{
+		case T_NONE: 		return ValueType::None;
+		case T_OBJECT: 		return ValueType::Object;
+		case T_CLASS: 		return ValueType::Class;
+		case T_MODULE: 		return ValueType::Module;
+		case T_FLOAT: 		return ValueType::Float;
+		case T_STRING: 		return ValueType::String;
+		case T_REGEXP: 		return ValueType::Regexp;
+		case T_ARRAY: 		return ValueType::Array;
+		case T_STRUCT:		return ValueType::Struct;
+		case T_BIGNUM: 		return ValueType::Bignum;
+		case T_FILE: 		return ValueType::File;
+		case T_MATCH: 		return ValueType::Match;
+		case T_COMPLEX: 	return ValueType::Complex;
+		case T_RATIONAL: 	return ValueType::Rational;
+		case T_NIL: 		return ValueType::Nil;
+		case T_TRUE: 		return ValueType::Bool;
+		case T_FALSE: 		return ValueType::Bool;
+		case T_SYMBOL: 		return ValueType::Symbol;
+		case T_FIXNUM: 		return ValueType::Fixnum;
+		default: return ValueType::Unknown;
+	}
+}
+
+bool Value::isNil() const
+{
+	return myValue == Qnil;
+}
+
 void Value::errorHandling(int rubyType) const
 {
 	if(TYPE(myValue) != rubyType)
@@ -90,6 +122,12 @@ template<>
 VALUE Value::to() const
 {
 	return myValue;
+}
+
+template<>
+const Value& Value::to() const
+{
+	return *this;
 }
 
 template<>
@@ -104,6 +142,20 @@ const std::string& Value::to() const
 	errorHandling(T_STRING);
 	myCachedStr.assign(RSTRING_PTR(myValue), RSTRING_LEN(myValue));
 	return myCachedStr;
+}
+
+template<>
+int Value::to() const
+{
+	errorHandling(T_FIXNUM);
+	return FIX2INT(myValue);
+}
+
+template<>
+float Value::to() const
+{
+	errorHandling(T_FLOAT);
+	return NUM2DBL(myValue);
 }
 
 }

@@ -19,11 +19,24 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#ifndef RBSFML_VALUE_HEADER_
+#define RBSFML_VALUE_HEADER_
+
 #include <ruby.h>
 #include <string>
 
 namespace rb
 {
+	enum class ValueType
+	{
+		None, Object, Class, Module,
+		Float, String, Regexp, Array, 
+		Hash, Struct, Bignum, File, 
+		Data, Match, Complex, Rational,
+		Nil, Bool, Symbol, Fixnum,
+		Unknown
+	};
+
 	class Value
 	{
 	public:
@@ -34,6 +47,10 @@ namespace rb
 
 		template<typename Type>
 		Type to() const;
+
+		ValueType getType() const;
+
+		bool isNil() const;
 
 	private:
 		void errorHandling(int rubyType) const;
@@ -46,8 +63,17 @@ namespace rb
 	VALUE Value::to() const;
 
 	template<>
-	std::string Value::to() const;
+	const Value& Value::to() const;
 
 	template<>
+	std::string Value::to() const;
+	template<>
 	const std::string& Value::to() const;
+
+	template<>
+	int Value::to() const;
+	template<>
+	float Value::to() const;
 }
+
+#endif // RBSFML_VALUE_HEADER_

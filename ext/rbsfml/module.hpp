@@ -19,6 +19,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+ #ifndef RBSFML_MODULE_HPP_
+ #define RBSFML_MODULE_HPP_
+
 #include <ruby.h>
 #include <string>
 #include <array>
@@ -97,3 +100,5 @@ namespace rb
 }
 
 #include "module.inc"
+
+#endif // RBSFML_MODULE_HPP_
