@@ -43,7 +43,7 @@ namespace rb
 
 		Module();
 
-		bool isDefined();
+		bool isDefined() const;
 
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineFunction(const std::string& name, ReturnType(*function)(Args...));
@@ -53,7 +53,7 @@ namespace rb
 
 	protected:
 		friend class Value;
-		
+
 		template<typename ReturnType, typename ...Args>
 		struct FunctionCaller : public CallerBase
 		{

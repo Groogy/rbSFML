@@ -55,6 +55,12 @@ Module<Base, MaxFunctions>::Module()
 }
 
 template<typename Base, int MaxFunctions>
+bool Module<Base, MaxFunctions>::isDefined() const
+{
+	return myDefinition != Qnil;
+}
+
+template<typename Base, int MaxFunctions>
 template<int ID, typename ReturnType, typename ...Args>
 void Module<Base, MaxFunctions>::defineFunction(const std::string& name, ReturnType(*function)(Args...))
 {
