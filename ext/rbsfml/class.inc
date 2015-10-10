@@ -31,6 +31,9 @@ Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClass(const std::stri
 	Module<Base, MaxFunctions>::myDefinition = rb_define_class(name.c_str(), parent.to<VALUE>());
 	Module<Base, MaxFunctions>::myName = name;
 	Module<Base, MaxFunctions>::myParent = parent;
+
+	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &allocate);
+
 	return Class();
 }
 
@@ -41,6 +44,9 @@ Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClassUnder(const std:
 	Module<Base, MaxFunctions>::myName = name;
 	Module<Base, MaxFunctions>::myNamespace = otherModule;
 	myParent = parent;
+
+	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &allocate);
+
 	return Class();
 }
 
@@ -48,6 +54,30 @@ template<typename Base, int MaxFunctions>
 Class<Base, MaxFunctions>::Class()
 : Module<Base, MaxFunctions>()
 {
+}
+
+template<typename Base, int MaxFunctions>
+Base* Class<Base, MaxFunctions>::allocate()
+{
+	void* memory = xmalloc(sizeof(Base));
+	if(memory == nullptr) rb_memerror();
+	Base* object = new(memory) Base;
+	return object;
+}
+
+template<typename Base, int MaxFunctions>
+VALUE Class<Base, MaxFunctions>::allocate(VALUE klass)
+{
+	Base* object = allocate();
+	return rb_data_object_alloc( klass, object, NULL, &free );
+}
+
+template<typename Base, int MaxFunctions>
+void Class<Base, MaxFunctions>::free(void* memory)
+{
+	Base* object = static_cast<Base*>(memory);
+	object->~Base();
+	xfree(memory);
 }
 
 }

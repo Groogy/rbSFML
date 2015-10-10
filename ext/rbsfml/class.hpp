@@ -43,6 +43,10 @@ namespace rb
 		Class();
 
 	protected:
+		static Base* allocate();
+		static VALUE allocate(VALUE klass);
+		static void free(void* memory);
+
 		static Value myParent;
 	};
 }

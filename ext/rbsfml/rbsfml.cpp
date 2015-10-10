@@ -42,7 +42,7 @@ public:
 class rbFoobar
 {
 public:
-	rbFoobar() : divider(3.0) {}
+	rbFoobar() : divider(2.0) {}
 
 	static int something()
 	{
@@ -51,6 +51,7 @@ public:
 
 	float somethingElse(int arg)
 	{
+		divider += 1;
 		return (arg * arg) / divider;
 	}
 
