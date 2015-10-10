@@ -34,9 +34,16 @@ namespace rb
 	class Class : public Module<Base, MaxFunctions>
 	{
 	public:
+		static Module<Base, MaxFunctions> defineModule(const std::string& name) = delete;
+		static Module<Base, MaxFunctions> defineModuleUnder(const std::string& name, const Value& otherModule) = delete;
+
+		static Class defineClass(const std::string& name, const Value& parent = Value(rb_cObject));
+		static Class defineClassUnder(const std::string& name, const Value& otherModule, const Value& parent = Value(rb_cObject));
+
 		Class();
 
 	protected:
+		static Value myParent;
 	};
 }
 

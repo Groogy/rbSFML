@@ -23,6 +23,28 @@ namespace rb
 {
 
 template<typename Base, int MaxFunctions>
+Value Class<Base, MaxFunctions>::myParent(Qnil);
+
+template<typename Base, int MaxFunctions>
+Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClass(const std::string& name, const Value& parent)
+{
+	Module<Base, MaxFunctions>::myDefinition = rb_define_class(name.c_str(), parent.to<VALUE>());
+	Module<Base, MaxFunctions>::myName = name;
+	Module<Base, MaxFunctions>::myParent = parent;
+	return Class();
+}
+
+template<typename Base, int MaxFunctions>
+Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClassUnder(const std::string& name, const Value& otherModule, const Value& parent)
+{
+	Module<Base, MaxFunctions>::myDefinition = rb_define_class_under(otherModule.to<VALUE>(), name.c_str(), parent.to<VALUE>());
+	Module<Base, MaxFunctions>::myName = name;
+	Module<Base, MaxFunctions>::myNamespace = otherModule;
+	myParent = parent;
+	return Class();
+}
+
+template<typename Base, int MaxFunctions>
 Class<Base, MaxFunctions>::Class()
 : Module<Base, MaxFunctions>()
 {
