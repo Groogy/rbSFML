@@ -30,45 +30,92 @@
 
 namespace rb
 {
-	template<typename Base, int MaxFunctions = 16>
+	typedef VALUE(*RubyCallback)(...);
+
+	struct CallerBase {};
+
+	template<typename Base, int MaxFunctions = 32>
 	class Module
 	{
 	public:
 		Module(const std::string& name);
-		Module(const std::string& name, Module& parent);
 
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineFunction(const std::string& name, ReturnType(*function)(Args...));
 
-	private:
-		typedef VALUE(*RubyCallback)(...);
+		template<int ID, typename ReturnType, typename ...Args>
+		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...));
 
+	protected:
 		template<typename ReturnType, typename ...Args>
-		struct FunctionCaller
+		struct FunctionCaller : public CallerBase
 		{
+			FunctionCaller(VALUE s, ReturnType(*f)(Args... args)) : self(s), function(f) {}
+
 			VALUE operator()(Args... args) 
 			{ 
 				Value returnValue(function(args...));
 				return returnValue.to<VALUE>();
 			}
 
+			VALUE self;
 			ReturnType(*function)(Args... args);
 		};
 
 		template<typename ...Args>
-		struct FunctionCaller<void, Args...>
+		struct FunctionCaller<void, Args...> : public CallerBase
 		{
+			FunctionCaller(VALUE s, void(*f)(Args... args)) : self(s), function(f) {}
+
 			VALUE operator()(Args... args)
 			{
 				function(args...);
 				return Qnil;
 			}
 
+			VALUE self;
 			void(*function)(Args... args);
 		};
 
+		template<typename ReturnType, typename ...Args>
+		struct MethodCaller
+		{
+			MethodCaller(VALUE s, ReturnType(*f)(Args... args)) : self(s), function(f) {}
+
+			VALUE operator()(Args... args) 
+			{ 
+				Base* object = nullptr;
+				Data_Get_Struct(self, Base, object);
+				Value returnValue(object->*function(args...));
+				return returnValue.to<VALUE>();
+			}
+
+			VALUE self;
+			ReturnType(Base::*function)(Args... args);
+		};
+
+		template<typename ...Args>
+		struct MethodCaller<void, Args...>
+		{
+			MethodCaller(VALUE s, void(*f)(Args... args)) : self(s), function(f) {}
+
+			VALUE operator()(Args... args)
+			{
+				Base* object = nullptr;
+				Data_Get_Struct(self, Base, object);
+				object->*function(args...);
+				return Qnil;
+			}
+
+			VALUE self;
+			void(Base::*function)(Args... args);
+		};
+
 		template<int ID, typename FunctionSignature, typename CallerSignature>
-		static CallerSignature createCaller();
+		static void createCaller(FunctionSignature function);
+
+		template<int ID, typename FunctionSignature, typename CallerSignature>
+		static CallerSignature& getCaller(VALUE self);
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>
 		static VALUE wrapperFunction(VALUE self);
@@ -91,7 +138,9 @@ namespace rb
 		template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6>
 		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6);
 
-		static std::array<void*, MaxFunctions> ourFunctions;
+		static std::array<CallerBase*, MaxFunctions> ourFunctions;
+
+		Module();
 
 		VALUE myModule;
 		std::string myName;
