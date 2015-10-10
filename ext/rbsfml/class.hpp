@@ -19,50 +19,27 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+ #ifndef RBSFML_CLASS_HPP_
+ #define RBSFML_CLASS_HPP_
+
 #include <ruby.h>
+#include <string>
+#include <array>
+
 #include "module.hpp"
-#include "class.hpp"
-#include <iostream>
 
-class rbSFML
+namespace rb
 {
-public:
-	static void blah()
+	template<typename Base, int MaxFunctions = 32>
+	class Class : public Module<Base, MaxFunctions>
 	{
-		std::cout << "EEEY!" << std::endl;
-	}
+	public:
+		Class(const std::string& name);
 
-	static std::string say(const std::string& arg)
-	{
-		std::cout << arg << std::endl;
-		return "Something something";
-	}
-};
-
-class rbFoobar
-{
-public:
-	rbFoobar() : divider(3.0) {}
-
-	static int something()
-	{
-		return 42;
-	}
-
-	float somethingElse(int arg)
-	{
-		return (arg * arg) / divider;
-	}
-
-	float divider;
-};
-
-extern "C" void Init_rbsfml() {
-	rb::Module<rbSFML> sfml("SFML");
-	sfml.defineFunction<0>("blah", &rbSFML::blah);
-	sfml.defineFunction<1>("say", &rbSFML::say);
-
-	rb::Class<rbFoobar> foobar("Foobar");
-	foobar.defineFunction<0>("something", &rbFoobar::something);
-	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
+	protected:
+	};
 }
+
+#include "class.inc"
+
+#endif // RBSFML_CLASS_HPP_

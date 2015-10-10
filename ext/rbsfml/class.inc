@@ -19,50 +19,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <ruby.h>
-#include "module.hpp"
-#include "class.hpp"
-#include <iostream>
-
-class rbSFML
+namespace rb
 {
-public:
-	static void blah()
-	{
-		std::cout << "EEEY!" << std::endl;
-	}
 
-	static std::string say(const std::string& arg)
-	{
-		std::cout << arg << std::endl;
-		return "Something something";
-	}
-};
-
-class rbFoobar
+template<typename Base, int MaxFunctions>
+Class<Base, MaxFunctions>::Class(const std::string& name)
+: Module<Base, MaxFunctions>()
 {
-public:
-	rbFoobar() : divider(3.0) {}
+	Module<Base, MaxFunctions>::myName = name;
+	Module<Base, MaxFunctions>::myModule = rb_define_class(name.c_str(), rb_cObject);
+}
 
-	static int something()
-	{
-		return 42;
-	}
-
-	float somethingElse(int arg)
-	{
-		return (arg * arg) / divider;
-	}
-
-	float divider;
-};
-
-extern "C" void Init_rbsfml() {
-	rb::Module<rbSFML> sfml("SFML");
-	sfml.defineFunction<0>("blah", &rbSFML::blah);
-	sfml.defineFunction<1>("say", &rbSFML::say);
-
-	rb::Class<rbFoobar> foobar("Foobar");
-	foobar.defineFunction<0>("something", &rbFoobar::something);
-	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
 }

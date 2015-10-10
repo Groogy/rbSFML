@@ -53,7 +53,7 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 	static_assert(ID < MaxFunctions, "Unsupported amount of functions");
 	typedef ReturnType(Base::*FunctionSignature)(Args...);
 
-	createCaller<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>>(function);
+	createCaller<ID, FunctionSignature, MethodCaller<ReturnType, Args...>>(function);
 	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, MethodCaller<ReturnType, Args...>, Args...>;
 	rb_define_method(myModule, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }

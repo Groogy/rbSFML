@@ -78,15 +78,15 @@ namespace rb
 		};
 
 		template<typename ReturnType, typename ...Args>
-		struct MethodCaller
+		struct MethodCaller : public CallerBase
 		{
-			MethodCaller(VALUE s, ReturnType(*f)(Args... args)) : self(s), function(f) {}
+			MethodCaller(VALUE s, ReturnType(Base::*f)(Args... args)) : self(s), function(f) {}
 
 			VALUE operator()(Args... args) 
 			{ 
 				Base* object = nullptr;
 				Data_Get_Struct(self, Base, object);
-				Value returnValue(object->*function(args...));
+				Value returnValue((object->*function)(args...));
 				return returnValue.to<VALUE>();
 			}
 
@@ -95,15 +95,15 @@ namespace rb
 		};
 
 		template<typename ...Args>
-		struct MethodCaller<void, Args...>
+		struct MethodCaller<void, Args...> : public CallerBase
 		{
-			MethodCaller(VALUE s, void(*f)(Args... args)) : self(s), function(f) {}
+			MethodCaller(VALUE s, void(Base::*f)(Args... args)) : self(s), function(f) {}
 
 			VALUE operator()(Args... args)
 			{
 				Base* object = nullptr;
 				Data_Get_Struct(self, Base, object);
-				object->*function(args...);
+				(object->*function)(args...);
 				return Qnil;
 			}
 
