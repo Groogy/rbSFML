@@ -23,11 +23,9 @@ namespace rb
 {
 
 template<typename Base, int MaxFunctions>
-Class<Base, MaxFunctions>::Class(const std::string& name)
+Class<Base, MaxFunctions>::Class()
 : Module<Base, MaxFunctions>()
 {
-	Module<Base, MaxFunctions>::myName = name;
-	Module<Base, MaxFunctions>::myModule = rb_define_class(name.c_str(), rb_cObject);
 }
 
 }

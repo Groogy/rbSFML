@@ -34,7 +34,7 @@ namespace rb
 	class Class : public Module<Base, MaxFunctions>
 	{
 	public:
-		Class(const std::string& name);
+		Class();
 
 	protected:
 	};

@@ -38,7 +38,11 @@ namespace rb
 	class Module
 	{
 	public:
-		Module(const std::string& name);
+		static Module defineModule(const std::string& name);
+
+		Module();
+
+		bool isDefined();
 
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineFunction(const std::string& name, ReturnType(*function)(Args...));
@@ -139,12 +143,9 @@ namespace rb
 		static VALUE wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6);
 
 		static std::array<CallerBase*, MaxFunctions> ourFunctions;
-
-		Module();
-
-		VALUE myModule;
-		std::string myName;
-		Module* myParent;
+		static VALUE myDefinition;
+		static std::string myName;
+		static Value myNamespace;
 	};
 }
 

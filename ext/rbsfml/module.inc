@@ -19,19 +19,30 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+
 namespace rb
 {
 
 template<typename Base, int MaxFunctions>
 std::array<CallerBase*, MaxFunctions> Module<Base, MaxFunctions>::ourFunctions;
+template<typename Base, int MaxFunctions>
+VALUE Module<Base, MaxFunctions>::myDefinition(Qnil);
+template<typename Base, int MaxFunctions>
+std::string Module<Base, MaxFunctions>::myName;
+template<typename Base, int MaxFunctions>
+Value Module<Base, MaxFunctions>::myNamespace;
 
 template<typename Base, int MaxFunctions>
-Module<Base, MaxFunctions>::Module(const std::string& name)
-: myModule(Qnil)
-, myName(name)
-, myParent(nullptr)
+Module<Base, MaxFunctions> Module<Base, MaxFunctions>::defineModule(const std::string& name)
 {
-	myModule = rb_define_module(myName.c_str());
+	myDefinition = rb_define_module(name.c_str());
+	myName = name;
+	return Module();
+}
+
+template<typename Base, int MaxFunctions>
+Module<Base, MaxFunctions>::Module()
+{
 }
 
 template<typename Base, int MaxFunctions>
@@ -43,7 +54,7 @@ void Module<Base, MaxFunctions>::defineFunction(const std::string& name, ReturnT
 
 	createCaller<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>>(function);
 	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>, Args...>;
-	rb_define_singleton_method(myModule, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
+	rb_define_singleton_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }
 
 template<typename Base, int MaxFunctions>
@@ -55,7 +66,7 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 
 	createCaller<ID, FunctionSignature, MethodCaller<ReturnType, Args...>>(function);
 	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, MethodCaller<ReturnType, Args...>, Args...>;
-	rb_define_method(myModule, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
+	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }
 
 template<typename Base, int MaxFunctions>
@@ -128,14 +139,6 @@ VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE 
 {
 	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
 	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(), Value(arg6).to<Arg6>());
-}
-
-template<typename Base, int MaxFunctions>
-Module<Base, MaxFunctions>::Module()
-: myModule(Qnil)
-, myName("")
-, myParent(nullptr)
-{
 }
 
 }

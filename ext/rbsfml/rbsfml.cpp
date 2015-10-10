@@ -58,11 +58,11 @@ public:
 };
 
 extern "C" void Init_rbsfml() {
-	rb::Module<rbSFML> sfml("SFML");
+	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
 	sfml.defineFunction<0>("blah", &rbSFML::blah);
 	sfml.defineFunction<1>("say", &rbSFML::say);
 
-	rb::Class<rbFoobar> foobar("Foobar");
+	auto foobar = rb::Class<rbFoobar>::defineModule("Foobar");
 	foobar.defineFunction<0>("something", &rbFoobar::something);
 	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
 }
