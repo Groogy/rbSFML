@@ -62,7 +62,7 @@ extern "C" void Init_rbsfml() {
 	sfml.defineFunction<0>("blah", &rbSFML::blah);
 	sfml.defineFunction<1>("say", &rbSFML::say);
 
-	auto foobar = rb::Class<rbFoobar>::defineModule("Foobar");
+	auto foobar = rb::Class<rbFoobar>::defineModuleUnder("Foobar", rb::Value(sfml));
 	foobar.defineFunction<0>("something", &rbFoobar::something);
 	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
 }

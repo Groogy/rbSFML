@@ -39,6 +39,7 @@ namespace rb
 	{
 	public:
 		static Module defineModule(const std::string& name);
+		static Module defineModuleUnder(const std::string& name, const Value& otherModule);
 
 		Module();
 
@@ -51,6 +52,8 @@ namespace rb
 		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...));
 
 	protected:
+		friend class Value;
+		
 		template<typename ReturnType, typename ...Args>
 		struct FunctionCaller : public CallerBase
 		{

@@ -41,6 +41,15 @@ Module<Base, MaxFunctions> Module<Base, MaxFunctions>::defineModule(const std::s
 }
 
 template<typename Base, int MaxFunctions>
+Module<Base, MaxFunctions> Module<Base, MaxFunctions>::defineModuleUnder(const std::string& name, const Value& otherModule)
+{
+	myDefinition = rb_define_module_under(otherModule.to<VALUE>(), name.c_str());
+	myName = name;
+	myNamespace = otherModule;
+	return Module();
+}
+
+template<typename Base, int MaxFunctions>
 Module<Base, MaxFunctions>::Module()
 {
 }
