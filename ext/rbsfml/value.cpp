@@ -76,6 +76,18 @@ Value::Value(const std::string& value)
 {
 }
 
+Value::Value(int value)
+: myValue(INT2FIX(value))
+, myCachedStr()
+{
+}
+
+Value::Value(float value)
+: myValue(rb_float_new(value))
+, myCachedStr()
+{
+}
+
 Value::~Value()
 {
 }

@@ -27,6 +27,9 @@
 
 namespace rb
 {
+	template<typename Base, int MaxFunctions>
+	class Module;
+
 	enum class ValueType
 	{
 		None, Object, Class, Module,
@@ -43,6 +46,11 @@ namespace rb
 		Value();
 		explicit Value(VALUE value);
 		explicit Value(const std::string& value);
+		explicit Value(int value);
+		explicit Value(float value);
+
+		template<typename Base, int MaxFunctions>
+		explicit Value(const Module<Base, MaxFunctions>& module);
 		~Value();
 
 		template<typename Type>
@@ -75,5 +83,7 @@ namespace rb
 	template<>
 	float Value::to() const;
 }
+
+#include "value.inc"
 
 #endif // RBSFML_VALUE_HEADER_

@@ -22,10 +22,11 @@
 namespace rb
 {
 
-template<typename Type>
-Type Value::to() const
+template<typename Base, int MaxFunctions>
+Value::Value(const Module<Base, MaxFunctions>& module)
+: myValue(module.myDefinition)
+, myCachedStr()
 {
-	static_assert(false, "Conversion has not been defined!");
 }
 
 }
