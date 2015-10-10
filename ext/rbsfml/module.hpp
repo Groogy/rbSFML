@@ -26,7 +26,7 @@
 #include <string>
 #include <array>
 
-#include "Value.hpp"
+#include "value.hpp"
 
 namespace rb
 {
