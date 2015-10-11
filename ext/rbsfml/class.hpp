@@ -27,6 +27,7 @@
 #include <array>
 
 #include "module.hpp"
+#include "object.hpp"
 
 namespace rb
 {
@@ -42,7 +43,7 @@ namespace rb
 
 		Class();
 
-		Value newObject();
+		Base* newObject();
 
 	protected:
 		static Base* allocate();

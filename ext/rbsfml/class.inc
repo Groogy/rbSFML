@@ -57,10 +57,10 @@ Class<Base, MaxFunctions>::Class()
 }
 
 template<typename Base, int MaxFunctions>
-Value Class<Base, MaxFunctions>::newObject()
+Base* Class<Base, MaxFunctions>::newObject()
 {
 	static ID newSymbol = rb_intern("new");
-	return Value(rb_funcall(Module<Base, MaxFunctions>::myDefinition, newSymbol, 0));
+	return Value(rb_funcall(Module<Base, MaxFunctions>::myDefinition, newSymbol, 0)).to<Base*>();
 }
 
 template<typename Base, int MaxFunctions>
@@ -75,8 +75,9 @@ Base* Class<Base, MaxFunctions>::allocate()
 template<typename Base, int MaxFunctions>
 VALUE Class<Base, MaxFunctions>::allocate(VALUE klass)
 {
-	Base* object = allocate();
-	return rb_data_object_alloc( klass, object, NULL, &free );
+	Base* memory = allocate();
+	VALUE object = rb_data_object_alloc(klass, memory, NULL, &free);
+	return object;
 }
 
 template<typename Base, int MaxFunctions>
