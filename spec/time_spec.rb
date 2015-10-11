@@ -18,6 +18,38 @@ describe SFML::Time do
         expect(time1 > time2).to be_falsy
       end
     end
+    context "given a smaller time" do
+      time1 = SFML.seconds(4.0)
+      time2 = SFML.seconds(2.0)
+
+      it "returns false on equal" do
+        expect(time1 == time2).to be_falsy
+      end
+
+      it "returns false on less than" do
+        expect(time1 < time2).to be_falsy
+      end
+
+      it "returns true on greater than" do
+        expect(time1 > time2).to be_truthy
+      end
+    end
+    context "given an bigger time" do
+      time1 = SFML.seconds(2.0)
+      time2 = SFML.seconds(4.0)
+
+      it "returns false on equal" do
+        expect(time1 == time2).to be_falsy
+      end
+
+      it "returns true on less than" do
+        expect(time1 < time2).to be_truthy
+      end
+
+      it "returns false on greater than" do
+        expect(time1 > time2).to be_falsy
+      end
+    end
   end
 
   describe "dup" do
