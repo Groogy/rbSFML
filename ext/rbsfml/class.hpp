@@ -42,6 +42,8 @@ namespace rb
 
 		Class();
 
+		Value newObject();
+
 	protected:
 		static Base* allocate();
 		static VALUE allocate(VALUE klass);

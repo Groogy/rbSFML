@@ -57,6 +57,13 @@ Class<Base, MaxFunctions>::Class()
 }
 
 template<typename Base, int MaxFunctions>
+Value Class<Base, MaxFunctions>::newObject()
+{
+	static ID newSymbol = rb_intern("new");
+	return Value(rb_funcall(Module<Base, MaxFunctions>::myDefinition, newSymbol, 0));
+}
+
+template<typename Base, int MaxFunctions>
 Base* Class<Base, MaxFunctions>::allocate()
 {
 	void* memory = xmalloc(sizeof(Base));
