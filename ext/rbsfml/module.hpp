@@ -57,6 +57,8 @@ namespace rb
 
 		void includeModule(const rb::Value& value);
 
+		void aliasMethod(const std::string& method, const std::string& alias);
+
 	protected:
 		friend class Value;
 

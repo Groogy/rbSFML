@@ -109,6 +109,12 @@ void Module<Base, MaxFunctions>::includeModule(const rb::Value& value)
 }
 
 template<typename Base, int MaxFunctions>
+void Module<Base, MaxFunctions>::aliasMethod(const std::string& method, const std::string& alias)
+{
+	rb_define_alias(myDefinition, alias.c_str(), method.c_str());
+}
+
+template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature>
 void Module<Base, MaxFunctions>::createCaller(FunctionSignature function)
 {
