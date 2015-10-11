@@ -85,6 +85,12 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 }
 
 template<typename Base, int MaxFunctions>
+void Module<Base, MaxFunctions>::includeModule(const rb::Value& value)
+{
+	rb_include_module(myDefinition, value.to<VALUE>());
+}
+
+template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature>
 void Module<Base, MaxFunctions>::createCaller(FunctionSignature function)
 {

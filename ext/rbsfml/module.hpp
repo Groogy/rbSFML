@@ -51,6 +51,8 @@ namespace rb
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...));
 
+		void includeModule(const rb::Value& value);
+
 	protected:
 		friend class Value;
 
