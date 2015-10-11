@@ -20,27 +20,53 @@
  */
 
 #include "rbtime.hpp"
+#include "error.hpp"
+#include "macros.hpp"
 
 rb::Class<rbTime> rbTime::ourDefinition;
 
 void rbTime::defineClass(const rb::Value& sfml)
 {
 	ourDefinition = rb::Class<rbTime>::defineClassUnder("Time", sfml);
-	ourDefinition.defineMethod<0>("as_seconds", &rbTime::asSeconds);
-	ourDefinition.defineMethod<1>("as_milliseconds", &rbTime::asMilliseconds);
-	ourDefinition.defineMethod<2>("as_microseconds", &rbTime::asMicroseconds);
+	ourDefinition.includeModule(rb::Value(rb_mComparable));
+	ourDefinition.defineMethod<0>("initialize_copy", &rbTime::initializeCopy);
+	ourDefinition.defineMethod<1>("as_seconds", &rbTime::asSeconds);
+	ourDefinition.defineMethod<2>("as_milliseconds", &rbTime::asMilliseconds);
+	ourDefinition.defineMethod<3>("as_microseconds", &rbTime::asMicroseconds);
+	ourDefinition.defineMethod<4>("marshal_dump", &rbTime::marshalDump);
+	ourDefinition.defineMethod<5>("inspect", &rbTime::inspect);
+	ourDefinition.defineMethod<6>("-@", &rbTime::negate);
+	ourDefinition.defineMethod<7>("+", &rbTime::addition);
+	ourDefinition.defineMethod<8>("-", &rbTime::subtract);
+	ourDefinition.defineMethod<9>("*", &rbTime::multiply);
+	ourDefinition.defineMethod<10>("/", &rbTime::divide);
+	ourDefinition.defineMethod<11>("<=>", &rbTime::compare);
 }
 
-rb::Value rbTime::seconds(float val)
+rbTime* rbTime::seconds(float val)
 {
-	rb::Value object = ourDefinition.newObject();
-	rbTime* time = object.to<rbTime*>();
-	time->myObject = sf::seconds(val);
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = sf::seconds(val);
+	return object;
+}
+
+rbTime* rbTime::milliseconds(sf::Int32 val)
+{
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = sf::milliseconds(val);
+	return object;
+}
+
+rbTime* rbTime::microseconds(sf::Int64 val)
+{
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = sf::microseconds(val);
 	return object;
 }
 
 rbTime::rbTime()
-: myObject()
+: rb::Object()
+, myObject()
 {
 }
 
@@ -48,19 +74,91 @@ rbTime::~rbTime()
 {
 }
 
-float rbTime::asSeconds()
+rbTime* rbTime::initializeCopy(const rbTime* value)
+{
+	myObject = value->myObject;
+	return this;
+}
+
+float rbTime::asSeconds() const
 {
 	return myObject.asSeconds();
 }
 
-sf::Int32 rbTime::asMilliseconds()
+sf::Int32 rbTime::asMilliseconds() const
 {
 	return myObject.asMilliseconds();
 }
 
-sf::Int64 rbTime::asMicroseconds()
+sf::Int64 rbTime::asMicroseconds() const
 {
 	return myObject.asMicroseconds();
+}
+
+rb::Value rbTime::marshalDump() const
+{
+	rb::raise(rb::TypeError, "can't dump %s", ourDefinition.getName().c_str() );
+	return rb::Nil;
+}
+
+std::string rbTime::inspect() const
+{
+	return ourDefinition.getName() + "(" + macro::toString(myObject.asSeconds()) + ")";
+}
+
+rbTime* rbTime::negate() const
+{
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = -myObject;
+	return object;
+}
+
+rbTime* rbTime::addition(const rbTime* other) const
+{
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = myObject + other->myObject;
+	return object;
+}
+
+rbTime* rbTime::subtract(const rbTime* other) const
+{
+	rbTime* object = ourDefinition.newObject();
+	object->myObject = myObject - other->myObject;
+	return object;
+}
+
+rbTime* rbTime::multiply(const rb::Value& other) const
+{
+	rbTime* object = ourDefinition.newObject();
+	if(other.getType() == rb::ValueType::Fixnum)
+		object->myObject = myObject * other.to<sf::Int64>();
+	else if(other.getType() == rb::ValueType::Float)
+		object->myObject = myObject * other.to<float>();
+	else
+		rb::expectedTypes("Fixnum", "Float");
+	return object;
+}
+
+rbTime* rbTime::divide(const rb::Value& other) const
+{
+	rbTime* object = ourDefinition.newObject();
+	if(other.getType() == rb::ValueType::Fixnum)
+		object->myObject = myObject / other.to<sf::Int64>();
+	else if(other.getType() == rb::ValueType::Float)
+		object->myObject = myObject / other.to<float>();
+	else
+		rb::expectedTypes("Fixnum", "Float");
+	return object;
+}
+
+int rbTime::compare(const rbTime* other) const
+{
+	sf::Int64 time1 = myObject.asMicroseconds();
+	sf::Int64 time2 = other->myObject.asMicroseconds();
+
+	if(time1 == time2) return 0;
+	if(time1 > time2) return 1;
+	return -1;
 }
 
 namespace rb
@@ -71,6 +169,15 @@ rbTime* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbTime* object = nullptr;
+	Data_Get_Struct(myValue, rbTime, object);
+	return object;
+}
+
+template<>
+const rbTime* Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbTime* object = nullptr;
 	Data_Get_Struct(myValue, rbTime, object);
 	return object;
 }

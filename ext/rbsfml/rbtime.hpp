@@ -20,21 +20,38 @@
  */
 
 #include <SFML/System/Time.hpp>
+#include <string>
 #include "class.hpp"
+#include "object.hpp"
 
-class rbTime
+class rbTime : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
 
-	static rb::Value seconds(float val);
+	static rbTime* seconds(float val);
+	static rbTime* milliseconds(sf::Int32 val);
+	static rbTime* microseconds(sf::Int64 val);
 
 	rbTime();
 	~rbTime();
 
-	float asSeconds();
-	sf::Int32 asMilliseconds();
-	sf::Int64 asMicroseconds();
+	rbTime* initializeCopy(const rbTime* value);
+
+	float asSeconds() const;
+	sf::Int32 asMilliseconds() const;
+	sf::Int64 asMicroseconds() const;
+
+	rb::Value marshalDump() const;
+	std::string inspect() const;
+
+	rbTime* negate() const;
+	rbTime* addition(const rbTime* other) const;
+	rbTime* subtract(const rbTime* other) const;
+	rbTime* multiply(const rb::Value& other) const;
+	rbTime* divide(const rb::Value& other) const;
+
+	int compare(const rbTime* other) const;
 
 private:
 	static rb::Class<rbTime> ourDefinition;
@@ -46,4 +63,6 @@ namespace rb
 {
 	template<>
 	rbTime* Value::to() const;
+	template<>
+	const rbTime* Value::to() const;
 }

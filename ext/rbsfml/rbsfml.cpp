@@ -23,52 +23,15 @@
 #include "module.hpp"
 #include "class.hpp"
 #include "rbtime.hpp"
-#include <iostream>
 
 class rbSFML
 {
-public:
-	static void blah()
-	{
-		std::cout << "EEEY!" << std::endl;
-	}
-
-	static std::string say(const std::string& arg)
-	{
-		std::cout << arg << std::endl;
-		return "Something something";
-	}
-};
-
-class rbFoobar
-{
-public:
-	rbFoobar() : divider(2.0) {}
-
-	static int something()
-	{
-		return 42;
-	}
-
-	float somethingElse(int arg)
-	{
-		divider += 1;
-		return (arg * arg) / divider;
-	}
-
-	float divider;
 };
 
 extern "C" void Init_rbsfml() {
 	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
-	sfml.defineFunction<0>("blah", &rbSFML::blah);
-	sfml.defineFunction<1>("say", &rbSFML::say);
 
-	auto foobar = rb::Class<rbFoobar>::defineClassUnder("Foobar", rb::Value(sfml));
-	foobar.defineFunction<0>("something", &rbFoobar::something);
-	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
-
-	sfml.defineFunction<3>("seconds", &rbTime::seconds);
+	sfml.defineFunction<0>("seconds", &rbTime::seconds);
 
 	rbTime::defineClass(rb::Value(sfml));
 }
