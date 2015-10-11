@@ -29,6 +29,7 @@ namespace rb
 {
 	template<typename Base, int MaxFunctions>
 	class Module;
+	class Object;
 
 	enum class ValueType
 	{
@@ -49,6 +50,7 @@ namespace rb
 		explicit Value(int value);
 		explicit Value(float value);
 		explicit Value(long long int value);
+		explicit Value(rb::Object* object);
 
 		template<typename Base, int MaxFunctions>
 		explicit Value(const Module<Base, MaxFunctions>& module);

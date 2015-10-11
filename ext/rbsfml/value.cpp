@@ -38,7 +38,8 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  */
-#include "Value.hpp"
+#include "value.hpp"
+#include "object.hpp"
 #include <array>
 
 namespace
@@ -94,6 +95,12 @@ Value::Value(float value)
 
 Value::Value(long long int value)
 : myValue(LL2NUM(value))
+, myCachedStr()
+{
+}
+
+Value::Value(rb::Object* object)
+: myValue(object->myValue.myValue)
 , myCachedStr()
 {
 }

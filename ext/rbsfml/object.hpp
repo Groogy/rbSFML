@@ -36,6 +36,8 @@ namespace rb
 		void setValue(VALUE value);
 
 	protected:
+		friend class Value;
+		
 		rb::Value myValue;
 	};
 }
