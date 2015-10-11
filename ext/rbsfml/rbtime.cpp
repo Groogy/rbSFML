@@ -41,6 +41,8 @@ void rbTime::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<9>("*", &rbTime::multiply);
 	ourDefinition.defineMethod<10>("/", &rbTime::divide);
 	ourDefinition.defineMethod<11>("<=>", &rbTime::compare);
+
+	ourDefinition.aliasMethod("inspect", "to_s");
 }
 
 rbTime* rbTime::seconds(float val)
