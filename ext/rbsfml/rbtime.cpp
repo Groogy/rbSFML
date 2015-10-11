@@ -23,11 +23,11 @@
 #include "error.hpp"
 #include "macros.hpp"
 
-rb::Class<rbTime> rbTime::ourDefinition;
+rbTimeClass rbTime::ourDefinition;
 
 void rbTime::defineClass(const rb::Value& sfml)
 {
-	ourDefinition = rb::Class<rbTime>::defineClassUnder("Time", sfml);
+	ourDefinition = rbTimeClass::defineClassUnder("Time", sfml);
 	ourDefinition.includeModule(rb::Value(rb_mComparable));
 	ourDefinition.defineMethod<0>("initialize_copy", &rbTime::initializeCopy);
 	ourDefinition.defineMethod<1>("as_seconds", &rbTime::asSeconds);
@@ -141,16 +141,28 @@ rbTime* rbTime::multiply(const rb::Value& other) const
 	return object;
 }
 
-rbTime* rbTime::divide(const rb::Value& other) const
+rb::Value rbTime::divide(const rb::Value& other) const
 {
-	rbTime* object = ourDefinition.newObject();
-	if(other.getType() == rb::ValueType::Fixnum)
-		object->myObject = myObject / other.to<sf::Int64>();
-	else if(other.getType() == rb::ValueType::Float)
-		object->myObject = myObject / other.to<float>();
+	rb::Value returnValue;
+	if(other.getType() == rb::ValueType::Data)
+	{
+		rbTime* object = other.to<rbTime*>();
+		returnValue = rb::Value(myObject / object->myObject);
+	}
 	else
-		rb::expectedTypes("Fixnum", "Float");
-	return object;
+	{
+		rbTime* object = ourDefinition.newObject();
+		if(other.getType() == rb::ValueType::Fixnum)
+			object->myObject = myObject / other.to<sf::Int64>();
+		else if(other.getType() == rb::ValueType::Float)
+			object->myObject = myObject / other.to<float>();
+
+		returnValue = rb::Value(object);
+	}
+
+	if(returnValue.isNil())
+		rb::expectedTypes("Fixnum", "Float", "Time");
+	return rb::Nil;
 }
 
 int rbTime::compare(const rbTime* other) const

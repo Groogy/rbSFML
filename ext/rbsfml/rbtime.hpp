@@ -24,6 +24,10 @@
 #include "class.hpp"
 #include "object.hpp"
 
+class rbTime;
+
+typedef rb::Class<rbTime> rbTimeClass;
+
 class rbTime : public rb::Object
 {
 public:
@@ -49,12 +53,12 @@ public:
 	rbTime* addition(const rbTime* other) const;
 	rbTime* subtract(const rbTime* other) const;
 	rbTime* multiply(const rb::Value& other) const;
-	rbTime* divide(const rb::Value& other) const;
+	rb::Value divide(const rb::Value& other) const;
 
 	int compare(const rbTime* other) const;
 
 private:
-	static rb::Class<rbTime> ourDefinition;
+	static rbTimeClass ourDefinition;
 
 	sf::Time myObject;
 };
