@@ -50,6 +50,12 @@ Module<Base, MaxFunctions> Module<Base, MaxFunctions>::defineModuleUnder(const s
 }
 
 template<typename Base, int MaxFunctions>
+const std::string& Module<Base, MaxFunctions>::getName()
+{
+	return myName;
+}
+
+template<typename Base, int MaxFunctions>
 Module<Base, MaxFunctions>::Module()
 {
 }

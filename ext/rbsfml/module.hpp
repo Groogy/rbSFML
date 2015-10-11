@@ -41,6 +41,8 @@ namespace rb
 		static Module defineModule(const std::string& name);
 		static Module defineModuleUnder(const std::string& name, const Value& otherModule);
 
+		static const std::string& getName();
+
 		Module();
 
 		bool isDefined() const;
