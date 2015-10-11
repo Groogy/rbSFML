@@ -27,11 +27,23 @@ class rbTime
 public:
 	static void defineClass(const rb::Value& sfml);
 
+	static rb::Value seconds(float val);
+
 	rbTime();
 	~rbTime();
+
+	float asSeconds();
+	sf::Int32 asMilliseconds();
+	sf::Int64 asMicroseconds();
 
 private:
 	static rb::Class<rbTime> ourDefinition;
 
 	sf::Time myObject;
 };
+
+namespace rb
+{
+	template<>
+	rbTime* Value::to() const;
+}

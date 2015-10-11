@@ -26,6 +26,17 @@ rb::Class<rbTime> rbTime::ourDefinition;
 void rbTime::defineClass(const rb::Value& sfml)
 {
 	ourDefinition = rb::Class<rbTime>::defineClassUnder("Time", sfml);
+	ourDefinition.defineMethod<0>("as_seconds", &rbTime::asSeconds);
+	ourDefinition.defineMethod<1>("as_milliseconds", &rbTime::asMilliseconds);
+	ourDefinition.defineMethod<2>("as_microseconds", &rbTime::asMicroseconds);
+}
+
+rb::Value rbTime::seconds(float val)
+{
+	rb::Value object = ourDefinition.newObject();
+	rbTime* time = object.to<rbTime*>();
+	time->myObject = sf::seconds(val);
+	return object;
 }
 
 rbTime::rbTime()
@@ -35,4 +46,33 @@ rbTime::rbTime()
 
 rbTime::~rbTime()
 {
+}
+
+float rbTime::asSeconds()
+{
+	return myObject.asSeconds();
+}
+
+sf::Int32 rbTime::asMilliseconds()
+{
+	return myObject.asMilliseconds();
+}
+
+sf::Int64 rbTime::asMicroseconds()
+{
+	return myObject.asMicroseconds();
+}
+
+namespace rb
+{
+
+template<>
+rbTime* Value::to() const
+{
+	errorHandling(T_DATA);
+	rbTime* object = nullptr;
+	Data_Get_Struct(myValue, rbTime, object);
+	return object;
+}
+
 }

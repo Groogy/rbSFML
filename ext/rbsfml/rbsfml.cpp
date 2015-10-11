@@ -68,5 +68,7 @@ extern "C" void Init_rbsfml() {
 	foobar.defineFunction<0>("something", &rbFoobar::something);
 	foobar.defineMethod<1>("somethingElse", &rbFoobar::somethingElse);
 
+	sfml.defineFunction<3>("seconds", &rbTime::seconds);
+
 	rbTime::defineClass(rb::Value(sfml));
 }

@@ -12,3 +12,7 @@ puts obj.somethingElse(6)
 puts obj.somethingElse(8)
 
 time = SFML::Time.new()
+puts time
+puts time.as_seconds
+time = SFML.seconds(3.95)
+puts time.as_seconds
