@@ -43,7 +43,7 @@
 namespace rb
 {
 
-template<Args... args>
+template<typename ...Args>
 void raise(const rb::Value& value, Args... args)
 {
 	rb_raise(value.to<VALUE>(), args...);
