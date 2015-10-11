@@ -48,6 +48,7 @@ namespace rb
 		explicit Value(const std::string& value);
 		explicit Value(int value);
 		explicit Value(float value);
+		explicit Value(long long int value);
 
 		template<typename Base, int MaxFunctions>
 		explicit Value(const Module<Base, MaxFunctions>& module);
@@ -82,6 +83,8 @@ namespace rb
 	int Value::to() const;
 	template<>
 	float Value::to() const;
+	template<>
+	long long int Value::to() const;
 }
 
 #include "value.inc"
