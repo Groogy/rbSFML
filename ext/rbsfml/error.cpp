@@ -38,7 +38,7 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  */
-#include "Error.hpp"
+#include "error.hpp"
 
 namespace rb
 {

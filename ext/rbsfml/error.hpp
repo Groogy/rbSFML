@@ -33,4 +33,6 @@ namespace rb
 	void raise(const rb::Value& value, Args... args);
 }
 
+#include "error.inc"
+
 #endif // RBSFML_ERROR_HEADER_
