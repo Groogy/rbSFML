@@ -58,6 +58,10 @@ namespace
 namespace rb
 {
 
+Value Nil(Qnil);
+Value True(Qtrue);
+Value False(Qfalse);
+
 Value::Value()
 : myValue(Qnil)
 , myCachedStr()

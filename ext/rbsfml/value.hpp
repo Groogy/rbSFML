@@ -68,6 +68,10 @@ namespace rb
 		mutable std::string myCachedStr;
 	};
 
+	extern Value Nil;
+	extern Value True;
+	extern Value False;
+
 	template<>
 	VALUE Value::to() const;
 
