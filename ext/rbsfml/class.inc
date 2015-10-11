@@ -77,6 +77,7 @@ VALUE Class<Base, MaxFunctions>::allocate(VALUE klass)
 {
 	Base* memory = allocate();
 	VALUE object = rb_data_object_alloc(klass, memory, NULL, &free);
+	memory->setValue(object);
 	return object;
 }
 
