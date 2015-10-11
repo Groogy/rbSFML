@@ -49,4 +49,18 @@ void raise(const rb::Value& value, Args... args)
 	rb_raise(value.to<VALUE>(), args...);
 }
 
+template<typename ...Args>
+void expectedTypes(Args... args)
+{
+	std::string result;
+	std::string types[]{args...};
+	for(int index = 0, num = sizeof...(args); index < num; index++)
+	{
+		result += types[index];
+		if(num < num - 1)
+			result += ", ";
+	}
+	raise(TypeError, "Did not receive expected types ( %s )", result.c_str());
+}
+
 }

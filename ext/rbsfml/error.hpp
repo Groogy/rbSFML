@@ -31,6 +31,9 @@ namespace rb
 
 	template<typename ...Args>
 	void raise(const rb::Value& value, Args... args);
+
+	template<typename ...Args>
+	void expectedTypes(Args... args);
 }
 
 #include "error.inc"
