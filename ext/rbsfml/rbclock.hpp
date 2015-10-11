@@ -40,6 +40,7 @@ public:
 	rbClock* initializeCopy(const rbClock* value);
 
 	rbTime* getElapsedTime() const;
+	rbTime* restart();
 
 	rb::Value marshalDump() const;
 	std::string inspect() const;

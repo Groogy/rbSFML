@@ -31,8 +31,9 @@ void rbClock::defineClass(const rb::Value& sfml)
 	ourDefinition = rbClockClass::defineClassUnder("Clock", sfml);
 	ourDefinition.defineMethod<0>("initialize_copy", &rbClock::initializeCopy);
 	ourDefinition.defineMethod<1>("elapsed_time", &rbClock::getElapsedTime);
-	ourDefinition.defineMethod<2>("marshal_dump", &rbClock::marshalDump);
-	ourDefinition.defineMethod<3>("inspect", &rbClock::inspect);
+	ourDefinition.defineMethod<2>("restart", &rbClock::restart);
+	ourDefinition.defineMethod<3>("marshal_dump", &rbClock::marshalDump);
+	ourDefinition.defineMethod<4>("inspect", &rbClock::inspect);
 
 	ourDefinition.aliasMethod("inspect", "to_s");
 }
@@ -56,6 +57,14 @@ rbClock* rbClock::initializeCopy(const rbClock* value)
 rbTime* rbClock::getElapsedTime() const
 {
 	sf::Time time = myObject.getElapsedTime();
+	rbTime* timeObject = rbTime::ourDefinition.newObject();
+	timeObject->myObject = time;
+	return timeObject;
+}
+
+rbTime* rbClock::restart()
+{
+	sf::Time time = myObject.restart();
 	rbTime* timeObject = rbTime::ourDefinition.newObject();
 	timeObject->myObject = time;
 	return timeObject;
