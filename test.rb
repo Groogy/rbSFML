@@ -1,18 +1,12 @@
 require './lib/rbsfml.so'
 
-SFML.blah()
-puts SFML.say("Lalalal")
+time1 = SFML.seconds(1.0)
+time2 = SFML.milliseconds(2000)
 
-puts SFML::Foobar.to_s
-puts SFML::Foobar.something
+puts time1.inspect
+puts time2.inspect
 
-obj = SFML::Foobar.new()
-puts obj
-puts obj.somethingElse(6)
-puts obj.somethingElse(8)
+puts time1.as_seconds
+puts time2.as_seconds
 
-time = SFML::Time.new()
-puts time
-puts time.as_seconds
-time = SFML.seconds(3.95)
-puts time.as_seconds
+puts (time2 - time1).inspect
