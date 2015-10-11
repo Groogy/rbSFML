@@ -19,23 +19,41 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <ruby.h>
-#include "module.hpp"
+#include <SFML/System/Clock.hpp>
+#include <string>
 #include "class.hpp"
-#include "rbtime.hpp"
-#include "rbclock.hpp"
+#include "object.hpp"
 
-class rbSFML
+class rbClock;
+class rbTime;
+
+typedef rb::Class<rbClock> rbClockClass;
+
+class rbClock : public rb::Object
 {
+public:
+	static void defineClass(const rb::Value& sfml);
+
+	rbClock();
+	~rbClock();
+
+	rbClock* initializeCopy(const rbClock* value);
+
+	rbTime* getElapsedTime() const;
+
+	rb::Value marshalDump() const;
+	std::string inspect() const;
+
+private:
+	static rbClockClass ourDefinition;
+
+	sf::Clock myObject;
 };
 
-extern "C" void Init_rbsfml() {
-	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
-
-	sfml.defineFunction<0>("seconds", &rbTime::seconds);
-	sfml.defineFunction<1>("milliseconds", &rbTime::milliseconds);
-	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
-
-	rbTime::defineClass(rb::Value(sfml));
-	rbClock::defineClass(rb::Value(sfml));
+namespace rb
+{
+	template<>
+	rbClock* Value::to() const;
+	template<>
+	const rbClock* Value::to() const;
 }

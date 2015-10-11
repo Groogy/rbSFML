@@ -25,6 +25,7 @@
 #include "object.hpp"
 
 class rbTime;
+class rbClock;
 
 typedef rb::Class<rbTime> rbTimeClass;
 
@@ -58,6 +59,8 @@ public:
 	int compare(const rbTime* other) const;
 
 private:
+	friend class rbClock;
+
 	static rbTimeClass ourDefinition;
 
 	sf::Time myObject;
