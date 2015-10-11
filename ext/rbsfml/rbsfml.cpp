@@ -32,6 +32,8 @@ extern "C" void Init_rbsfml() {
 	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
 
 	sfml.defineFunction<0>("seconds", &rbTime::seconds);
+	sfml.defineFunction<1>("milliseconds", &rbTime::milliseconds);
+	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
 
 	rbTime::defineClass(rb::Value(sfml));
 }
