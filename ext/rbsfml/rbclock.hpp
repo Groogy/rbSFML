@@ -19,6 +19,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#ifndef RBSFML_RBCLOCK_HPP_
+#define RBSFML_RBCLOCK_HPP_
+
 #include <SFML/System/Clock.hpp>
 #include <string>
 #include "class.hpp"
@@ -58,3 +61,5 @@ namespace rb
 	template<>
 	const rbClock* Value::to() const;
 }
+
+#endif // RBSFML_RBCLOCK_HPP_

@@ -19,8 +19,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
- #ifndef RBSFML_CLASS_HPP_
- #define RBSFML_CLASS_HPP_
+#ifndef RBSFML_CLASS_HPP_
+#define RBSFML_CLASS_HPP_
 
 #include <ruby.h>
 #include <string>

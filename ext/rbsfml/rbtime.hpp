@@ -19,6 +19,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#ifndef RBSFML_RBTIME_HPP_
+#define RBSFML_RBTIME_HPP_
+
 #include <SFML/System/Time.hpp>
 #include <string>
 #include "class.hpp"
@@ -73,3 +76,5 @@ namespace rb
 	template<>
 	const rbTime* Value::to() const;
 }
+
+#endif // RBSFML_RBTIME_HPP_
