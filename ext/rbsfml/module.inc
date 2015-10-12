@@ -103,6 +103,18 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 }
 
 template<typename Base, int MaxFunctions>
+template<int ID, typename ReturnType, typename ...Args>
+void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnType(*function)(Args...))
+{
+	static_assert(ID < MaxFunctions, "Unsupported amount of functions");
+	typedef ReturnType(*FunctionSignature)(Args...);
+
+	createCaller<ID, FunctionSignature, StaticMethodCaller<ReturnType, Args...>>(function);
+	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, StaticMethodCaller<ReturnType, Args...>, Args...>;
+	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
+}
+
+template<typename Base, int MaxFunctions>
 void Module<Base, MaxFunctions>::includeModule(const rb::Value& value)
 {
 	rb_include_module(myDefinition, value.to<VALUE>());

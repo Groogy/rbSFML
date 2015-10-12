@@ -54,6 +54,8 @@ namespace rb
 		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...));
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...)const);
+		template<int ID, typename ReturnType, typename ...Args>
+		void defineMethod(const std::string& name, ReturnType(*function)(Args...));
 
 		void includeModule(const rb::Value& value);
 
@@ -158,6 +160,36 @@ namespace rb
 
 			VALUE self;
 			void(Base::*function)(Args... args)const;
+		};
+
+		template<typename ReturnType, typename ...Args>
+		struct StaticMethodCaller : public CallerBase
+		{
+			StaticMethodCaller(VALUE s, ReturnType(*f)(Args... args)) : self(s), function(f) {}
+
+			VALUE operator()(Args... args) 
+			{ 
+				Value returnValue(function(args...));
+				return returnValue.to<VALUE>();
+			}
+
+			VALUE self;
+			ReturnType(*function)(Args... args);
+		};
+
+		template<typename ...Args>
+		struct StaticMethodCaller<void, Args...> : public CallerBase
+		{
+			StaticMethodCaller(VALUE s, void(*f)(Args... args)) : self(s), function(f) {}
+
+			VALUE operator()(Args... args)
+			{
+				function(args...);
+				return Qnil;
+			}
+
+			VALUE self;
+			void(*function)(Args... args);
 		};
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>
