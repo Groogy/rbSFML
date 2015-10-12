@@ -19,25 +19,29 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <ruby.h>
-#include "module.hpp"
-#include "class.hpp"
-#include "rbtime.hpp"
-#include "rbclock.hpp"
 #include "rbnoncopyable.hpp"
+#include "error.hpp"
+#include "macros.hpp"
 
-class rbSFML
+rbNonCopyableModule rbNonCopyable::ourDefinition;
+
+void rbNonCopyable::defineModule(const rb::Value& sfml)
 {
-};
+	ourDefinition = rbNonCopyableModule::defineModuleUnder("NonCopyable", sfml);
+	ourDefinition.defineMethod<0>("initialize_copy", &rbNonCopyable::initializeCopy);
+	ourDefinition.defineMethod<1>("marshal_dump", &rbNonCopyable::marshalDump);
+}
 
-extern "C" void Init_rbsfml() {
-	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
+const rb::Value& rbNonCopyable::initializeCopy(const rb::Value& self, const rb::Value& value)
+{
+	std::string type = self.getClassName();
+	rb::raise(rb::RuntimeError, "%s can not be copied!", type.c_str());
+	return rb::Nil;
+}
 
-	sfml.defineFunction<0>("seconds", &rbTime::seconds);
-	sfml.defineFunction<1>("milliseconds", &rbTime::milliseconds);
-	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
-
-	rbNonCopyable::defineModule(rb::Value(sfml));
-	rbTime::defineClass(rb::Value(sfml));
-	rbClock::defineClass(rb::Value(sfml));
+const rb::Value& rbNonCopyable::marshalDump(const rb::Value& self)
+{
+	std::string type = self.getClassName();
+	rb::raise(rb::TypeError, "can't dump %s", type.c_str());
+	return rb::Nil;
 }

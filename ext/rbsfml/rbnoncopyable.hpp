@@ -19,25 +19,27 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <ruby.h>
-#include "module.hpp"
-#include "class.hpp"
-#include "rbtime.hpp"
-#include "rbclock.hpp"
-#include "rbnoncopyable.hpp"
+#ifndef RBSFML_RBNONCOPYABLE_HPP
+#define RBSFML_RBNONCOPYABLE_HPP
 
-class rbSFML
+#include <SFML/System/NonCopyable.hpp>
+#include "class.hpp"
+#include "object.hpp"
+
+class rbNonCopyable;
+
+typedef rb::Module<rbNonCopyable> rbNonCopyableModule;
+
+class rbNonCopyable
 {
+public:
+	static void defineModule(const rb::Value& sfml);
+
+	static const rb::Value& initializeCopy(const rb::Value& self, const rb::Value& value);
+	static const rb::Value& marshalDump(const rb::Value& self);
+
+private:
+	static rbNonCopyableModule ourDefinition;
 };
 
-extern "C" void Init_rbsfml() {
-	auto sfml = rb::Module<rbSFML>::defineModule("SFML");
-
-	sfml.defineFunction<0>("seconds", &rbTime::seconds);
-	sfml.defineFunction<1>("milliseconds", &rbTime::milliseconds);
-	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
-
-	rbNonCopyable::defineModule(rb::Value(sfml));
-	rbTime::defineClass(rb::Value(sfml));
-	rbClock::defineClass(rb::Value(sfml));
-}
+#endif // RBSFML_RBNONCOPYABLE_HPP
