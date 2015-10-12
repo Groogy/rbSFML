@@ -43,6 +43,7 @@
 namespace rb
 {
 
-rb::Value TypeError;
+rb::Value TypeError(rb_eTypeError);
+rb::Value RuntimeError(rb_eRuntimeError);
 
 }

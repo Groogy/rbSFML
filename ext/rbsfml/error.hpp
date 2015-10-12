@@ -28,6 +28,7 @@
 namespace rb
 {
 	extern rb::Value TypeError;
+	extern rb::Value RuntimeError;
 
 	template<typename ...Args>
 	void raise(const rb::Value& value, Args... args);
