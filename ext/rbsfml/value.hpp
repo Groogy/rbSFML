@@ -60,6 +60,7 @@ namespace rb
 		Type to() const;
 
 		ValueType getType() const;
+		std::string getClassName() const;
 
 		bool isNil() const;
 
@@ -79,6 +80,8 @@ namespace rb
 
 	template<>
 	const Value& Value::to() const;
+	template<>
+	Value Value::to() const;
 
 	template<>
 	std::string Value::to() const;

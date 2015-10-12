@@ -136,6 +136,11 @@ ValueType Value::getType() const
 	}
 }
 
+std::string Value::getClassName() const
+{
+	return rb_obj_classname(myValue);
+}
+
 bool Value::isNil() const
 {
 	return myValue == Qnil;
@@ -155,6 +160,12 @@ VALUE Value::to() const
 
 template<>
 const Value& Value::to() const
+{
+	return *this;
+}
+
+template<>
+Value Value::to() const
 {
 	return *this;
 }
