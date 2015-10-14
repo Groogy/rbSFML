@@ -64,6 +64,9 @@ namespace rb
 
 		bool isNil() const;
 
+		template<const char* Name, typename ReturnType, typename ...Args>
+		ReturnType call(Args... args);
+
 	private:
 		void errorHandling(int rubyType) const;
 

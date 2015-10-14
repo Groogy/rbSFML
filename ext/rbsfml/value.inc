@@ -29,4 +29,12 @@ Value::Value(const Module<Base, MaxFunctions>& module)
 {
 }
 
+template<const char* Name, typename ReturnType, typename ...Args>
+ReturnType Value::call(Args... args)
+{
+	static ID sym = rb_intern(Name);
+	VALUE returnValue = rb_funcall(myValue, sym, sizeof...(args), (Value(args).to<VALUE>())...);
+	return Value(returnValue).to<ReturnType>();
+}
+
 }
