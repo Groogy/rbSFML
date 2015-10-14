@@ -68,6 +68,11 @@ namespace rb
 		template<const char* Name, typename ReturnType, typename ...Args>
 		ReturnType call(Args... args);
 
+		template<const char* Name, typename ValueType>
+		void setVar(ValueType value);
+		template<const char* Name, typename ValueType>
+		ValueType getVar() const;
+
 	private:
 		void errorHandling(int rubyType) const;
 		void errorHandling(int type1, int type2) const;

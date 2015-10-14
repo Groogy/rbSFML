@@ -37,4 +37,19 @@ ReturnType Value::call(Args... args)
 	return Value(returnValue).to<ReturnType>();
 }
 
+template<const char* Name, typename ValueType>
+void Value::setVar(ValueType value)
+{
+	static ID sym = rb_intern(Name);
+	rb_ivar_set(myValue, sym, Value(value).to<VALUE>());
+}
+
+template<const char* Name, typename ValueType>
+ValueType Value::getVar() const
+{
+	static ID sym = rb_intern(Name);
+	VALUE value = rb_ivar_get(myValue, sym);
+	return Value(value).to<ValueType>();
+}
+
 }
