@@ -99,6 +99,12 @@ Value::Value(long long int value)
 {
 }
 
+Value::Value(bool value)
+: myValue(value ? Qtrue : Qfalse)
+, myCachedStr()
+{
+}
+
 Value::Value(rb::Object* object)
 : myValue(object->myValue.myValue)
 , myCachedStr()
@@ -152,6 +158,12 @@ void Value::errorHandling(int rubyType) const
 		rb_raise(rb_eTypeError, "tried converting '%s' to '%s'", RubyTypeNames[TYPE(myValue)], RubyTypeNames[rubyType]);
 }
 
+void Value::errorHandling(int type1, int type2) const
+{
+	if(TYPE(myValue) != type1 && TYPE(myValue) != type2)
+		rb_raise(rb_eTypeError, "tried converting '%s' to '%s'", RubyTypeNames[TYPE(myValue)], RubyTypeNames[type1]);
+}
+
 template<>
 VALUE Value::to() const
 {
@@ -203,6 +215,13 @@ long long int Value::to() const
 {
 	errorHandling(T_FIXNUM);
 	return NUM2LL(myValue);
+}
+
+template<>
+bool Value::to() const
+{
+	errorHandling(T_TRUE, T_FALSE);
+	return myValue == Qtrue;
 }
 
 }

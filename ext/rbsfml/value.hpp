@@ -50,6 +50,7 @@ namespace rb
 		explicit Value(int value);
 		explicit Value(float value);
 		explicit Value(long long int value);
+		explicit Value(bool value);
 		explicit Value(rb::Object* object);
 
 		template<typename Base, int MaxFunctions>
@@ -69,6 +70,7 @@ namespace rb
 
 	private:
 		void errorHandling(int rubyType) const;
+		void errorHandling(int type1, int type2) const;
 
 		VALUE myValue;
 		mutable std::string myCachedStr;
@@ -97,6 +99,8 @@ namespace rb
 	float Value::to() const;
 	template<>
 	long long int Value::to() const;
+	template<>
+	bool Value::to() const;
 }
 
 #include "value.inc"
