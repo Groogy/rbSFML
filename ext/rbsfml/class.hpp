@@ -31,6 +31,21 @@
 
 namespace rb
 {
+	template<typename Base>
+	class DefaultAllocator
+	{
+	public:
+		static Base* allocate();
+		static VALUE allocate(VALUE klass);
+		static void free(void* memory);
+	};
+
+	class RubyObjAllocator
+	{
+	public:
+		static VALUE allocate(VALUE klass);
+	};
+
 	template<typename Base, int MaxFunctions = 32>
 	class Class : public Module<Base, MaxFunctions>
 	{
@@ -38,7 +53,9 @@ namespace rb
 		static Module<Base, MaxFunctions> defineModule(const std::string& name) = delete;
 		static Module<Base, MaxFunctions> defineModuleUnder(const std::string& name, const Value& otherModule) = delete;
 
+		template<typename Allocator = DefaultAllocator<Base>>
 		static Class defineClass(const std::string& name, const Value& parent = Value(rb_cObject));
+		template<typename Allocator = DefaultAllocator<Base>>
 		static Class defineClassUnder(const std::string& name, const Value& otherModule, const Value& parent = Value(rb_cObject));
 
 		Class();
@@ -46,10 +63,6 @@ namespace rb
 		Base* newObject();
 
 	protected:
-		static Base* allocate();
-		static VALUE allocate(VALUE klass);
-		static void free(void* memory);
-
 		static Value myParent;
 	};
 }

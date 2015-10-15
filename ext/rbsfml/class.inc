@@ -22,22 +22,50 @@
 namespace rb
 {
 
+template<typename Base>
+Base* DefaultAllocator<Base>::allocate()
+{
+	void* memory = xmalloc(sizeof(Base));
+	if(memory == nullptr) rb_memerror();
+	Base* object = new(memory) Base;
+	return object;
+}
+
+template<typename Base>
+VALUE DefaultAllocator<Base>::allocate(VALUE klass)
+{
+	Base* memory = allocate();
+	VALUE object = rb_data_object_alloc(klass, memory, NULL, &free);
+	memory->setValue(object);
+	return object;
+}
+
+template<typename Base>
+void DefaultAllocator<Base>::free(void* memory)
+{
+	Base* object = static_cast<Base*>(memory);
+	object->~Base();
+	xfree(memory);
+}
+
 template<typename Base, int MaxFunctions>
 Value Class<Base, MaxFunctions>::myParent(Qnil);
 
 template<typename Base, int MaxFunctions>
+template<typename Allocator>
 Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClass(const std::string& name, const Value& parent)
 {
 	Module<Base, MaxFunctions>::myDefinition = rb_define_class(name.c_str(), parent.to<VALUE>());
 	Module<Base, MaxFunctions>::myName = name;
 	Module<Base, MaxFunctions>::myParent = parent;
 
-	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &allocate);
+	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &Allocator::allocate);
 
 	return Class();
 }
 
 template<typename Base, int MaxFunctions>
+template<typename Allocator>
 Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClassUnder(const std::string& name, const Value& otherModule, const Value& parent)
 {
 	Module<Base, MaxFunctions>::myDefinition = rb_define_class_under(otherModule.to<VALUE>(), name.c_str(), parent.to<VALUE>());
@@ -45,7 +73,7 @@ Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClassUnder(const std:
 	Module<Base, MaxFunctions>::myNamespace = otherModule;
 	myParent = parent;
 
-	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &allocate);
+	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &Allocator::allocate);
 
 	return Class();
 }
@@ -61,32 +89,6 @@ Base* Class<Base, MaxFunctions>::newObject()
 {
 	static ID newSymbol = rb_intern("new");
 	return Value(rb_funcall(Module<Base, MaxFunctions>::myDefinition, newSymbol, 0)).to<Base*>();
-}
-
-template<typename Base, int MaxFunctions>
-Base* Class<Base, MaxFunctions>::allocate()
-{
-	void* memory = xmalloc(sizeof(Base));
-	if(memory == nullptr) rb_memerror();
-	Base* object = new(memory) Base;
-	return object;
-}
-
-template<typename Base, int MaxFunctions>
-VALUE Class<Base, MaxFunctions>::allocate(VALUE klass)
-{
-	Base* memory = allocate();
-	VALUE object = rb_data_object_alloc(klass, memory, NULL, &free);
-	memory->setValue(object);
-	return object;
-}
-
-template<typename Base, int MaxFunctions>
-void Class<Base, MaxFunctions>::free(void* memory)
-{
-	Base* object = static_cast<Base*>(memory);
-	object->~Base();
-	xfree(memory);
 }
 
 }
