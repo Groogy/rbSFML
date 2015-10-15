@@ -115,6 +115,18 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 }
 
 template<typename Base, int MaxFunctions>
+template<int ID>
+void Module<Base, MaxFunctions>::defineMethod(const std::string& name, Value(*function)(const Value&, const std::vector<Value>&))
+{
+	static_assert(ID < MaxFunctions, "Unsupported amount of functions");
+	typedef Value(*FunctionSignature)(const Value&, const std::vector<Value>&);
+
+	createCaller<ID, FunctionSignature, VariadicMethodCaller>(function);
+	auto wrapFunc = &Module::variadicWrapperFunction<ID>;
+	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), -1);
+}
+
+template<typename Base, int MaxFunctions>
 void Module<Base, MaxFunctions>::includeModule(const rb::Value& value)
 {
 	rb_include_module(myDefinition, value.to<VALUE>());
@@ -140,6 +152,20 @@ CallerSignature& Module<Base, MaxFunctions>::getCaller(VALUE self)
 	CallerSignature* caller = static_cast<CallerSignature*>(ourFunctions[ID]);
 	caller->self = self;
 	return *caller;
+}
+
+template<typename Base, int MaxFunctions>
+template<int ID>
+VALUE Module<Base, MaxFunctions>::variadicWrapperFunction(int argc, VALUE* argv, VALUE self)
+{
+	typedef Value(*FunctionSignature)(const Value&, const std::vector<Value>&);
+	VariadicMethodCaller& caller = getCaller<ID, FunctionSignature, VariadicMethodCaller>(self);
+	std::vector<Value> arguments;
+	for(int index = 0; index < argc; index++)
+	{
+		arguments.push_back(Value(argv[index]));
+	}
+	return caller(arguments);
 }
 
 template<typename Base, int MaxFunctions>

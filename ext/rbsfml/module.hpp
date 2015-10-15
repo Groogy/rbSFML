@@ -25,6 +25,7 @@
 #include <ruby.h>
 #include <string>
 #include <array>
+#include <vector>
 
 #include "value.hpp"
 
@@ -56,6 +57,9 @@ namespace rb
 		void defineMethod(const std::string& name, ReturnType(Base::*function)(Args...)const);
 		template<int ID, typename ReturnType, typename ...Args>
 		void defineMethod(const std::string& name, ReturnType(*function)(Args...));
+
+		template<int ID>
+		void defineMethod(const std::string& name, Value(*function)(const Value&, const std::vector<Value>&));
 
 		void includeModule(const rb::Value& value);
 
@@ -192,11 +196,28 @@ namespace rb
 			void(*function)(Args... args);
 		};
 
+		struct VariadicMethodCaller : public CallerBase
+		{
+			VariadicMethodCaller(VALUE s, Value(*f)(const Value&, const std::vector<Value>&)) : self(s), function(f) {}
+
+			VALUE operator()(const std::vector<Value>& args) 
+			{ 
+				Value returnValue(function(Value(self), args));
+				return returnValue.to<VALUE>();
+			}
+
+			VALUE self;
+			Value(*function)(const Value&, const std::vector<Value>&);
+		};
+
 		template<int ID, typename FunctionSignature, typename CallerSignature>
 		static void createCaller(FunctionSignature function);
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>
 		static CallerSignature& getCaller(VALUE self);
+
+		template<int ID>
+		static VALUE variadicWrapperFunction(int argc, VALUE* argv, VALUE self);
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>
 		static VALUE wrapperFunction(VALUE self);
