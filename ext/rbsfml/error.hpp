@@ -36,8 +36,8 @@ namespace rb
 	template<typename ...Args>
 	void expectedTypes(Args... args);
 
-	void expectedNumArgs(int count);
-	void expectedNumArgs(int minCount, int maxCount);
+	void expectedNumArgs(int argCount, int count);
+	void expectedNumArgs(int argCount, int minCount, int maxCount);
 }
 
 #include "error.inc"
