@@ -24,6 +24,7 @@
 
 #include <ruby.h>
 #include <string>
+#include <vector>
 
 namespace rb
 {
@@ -52,9 +53,11 @@ namespace rb
 		explicit Value(long long int value);
 		explicit Value(bool value);
 		explicit Value(rb::Object* object);
+		explicit Value(const std::vector<rb::Value>& collection);
 
 		template<typename Base, int MaxFunctions>
 		explicit Value(const Module<Base, MaxFunctions>& module);
+
 		~Value();
 
 		template<typename Type>
