@@ -46,54 +46,63 @@ Value False(Qfalse);
 Value::Value()
 : myValue(Qnil)
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(VALUE value)
 : myValue(value)
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(const std::string& value)
 : myValue(rb_str_new2(value.c_str()))
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(int value)
 : myValue(INT2FIX(value))
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(float value)
 : myValue(rb_float_new(value))
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(long long int value)
 : myValue(LL2NUM(value))
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(bool value)
 : myValue(value ? Qtrue : Qfalse)
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(rb::Object* object)
 : myValue(object->myValue.myValue)
 , myCachedStr()
+, myCachedArray()
 {
 }
 
 Value::Value(const std::vector<rb::Value>& collection)
 : myValue(Qnil)
 , myCachedStr()
+, myCachedArray()
 {
 	std::vector<VALUE> convertedData(collection.size(), Qnil);
 	for(int index = 0, size = collection.size(); index < size; index++)
@@ -172,6 +181,26 @@ template<>
 Value Value::to() const
 {
 	return *this;
+}
+
+template<>
+std::vector<Value> Value::to() const
+{
+	return to<const std::vector<Value>&>();
+}
+
+template<>
+const std::vector<Value>& Value::to() const
+{
+	errorHandling(T_ARRAY);
+	int count = RARRAY_LEN(myValue);
+	VALUE* ptr = RARRAY_PTR(myValue);
+	myCachedArray.resize(count);
+	for(int index = 0; index < count; index++)
+	{
+		myCachedArray[index] = Value(ptr[index]);
+	}
+	return myCachedArray;
 }
 
 template<>

@@ -26,6 +26,7 @@ template<typename Base, int MaxFunctions>
 Value::Value(const Module<Base, MaxFunctions>& module)
 : myValue(module.myDefinition)
 , myCachedStr()
+, myCachedArray()
 {
 }
 

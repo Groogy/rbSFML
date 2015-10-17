@@ -53,7 +53,7 @@ namespace rb
 		explicit Value(long long int value);
 		explicit Value(bool value);
 		explicit Value(rb::Object* object);
-		explicit Value(const std::vector<rb::Value>& collection);
+		explicit Value(const std::vector<Value>& collection);
 
 		template<typename Base, int MaxFunctions>
 		explicit Value(const Module<Base, MaxFunctions>& module);
@@ -82,6 +82,7 @@ namespace rb
 
 		VALUE myValue;
 		mutable std::string myCachedStr;
+		mutable std::vector<Value> myCachedArray;
 	};
 
 	extern Value Nil;
@@ -100,6 +101,11 @@ namespace rb
 	std::string Value::to() const;
 	template<>
 	const std::string& Value::to() const;
+
+	template<>
+	std::vector<Value> Value::to() const;
+	template<>
+	const std::vector<Value>& Value::to() const;
 
 	template<>
 	int Value::to() const;
