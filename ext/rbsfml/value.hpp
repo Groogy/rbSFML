@@ -68,12 +68,12 @@ namespace rb
 
 		bool isNil() const;
 
-		template<const char* Name, typename ReturnType, typename ...Args>
+		template<const char* Name, typename ReturnType = Value, typename ...Args>
 		ReturnType call(Args... args);
 
 		template<const char* Name, typename ValueType>
 		void setVar(ValueType value);
-		template<const char* Name, typename ValueType>
+		template<const char* Name, typename ValueType = Value>
 		ValueType getVar() const;
 
 	private:
