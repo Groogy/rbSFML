@@ -27,6 +27,27 @@ namespace
 {
 	constexpr char symVarX[] = "@x";
 	constexpr char symVarY[] = "@y";
+	constexpr char symNegate[] = "-@";
+
+	constexpr char symAdd[] = "+";
+	constexpr char symSubtract[] = "-";
+	constexpr char symMultiply[] = "*";
+	constexpr char symDivide[] = "/";
+
+	template<const char* operation, const char* varX = symVarX, const char* varY = symVarY>
+	void doMath(rb::Value result, const rb::Value& left, const rb::Value& right)
+	{
+		rb::Value leftX = left.getVar<varX>();
+		rb::Value leftY = left.getVar<varY>();
+		rb::Value rightX = right.getVar<varX>();
+		rb::Value rightY = right.getVar<varY>();
+
+		rb::Value x = leftX.call<operation>(rightX);
+		rb::Value y = leftY.call<operation>(rightY);
+
+		result.setVar<varX>(x);
+		result.setVar<varY>(y);
+	}
 }
 
 rbVector2Class rbVector2::ourDefinition;
@@ -37,7 +58,12 @@ void rbVector2::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<0>("initialize", &rbVector2::initialize);
 	ourDefinition.defineMethod<1>("initialize_copy", &rbVector2::initializeCopy);
 	ourDefinition.defineMethod<2>("marshal_dump", &rbVector2::marshalDump);
-	ourDefinition.defineMethod<2>("marshal_load", &rbVector2::marshalLoad);
+	ourDefinition.defineMethod<3>("marshal_load", &rbVector2::marshalLoad);
+	ourDefinition.defineMethod<4>("-@", &rbVector2::negate);
+	ourDefinition.defineMethod<5>("+", &rbVector2::add);
+	ourDefinition.defineMethod<6>("-", &rbVector2::subtract);
+	ourDefinition.defineMethod<7>("*", &rbVector2::multiply);
+	ourDefinition.defineMethod<8>("/", &rbVector2::divide);
 }
 
 rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& args)
@@ -56,30 +82,68 @@ rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& ar
         	self.setVar<symVarY>(args[0]);
             break;
         default:
-        	rb::expectedNumArgs( argc, 0, 2 );
+        	rb::expectedNumArgs( args.size(), 0, 2 );
         	break;
     }
 
 	return self;
 }
 
-rb::Value rbVector2::initializeCopy(const rb::Value& self, const rb::Value& value)
+rb::Value rbVector2::initializeCopy(rb::Value self, const rb::Value& value)
 {
-	std::string type = self.getClassName();
-	rb::raise(rb::RuntimeError, "%s can not be copied!", type.c_str());
+	self.setVar<symVarX>(value.getVar<symVarX, rb::Value>());
+    self.setVar<symVarY>(value.getVar<symVarY, rb::Value>());
+	return self;
+}
+
+std::vector<rb::Value> rbVector2::marshalDump(const rb::Value& self)
+{
+	std::vector<rb::Value> array;
+	array.push_back(self.getVar<symVarX, rb::Value>());
+    array.push_back(self.getVar<symVarY, rb::Value>());
+    return array;
+}
+
+rb::Value rbVector2::marshalLoad(rb::Value self, const rb::Value& data)
+{
+	std::vector<rb::Value> array = data.to<std::vector<rb::Value>>();
+	self.setVar<symVarX>(array[0]);
+    self.setVar<symVarY>(array[1]);
 	return rb::Nil;
 }
 
-rb::Value rbVector2::marshalDump(const rb::Value& self)
+rb::Value rbVector2::negate(const rb::Value& self)
 {
-	std::string type = self.getClassName();
-	rb::raise(rb::TypeError, "can't dump %s", type.c_str());
-	return rb::Nil;
+	rb::Value object = ourDefinition.newObject();
+	object.setVar<symVarX>(object.getVar<symVarX>().call<symNegate>());
+	object.setVar<symVarY>(object.getVar<symVarY>().call<symNegate>());
+	return object;
 }
 
-rb::Value rbVector2::marshalLoad(const rb::Value& self)
+rb::Value rbVector2::add(const rb::Value& self, const rb::Value& other)
 {
-	std::string type = self.getClassName();
-	rb::raise(rb::TypeError, "can't dump %s", type.c_str());
-	return rb::Nil;
+	rb::Value result = ourDefinition.newObject();
+	doMath<symAdd>(result, self, other);
+	return result;
+}
+
+rb::Value rbVector2::subtract(const rb::Value& self, const rb::Value& other)
+{
+	rb::Value result = ourDefinition.newObject();
+	doMath<symSubtract>(result, self, other);
+	return result;
+}
+
+rb::Value rbVector2::multiply(const rb::Value& self, const rb::Value& other)
+{
+	rb::Value result = ourDefinition.newObject();
+	doMath<symMultiply>(result, self, other);
+	return result;
+}
+
+rb::Value rbVector2::divide(const rb::Value& self, const rb::Value& other)
+{
+	rb::Value result = ourDefinition.newObject();
+	doMath<symDivide>(result, self, other);
+	return result;
 }

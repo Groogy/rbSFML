@@ -23,6 +23,7 @@
 #define RBSFML_RBVECTOR2_HPP
 
 #include <SFML/System/Vector2.hpp>
+#include <array>
 #include "class.hpp"
 #include "object.hpp"
 
@@ -36,9 +37,15 @@ public:
 	static void defineClass(const rb::Value& sfml);
 
 	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
-	static rb::Value initializeCopy(const rb::Value& self, const rb::Value& value);
-	static rb::Value marshalDump(const rb::Value& self);
-	static rb::Value marshalLoad(const rb::Value& self);
+	static rb::Value initializeCopy(rb::Value self, const rb::Value& value);
+	static std::vector<rb::Value> marshalDump(const rb::Value& self);
+	static rb::Value marshalLoad(rb::Value self, const rb::Value& data);
+
+	static rb::Value negate(const rb::Value& self);
+	static rb::Value add(const rb::Value& self, const rb::Value& other);
+	static rb::Value subtract(const rb::Value& self, const rb::Value& other);
+	static rb::Value multiply(const rb::Value& self, const rb::Value& other);
+	static rb::Value divide(const rb::Value& self, const rb::Value& other);
 
 private:
 	static rbVector2Class ourDefinition;
