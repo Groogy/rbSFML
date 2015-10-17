@@ -56,8 +56,8 @@ rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& ar
         	self.setVar<symVarY>(args[0]);
             break;
         default:
+        	rb::expectedNumArgs( argc, 0, 2 );
         	break;
-            //INVALID_ARGUMENT_LIST( argc, "0..2" );
     }
 
 	return self;
