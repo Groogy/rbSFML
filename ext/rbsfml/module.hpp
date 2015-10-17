@@ -59,7 +59,7 @@ namespace rb
 		void defineMethod(const std::string& name, ReturnType(*function)(Args...));
 
 		template<int ID>
-		void defineMethod(const std::string& name, Value(*function)(const Value&, const std::vector<Value>&));
+		void defineMethod(const std::string& name, Value(*function)(Value, const std::vector<Value>&));
 
 		void includeModule(const rb::Value& value);
 
@@ -198,7 +198,7 @@ namespace rb
 
 		struct VariadicMethodCaller : public CallerBase
 		{
-			VariadicMethodCaller(VALUE s, Value(*f)(const Value&, const std::vector<Value>&)) : self(s), function(f) {}
+			VariadicMethodCaller(VALUE s, Value(*f)(Value, const std::vector<Value>&)) : self(s), function(f) {}
 
 			VALUE operator()(const std::vector<Value>& args) 
 			{ 
@@ -207,7 +207,7 @@ namespace rb
 			}
 
 			VALUE self;
-			Value(*function)(const Value&, const std::vector<Value>&);
+			Value(*function)(Value, const std::vector<Value>&);
 		};
 
 		template<int ID, typename FunctionSignature, typename CallerSignature>

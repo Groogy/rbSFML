@@ -35,7 +35,7 @@ class rbVector2
 public:
 	static void defineClass(const rb::Value& sfml);
 
-	static rb::Value initialize(const rb::Value& self, const std::vector<rb::Value>& args);
+	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
 	static rb::Value initializeCopy(const rb::Value& self, const rb::Value& value);
 	static rb::Value marshalDump(const rb::Value& self);
 	static rb::Value marshalLoad(const rb::Value& self);

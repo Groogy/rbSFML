@@ -116,10 +116,10 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 
 template<typename Base, int MaxFunctions>
 template<int ID>
-void Module<Base, MaxFunctions>::defineMethod(const std::string& name, Value(*function)(const Value&, const std::vector<Value>&))
+void Module<Base, MaxFunctions>::defineMethod(const std::string& name, Value(*function)(Value, const std::vector<Value>&))
 {
 	static_assert(ID < MaxFunctions, "Unsupported amount of functions");
-	typedef Value(*FunctionSignature)(const Value&, const std::vector<Value>&);
+	typedef Value(*FunctionSignature)(Value, const std::vector<Value>&);
 
 	createCaller<ID, FunctionSignature, VariadicMethodCaller>(function);
 	auto wrapFunc = &Module::variadicWrapperFunction<ID>;
@@ -158,7 +158,7 @@ template<typename Base, int MaxFunctions>
 template<int ID>
 VALUE Module<Base, MaxFunctions>::variadicWrapperFunction(int argc, VALUE* argv, VALUE self)
 {
-	typedef Value(*FunctionSignature)(const Value&, const std::vector<Value>&);
+	typedef Value(*FunctionSignature)(Value, const std::vector<Value>&);
 	VariadicMethodCaller& caller = getCaller<ID, FunctionSignature, VariadicMethodCaller>(self);
 	std::vector<Value> arguments;
 	for(int index = 0; index < argc; index++)

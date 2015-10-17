@@ -40,22 +40,23 @@ void rbVector2::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<2>("marshal_load", &rbVector2::marshalLoad);
 }
 
-rb::Value rbVector2::initialize(const rb::Value& self, const std::vector<rb::Value>& args)
+rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& args)
 {
 	switch( args.size() )
     {
         case 0:
-        	self.setVariable<symVarX>(0);
-        	self.setVariable<symVarY>(0);
+        	self.setVar<symVarX>(0);
+        	self.setVar<symVarY>(0);
             break;
         case 1:
         	rbVector2::initializeCopy(self, args[0]);
             break;
         case 2:
-        	self.setVariable<symVarX>(args[0]);
-        	self.setVariable<symVarY>(args[0]);
+        	self.setVar<symVarX>(args[0]);
+        	self.setVar<symVarY>(args[0]);
             break;
         default:
+        	break;
             //INVALID_ARGUMENT_LIST( argc, "0..2" );
     }
 
