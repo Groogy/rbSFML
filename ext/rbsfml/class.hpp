@@ -60,7 +60,7 @@ namespace rb
 
 		Class();
 
-		Base* newObject();
+		Value newObject();
 
 	protected:
 		static Value myParent;

@@ -57,7 +57,7 @@ rbClock* rbClock::initializeCopy(const rbClock* value)
 rbTime* rbClock::getElapsedTime() const
 {
 	sf::Time time = myObject.getElapsedTime();
-	rbTime* timeObject = rbTime::ourDefinition.newObject();
+	rbTime* timeObject = rbTime::ourDefinition.newObject().to<rbTime*>();
 	timeObject->myObject = time;
 	return timeObject;
 }
@@ -65,7 +65,7 @@ rbTime* rbClock::getElapsedTime() const
 rbTime* rbClock::restart()
 {
 	sf::Time time = myObject.restart();
-	rbTime* timeObject = rbTime::ourDefinition.newObject();
+	rbTime* timeObject = rbTime::ourDefinition.newObject().to<rbTime*>();
 	timeObject->myObject = time;
 	return timeObject;
 }

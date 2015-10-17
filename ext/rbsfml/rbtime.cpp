@@ -47,21 +47,21 @@ void rbTime::defineClass(const rb::Value& sfml)
 
 rbTime* rbTime::seconds(float val)
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = sf::seconds(val);
 	return object;
 }
 
 rbTime* rbTime::milliseconds(sf::Int32 val)
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = sf::milliseconds(val);
 	return object;
 }
 
 rbTime* rbTime::microseconds(sf::Int64 val)
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = sf::microseconds(val);
 	return object;
 }
@@ -110,28 +110,28 @@ std::string rbTime::inspect() const
 
 rbTime* rbTime::negate() const
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = -myObject;
 	return object;
 }
 
 rbTime* rbTime::addition(const rbTime* other) const
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = myObject + other->myObject;
 	return object;
 }
 
 rbTime* rbTime::subtract(const rbTime* other) const
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	object->myObject = myObject - other->myObject;
 	return object;
 }
 
 rbTime* rbTime::multiply(const rb::Value& other) const
 {
-	rbTime* object = ourDefinition.newObject();
+	rbTime* object = ourDefinition.newObject().to<rbTime*>();
 	if(other.getType() == rb::ValueType::Fixnum)
 		object->myObject = myObject * other.to<sf::Int64>();
 	else if(other.getType() == rb::ValueType::Float)
@@ -151,7 +151,7 @@ rb::Value rbTime::divide(const rb::Value& other) const
 	}
 	else
 	{
-		rbTime* object = ourDefinition.newObject();
+		rbTime* object = ourDefinition.newObject().to<rbTime*>();
 		if(other.getType() == rb::ValueType::Fixnum)
 			object->myObject = myObject / other.to<sf::Int64>();
 		else if(other.getType() == rb::ValueType::Float)
