@@ -27,7 +27,7 @@ describe SFML::Vector2 do
       end
     end
 
-    context "given fixnum arguments" do
+    context "given float arguments" do
       obj = SFML::Vector2.new(3.0, 8.0)
       it "vector attributes should be equal to given values" do
         expect(obj.x).to eql(3.0)
