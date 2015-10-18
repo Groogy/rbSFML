@@ -65,6 +65,8 @@ namespace rb
 
 		void aliasMethod(const std::string& method, const std::string& alias);
 
+		void defineAttribute(const std::string& attribute, bool reader, bool writer);
+
 	protected:
 		friend class Value;
 

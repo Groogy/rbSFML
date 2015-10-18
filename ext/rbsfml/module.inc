@@ -139,6 +139,12 @@ void Module<Base, MaxFunctions>::aliasMethod(const std::string& method, const st
 }
 
 template<typename Base, int MaxFunctions>
+void Module<Base, MaxFunctions>::defineAttribute(const std::string& attribute, bool reader, bool writer)
+{
+	rb_define_attr(myDefinition, attribute.c_str(), reader, writer);
+}
+
+template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature>
 void Module<Base, MaxFunctions>::createCaller(FunctionSignature function)
 {
