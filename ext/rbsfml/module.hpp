@@ -91,7 +91,7 @@ namespace rb
 		{
 			FunctionCaller(void(*f)(Args... args)) : function(f) {}
 
-			VALUE operator()(Args... args)
+			VALUE operator()(Value self, Args... args)
 			{
 				function(args...);
 				return Qnil;
