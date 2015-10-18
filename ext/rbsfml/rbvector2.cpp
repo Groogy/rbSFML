@@ -29,6 +29,8 @@ namespace
 	constexpr char symVarY[] = "@y";
 	constexpr char symNegate[] = "-@";
 
+	constexpr char symInspect[] = "inspect";
+
 	constexpr char symAdd[] = "+";
 	constexpr char symSubtract[] = "-";
 	constexpr char symMultiply[] = "*";
@@ -64,6 +66,15 @@ void rbVector2::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<6>("-", &rbVector2::subtract);
 	ourDefinition.defineMethod<7>("*", &rbVector2::multiply);
 	ourDefinition.defineMethod<8>("/", &rbVector2::divide);
+	ourDefinition.defineMethod<9>("==", &rbVector2::equal);
+	ourDefinition.defineMethod<10>("eql?", &rbVector2::strictEqual);
+	ourDefinition.defineMethod<11>("inspect", &rbVector2::inspect);
+
+	ourDefinition.defineAttribute("x", true, true);
+	ourDefinition.defineAttribute("y", true, true);
+
+	ourDefinition.aliasMethod("eql?", "equal?");
+	ourDefinition.aliasMethod("to_s", "inspect");
 }
 
 rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& args)
@@ -146,4 +157,27 @@ rb::Value rbVector2::divide(const rb::Value& self, const rb::Value& other)
 	rb::Value result = ourDefinition.newObject();
 	doMath<symDivide>(result, self, other);
 	return result;
+}
+
+bool rbVector2::equal(const rb::Value& self, const rb::Value& other)
+{
+	if(!other.isKindOf(rb::Value(ourDefinition)) && !(other.getType() == rb::ValueType::Array && other.getArrayLength() == 2)) return false;
+	if(!self.getVar<symVarX>().equal(other.getVar<symVarX>())) return false;
+	if(!self.getVar<symVarY>().equal(other.getVar<symVarY>())) return false;
+	return true;
+}
+
+bool rbVector2::strictEqual(const rb::Value& self, const rb::Value& other)
+{
+	if(!other.isKindOf(rb::Value(ourDefinition))) return false;
+	if(self.getVar<symVarX>().getType() != other.getVar<symVarX>().getType()) return false;
+	if(self.getVar<symVarY>().getType() != other.getVar<symVarY>().getType()) return false;
+	return equal(self, other);
+}
+
+std::string rbVector2::inspect(const rb::Value& self)
+{
+	std::string xStr = self.getVar<symVarX>().call<symInspect, std::string>();
+	std::string yStr = self.getVar<symVarY>().call<symInspect, std::string>();
+	return ourDefinition.getName() + "(" + xStr + ", " + yStr + ")";
 }

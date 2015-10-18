@@ -47,6 +47,11 @@ public:
 	static rb::Value multiply(const rb::Value& self, const rb::Value& other);
 	static rb::Value divide(const rb::Value& self, const rb::Value& other);
 
+	static bool equal(const rb::Value& self, const rb::Value& other);
+	static bool strictEqual(const rb::Value& self, const rb::Value& other);
+
+	static std::string inspect(const rb::Value& self);
+
 private:
 	static rbVector2Class ourDefinition;
 };
