@@ -20,6 +20,7 @@
  */
 
 #include <ruby.h>
+#include <SFML/System/Sleep.hpp>
 #include "module.hpp"
 #include "class.hpp"
 #include "rbtime.hpp"
@@ -30,6 +31,11 @@
 
 class rbSFML
 {
+public:
+	static void sleep(rbTime* time)
+	{
+		sf::sleep(time->getObject());
+	}
 };
 
 extern "C" void Init_rbsfml() {
@@ -38,6 +44,7 @@ extern "C" void Init_rbsfml() {
 	sfml.defineFunction<0>("seconds", &rbTime::seconds);
 	sfml.defineFunction<1>("milliseconds", &rbTime::milliseconds);
 	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
+	sfml.defineFunction<3>("sleep", &rbSFML::sleep);
 
 	rbNonCopyable::defineModule(rb::Value(sfml));
 	rbVector2::defineClass(rb::Value(sfml));

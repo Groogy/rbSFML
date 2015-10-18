@@ -61,6 +61,11 @@ public:
 
 	int compare(const rbTime* other) const;
 
+	inline const sf::Time& getObject() const
+	{
+		return myObject;
+	}
+
 private:
 	friend class rbClock;
 
