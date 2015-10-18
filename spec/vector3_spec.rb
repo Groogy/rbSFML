@@ -13,6 +13,10 @@ describe SFML::Vector3 do
       it "should be equal to the zero vector" do
         expect(obj == SFML::Vector3::Zero).to be_truthy
       end
+
+      it "should be equal an array of zeros" do
+        expect(obj == [0, 0, 0]).to be_truthy
+      end
     end
 
     context "given fixnum arguments" do

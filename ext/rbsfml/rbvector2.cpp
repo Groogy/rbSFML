@@ -88,7 +88,16 @@ rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& ar
         	self.setVar<symVarY>(0);
             break;
         case 1:
-        	rbVector2::initializeCopy(self, args[0]);
+        	if(args[0].getType() == rb::ValueType::Array)
+        	{
+        		const std::vector<rb::Value>& elements = args[0].to<const std::vector<rb::Value>&>();
+        		self.setVar<symVarX>(elements[0]);
+	        	self.setVar<symVarY>(elements[1]);
+        	}
+        	else
+        	{
+        		rbVector2::initializeCopy(self, args[0]);
+        	}
             break;
         case 2:
         	self.setVar<symVarX>(args[0]);
@@ -163,9 +172,13 @@ rb::Value rbVector2::divide(const rb::Value& self, const rb::Value& other)
 
 bool rbVector2::equal(const rb::Value& self, const rb::Value& other)
 {
-	if(!other.isKindOf(rb::Value(ourDefinition))) return false;
-	if(!self.getVar<symVarX>().equal(other.getVar<symVarX>())) return false;
-	if(!self.getVar<symVarY>().equal(other.getVar<symVarY>())) return false;
+	if(	!other.isKindOf(rb::Value(ourDefinition)) && 
+		!(other.getType() == rb::ValueType::Array && other.getArrayLength() == 2))
+		return false;
+
+	rb::Value vector = ourDefinition.newObject(other);
+	if(!self.getVar<symVarX>().equal(vector.getVar<symVarX>())) return false;
+	if(!self.getVar<symVarY>().equal(vector.getVar<symVarY>())) return false;
 	return true;
 }
 
