@@ -92,7 +92,7 @@ rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& ar
             break;
         case 2:
         	self.setVar<symVarX>(args[0]);
-        	self.setVar<symVarY>(args[0]);
+        	self.setVar<symVarY>(args[1]);
             break;
         default:
         	rb::expectedNumArgs( args.size(), 0, 2 );
