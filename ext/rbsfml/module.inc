@@ -74,7 +74,7 @@ void Module<Base, MaxFunctions>::defineFunction(const std::string& name, ReturnT
 	typedef ReturnType(*FunctionSignature)(Args...);
 
 	createCaller<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>>(function);
-	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>, Args...>;
+	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, FunctionCaller<ReturnType, Args...>, Value, Args...>;
 	rb_define_singleton_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }
 
@@ -86,7 +86,7 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 	typedef ReturnType(Base::*FunctionSignature)(Args...);
 
 	createCaller<ID, FunctionSignature, MethodCaller<ReturnType, Args...>>(function);
-	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, MethodCaller<ReturnType, Args...>, Args...>;
+	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, MethodCaller<ReturnType, Args...>, Value, Args...>;
 	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }
 
@@ -98,7 +98,7 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 	typedef ReturnType(Base::*FunctionSignature)(Args...)const;
 
 	createCaller<ID, FunctionSignature, ConstMethodCaller<ReturnType, Args...>>(function);
-	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, ConstMethodCaller<ReturnType, Args...>, Args...>;
+	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, ConstMethodCaller<ReturnType, Args...>, Value, Args...>;
 	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
 }
 
@@ -111,7 +111,7 @@ void Module<Base, MaxFunctions>::defineMethod(const std::string& name, ReturnTyp
 
 	createCaller<ID, FunctionSignature, StaticMethodCaller<ReturnType, Args...>>(function);
 	auto wrapFunc = &Module::wrapperFunction<ID, FunctionSignature, StaticMethodCaller<ReturnType, Args...>, Args...>;
-	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args));
+	rb_define_method(myDefinition, name.c_str(), reinterpret_cast<RubyCallback>(wrapFunc), sizeof...(Args)-1);
 }
 
 template<typename Base, int MaxFunctions>
@@ -145,18 +145,23 @@ void Module<Base, MaxFunctions>::defineAttribute(const std::string& attribute, b
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature>
-void Module<Base, MaxFunctions>::createCaller(FunctionSignature function)
+void Module<Base, MaxFunctions>::defineConstant(const std::string& name, const Value& constant)
 {
-	ourFunctions[ID] =  new CallerSignature(Qnil, function);
+	rb_define_const(myDefinition, name.c_str(), constant.to<VALUE>());
 }
 
 template<typename Base, int MaxFunctions>
 template<int ID, typename FunctionSignature, typename CallerSignature>
-CallerSignature& Module<Base, MaxFunctions>::getCaller(VALUE self)
+void Module<Base, MaxFunctions>::createCaller(FunctionSignature function)
+{
+	ourFunctions[ID] =  new CallerSignature(function);
+}
+
+template<typename Base, int MaxFunctions>
+template<int ID, typename FunctionSignature, typename CallerSignature>
+CallerSignature& Module<Base, MaxFunctions>::getCaller()
 {
 	CallerSignature* caller = static_cast<CallerSignature*>(ourFunctions[ID]);
-	caller->self = self;
 	return *caller;
 }
 
@@ -165,69 +170,69 @@ template<int ID>
 VALUE Module<Base, MaxFunctions>::variadicWrapperFunction(int argc, VALUE* argv, VALUE self)
 {
 	typedef Value(*FunctionSignature)(Value, const std::vector<Value>&);
-	VariadicMethodCaller& caller = getCaller<ID, FunctionSignature, VariadicMethodCaller>(self);
+	VariadicMethodCaller& caller = getCaller<ID, FunctionSignature, VariadicMethodCaller>();
 	std::vector<Value> arguments;
 	for(int index = 0; index < argc; index++)
 	{
 		arguments.push_back(Value(argv[index]));
 	}
-	return caller(arguments);
+	return caller(Value(self), arguments);
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller();
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self));
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>());
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>());
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>());
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>());
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>());
 }
 
 template<typename Base, int MaxFunctions>
-template<int ID, typename FunctionSignature, typename CallerSignature, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6>
 VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6)
 {
-	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>(self);
-	return caller(Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(), Value(arg6).to<Arg6>());
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(), Value(arg6).to<Arg6>());
 }
 
 }

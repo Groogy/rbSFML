@@ -25,6 +25,7 @@
 #include "rbtime.hpp"
 #include "rbclock.hpp"
 #include "rbnoncopyable.hpp"
+#include "rbvector2.hpp"
 
 class rbSFML
 {
@@ -38,6 +39,7 @@ extern "C" void Init_rbsfml() {
 	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
 
 	rbNonCopyable::defineModule(rb::Value(sfml));
+	rbVector2::defineClass(rb::Value(sfml));
 	rbTime::defineClass(rb::Value(sfml));
 	rbClock::defineClass(rb::Value(sfml));
 }

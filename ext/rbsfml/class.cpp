@@ -25,7 +25,7 @@ namespace rb
 {
 	VALUE RubyObjAllocator::allocate(VALUE klass)
 	{
-		static ID sym = rb_intern("allocate");
-		return rb_funcall(klass, sym, 0);
+		NEWOBJ_OF(obj, struct RObject, klass, T_OBJECT | (RGENGC_WB_PROTECTED_OBJECT ? FL_WB_PROTECTED : 0));
+     	return (VALUE)obj;
 	}
 }

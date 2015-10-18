@@ -75,6 +75,8 @@ void rbVector2::defineClass(const rb::Value& sfml)
 
 	ourDefinition.aliasMethod("eql?", "equal?");
 	ourDefinition.aliasMethod("to_s", "inspect");
+
+	ourDefinition.defineConstant("Zero", ourDefinition.newObject());
 }
 
 rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& args)
@@ -161,7 +163,7 @@ rb::Value rbVector2::divide(const rb::Value& self, const rb::Value& other)
 
 bool rbVector2::equal(const rb::Value& self, const rb::Value& other)
 {
-	if(!other.isKindOf(rb::Value(ourDefinition)) && !(other.getType() == rb::ValueType::Array && other.getArrayLength() == 2)) return false;
+	if(!other.isKindOf(rb::Value(ourDefinition))) return false;
 	if(!self.getVar<symVarX>().equal(other.getVar<symVarX>())) return false;
 	if(!self.getVar<symVarY>().equal(other.getVar<symVarY>())) return false;
 	return true;
