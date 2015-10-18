@@ -74,7 +74,7 @@ void rbVector2::defineClass(const rb::Value& sfml)
 	ourDefinition.defineAttribute("y", true, true);
 
 	ourDefinition.aliasMethod("eql?", "equal?");
-	ourDefinition.aliasMethod("to_s", "inspect");
+	ourDefinition.aliasMethod("inspect", "to_s");
 
 	ourDefinition.defineConstant("Zero", ourDefinition.newObject());
 }
