@@ -40,4 +40,46 @@ describe SFML::Vector2 do
       end
     end
   end
+
+  describe "in math" do
+    context "given same type vectors" do
+      vec1 = SFML::Vector2.new(3, 9)
+      vec2 = SFML::Vector2.new(7, 4)
+      it "addition will produce expected result" do
+        expect(vec1 + vec2).to be(SFML::Vector2.new(10, 13))
+      end
+
+      it "subtraction will produce expected result" do
+        expect(vec1 - vec2).to be(SFML::Vector2.new(-4, 5))
+      end
+
+      it "multiplication will produce expected result" do
+        expect(vec1 * vec2).to be(SFML::Vector2.new(21, 36))
+      end
+
+      it "division will produce expected result" do
+        expect(vec1 / vec2).to be(SFML::Vector2.new(0, 2))
+      end
+    end
+
+    context "given different type vectors" do
+      vec1 = SFML::Vector2.new(10.0, 12.0)
+      vec2 = SFML::Vector2.new(2, 5)
+      it "addition will produce expected result" do
+        expect(vec1 + vec2).to be(SFML::Vector2.new(12.0, 17.0))
+      end
+
+      it "subtraction will produce expected result" do
+        expect(vec1 - vec2).to be(SFML::Vector2.new(8.0, 7.0))
+      end
+
+      it "multiplication will produce expected result" do
+        expect(vec1 * vec2).to be(SFML::Vector2.new(20.0, 60.0))
+      end
+
+      it "division will produce expected result" do
+        expect(vec1 / vec2).to be(SFML::Vector2.new(5.0, 2.4))
+      end
+    end
+  end
 end
