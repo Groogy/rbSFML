@@ -84,11 +84,14 @@ Class<Base, MaxFunctions>::Class()
 {
 }
 
+constexpr char symNew[] = "new";
+
 template<typename Base, int MaxFunctions>
-Value Class<Base, MaxFunctions>::newObject()
+template<typename ...Args>
+Value Class<Base, MaxFunctions>::newObject(Args... args)
 {
-	static ID newSymbol = rb_intern("new");
-	return Value(rb_funcall(Module<Base, MaxFunctions>::myDefinition, newSymbol, 0));
+	Value obj(Module<Base, MaxFunctions>::myDefinition);
+	return obj.call<symNew>(args...);
 }
 
 }

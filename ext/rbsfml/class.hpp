@@ -60,7 +60,8 @@ namespace rb
 
 		Class();
 
-		Value newObject();
+		template<typename ...Args>
+		Value newObject(Args... args);
 
 	protected:
 		static Value myParent;
