@@ -19,7 +19,7 @@ describe SFML::Clock do
       time = clock.restart
 
       it "returning the elapsed time up to that point" do
-        expect(time.as_milliseconds).to be > 18
+        expect(time.as_milliseconds).to be > 18 # SFML doesn't guarantee that elapsed time will be passed 20 milliseconds
       end
 
       it "next call to elapsed_time give a lower elapsed time" do
