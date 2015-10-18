@@ -66,7 +66,13 @@ namespace rb
 		ValueType getType() const;
 		std::string getClassName() const;
 
+		bool isKindOf(const Value& klass) const;
+
 		bool isNil() const;
+
+		bool equal(const Value& other) const;
+
+		int getArrayLength() const;
 
 		template<const char* Name, typename ReturnType = Value, typename ...Args>
 		ReturnType call(Args... args);

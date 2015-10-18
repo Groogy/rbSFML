@@ -148,9 +148,25 @@ std::string Value::getClassName() const
 	return rb_obj_classname(myValue);
 }
 
+bool Value::isKindOf(const Value& klass) const
+{
+	return rb_obj_is_kind_of(myValue, klass.myValue);
+}
+
+bool Value::equal(const Value& other) const
+{
+	return rb_equal(myValue, other.myValue);
+}
+
 bool Value::isNil() const
 {
 	return myValue == Qnil;
+}
+
+int Value::getArrayLength() const
+{
+	errorHandling(T_ARRAY);
+	return RARRAY_LEN(myValue);
 }
 
 void Value::errorHandling(int rubyType) const
