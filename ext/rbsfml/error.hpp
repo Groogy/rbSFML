@@ -38,6 +38,7 @@ namespace rb
 
 	void expectedNumArgs(int argCount, int count);
 	void expectedNumArgs(int argCount, int minCount, int maxCount);
+	void expectedNumArgs(int argCount, const std::string& customText);
 }
 
 #include "error.inc"

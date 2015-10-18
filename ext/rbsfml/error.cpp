@@ -37,4 +37,9 @@ void expectedNumArgs(int argCount, int minCount, int maxCount)
 	raise(ArgumentError, "wrong number of arguments(%i for %i...%i)", argCount, minCount, maxCount);
 }
 
+void expectedNumArgs(int argCount, const std::string& customText)
+{
+	raise(ArgumentError, "wrong number of arguments(%i for %s)", argCount, customText.c_str());
+}
+
 }
