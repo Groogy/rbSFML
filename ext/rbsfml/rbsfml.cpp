@@ -28,6 +28,7 @@
 #include "rbnoncopyable.hpp"
 #include "rbvector2.hpp"
 #include "rbvector3.hpp"
+#include "rbvideomode.hpp"
 
 class rbSFML
 {
@@ -51,4 +52,5 @@ extern "C" void Init_rbsfml() {
 	rbVector3::defineClass(rb::Value(sfml));
 	rbTime::defineClass(rb::Value(sfml));
 	rbClock::defineClass(rb::Value(sfml));
+	rbVideoMode::defineClass(rb::Value(sfml));
 }
