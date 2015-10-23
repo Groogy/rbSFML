@@ -54,15 +54,21 @@ describe SFML::VideoMode do
   end
 
   describe "in fetching desktop resolution" do
+    mode = SFML::VideoMode.desktop_mode
+
     it "should give a valid video mode" do
-      mode = SFML::VideoMode.desktop_mode
       expect(mode.valid?).to be_truthy
     end
   end
 
   describe "in fetching fullscreen resolutions" do
+    modes = SFML::VideoMode.fullscreen_modes
+
+    it "should give array with more than one mode" do
+      expect(modes.size).to be > 1
+    end
+
     it "should give only valid video modes" do
-      modes = SFML::VideoMode.fullscreen_modes
       modes.each do |mode|
         expect(mode.valid?).to be_truthy
       end
