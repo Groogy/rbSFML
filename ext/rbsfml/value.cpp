@@ -85,6 +85,13 @@ Value::Value(long long int value)
 {
 }
 
+Value::Value(unsigned int value)
+: myValue(UINT2NUM(value))
+, myCachedStr()
+, myCachedArray()
+{
+}
+
 Value::Value(bool value)
 : myValue(value ? Qtrue : Qfalse)
 , myCachedStr()
@@ -252,6 +259,13 @@ long long int Value::to() const
 {
 	errorHandling(T_FIXNUM);
 	return NUM2LL(myValue);
+}
+
+template<>
+unsigned int Value::to() const
+{
+	errorHandling(T_FIXNUM);
+	return NUM2UINT(myValue);
 }
 
 template<>

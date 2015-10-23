@@ -51,6 +51,7 @@ namespace rb
 		explicit Value(int value);
 		explicit Value(float value);
 		explicit Value(long long int value);
+		explicit Value(unsigned int value);
 		explicit Value(bool value);
 		explicit Value(rb::Object* object);
 		explicit Value(const std::vector<Value>& collection);
@@ -119,6 +120,8 @@ namespace rb
 	float Value::to() const;
 	template<>
 	long long int Value::to() const;
+	template<>
+	unsigned int Value::to() const;
 	template<>
 	bool Value::to() const;
 }
