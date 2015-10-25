@@ -154,8 +154,8 @@ rb::Value rbVideoMode::marshalDump() const
 std::string rbVideoMode::inspect() const
 {
 	return ourDefinition.getName() + "(" 
-		+ macro::toString(myObject.width)
-		+ macro::toString(myObject.height)
+		+ macro::toString(myObject.width) + ", "
+		+ macro::toString(myObject.height) + ", "
 		+ macro::toString(myObject.bitsPerPixel) + ")";
 }
 
