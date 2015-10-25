@@ -29,6 +29,7 @@
 #include "rbvector2.hpp"
 #include "rbvector3.hpp"
 #include "rbvideomode.hpp"
+#include "rbcontextsettings.hpp"
 
 class rbSFML
 {
@@ -47,10 +48,14 @@ extern "C" void Init_rbsfml() {
 	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
 	sfml.defineFunction<3>("sleep", &rbSFML::sleep);
 
+	// System
 	rbNonCopyable::defineModule(rb::Value(sfml));
 	rbVector2::defineClass(rb::Value(sfml));
 	rbVector3::defineClass(rb::Value(sfml));
 	rbTime::defineClass(rb::Value(sfml));
 	rbClock::defineClass(rb::Value(sfml));
+
+	// Window
 	rbVideoMode::defineClass(rb::Value(sfml));
+	rbContextSettings::defineClass(rb::Value(sfml));
 }
