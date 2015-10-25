@@ -34,6 +34,7 @@ class rbNonCopyable
 {
 public:
 	static void defineModule(const rb::Value& sfml);
+	static rbNonCopyableModule getDefinition();
 
 	static const rb::Value& initializeCopy(const rb::Value& self, const rb::Value& value);
 	static const rb::Value& marshalDump(const rb::Value& self);

@@ -32,6 +32,11 @@ void rbNonCopyable::defineModule(const rb::Value& sfml)
 	ourDefinition.defineMethod<1>("marshal_dump", &rbNonCopyable::marshalDump);
 }
 
+rbNonCopyableModule rbNonCopyable::getDefinition()
+{
+	return ourDefinition;
+}
+
 const rb::Value& rbNonCopyable::initializeCopy(const rb::Value& self, const rb::Value& value)
 {
 	std::string type = self.getClassName();
