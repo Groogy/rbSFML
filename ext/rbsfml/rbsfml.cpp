@@ -30,6 +30,7 @@
 #include "rbvector3.hpp"
 #include "rbvideomode.hpp"
 #include "rbcontextsettings.hpp"
+#include "rbcontext.hpp"
 
 class rbSFML
 {
@@ -58,4 +59,5 @@ extern "C" void Init_rbsfml() {
 	// Window
 	rbVideoMode::defineClass(rb::Value(sfml));
 	rbContextSettings::defineClass(rb::Value(sfml));
+	rbContext::defineClass(rb::Value(sfml));
 }

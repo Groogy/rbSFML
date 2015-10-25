@@ -59,6 +59,8 @@ public:
 	std::string inspect() const;
 
 private:
+	friend class rbContext;
+	
 	static rbContextSettingsClass ourDefinition;
 
 	sf::ContextSettings myObject;
