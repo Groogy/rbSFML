@@ -14,11 +14,5 @@ describe SFML::ContextSettings do
         expect(mode.attribute_flags).to eql(SFML::ContextSettings::Default)
       end
     end
-
-    context "with two arguments" do
-    end
-  end
-
-  describe "in basic instance usage" do
   end
 end
