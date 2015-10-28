@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "value.hpp"
+#include "error.hpp"
 
 namespace rb
 {
@@ -108,6 +109,8 @@ namespace rb
 
 			VALUE operator()(Value self, Args... args) 
 			{ 
+				if(self.isFrozen())
+					rb::modifiedFrozen(self);
 				Base* object = nullptr;
 				Data_Get_Struct(self.to<VALUE>(), Base, object);
 				Value returnValue((object->*function)(args...));
@@ -124,6 +127,9 @@ namespace rb
 
 			VALUE operator()(Value self, Args... args)
 			{
+				if(self.isFrozen())
+					rb::modifiedFrozen(self);
+
 				Base* object = nullptr;
 				Data_Get_Struct(self.to<VALUE>(), Base, object);
 				(object->*function)(args...);
