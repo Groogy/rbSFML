@@ -40,6 +40,8 @@ namespace rb
 	void expectedNumArgs(int argCount, int count);
 	void expectedNumArgs(int argCount, int minCount, int maxCount);
 	void expectedNumArgs(int argCount, const std::string& customText);
+
+	void modifiedFrozen(rb::Value object);
 }
 
 #include "error.inc"

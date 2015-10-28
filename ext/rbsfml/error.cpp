@@ -42,4 +42,9 @@ void expectedNumArgs(int argCount, const std::string& customText)
 	raise(ArgumentError, "wrong number of arguments(%i for %s)", argCount, customText.c_str());
 }
 
+void modifiedFrozen(rb::Value object)
+{
+	raise(RuntimeError, "can't modify frozen %s", object.getClassName().c_str());
+}
+
 }
