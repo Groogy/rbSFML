@@ -170,6 +170,11 @@ bool Value::isNil() const
 	return myValue == Qnil;
 }
 
+bool Value::isFrozen() const
+{
+	return OBJ_FROZEN(myValue);
+}
+
 int Value::getArrayLength() const
 {
 	errorHandling(T_ARRAY);

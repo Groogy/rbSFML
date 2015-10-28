@@ -70,6 +70,7 @@ namespace rb
 		bool isKindOf(const Value& klass) const;
 
 		bool isNil() const;
+		bool isFrozen() const;
 
 		bool equal(const Value& other) const;
 
