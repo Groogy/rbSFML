@@ -22,6 +22,12 @@
 namespace rb
 {
 
+template<typename Type>
+Value Value::create(Type value)
+{
+	return Value(value);
+}
+
 template<typename Base, int MaxFunctions>
 Value::Value(const Module<Base, MaxFunctions>& module)
 : myValue(module.myDefinition)

@@ -80,7 +80,7 @@ namespace rb
 
 			VALUE operator()(Value self, Args... args) 
 			{ 
-				Value returnValue(function(args...));
+				Value returnValue = Value::create(function(args...));
 				return returnValue.to<VALUE>();
 			}
 
@@ -113,7 +113,7 @@ namespace rb
 					rb::modifiedFrozen(self);
 				Base* object = nullptr;
 				Data_Get_Struct(self.to<VALUE>(), Base, object);
-				Value returnValue((object->*function)(args...));
+				Value returnValue = Value::create((object->*function)(args...));
 				return returnValue.to<VALUE>();
 			}
 
@@ -148,7 +148,7 @@ namespace rb
 			{ 
 				Base* object = nullptr;
 				Data_Get_Struct(self.to<VALUE>(), Base, object);
-				Value returnValue((object->*function)(args...));
+				Value returnValue = Value::create((object->*function)(args...));
 				return returnValue.to<VALUE>();
 			}
 
@@ -178,7 +178,7 @@ namespace rb
 
 			VALUE operator()(Args... args) 
 			{ 
-				Value returnValue(function(args...));
+				Value returnValue = Value::create(function(args...));
 				return returnValue.to<VALUE>();
 			}
 
@@ -205,7 +205,7 @@ namespace rb
 
 			VALUE operator()(Value self, const std::vector<Value>& args) 
 			{ 
-				Value returnValue(function(Value(self), args));
+				Value returnValue = Value::create(function(Value(self), args));
 				return returnValue.to<VALUE>();
 			}
 

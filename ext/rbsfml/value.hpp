@@ -45,6 +45,9 @@ namespace rb
 	class Value
 	{
 	public:
+		template<typename Type>
+		static Value create(Type value);
+
 		Value();
 		explicit Value(VALUE value);
 		explicit Value(const std::string& value);
