@@ -79,6 +79,11 @@ void rbVector2::defineClass(const rb::Value& sfml)
 	ourDefinition.defineConstant("Zero", ourDefinition.newObject());
 }
 
+const rbVector2Class& rbVector2::getDefinition()
+{
+	return ourDefinition;
+}
+
 rb::Value rbVector2::initialize(rb::Value self, const std::vector<rb::Value>& args)
 {
 	switch( args.size() )
@@ -199,6 +204,7 @@ std::string rbVector2::inspect(const rb::Value& self)
 
 namespace rb
 {
+
 template<>
 sf::Vector2f Value::to() const
 {
@@ -218,25 +224,29 @@ sf::Vector2i Value::to() const
 template<>
 Value Value::create<sf::Vector2f>( sf::Vector2f value )
 {
-	return rb::Nil;
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
 }
 
 template<>
 Value Value::create<const sf::Vector2f&>( const sf::Vector2f& value )
 {
-	return rb::Nil;
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
 }
 
 template<>
 Value Value::create<sf::Vector2i>( sf::Vector2i value )
 {
-	return rb::Nil;
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
 }
 
 template<>
 Value Value::create<const sf::Vector2i&>( const sf::Vector2i& value )
 {
-	return rb::Nil;
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
 }
 
 }
