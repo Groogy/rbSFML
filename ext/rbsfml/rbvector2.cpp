@@ -196,3 +196,47 @@ std::string rbVector2::inspect(const rb::Value& self)
 	std::string yStr = self.getVar<symVarY>().call<symInspect, std::string>();
 	return ourDefinition.getName() + "(" + xStr + ", " + yStr + ")";
 }
+
+namespace rb
+{
+template<>
+sf::Vector2f Value::to() const
+{
+	errorHandling(T_OBJECT);
+	sf::Vector2f vector(getVar<symVarX, float>(), getVar<symVarY, float>());
+	return vector;
+}
+
+template<>
+sf::Vector2i Value::to() const
+{
+	errorHandling(T_OBJECT);
+	sf::Vector2i vector(getVar<symVarX, int>(), getVar<symVarY, int>());
+	return vector;
+}
+
+template<>
+Value Value::create<sf::Vector2f>( sf::Vector2f value )
+{
+	return rb::Nil;
+}
+
+template<>
+Value Value::create<const sf::Vector2f&>( const sf::Vector2f& value )
+{
+	return rb::Nil;
+}
+
+template<>
+Value Value::create<sf::Vector2i>( sf::Vector2i value )
+{
+	return rb::Nil;
+}
+
+template<>
+Value Value::create<const sf::Vector2i&>( const sf::Vector2i& value )
+{
+	return rb::Nil;
+}
+
+}

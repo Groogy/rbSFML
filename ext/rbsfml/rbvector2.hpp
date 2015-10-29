@@ -56,4 +56,21 @@ private:
 	static rbVector2Class ourDefinition;
 };
 
+namespace rb
+{
+	template<>
+	sf::Vector2f Value::to() const;
+	template<>
+	sf::Vector2i Value::to() const;
+
+	template<>
+	Value Value::create<sf::Vector2f>( sf::Vector2f value );
+	template<>
+	Value Value::create<const sf::Vector2f&>( const sf::Vector2f& value );
+	template<>
+	Value Value::create<sf::Vector2i>( sf::Vector2i value );
+	template<>
+	Value Value::create<const sf::Vector2i&>( const sf::Vector2i& value );
+}
+
 #endif // RBSFML_RBVECTOR2_HPP
