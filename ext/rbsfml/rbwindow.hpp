@@ -50,6 +50,9 @@ public:
 	void setPosition(sf::Vector2i position);
 	sf::Vector2i getPosition() const;
 
+	void setSize(sf::Vector2u size);
+	sf::Vector2u getSize() const;
+
 private:
 	static rbWindowClass ourDefinition;
 

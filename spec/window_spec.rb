@@ -57,5 +57,16 @@ describe SFML::Window do
         expect(@window.position).to eql(pos)
       end
     end
+
+    context "when setting the size" do
+      size = SFML::Vector2.new(300, 300)
+      before(:each) do
+        @window.size = size
+      end
+
+      it "should have that new size" do
+        expect(@window.size).to eql(size)
+      end
+    end
   end
 end

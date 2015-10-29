@@ -52,6 +52,8 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<4>("settings", &rbWindow::getSettings);
 	ourDefinition.defineMethod<5>("position=", &rbWindow::setPosition);
 	ourDefinition.defineMethod<6>("position", &rbWindow::getPosition);
+	ourDefinition.defineMethod<7>("size=", &rbWindow::setSize);
+	ourDefinition.defineMethod<8>("size", &rbWindow::getSize);
 
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
@@ -165,6 +167,16 @@ void rbWindow::setPosition(sf::Vector2i position)
 sf::Vector2i rbWindow::getPosition() const
 {
 	return myObject.getPosition();
+}
+
+void rbWindow::setSize(sf::Vector2u size)
+{
+	myObject.setSize(size);
+}
+
+sf::Vector2u rbWindow::getSize() const
+{
+	return myObject.getSize();
 }
 
 namespace rb
