@@ -35,6 +35,7 @@ class rbVector3
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static const rbVector3Class& getDefinition();
 
 	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
 	static rb::Value initializeCopy(rb::Value self, const rb::Value& value);
@@ -55,5 +56,22 @@ public:
 private:
 	static rbVector3Class ourDefinition;
 };
+
+namespace rb
+{
+	template<>
+	sf::Vector3f Value::to() const;
+	template<>
+	sf::Vector3i Value::to() const;
+
+	template<>
+	Value Value::create<sf::Vector3f>( sf::Vector3f value );
+	template<>
+	Value Value::create<const sf::Vector3f&>( const sf::Vector3f& value );
+	template<>
+	Value Value::create<sf::Vector3i>( sf::Vector3i value );
+	template<>
+	Value Value::create<const sf::Vector3i&>( const sf::Vector3i& value );
+}
 
 #endif // RBSFML_RBVECTOR3_HPP

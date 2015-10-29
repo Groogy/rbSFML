@@ -85,6 +85,11 @@ void rbVector3::defineClass(const rb::Value& sfml)
 	ourDefinition.defineConstant("Zero", ourDefinition.newObject());
 }
 
+const rbVector3Class& rbVector3::getDefinition()
+{
+	return ourDefinition;
+}
+
 rb::Value rbVector3::initialize(rb::Value self, const std::vector<rb::Value>& args)
 {
 	switch( args.size() )
@@ -211,4 +216,53 @@ std::string rbVector3::inspect(const rb::Value& self)
 	std::string yStr = self.getVar<symVarY>().call<symInspect, std::string>();
 	std::string zStr = self.getVar<symVarZ>().call<symInspect, std::string>();
 	return ourDefinition.getName() + "(" + xStr + ", " + yStr + ", " + zStr + ")";
+}
+
+namespace rb
+{
+
+template<>
+sf::Vector3f Value::to() const
+{
+	errorHandling(T_OBJECT);
+	sf::Vector3f vector(getVar<symVarX, float>(), getVar<symVarY, float>(), getVar<symVarZ, float>());
+	return vector;
+}
+
+template<>
+sf::Vector3i Value::to() const
+{
+	errorHandling(T_OBJECT);
+	sf::Vector3i vector(getVar<symVarX, int>(), getVar<symVarY, int>(), getVar<symVarZ, int>());
+	return vector;
+}
+
+template<>
+Value Value::create<sf::Vector3f>( sf::Vector3f value )
+{
+	rb::Value object = rbVector3::getDefinition().newObject(value.x, value.y, value.z);
+	return object;
+}
+
+template<>
+Value Value::create<const sf::Vector3f&>( const sf::Vector3f& value )
+{
+	rb::Value object = rbVector3::getDefinition().newObject(value.x, value.y, value.z);
+	return object;
+}
+
+template<>
+Value Value::create<sf::Vector3i>( sf::Vector3i value )
+{
+	rb::Value object = rbVector3::getDefinition().newObject(value.x, value.y, value.z);
+	return object;
+}
+
+template<>
+Value Value::create<const sf::Vector3i&>( const sf::Vector3i& value )
+{
+	rb::Value object = rbVector3::getDefinition().newObject(value.x, value.y, value.z);
+	return object;
+}
+
 }
