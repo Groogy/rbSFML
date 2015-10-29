@@ -63,6 +63,8 @@ namespace rb
 	sf::Vector2f Value::to() const;
 	template<>
 	sf::Vector2i Value::to() const;
+	template<>
+	sf::Vector2u Value::to() const;
 
 	template<>
 	Value Value::create<sf::Vector2f>( sf::Vector2f value );
@@ -72,6 +74,10 @@ namespace rb
 	Value Value::create<sf::Vector2i>( sf::Vector2i value );
 	template<>
 	Value Value::create<const sf::Vector2i&>( const sf::Vector2i& value );
+	template<>
+	Value Value::create<sf::Vector2u>( sf::Vector2u value );
+	template<>
+	Value Value::create<const sf::Vector2u&>( const sf::Vector2u& value );
 }
 
 #endif // RBSFML_RBVECTOR2_HPP

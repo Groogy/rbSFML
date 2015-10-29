@@ -222,6 +222,14 @@ sf::Vector2i Value::to() const
 }
 
 template<>
+sf::Vector2u Value::to() const
+{
+	errorHandling(T_OBJECT);
+	sf::Vector2u vector(getVar<symVarX, unsigned int>(), getVar<symVarY, unsigned int>());
+	return vector;
+}
+
+template<>
 Value Value::create<sf::Vector2f>( sf::Vector2f value )
 {
 	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
@@ -244,6 +252,20 @@ Value Value::create<sf::Vector2i>( sf::Vector2i value )
 
 template<>
 Value Value::create<const sf::Vector2i&>( const sf::Vector2i& value )
+{
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
+}
+
+template<>
+Value Value::create<sf::Vector2u>( sf::Vector2u value )
+{
+	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
+	return object;
+}
+
+template<>
+Value Value::create<const sf::Vector2u&>( const sf::Vector2u& value )
 {
 	rb::Value object = rbVector2::getDefinition().newObject(value.x, value.y);
 	return object;
