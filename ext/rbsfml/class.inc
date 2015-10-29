@@ -88,7 +88,7 @@ constexpr char symNew[] = "new";
 
 template<typename Base, int MaxFunctions>
 template<typename ...Args>
-Value Class<Base, MaxFunctions>::newObject(Args... args)
+Value Class<Base, MaxFunctions>::newObject(Args... args) const
 {
 	Value obj(Module<Base, MaxFunctions>::myDefinition);
 	return obj.call<symNew>(args...);

@@ -61,7 +61,7 @@ namespace rb
 		Class();
 
 		template<typename ...Args>
-		Value newObject(Args... args);
+		Value newObject(Args... args) const;
 
 	protected:
 		static Value myParent;
