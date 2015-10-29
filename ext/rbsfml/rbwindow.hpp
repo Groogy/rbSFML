@@ -19,61 +19,49 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef RBSFML_RBVIDEOMODE_HPP_
-#define RBSFML_RBVIDEOMODE_HPP_
+#ifndef RBSFML_RBWINDOW_HPP_
+#define RBSFML_RBWINDOW_HPP_
 
-#include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/Window.hpp>
 #include "class.hpp"
 #include "object.hpp"
 
-class rbVideoMode;
+class rbWindow;
+class rbContextSettings;
 
-typedef rb::Class<rbVideoMode> rbVideoModeClass;
+typedef rb::Class<rbWindow> rbWindowClass;
 
-class rbVideoMode : public rb::Object
+class rbWindow : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
 
-	rbVideoMode();
-	~rbVideoMode();
+	rbWindow();
+	~rbWindow();
 
-	static rbVideoMode* getDesktopMode();
-	static std::vector<rb::Value> getFullscreenModes();
+	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& arguments);
+	static rb::Value create(rb::Value self, const std::vector<rb::Value>& arguments);
 
-	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
-	rbVideoMode* initializeCopy(const rbVideoMode* value);
+	void close();
+	bool isOpen() const;
 
-	bool isValid() const;
+	rbContextSettings* getSettings() const;
 
-	void setWidth(unsigned int value);
-	unsigned int getWidth() const;
-
-	void setHeight(unsigned int value);
-	unsigned int getHeight() const;
-
-	void setBitsPerPixel(unsigned int value);
-	unsigned int getBitsPerPixel() const;
-
-	rb::Value marshalDump() const;
-	std::string inspect() const;
-
-	int compare(const rbVideoMode* other) const;
+	void setPosition(sf::Vector2i position);
+	sf::Vector2i getPosition() const;
 
 private:
-	friend class rbWindow;
-	
-	static rbVideoModeClass ourDefinition;
+	static rbWindowClass ourDefinition;
 
-	sf::VideoMode myObject;
+	sf::Window myObject;
 };
 
 namespace rb
 {
 	template<>
-	rbVideoMode* Value::to() const;
+	rbWindow* Value::to() const;
 	template<>
-	const rbVideoMode* Value::to() const;
+	const rbWindow* Value::to() const;
 }
 
-#endif // RBSFML_RBVIDEOMODE_HPP_
+#endif // RBSFML_RBWINDOW_HPP_

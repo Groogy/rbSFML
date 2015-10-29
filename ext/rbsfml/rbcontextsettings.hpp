@@ -60,6 +60,7 @@ public:
 
 private:
 	friend class rbContext;
+	friend class rbWindow;
 	
 	static rbContextSettingsClass ourDefinition;
 

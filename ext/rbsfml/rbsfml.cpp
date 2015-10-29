@@ -31,6 +31,7 @@
 #include "rbvideomode.hpp"
 #include "rbcontextsettings.hpp"
 #include "rbcontext.hpp"
+#include "rbwindow.hpp"
 
 class rbSFML
 {
@@ -60,4 +61,5 @@ extern "C" void Init_rbsfml() {
 	rbVideoMode::defineClass(rb::Value(sfml));
 	rbContextSettings::defineClass(rb::Value(sfml));
 	rbContext::defineClass(rb::Value(sfml));
+	rbWindow::defineClass(rb::Value(sfml));
 }
