@@ -53,6 +53,22 @@ public:
 	void setSize(sf::Vector2u size);
 	sf::Vector2u getSize() const;
 
+	void setTitle(const std::string& title);
+
+	void setIcon(unsigned int width, unsigned int height, const std::vector<rb::Value>& pixels);
+
+	void setVisible(bool enabled);
+	void setVerticalSyncEnabled(bool enabled);
+	void setMouseCursorVisible(bool enabled);
+	void setKeyRepeatEnabled(bool enabled);
+	void setFramerateLimit(unsigned int limit);
+	void setJoystickThreshold(float treshold);
+	static rb::Value setActive(rb::Value self, const std::vector<rb::Value>& arguments);
+	void requestFocus();
+	bool hasFocus() const;
+	void display();
+	sf::WindowHandle getSystemHandle() const;
+
 private:
 	static rbWindowClass ourDefinition;
 

@@ -54,6 +54,19 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<6>("position", &rbWindow::getPosition);
 	ourDefinition.defineMethod<7>("size=", &rbWindow::setSize);
 	ourDefinition.defineMethod<8>("size", &rbWindow::getSize);
+	ourDefinition.defineMethod<9>("set_title", &rbWindow::setTitle);
+	ourDefinition.defineMethod<10>("set_icon", &rbWindow::setIcon);
+	ourDefinition.defineMethod<11>("visible=", &rbWindow::setVisible);
+	ourDefinition.defineMethod<12>("vertical_sync_enabled=", &rbWindow::setVerticalSyncEnabled);
+	ourDefinition.defineMethod<13>("mouse_cursor_visible=", &rbWindow::setMouseCursorVisible);
+	ourDefinition.defineMethod<14>("key_repeat_enabled=", &rbWindow::setKeyRepeatEnabled);
+	ourDefinition.defineMethod<15>("framerate_limit=", &rbWindow::setFramerateLimit);
+	ourDefinition.defineMethod<16>("joystick_threshold=", &rbWindow::setJoystickThreshold);
+	ourDefinition.defineMethod<17>("set_active", &rbWindow::setActive);
+	ourDefinition.defineMethod<18>("request_focus", &rbWindow::requestFocus);
+	ourDefinition.defineMethod<19>("has_focus", &rbWindow::hasFocus);
+	ourDefinition.defineMethod<20>("display", &rbWindow::display);
+	ourDefinition.defineMethod<21>("system_handle", &rbWindow::getSystemHandle);
 
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
@@ -135,7 +148,7 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 		break;
 	}
 	default:
-		rb::expectedNumArgs( arguments.size(), 1, 4 );
+		rb::expectedNumArgs(arguments.size(), 1, 4);
 	};
 	return self;
 }
@@ -177,6 +190,88 @@ void rbWindow::setSize(sf::Vector2u size)
 sf::Vector2u rbWindow::getSize() const
 {
 	return myObject.getSize();
+}
+
+void rbWindow::setTitle(const std::string& title)
+{
+	myObject.setTitle(title);
+}
+
+void rbWindow::setIcon(unsigned int width, unsigned int height, const std::vector<rb::Value>& pixels)
+{
+	std::vector<sf::Uint8> convPixels(pixels.size(), 0);
+	for(int index = 0, size = pixels.size(); index < size; index++)
+	{
+		convPixels[index] = pixels[index].to<int>();
+	}
+	myObject.setIcon(width, height, convPixels.data());
+}
+
+void rbWindow::setVisible(bool enabled)
+{
+	myObject.setVisible(enabled);
+}
+
+void rbWindow::setVerticalSyncEnabled(bool enabled)
+{
+	myObject.setVerticalSyncEnabled(enabled);
+}
+
+void rbWindow::setMouseCursorVisible(bool enabled)
+{
+	myObject.setMouseCursorVisible(enabled);
+}
+
+void rbWindow::setKeyRepeatEnabled(bool enabled)
+{
+	myObject.setKeyRepeatEnabled(enabled);
+}
+
+void rbWindow::setFramerateLimit(unsigned int limit)
+{
+	myObject.setFramerateLimit(limit);
+}
+
+void rbWindow::setJoystickThreshold(float treshold)
+{
+	myObject.setJoystickThreshold(treshold);
+}
+
+rb::Value rbWindow::setActive(rb::Value self, const std::vector<rb::Value>& arguments)
+{
+	const rbWindow* object = self.to<const rbWindow*>();
+	bool flag = true;
+	switch(arguments.size())
+	{
+	case 0:
+		break;
+	case 1:
+		flag = arguments[0].to<bool>();
+		break;
+	default:
+		rb::expectedNumArgs(arguments.size(), 0, 1);
+	};
+	return rb::Value::create(object->myObject.setActive(flag));
+}
+
+void rbWindow::requestFocus()
+{
+	myObject.requestFocus();
+}
+
+bool rbWindow::hasFocus() const
+{
+	return myObject.hasFocus();
+}
+
+void rbWindow::display()
+{
+	myObject.display();
+}
+
+sf::WindowHandle rbWindow::getSystemHandle() const
+{
+	return myObject.getSystemHandle();
 }
 
 namespace rb
