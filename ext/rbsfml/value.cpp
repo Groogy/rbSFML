@@ -100,7 +100,7 @@ Value::Value(bool value)
 }
 
 Value::Value(rb::Object* object)
-: myValue(object->myValue.myValue)
+: myValue(object ? object->myValue.myValue : Qnil)
 , myCachedStr()
 , myCachedArray()
 {
