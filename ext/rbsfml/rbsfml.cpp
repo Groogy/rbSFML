@@ -32,6 +32,7 @@
 #include "rbcontextsettings.hpp"
 #include "rbcontext.hpp"
 #include "rbwindow.hpp"
+#include "rbevent.hpp"
 
 class rbSFML
 {
@@ -62,4 +63,5 @@ extern "C" void Init_rbsfml() {
 	rbContextSettings::defineClass(rb::Value(sfml));
 	rbContext::defineClass(rb::Value(sfml));
 	rbWindow::defineClass(rb::Value(sfml));
-}
+	rbEvent::defineClass(rb::Value(sfml));
+}	
