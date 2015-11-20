@@ -24,11 +24,13 @@
 #include "rbvideomode.hpp"
 #include "rbnoncopyable.hpp"
 #include "rbvector2.hpp"
+#include "rbevent.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
 #include <SFML/Window/WindowHandle.hpp>
 #include <SFML/Window/WindowStyle.hpp>
+#include <SFML/Window/Event.hpp>
 
 rbWindowClass rbWindow::ourDefinition;
 
@@ -67,6 +69,7 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<19>("has_focus", &rbWindow::hasFocus);
 	ourDefinition.defineMethod<20>("display", &rbWindow::display);
 	ourDefinition.defineMethod<21>("system_handle", &rbWindow::getSystemHandle);
+	ourDefinition.defineMethod<22>("poll_event", &rbWindow::pollEvent);
 
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
@@ -272,6 +275,16 @@ void rbWindow::display()
 sf::WindowHandle rbWindow::getSystemHandle() const
 {
 	return myObject.getSystemHandle();
+}
+
+rbEvent* rbWindow::pollEvent()
+{
+	sf::Event event;
+	if(myObject.pollEvent(event) == false)
+		return nullptr;
+
+	rbEvent* object = rbEvent::createEvent(event);
+	return object;
 }
 
 namespace rb

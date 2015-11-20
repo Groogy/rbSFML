@@ -28,6 +28,7 @@
 
 class rbWindow;
 class rbContextSettings;
+class rbEvent;
 
 typedef rb::Class<rbWindow> rbWindowClass;
 
@@ -68,6 +69,8 @@ public:
 	bool hasFocus() const;
 	void display();
 	sf::WindowHandle getSystemHandle() const;
+
+	rbEvent* pollEvent();
 
 private:
 	static rbWindowClass ourDefinition;
