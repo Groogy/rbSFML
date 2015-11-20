@@ -71,6 +71,7 @@ public:
 	sf::WindowHandle getSystemHandle() const;
 
 	rbEvent* pollEvent();
+	rbEvent* waitEvent();
 
 private:
 	static rbWindowClass ourDefinition;

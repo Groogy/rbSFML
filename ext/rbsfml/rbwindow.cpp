@@ -70,6 +70,7 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<20>("display", &rbWindow::display);
 	ourDefinition.defineMethod<21>("system_handle", &rbWindow::getSystemHandle);
 	ourDefinition.defineMethod<22>("poll_event", &rbWindow::pollEvent);
+	ourDefinition.defineMethod<23>("wait_event", &rbWindow::waitEvent);
 
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
@@ -281,6 +282,16 @@ rbEvent* rbWindow::pollEvent()
 {
 	sf::Event event;
 	if(myObject.pollEvent(event) == false)
+		return nullptr;
+
+	rbEvent* object = rbEvent::createEvent(event);
+	return object;
+}
+
+rbEvent* rbWindow::waitEvent()
+{
+	sf::Event event;
+	if(myObject.waitEvent(event) == false)
 		return nullptr;
 
 	rbEvent* object = rbEvent::createEvent(event);
