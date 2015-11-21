@@ -27,6 +27,7 @@
 #include "rbevent.hpp"
 #include "error.hpp"
 #include "macros.hpp"
+#include "base.hpp"
 
 #include <SFML/Window/WindowHandle.hpp>
 #include <SFML/Window/WindowStyle.hpp>
@@ -71,6 +72,7 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<21>("system_handle", &rbWindow::getSystemHandle);
 	ourDefinition.defineMethod<22>("poll_event", &rbWindow::pollEvent);
 	ourDefinition.defineMethod<23>("wait_event", &rbWindow::waitEvent);
+	ourDefinition.defineMethod<24>("each_event", &rbWindow::eachEvent);
 
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
@@ -296,6 +298,20 @@ rbEvent* rbWindow::waitEvent()
 
 	rbEvent* object = rbEvent::createEvent(event);
 	return object;
+}
+
+rb::Value rbWindow::eachEvent()
+{
+	if(!rb::blockGiven())
+		return rb::getEnumerator(myValue);
+
+	sf::Event event;
+	while(myObject.pollEvent(event))
+	{
+		rbEvent* object = rbEvent::createEvent(event);
+		rb::yield(rb::Value(object));
+	}
+	return myValue;
 }
 
 namespace rb

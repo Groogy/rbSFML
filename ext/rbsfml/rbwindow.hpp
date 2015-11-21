@@ -73,6 +73,8 @@ public:
 	rbEvent* pollEvent();
 	rbEvent* waitEvent();
 
+	rb::Value eachEvent();
+
 private:
 	static rbWindowClass ourDefinition;
 
