@@ -73,7 +73,7 @@ namespace rb
 	sf::Joystick::Identification Value::to() const;
 
 	template<>
-	Value Value::create( const sf::Joystick::Identification value );	
+	Value Value::create( sf::Joystick::Identification value );	
 }
 
 #endif // RBSFML_RBJOYSTICK_HPP

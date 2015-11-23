@@ -46,6 +46,7 @@ void rbJoystick::defineModule(const rb::Value& sfml)
 	ourDefinition.defineFunction<3>("is_button_pressed?", &sf::Joystick::isButtonPressed);
 	ourDefinition.defineFunction<4>("get_axis_position", &sf::Joystick::getAxisPosition);
 	ourDefinition.defineFunction<5>("update", &sf::Joystick::update);
+	ourDefinition.defineFunction<6>("get_identification", &sf::Joystick::getIdentification);
 
 	ourDefinition.defineConstant("Count", rb::Value(sf::Joystick::Count));
 	ourDefinition.defineConstant("ButtonCount", rb::Value(sf::Joystick::ButtonCount));
@@ -140,7 +141,7 @@ sf::Joystick::Identification Value::to() const
 }
 
 template<>
-Value Value::create( const sf::Joystick::Identification& value )
+Value Value::create( sf::Joystick::Identification value )
 {
 	rb::Value object = rbJoystickIdentification::getDefinition().newObject();
 	object.setVar<symVarName>(value.name);
