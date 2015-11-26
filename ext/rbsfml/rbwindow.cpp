@@ -335,4 +335,22 @@ const rbWindow* Value::to() const
 	return object;
 }
 
+template<>
+sf::Window& Value::to() const
+{
+	errorHandling(T_DATA);
+	rbWindow* object = nullptr;
+	Data_Get_Struct(myValue, rbWindow, object);
+	return object->myObject;
+}
+
+template<>
+const sf::Window& Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbWindow* object = nullptr;
+	Data_Get_Struct(myValue, rbWindow, object);
+	return object->myObject;
+}
+
 }

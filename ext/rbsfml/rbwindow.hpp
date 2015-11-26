@@ -76,6 +76,8 @@ public:
 	rb::Value eachEvent();
 
 private:
+	friend class rb::Value;
+
 	static rbWindowClass ourDefinition;
 
 	sf::Window myObject;
@@ -87,6 +89,11 @@ namespace rb
 	rbWindow* Value::to() const;
 	template<>
 	const rbWindow* Value::to() const;
+
+	template<>
+	sf::Window& Value::to() const;
+	template<>
+	const sf::Window& Value::to() const;
 }
 
 #endif // RBSFML_RBWINDOW_HPP_
