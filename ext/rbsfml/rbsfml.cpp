@@ -34,6 +34,7 @@
 #include "rbwindow.hpp"
 #include "rbevent.hpp"
 #include "rbjoystick.hpp"
+#include "rbkeyboard.hpp"
 
 class rbSFML
 {
@@ -66,4 +67,5 @@ extern "C" void Init_rbsfml() {
 	rbWindow::defineClass(rb::Value(sfml));
 	rbEvent::defineClass(rb::Value(sfml));
 	rbJoystick::defineModule(rb::Value(sfml));
-}	
+	rbKeyboard::defineModule(rb::Value(sfml));
+}
