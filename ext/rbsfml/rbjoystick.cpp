@@ -33,10 +33,6 @@ namespace
 rbJoystickModule rbJoystick::ourDefinition;
 rbJoystickIdentificationClass rbJoystickIdentification::ourDefinition;
 
-namespace 
-{
-}
-
 void rbJoystick::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbJoystickModule::defineModuleUnder("Joystick", sfml);
