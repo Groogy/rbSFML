@@ -36,6 +36,7 @@
 #include "rbjoystick.hpp"
 #include "rbkeyboard.hpp"
 #include "rbmouse.hpp"
+#include "rbsensor.hpp"
 
 class rbSFML
 {
@@ -70,4 +71,5 @@ extern "C" void Init_rbsfml() {
 	rbJoystick::defineModule(rb::Value(sfml));
 	rbKeyboard::defineModule(rb::Value(sfml));
 	rbMouse::defineModule(rb::Value(sfml));
+	rbSensor::defineModule(rb::Value(sfml));
 }
