@@ -37,6 +37,7 @@
 #include "rbkeyboard.hpp"
 #include "rbmouse.hpp"
 #include "rbsensor.hpp"
+#include "rbtouch.hpp"
 
 class rbSFML
 {
@@ -72,4 +73,5 @@ extern "C" void Init_rbsfml() {
 	rbKeyboard::defineModule(rb::Value(sfml));
 	rbMouse::defineModule(rb::Value(sfml));
 	rbSensor::defineModule(rb::Value(sfml));
+	rbTouch::defineModule(rb::Value(sfml));
 }
