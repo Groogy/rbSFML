@@ -31,7 +31,7 @@ void rbSensor::defineModule(const rb::Value& sfml)
 	ourDefinition = rbSensorModule::defineModuleUnder("Sensor", sfml);
 	ourDefinition.defineFunction<0>("is_available?", &sf::Sensor::isAvailable);
 	ourDefinition.defineFunction<1>("set_enabled", &sf::Sensor::setEnabled);
-	ourDefinition.defineFunction<0>("get_value", &sf::Sensor::getValue);
+	ourDefinition.defineFunction<2>("get_value", &sf::Sensor::getValue);
 
 	ourDefinition.defineConstant("Accelerometer", rb::Value(sf::Sensor::Accelerometer));
 	ourDefinition.defineConstant("Gyroscope", rb::Value(sf::Sensor::Gyroscope));
