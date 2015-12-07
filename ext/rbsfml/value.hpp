@@ -79,6 +79,8 @@ namespace rb
 
 		int getArrayLength() const;
 
+		void freeze();
+
 		template<const char* Name, typename ReturnType = Value, typename ...Args>
 		ReturnType call(Args... args);
 

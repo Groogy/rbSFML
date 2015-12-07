@@ -181,6 +181,11 @@ int Value::getArrayLength() const
 	return RARRAY_LEN(myValue);
 }
 
+void Value::freeze()
+{
+	OBJ_FREEZE(myValue);
+}
+
 void Value::errorHandling(int rubyType) const
 {
 	if(TYPE(myValue) != rubyType)
