@@ -38,6 +38,7 @@
 #include "rbmouse.hpp"
 #include "rbsensor.hpp"
 #include "rbtouch.hpp"
+#include "rbcolor.hpp"
 
 class rbSFML
 {
@@ -74,4 +75,7 @@ extern "C" void Init_rbsfml() {
 	rbMouse::defineModule(rb::Value(sfml));
 	rbSensor::defineModule(rb::Value(sfml));
 	rbTouch::defineModule(rb::Value(sfml));
+
+	// Graphics
+	rbColor::defineClass(rb::Value(sfml));
 }
