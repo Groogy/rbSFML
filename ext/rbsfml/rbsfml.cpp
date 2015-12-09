@@ -39,6 +39,7 @@
 #include "rbsensor.hpp"
 #include "rbtouch.hpp"
 #include "rbcolor.hpp"
+#include "rbblendmode.hpp"
 
 class rbSFML
 {
@@ -78,4 +79,5 @@ extern "C" void Init_rbsfml() {
 
 	// Graphics
 	rbColor::defineClass(rb::Value(sfml));
+	rbBlendMode::defineModule(rb::Value(sfml));
 }
