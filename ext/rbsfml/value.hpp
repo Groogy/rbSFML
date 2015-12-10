@@ -76,6 +76,7 @@ namespace rb
 		bool isFrozen() const;
 
 		bool equal(const Value& other) const;
+		bool operator==(const Value& other) const;
 
 		int getArrayLength() const;
 

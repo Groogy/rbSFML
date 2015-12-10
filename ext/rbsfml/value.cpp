@@ -165,6 +165,11 @@ bool Value::equal(const Value& other) const
 	return rb_equal(myValue, other.myValue);
 }
 
+bool Value::operator==(const Value& other) const
+{
+	return equal(other);
+}
+
 bool Value::isNil() const
 {
 	return myValue == Qnil;
