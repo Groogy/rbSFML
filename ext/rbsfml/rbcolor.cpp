@@ -157,6 +157,9 @@ rb::Value rbColor::initialize(rb::Value self, const std::vector<rb::Value>& args
     self.setVar<symVarB>(0);
     self.setVar<symVarA>(255);
 
+    static const rb::Value MaxValue = rb::Value::create(255);
+    static const rb::Value MinValue = rb::Value::create(0);
+
 	switch( args.size() )
     {
         case 0:
@@ -165,13 +168,13 @@ rb::Value rbColor::initialize(rb::Value self, const std::vector<rb::Value>& args
         	if(args[0].getType() == rb::ValueType::Array)
         	{
         		const std::vector<rb::Value>& elements = args[0].to<const std::vector<rb::Value>&>();
-        		self.setVar<symVarR>(elements[0]);
-	        	self.setVar<symVarG>(elements[1]);
-	        	self.setVar<symVarB>(elements[2]);
+        		self.setVar<symVarR>(rb::max(MinValue, rb::min(MaxValue, elements[0])));
+	        	self.setVar<symVarG>(rb::max(MinValue, rb::min(MaxValue, elements[1])));
+	        	self.setVar<symVarB>(rb::max(MinValue, rb::min(MaxValue, elements[2])));
 	        	if (elements.size() > 3)
-	        	    self.setVar<symVarA>(elements[3]);
+	        	    self.setVar<symVarA>(rb::max(MinValue, rb::min(MaxValue, elements[3])));
 	        	else
-	        	    self.setVar<symVarA>(255);
+	        	    self.setVar<symVarA>(MaxValue);
         	}
         	else if(args[0].getType() == rb::ValueType::Fixnum)
         	{
@@ -187,11 +190,11 @@ rb::Value rbColor::initialize(rb::Value self, const std::vector<rb::Value>& args
         	}
             break;
         case 4:
-        	self.setVar<symVarA>(args[3]);
+        	self.setVar<symVarA>(rb::max(MinValue, rb::min(MaxValue, args[3])));
         case 3:
-        	self.setVar<symVarR>(args[0]);
-        	self.setVar<symVarG>(args[1]);
-        	self.setVar<symVarB>(args[2]);
+        	self.setVar<symVarR>(rb::max(MinValue, rb::min(MaxValue, args[0])));
+        	self.setVar<symVarG>(rb::max(MinValue, rb::min(MaxValue, args[1])));
+        	self.setVar<symVarB>(rb::max(MinValue, rb::min(MaxValue, args[2])));
         	break;
         default:
         	rb::expectedNumArgs( args.size(), 0, 4 );
