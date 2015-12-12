@@ -20,8 +20,10 @@
  */
 
 #include "rbrect.hpp"
+#include "rbvector2.hpp"
 #include "error.hpp"
 #include "macros.hpp"
+#include "base.hpp"
 
 namespace 
 {
@@ -30,7 +32,16 @@ namespace
 	constexpr char symVarWidth[] = "@width";
 	constexpr char symVarHeight[] = "@height";
 
+	constexpr char symVarX[] = "@x";
+	constexpr char symVarY[] = "@y";
+
 	constexpr char symInspect[] = "inspect";
+	constexpr char symMoreEqual[] = ">=";
+	constexpr char symLessEqual[] = "<=";
+	constexpr char symMore[] = ">";
+	constexpr char symLess[] = "<";
+	constexpr char symAdd[] = "+";
+	constexpr char symSubtract[] = "-";
 }
 
 rbRectClass rbRect::ourDefinition;
@@ -42,9 +53,11 @@ void rbRect::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<1>("initialize_copy", &rbRect::initializeCopy);
 	ourDefinition.defineMethod<2>("marshal_dump", &rbRect::marshalDump);
 	ourDefinition.defineMethod<3>("marshal_load", &rbRect::marshalLoad);
-	ourDefinition.defineMethod<4>("==", &rbRect::equal);
-	ourDefinition.defineMethod<5>("eql?", &rbRect::strictEqual);
-	ourDefinition.defineMethod<6>("inspect", &rbRect::inspect);
+	ourDefinition.defineMethod<4>("contains", &rbRect::contains);
+	ourDefinition.defineMethod<5>("intersects", &rbRect::intersects);
+	ourDefinition.defineMethod<6>("==", &rbRect::equal);
+	ourDefinition.defineMethod<7>("eql?", &rbRect::strictEqual);
+	ourDefinition.defineMethod<8>("inspect", &rbRect::inspect);
 
 	ourDefinition.defineAttribute("left", true, true);
 	ourDefinition.defineAttribute("top", true, true);
@@ -125,6 +138,64 @@ rb::Value rbRect::marshalLoad(rb::Value self, const rb::Value& data)
     self.setVar<symVarWidth>(array[2]);
     self.setVar<symVarHeight>(array[3]);
 	return rb::Nil;
+}
+
+rb::Value rbRect::contains(rb::Value self, const std::vector<rb::Value>& args)
+{
+	rb::Value vector = rbVector2::getDefinition().newObject(args);
+	bool result = false;
+	rb::Value x = vector.getVar<symVarX>();
+	rb::Value y = vector.getVar<symVarY>();
+	rb::Value left = self.getVar<symVarLeft>();
+	rb::Value top = self.getVar<symVarTop>();
+	rb::Value width = self.getVar<symVarWidth>();
+	rb::Value height = self.getVar<symVarHeight>();
+
+	if( x.call<symMoreEqual>(left) == rb::True && 
+		x.call<symLess>(left.call<symAdd>(width)) == rb::True && 
+		y.call<symMoreEqual>(top) == rb::True && 
+		y.call<symLess>(top.call<symAdd>(height)) == rb::True)
+	{
+		return rb::True;
+	}
+	else
+	{
+		return rb::False;
+	}
+}
+
+rb::Value rbRect::intersects(const rb::Value& self, const rb::Value& other)
+{
+	rb::Value otherRect = rbRect::getDefinition().newObject(other);
+	bool result = false;
+
+	rb::Value myLeft = self.getVar<symVarLeft>();
+	rb::Value myTop = self.getVar<symVarTop>();
+	rb::Value myWidth = self.getVar<symVarWidth>();
+	rb::Value myHeight = self.getVar<symVarHeight>();
+	rb::Value otherLeft = otherRect.getVar<symVarLeft>();
+	rb::Value otherTop = otherRect.getVar<symVarTop>();
+	rb::Value otherWidth = otherRect.getVar<symVarWidth>();
+	rb::Value otherHeight = otherRect.getVar<symVarHeight>();
+
+	rb::Value left = rb::max(myLeft, otherLeft);
+	rb::Value top = rb::max(myTop, otherTop);
+	rb::Value right = rb::min(myLeft.call<symAdd>(myWidth), otherLeft.call<symAdd>(otherWidth));
+	rb::Value bottom = rb::min(myTop.call<symAdd>(myHeight), otherTop.call<symAdd>(otherHeight));
+
+	if(left.call<symLess>(right) == rb::True && top.call<symLess>(bottom) == rb::True)
+	{
+		rb::Value intersection = ourDefinition.newObject();
+		intersection.setVar<symVarLeft>(left);
+		intersection.setVar<symVarTop>(top);
+		intersection.setVar<symVarWidth>(right.call<symSubtract>(left));
+		intersection.setVar<symVarHeight>(bottom.call<symSubtract>(top));
+		return intersection;
+	}
+	else
+	{
+		return rb::Nil;
+	}
 }
 
 bool rbRect::equal(const rb::Value& self, const rb::Value& other)

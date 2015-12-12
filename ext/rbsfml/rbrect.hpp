@@ -41,6 +41,9 @@ public:
 	static std::vector<rb::Value> marshalDump(const rb::Value& self);
 	static rb::Value marshalLoad(rb::Value self, const rb::Value& data);
 
+	static rb::Value contains(rb::Value self, const std::vector<rb::Value>& args);
+	static rb::Value intersects(const rb::Value& self, const rb::Value& other);
+
 	static bool equal(const rb::Value& self, const rb::Value& other);
 	static bool strictEqual(const rb::Value& self, const rb::Value& other);
 
