@@ -266,10 +266,6 @@ bool rbColor::equal(const rb::Value& self, const rb::Value& other)
 bool rbColor::strictEqual(const rb::Value& self, const rb::Value& other)
 {
 	if(!other.isKindOf(rb::Value(ourDefinition))) return false;
-	if(self.getVar<symVarR>().getType() != other.getVar<symVarR>().getType()) return false;
-	if(self.getVar<symVarG>().getType() != other.getVar<symVarG>().getType()) return false;
-	if(self.getVar<symVarB>().getType() != other.getVar<symVarB>().getType()) return false;
-	if(self.getVar<symVarA>().getType() != other.getVar<symVarA>().getType()) return false;
 	return equal(self, other);
 }
 
