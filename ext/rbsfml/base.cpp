@@ -29,12 +29,12 @@ namespace
 namespace rb
 {
 
-rb::Value yield(const rb::Value& value)
+Value yield(const Value& value)
 {
 	return rb::Value(rb_yield(value.to<VALUE>()));
 }
 
-rb::Value getEnumerator(const rb::Value& value)
+Value getEnumerator(const Value& value)
 {
 	VALUE enumerator = SIZED_ENUMERATOR(value.to<VALUE>(), 0, nullptr, 0);
 	return rb::Value(enumerator);
@@ -45,14 +45,14 @@ bool blockGiven()
 	return rb_block_given_p();
 }
 
-rb::Value max(rb::Value a, rb::Value b)
+Value max(Value a, Value b)
 {
-	return a.call<symMore>(b) == rb::True ? a : b;
+	return a.call<symMore>(b) == True ? a : b;
 }
 
-rb::Value min(rb::Value a, rb::Value b)
+Value min(Value a, Value b)
 {
-	return a.call<symLess>(b) == rb::True ? a : b;
+	return a.call<symLess>(b) == True ? a : b;
 }
 
 }

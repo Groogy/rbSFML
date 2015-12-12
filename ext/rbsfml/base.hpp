@@ -27,12 +27,12 @@
 
 namespace rb
 {
-	rb::Value yield(const rb::Value& value);
-	rb::Value getEnumerator(const rb::Value& object);
+	Value yield(const Value& value);
+	Value getEnumerator(const Value& object);
 	bool blockGiven();
 
-	rb::Value max(rb::Value a, rb::Value b);
-	rb::Value min(rb::Value a, rb::Value b);
+	Value max(Value a, Value b);
+	Value min(Value a, Value b);
 }
 
 #endif // RBSFML_BASE_HEADER_
