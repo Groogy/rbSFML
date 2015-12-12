@@ -30,6 +30,9 @@ namespace rb
 	rb::Value yield(const rb::Value& value);
 	rb::Value getEnumerator(const rb::Value& object);
 	bool blockGiven();
+
+	rb::Value max(rb::Value a, rb::Value b);
+	rb::Value min(rb::Value a, rb::Value b);
 }
 
 #endif // RBSFML_BASE_HEADER_

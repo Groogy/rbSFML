@@ -20,6 +20,12 @@
  */
 #include "base.hpp"
 
+namespace
+{
+	constexpr char symMore[] = ">";
+	constexpr char symLess[] = "<";
+}
+
 namespace rb
 {
 
@@ -37,6 +43,16 @@ rb::Value getEnumerator(const rb::Value& value)
 bool blockGiven()
 {
 	return rb_block_given_p();
+}
+
+rb::Value max(rb::Value a, rb::Value b)
+{
+	return a.call<symMore>(b) == rb::True ? a : b;
+}
+
+rb::Value min(rb::Value a, rb::Value b)
+{
+	return a.call<symLess>(b) == rb::True ? a : b;
 }
 
 }
