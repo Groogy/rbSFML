@@ -40,7 +40,7 @@ namespace
 
 	template<const char* operation, const char* varR = symVarR, const char* varG = symVarG,
 			 const char* varB = symVarB, const char* varA = symVarA>
-	void doMath(rb::Value result, const rb::Value& left, const rb::Value& right)
+	void doMath(rb::Value result, const rb::Value& left, const rb::Value& right, bool clamp)
 	{
 		rb::Value leftR = left.getVar<varR>();
 		rb::Value leftG = left.getVar<varG>();
@@ -56,10 +56,20 @@ namespace
 		rb::Value b = leftB.call<operation>(rightB);
 		rb::Value a = leftA.call<operation>(rightA);
 
-		result.setVar<varR>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), r)));
-		result.setVar<varG>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), g)));
-		result.setVar<varB>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), b)));
-		result.setVar<varA>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), a)));
+        if(clamp)
+        {
+            result.setVar<varR>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), r)));
+            result.setVar<varG>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), g)));
+            result.setVar<varB>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), b)));
+            result.setVar<varA>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), a)));
+        }
+        else
+        {
+            result.setVar<varR>(r);
+            result.setVar<varG>(g);
+            result.setVar<varB>(b);
+            result.setVar<varA>(a);
+        }
 	}
 
 	template<const char* operation, const char* varR = symVarR, const char* varG = symVarG,
@@ -71,7 +81,7 @@ namespace
 		rb::Value leftB = left.getVar<varB>();
 		rb::Value leftA = left.getVar<varA>();
 
-		rb::Value rightValue(right);
+		rb::Value rightValue = rb::Value::create(right);
 		
 		rb::Value r = leftR.call<operation>(rightValue);
 		rb::Value g = leftG.call<operation>(rightValue);
@@ -229,21 +239,21 @@ unsigned int rbColor::toInteger(rb::Value self)
 rb::Value rbColor::add(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symAdd>(result, self, ourDefinition.newObject(other));
+	doMath<symAdd>(result, self, ourDefinition.newObject(other), true);
 	return result;
 }
 
 rb::Value rbColor::subtract(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symSubtract>(result, self, ourDefinition.newObject(other));
+	doMath<symSubtract>(result, self, ourDefinition.newObject(other), true);
 	return result;
 }
 
 rb::Value rbColor::multiply(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symMultiply>(result, self, ourDefinition.newObject(other));
+	doMath<symMultiply>(result, self, ourDefinition.newObject(other), false);
 	doMath<symDivide>(result, result, 255);
 	return result;
 }
