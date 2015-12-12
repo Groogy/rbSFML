@@ -1,5 +1,6 @@
 tmp/*
 lib/*
+.idea/*
 
 *.log
 */*.log
