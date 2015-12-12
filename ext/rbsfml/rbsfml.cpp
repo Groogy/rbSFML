@@ -79,5 +79,5 @@ extern "C" void Init_rbsfml() {
 
 	// Graphics
 	rbColor::defineClass(rb::Value(sfml));
-	rbBlendMode::defineModule(rb::Value(sfml));
+	rbBlendMode::defineClass(rb::Value(sfml));
 }

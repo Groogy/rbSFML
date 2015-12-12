@@ -25,19 +25,34 @@
 #include <SFML/Graphics/BlendMode.hpp>
 #include "class.hpp"
 #include "object.hpp"
+#include "macros.hpp"
 
 class rbBlendMode;
 
-typedef rb::Module<sf::BlendMode> rbBlendModeModule;
+typedef rb::Class<rbBlendMode> rbBlendModeClass;
 
 class rbBlendMode
 {
 public:
-	static void defineModule(const rb::Value& sfml);
+	static void defineClass(const rb::Value& sfml);
+	static const rbBlendModeClass& getDefinition();
+
+	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
+
+	static bool equal(const rb::Value& self, const rb::Value& other);
+	static std::string inspect(const rb::Value& self);
 
 private:
-	static rbBlendModeModule ourDefinition;
+	static rbBlendModeClass ourDefinition;
 };
+
+namespace macro
+{
+	template<>
+	std::string toString(const sf::BlendMode::Factor& value);
+	template<>
+	std::string toString(const sf::BlendMode::Equation& value);
+}
 
 namespace rb
 {
@@ -51,7 +66,13 @@ namespace rb
 	sf::BlendMode::Equation Value::to() const;
 
 	template<>
-	Value Value::create( sf::BlendMode::Equation value );	
+	Value Value::create( sf::BlendMode::Equation value );
+
+	template<>
+	sf::BlendMode Value::to() const;
+
+	template<>
+	Value Value::create( const sf::BlendMode& value );
 }
 
 #endif // RBSFML_RBBLENDMODE_HPP
