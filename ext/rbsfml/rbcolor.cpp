@@ -38,13 +38,13 @@ namespace
 	constexpr char symDivide[] = "/";
 
 	template<const char* operation, const char* varR = symVarR, const char* varG = symVarG,
-			 const char* varB = symVarG, const char* varA = symVarA>
+			 const char* varB = symVarB, const char* varA = symVarA>
 	void doMath(rb::Value result, const rb::Value& left, const rb::Value& right)
 	{
 		rb::Value leftR = left.getVar<varR>();
-		rb::Value leftG = left.getVar<varR>();
-		rb::Value leftB = left.getVar<varR>();
-		rb::Value leftA = left.getVar<varR>();
+		rb::Value leftG = left.getVar<varG>();
+		rb::Value leftB = left.getVar<varB>();
+		rb::Value leftA = left.getVar<varA>();
 		rb::Value rightR = right.getVar<varR>();
 		rb::Value rightG = right.getVar<varG>();
 		rb::Value rightB = right.getVar<varB>();
@@ -62,13 +62,13 @@ namespace
 	}
 
 	template<const char* operation, const char* varR = symVarR, const char* varG = symVarG,
-			 const char* varB = symVarG, const char* varA = symVarA>
+			 const char* varB = symVarB, const char* varA = symVarA>
 	void doMath(rb::Value result, const rb::Value& left, int right)
 	{
 		rb::Value leftR = left.getVar<varR>();
-		rb::Value leftG = left.getVar<varR>();
-		rb::Value leftB = left.getVar<varR>();
-		rb::Value leftA = left.getVar<varR>();
+		rb::Value leftG = left.getVar<varG>();
+		rb::Value leftB = left.getVar<varB>();
+		rb::Value leftA = left.getVar<varA>();
 
 		rb::Value rightValue(right);
 		
@@ -141,13 +141,14 @@ const rbColorClass& rbColor::getDefinition()
 
 rb::Value rbColor::initialize(rb::Value self, const std::vector<rb::Value>& args)
 {
+    self.setVar<symVarR>(0);
+    self.setVar<symVarG>(0);
+    self.setVar<symVarB>(0);
+    self.setVar<symVarA>(255);
+
 	switch( args.size() )
     {
         case 0:
-        	self.setVar<symVarR>(0);
-        	self.setVar<symVarG>(0);
-        	self.setVar<symVarB>(0);
-        	self.setVar<symVarA>(255);
             break;
         case 1:
         	if(args[0].getType() == rb::ValueType::Array)
@@ -156,7 +157,10 @@ rb::Value rbColor::initialize(rb::Value self, const std::vector<rb::Value>& args
         		self.setVar<symVarR>(elements[0]);
 	        	self.setVar<symVarG>(elements[1]);
 	        	self.setVar<symVarB>(elements[2]);
-	        	self.setVar<symVarA>(elements[3]);
+	        	if (elements.size() > 3)
+	        	    self.setVar<symVarA>(elements[3]);
+	        	else
+	        	    self.setVar<symVarA>(255);
         	}
         	else if(args[0].getType() == rb::ValueType::Fixnum)
         	{
@@ -224,21 +228,21 @@ unsigned int rbColor::toInteger(rb::Value self)
 rb::Value rbColor::add(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symAdd>(result, self, other);
+	doMath<symAdd>(result, self, ourDefinition.newObject(other));
 	return result;
 }
 
 rb::Value rbColor::subtract(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symSubtract>(result, self, other);
+	doMath<symSubtract>(result, self, ourDefinition.newObject(other));
 	return result;
 }
 
 rb::Value rbColor::multiply(const rb::Value& self, const rb::Value& other)
 {
 	rb::Value result = ourDefinition.newObject();
-	doMath<symMultiply>(result, self, other);
+	doMath<symMultiply>(result, self, ourDefinition.newObject(other));
 	doMath<symDivide>(result, result, 255);
 	return result;
 }
