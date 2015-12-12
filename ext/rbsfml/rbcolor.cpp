@@ -22,6 +22,7 @@
 #include "rbcolor.hpp"
 #include "error.hpp"
 #include "macros.hpp"
+#include "base.hpp"
 
 namespace 
 {
@@ -55,10 +56,10 @@ namespace
 		rb::Value b = leftB.call<operation>(rightB);
 		rb::Value a = leftA.call<operation>(rightA);
 
-		result.setVar<varR>(r);
-		result.setVar<varG>(g);
-		result.setVar<varB>(b);
-		result.setVar<varA>(a);
+		result.setVar<varR>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), r)));
+		result.setVar<varG>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), g)));
+		result.setVar<varB>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), b)));
+		result.setVar<varA>(rb::max(rb::Value::create(0), rb::min(rb::Value::create(255), a)));
 	}
 
 	template<const char* operation, const char* varR = symVarR, const char* varG = symVarG,
