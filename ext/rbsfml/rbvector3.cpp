@@ -224,17 +224,35 @@ namespace rb
 template<>
 sf::Vector3f Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Vector3f vector(getVar<symVarX, float>(), getVar<symVarY, float>(), getVar<symVarZ, float>());
-	return vector;
+	if(getType() == rb::ValueType::Array && getArrayLength() == 3)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Vector3f vector(elements[0].to<float>(), elements[1].to<float>(), elements[2].to<float>());
+        return vector;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Vector3f vector(getVar<symVarX, float>(), getVar<symVarY, float>(), getVar<symVarZ, float>());
+        return vector;
+    }
 }
 
 template<>
 sf::Vector3i Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Vector3i vector(getVar<symVarX, int>(), getVar<symVarY, int>(), getVar<symVarZ, int>());
-	return vector;
+	if(getType() == rb::ValueType::Array && getArrayLength() == 3)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Vector3i vector(elements[0].to<int>(), elements[1].to<int>(), elements[2].to<int>());
+        return vector;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Vector3i vector(getVar<symVarX, int>(), getVar<symVarY, int>(), getVar<symVarZ, int>());
+        return vector;
+    }
 }
 
 template<>

@@ -208,25 +208,52 @@ namespace rb
 template<>
 sf::Vector2f Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Vector2f vector(getVar<symVarX, float>(), getVar<symVarY, float>());
-	return vector;
+    if(getType() == rb::ValueType::Array && getArrayLength() == 2)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Vector2f vector(elements[0].to<float>(), elements[1].to<float>());
+        return vector;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Vector2f vector(getVar<symVarX, float>(), getVar<symVarY, float>());
+        return vector;
+    }
 }
 
 template<>
 sf::Vector2i Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Vector2i vector(getVar<symVarX, int>(), getVar<symVarY, int>());
-	return vector;
+	if(getType() == rb::ValueType::Array && getArrayLength() == 2)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Vector2i vector(elements[0].to<int>(), elements[1].to<int>());
+        return vector;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Vector2i vector(getVar<symVarX, int>(), getVar<symVarY, int>());
+        return vector;
+    }
 }
 
 template<>
 sf::Vector2u Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Vector2u vector(getVar<symVarX, unsigned int>(), getVar<symVarY, unsigned int>());
-	return vector;
+	if(getType() == rb::ValueType::Array && getArrayLength() == 2)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Vector2u vector(elements[0].to<unsigned int>(), elements[1].to<unsigned int>());
+        return vector;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Vector2u vector(getVar<symVarX, unsigned int>(), getVar<symVarY, unsigned int>());
+        return vector;
+    }
 }
 
 template<>
