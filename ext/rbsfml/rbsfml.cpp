@@ -40,6 +40,7 @@
 #include "rbtouch.hpp"
 #include "rbcolor.hpp"
 #include "rbblendmode.hpp"
+#include "rbtransform.hpp"
 
 class rbSFML
 {
@@ -80,4 +81,5 @@ extern "C" void Init_rbsfml() {
 	// Graphics
 	rbColor::defineClass(rb::Value(sfml));
 	rbBlendMode::defineClass(rb::Value(sfml));
+	rbTransform::defineClass(rb::Value(sfml));
 }
