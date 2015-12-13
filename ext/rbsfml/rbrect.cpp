@@ -237,23 +237,47 @@ namespace rb
 template<>
 sf::FloatRect Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::FloatRect rect(
-		getVar<symVarLeft, float>(), getVar<symVarTop, float>(),
-		getVar<symVarWidth, float>(), getVar<symVarHeight, float>()
-	);
-	return rect;
+    if(getType() == rb::ValueType::Array && getArrayLength() == 4)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::FloatRect rect(
+            elements[0].to<float>(), elements[1].to<float>(),
+            elements[2].to<float>(), elements[3].to<float>()
+        );
+        return rect;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::FloatRect rect(
+            getVar<symVarLeft, float>(), getVar<symVarTop, float>(),
+            getVar<symVarWidth, float>(), getVar<symVarHeight, float>()
+        );
+        return rect;
+    }
 }
 
 template<>
 sf::IntRect Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::IntRect rect(
-		getVar<symVarLeft, int>(), getVar<symVarTop, int>(),
-		getVar<symVarWidth, int>(), getVar<symVarHeight, int>()
-	);
-	return rect;
+    if(getType() == rb::ValueType::Array && getArrayLength() == 4)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::IntRect rect(
+            elements[0].to<int>(), elements[1].to<int>(),
+            elements[2].to<int>(), elements[3].to<int>()
+        );
+        return rect;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::IntRect rect(
+            getVar<symVarLeft, int>(), getVar<symVarTop, int>(),
+            getVar<symVarWidth, int>(), getVar<symVarHeight, int>()
+        );
+        return rect;
+    }
 }
 
 
