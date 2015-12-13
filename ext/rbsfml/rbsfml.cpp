@@ -41,6 +41,7 @@
 #include "rbcolor.hpp"
 #include "rbblendmode.hpp"
 #include "rbtransform.hpp"
+#include "rbview.hpp"
 
 class rbSFML
 {
@@ -82,4 +83,5 @@ extern "C" void Init_rbsfml() {
 	rbColor::defineClass(rb::Value(sfml));
 	rbBlendMode::defineClass(rb::Value(sfml));
 	rbTransform::defineClass(rb::Value(sfml));
+	rbView::defineClass(rb::Value(sfml));
 }

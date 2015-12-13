@@ -34,6 +34,7 @@ class rbTransform : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static rbTransformClass& getDefinition();
 
 	rbTransform();
 	~rbTransform();
@@ -72,6 +73,8 @@ public:
 
 private:
     friend class rb::Value;
+    friend class rbView;
+    
 	static rbTransformClass ourDefinition;
 
 	sf::Transform myObject;

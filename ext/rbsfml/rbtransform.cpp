@@ -59,6 +59,11 @@ void rbTransform::defineClass(const rb::Value& sfml)
 	ourDefinition.defineConstant("Identity", ourDefinition.newObject());
 }
 
+rbTransformClass& rbTransform::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbTransform::rbTransform()
 : rb::Object()
 , myObject()
