@@ -297,10 +297,22 @@ namespace rb
 template<>
 sf::Color Value::to() const
 {
-	errorHandling(T_OBJECT);
-	sf::Color color(getVar<symVarR, unsigned int>(), getVar<symVarG, unsigned int>(),
-					 getVar<symVarB, unsigned int>(), getVar<symVarA, unsigned int>());
-	return color;
+    if(getType() == rb::ValueType::Array && getArrayLength() == 4)
+    {
+        std::vector<rb::Value> elements = to<std::vector<rb::Value>>();
+        sf::Color color(
+            elements[0].to<unsigned int>(), elements[1].to<unsigned int>(),
+            elements[2].to<unsigned int>(), elements[3].to<unsigned int>()
+        );
+        return color;
+    }
+    else
+    {
+        errorHandling(T_OBJECT);
+        sf::Color color(getVar<symVarR, unsigned int>(), getVar<symVarG, unsigned int>(),
+                         getVar<symVarB, unsigned int>(), getVar<symVarA, unsigned int>());
+        return color;
+    }
 }
 
 template<>
