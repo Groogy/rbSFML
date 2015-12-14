@@ -42,6 +42,7 @@
 #include "rbblendmode.hpp"
 #include "rbtransform.hpp"
 #include "rbview.hpp"
+#include "rbimage.hpp"
 
 class rbSFML
 {
@@ -84,4 +85,5 @@ extern "C" void Init_rbsfml() {
 	rbBlendMode::defineClass(rb::Value(sfml));
 	rbTransform::defineClass(rb::Value(sfml));
 	rbView::defineClass(rb::Value(sfml));
+	rbImage::defineClass(rb::Value(sfml));
 }

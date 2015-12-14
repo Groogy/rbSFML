@@ -22,6 +22,7 @@
 #include "rbimage.hpp"
 #include "rbvector2.hpp"
 #include "rbrect.hpp"
+#include "rbcolor.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
@@ -35,8 +36,20 @@ void rbImage::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<2>("marshal_dump", &rbImage::marshalDump);
 	ourDefinition.defineMethod<3>("marshal_load", &rbImage::marshalLoad);
 	ourDefinition.defineMethod<4>("inspect", &rbImage::inspect);
+	ourDefinition.defineMethod<5>("create_from_color", &rbImage::createFromColor);
+	ourDefinition.defineMethod<5>("create_from_data", &rbImage::createFromData);
     ourDefinition.defineMethod<5>("load_from_file", &rbImage::loadFromFile);
     ourDefinition.defineMethod<6>("load_from_memory", &rbImage::loadFromMemory);
+    ourDefinition.defineMethod<6>("save_to_file", &rbImage::saveToFile);
+    ourDefinition.defineMethod<6>("size", &rbImage::getSize);
+    ourDefinition.defineMethod<6>("create_mask_from_color", &rbImage::createMaskFromColor);
+    ourDefinition.defineMethod<6>("copy", &rbImage::copy);
+    ourDefinition.defineMethod<6>("set_pixel", &rbImage::setPixel);
+    ourDefinition.defineMethod<6>("get_pixel", &rbImage::getPixel);
+    ourDefinition.defineMethod<6>("pixels", &rbImage::getPixel);
+    ourDefinition.defineMethod<6>("flip_horizontally", &rbImage::flipHorizontally);
+    ourDefinition.defineMethod<6>("flip_vertically", &rbImage::flipVertically);
+
 
 	ourDefinition.aliasMethod("inspect", "to_s");
 }
@@ -64,8 +77,11 @@ rb::Value rbImage::initialize(rb::Value self, const std::vector<rb::Value>& args
             else
                 object->loadFromFile(args[0].to<std::string>());
             break;
+        case 3:
+            object->createFromColor(args[0].to<unsigned int>(), args[1].to<unsigned int>(), args[2].to<sf::Color>());
+            break;
         default:
-        	rb::expectedNumArgs( args.size(), 0, 2 );
+        	rb::expectedNumArgs( args.size(), "0, 1 or 3" );
         	break;
     }
 
@@ -81,13 +97,26 @@ rbImage* rbImage::initializeCopy(const rbImage* value)
 rb::Value rbImage::marshalDump() const
 {
     std::vector<rb::Value> data;
-    //data.push_back(rb::Value::create(myObject.getViewport()));
+    const sf::Vector2u& imgSize = myObject.getSize();
+    data.push_back(rb::Value::create(imgSize));
+    const sf::Uint8* rawData = myObject.getPixelsPtr();
+    for(int index = 0, size = imgSize.x * imgSize.y; index < size; index++)
+    {
+        data.push_back(rb::Value::create(rawData[index]));
+    }
 	return rb::Value::create(data);
 }
 
 void rbImage::marshalLoad(const std::vector<rb::Value>& data)
 {
-    //myObject.reset(data[0].to<sf::FloatRect>());
+    sf::Vector2u imgSize = data[0].to<sf::Vector2u>();
+    sf::Uint8* rawData = new sf::Uint8[data.size()-1];
+    for(int index = 0, size = data.size()-1; index < size; index++)
+    {
+        rawData[index] = data[index+1].to<sf::Uint8>();
+    }
+    myObject.create(imgSize.x, imgSize.y, rawData);
+    delete[] rawData;
 }
 
 std::string rbImage::inspect() const
@@ -95,6 +124,22 @@ std::string rbImage::inspect() const
     sf::Vector2u size = myObject.getSize();
 
     return ourDefinition.getName() + "(" + macro::toString(size.x) + ", " + macro::toString(size.y) + ")";
+}
+
+void rbImage::createFromColor(unsigned int width, unsigned int height, sf::Color color)
+{
+    myObject.create(width, height, color);
+}
+
+void rbImage::createFromData(unsigned int width, unsigned int height, const std::vector<rb::Value>& data)
+{
+    sf::Uint8* rawData = new sf::Uint8[data.size()];
+    for(int index = 0, size = data.size(); index < size; index++)
+    {
+        rawData[index] = data[index].to<sf::Uint8>();
+    }
+    myObject.create(width, height, rawData);
+    delete[] rawData;
 }
 
 bool rbImage::loadFromFile(const std::string& filename)
@@ -109,7 +154,102 @@ bool rbImage::loadFromMemory(const std::vector<rb::Value>& data)
     {
         rawData[index] = data[index].to<sf::Uint8>();
     }
-    return myObject.loadFromMemory(rawData, data.size());
+    bool result = myObject.loadFromMemory(rawData, data.size());
+    delete[] rawData;
+    return result;
+}
+
+bool rbImage::saveToFile(const std::string& filename) const
+{
+    return myObject.saveToFile(filename);
+}
+
+sf::Vector2u rbImage::getSize() const
+{
+    return myObject.getSize();
+}
+
+rb::Value rbImage::createMaskFromColor(rb::Value self, const std::vector<rb::Value>& args)
+{
+	rbImage* object = self.to<rbImage*>();
+	sf::Color color;
+	sf::Uint8 alpha = 0;
+	switch(args.size())
+    {
+        case 2:
+            alpha = args[1].to<sf::Uint8>();
+        case 1:
+            color = args[0].to<sf::Color>();
+            break;
+        default:
+        	rb::expectedNumArgs( args.size(), 1, 2 );
+        	break;
+    }
+
+    object->myObject.createMaskFromColor(color, alpha);
+
+	return rb::Nil;
+}
+
+rb::Value rbImage::copy(rb::Value self, const std::vector<rb::Value>& args)
+{
+	rbImage* object = self.to<rbImage*>();
+	const sf::Image* source = nullptr;
+	unsigned int destX = 0;
+	unsigned int destY = 0;
+	sf::IntRect sourceRect;
+	bool applyAlpha = false;
+	switch(args.size())
+    {
+        case 5:
+            applyAlpha = args[4].to<bool>();
+        case 4:
+            sourceRect = args[3].to<sf::IntRect>();
+        case 3:
+            source = &args[0].to<const sf::Image&>();
+            destX = args[1].to<unsigned int>();
+            destY = args[2].to<unsigned int>();
+            break;
+        default:
+        	rb::expectedNumArgs(args.size(), 3, 5);
+        	break;
+    }
+
+    object->myObject.copy(*source, destX, destY, sourceRect, applyAlpha);
+
+	return rb::Nil;
+}
+
+void rbImage::setPixel(unsigned int x, unsigned int y, sf::Color color)
+{
+    myObject.setPixel(x, y, color);
+}
+
+sf::Color rbImage::getPixel(unsigned int x, unsigned int y) const
+{
+    return myObject.getPixel(x, y);
+}
+
+rb::Value rbImage::getPixels() const
+{
+    std::vector<rb::Value> data;
+    const sf::Vector2u& imgSize = myObject.getSize();
+    const sf::Uint8* rawData = myObject.getPixelsPtr();
+    for(int index = 0, size = imgSize.x * imgSize.y; index < size; index++)
+    {
+        data.push_back(rb::Value::create(rawData[index]));
+    }
+	return rb::Value::create(data);
+}
+
+void rbImage::flipHorizontally()
+{
+    myObject.flipHorizontally();
+}
+
+void rbImage::flipVertically()
+{
+    myObject.flipVertically();
 }
 
 namespace rb

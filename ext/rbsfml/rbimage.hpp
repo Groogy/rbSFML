@@ -46,8 +46,24 @@ public:
 
 	std::string inspect() const;
 
+    void createFromColor(unsigned int width, unsigned int height, sf::Color color);
+    void createFromData(unsigned int width, unsigned int height, const std::vector<rb::Value>& data);
+
 	bool loadFromFile(const std::string& filename);
 	bool loadFromMemory(const std::vector<rb::Value>& data);
+	bool saveToFile(const std::string& filename) const;
+
+	sf::Vector2u getSize() const;
+
+	static rb::Value createMaskFromColor(rb::Value self, const std::vector<rb::Value>& args);
+	static rb::Value copy(rb::Value self, const std::vector<rb::Value>& args);
+
+	void setPixel(unsigned int x, unsigned int y, sf::Color color);
+	sf::Color getPixel(unsigned int x, unsigned int y) const;
+	rb::Value getPixels() const;
+
+	void flipHorizontally();
+	void flipVertically();
 
 private:
     friend class rb::Value;
