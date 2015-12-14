@@ -64,6 +64,13 @@ Value::Value(const std::string& value)
 {
 }
 
+Value::Value(unsigned char value)
+: myValue(INT2FIX(value))
+, myCachedStr()
+, myCachedArray()
+{
+}
+
 Value::Value(int value)
 : myValue(INT2FIX(value))
 , myCachedStr()
@@ -253,6 +260,13 @@ const std::string& Value::to() const
 	errorHandling(T_STRING);
 	myCachedStr.assign(RSTRING_PTR(myValue), RSTRING_LEN(myValue));
 	return myCachedStr;
+}
+
+template<>
+unsigned char Value::to() const
+{
+	errorHandling(T_FIXNUM);
+	return FIX2INT(myValue);
 }
 
 template<>

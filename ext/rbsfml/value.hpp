@@ -51,6 +51,7 @@ namespace rb
 		Value();
 		explicit Value(VALUE value);
 		explicit Value(const std::string& value);
+		explicit Value(unsigned char value);
 		explicit Value(int value);
 		explicit Value(float value);
 		explicit Value(long long int value);
@@ -121,6 +122,8 @@ namespace rb
 	template<>
 	const std::vector<Value>& Value::to() const;
 
+	template<>
+	unsigned char Value::to() const;
 	template<>
 	int Value::to() const;
 	template<>
