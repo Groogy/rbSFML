@@ -19,59 +19,35 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef RBSFML_RBSHADER_HPP_
-#define RBSFML_RBSHADER_HPP_
+#ifndef RBSFML_RBRENDERSTATES_HPP
+#define RBSFML_RBRENDERSTATES_HPP
 
-#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 #include "class.hpp"
 #include "object.hpp"
 
-class rbShader;
+class rbRenderStates;
 
-typedef rb::Class<rbShader> rbShaderClass;
+typedef rb::Class<rbRenderStates> rbRenderStatesClass;
 
-class rbShader : public rb::Object
+class rbRenderStates
 {
 public:
 	static void defineClass(const rb::Value& sfml);
-	static rbShaderClass& getDefinition();
+	static const rbRenderStatesClass& getDefinition();
 
-	rbShader();
-	~rbShader();
-
-	bool loadFromFile(rb::Value arg1, rb::Value arg2);
-	bool loadFromMemory(rb::Value arg1, rb::Value arg2);
-
-	static rb::Value setParameter(rb::Value self, const std::vector<rb::Value>& args);
-
-	unsigned int getNativeHandle() const;
-
-	static void bind(const rbShader* shader);
-	static bool isAvailable();
+	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
+	static rb::Value initializeCopy(rb::Value self, const rb::Value& value);
+	rb::Value marshalDump() const;
 
 private:
-    friend class rb::Value;
-	static rbShaderClass ourDefinition;
-	static rb::Module<sf::Shader::CurrentTextureType> ourCurrentTextureTypeDefinition;
-
-	sf::Shader myObject;
+	static rbRenderStatesClass ourDefinition;
 };
 
 namespace rb
 {
 	template<>
-	rbShader* Value::to() const;
-	template<>
-	const rbShader* Value::to() const;
-	template<>
-    sf::Shader& Value::to() const;
-    template<>
-    const sf::Shader& Value::to() const;
-
-    template<>
-    sf::Shader::Type Value::to() const;
-    template<>
-    Value Value::create(sf::Shader::Type value);
+	sf::RenderStates Value::to() const;
 }
 
-#endif // RBSFML_RBSHADER_HPP_
+#endif // RBSFML_RBRENDERSTATES_HPP

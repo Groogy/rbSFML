@@ -45,6 +45,7 @@
 #include "rbimage.hpp"
 #include "rbtexture.hpp"
 #include "rbshader.hpp"
+#include "rbrenderstates.hpp"
 
 class rbSFML
 {
@@ -90,4 +91,5 @@ extern "C" void Init_rbsfml() {
 	rbImage::defineClass(rb::Value(sfml));
 	rbTexture::defineClass(rb::Value(sfml));
 	rbShader::defineClass(rb::Value(sfml));
+	rbRenderStates::defineClass(rb::Value(sfml));
 }

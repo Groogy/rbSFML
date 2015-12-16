@@ -52,6 +52,11 @@ void rbShader::defineClass(const rb::Value& sfml)
     ourCurrentTextureTypeDefinition = rb::Module<sf::Shader::CurrentTextureType>::defineModuleUnder("CurrentTexture", rb::Value(ourDefinition));
 }
 
+rbShaderClass& rbShader::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbShader::rbShader()
 : rb::Object()
 , myObject()
