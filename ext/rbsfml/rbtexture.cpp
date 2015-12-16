@@ -106,12 +106,6 @@ rb::Value rbTexture::marshalDump() const
     return rb::Nil;
 }
 
-std::string rbTexture::inspect() const
-{
-    sf::Vector2u size = myObject.getSize();
-    return ourDefinition.getName() + "(" + macro::toString(size.x) + ", " + macro::toString(size.y) + ")";
-}
-
 void rbTexture::create(unsigned int width, unsigned int height)
 {
     myObject.create(width, height);

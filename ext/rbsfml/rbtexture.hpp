@@ -44,8 +44,6 @@ public:
 
 	rb::Value marshalDump() const;
 
-	std::string inspect() const;
-
     void create(unsigned int width, unsigned int height);
 	static rb::Value loadFromFile(rb::Value self, const std::vector<rb::Value>& args);
 	static rb::Value loadFromMemory(rb::Value self, const std::vector<rb::Value>& args);
