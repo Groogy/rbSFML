@@ -35,21 +35,21 @@ void rbTexture::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<0>("initialize", &rbTexture::initialize);
 	ourDefinition.defineMethod<1>("initialize_copy", &rbTexture::initializeCopy);
 	ourDefinition.defineMethod<2>("marshal_dump", &rbTexture::marshalDump);
-	ourDefinition.defineMethod<5>("create", &rbTexture::create);
-    ourDefinition.defineMethod<5>("load_from_file", &rbTexture::loadFromFile);
-    ourDefinition.defineMethod<6>("load_from_memory", &rbTexture::loadFromMemory);
+	ourDefinition.defineMethod<3>("create", &rbTexture::create);
+    ourDefinition.defineMethod<4>("load_from_file", &rbTexture::loadFromFile);
+    ourDefinition.defineMethod<5>("load_from_memory", &rbTexture::loadFromMemory);
     ourDefinition.defineMethod<6>("load_from_image", &rbTexture::loadFromImage);
-    ourDefinition.defineMethod<6>("size", &rbTexture::getSize);
-    ourDefinition.defineMethod<6>("copy_to_image", &rbTexture::copyToImage);
-    ourDefinition.defineMethod<6>("update", &rbTexture::update);
-    ourDefinition.defineMethod<6>("smooth=", &rbTexture::setSmooth);
-    ourDefinition.defineMethod<6>("smooth?", &rbTexture::isSmooth);
-    ourDefinition.defineMethod<6>("repeated=", &rbTexture::setRepeated);
-    ourDefinition.defineMethod<6>("repeated?", &rbTexture::isRepeated);
-    ourDefinition.defineMethod<6>("native_handle", &rbTexture::getNativeHandle);
+    ourDefinition.defineMethod<7>("size", &rbTexture::getSize);
+    ourDefinition.defineMethod<8>("copy_to_image", &rbTexture::copyToImage);
+    ourDefinition.defineMethod<9>("update", &rbTexture::update);
+    ourDefinition.defineMethod<10>("smooth=", &rbTexture::setSmooth);
+    ourDefinition.defineMethod<11>("smooth?", &rbTexture::isSmooth);
+    ourDefinition.defineMethod<12>("repeated=", &rbTexture::setRepeated);
+    ourDefinition.defineMethod<13>("repeated?", &rbTexture::isRepeated);
+    ourDefinition.defineMethod<14>("native_handle", &rbTexture::getNativeHandle);
 
-    ourDefinition.defineFunction<6>("bind", &rbTexture::bind);
-    ourDefinition.defineFunction<6>("maximum_size", &rbTexture::getMaximumSize);
+    ourDefinition.defineFunction<15>("bind", &rbTexture::bind);
+    ourDefinition.defineFunction<16>("maximum_size", &rbTexture::getMaximumSize);
 
     ourDefinition.defineConstant("Normalized", rb::Value(sf::Texture::Normalized));
     ourDefinition.defineConstant("Pixels", rb::Value(sf::Texture::Pixels));
