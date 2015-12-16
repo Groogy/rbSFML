@@ -56,7 +56,9 @@ void rbTransform::defineClass(const rb::Value& sfml)
 	ourDefinition.aliasMethod("inspect", "to_s");
 	ourDefinition.aliasMethod("to_ary", "to_a");
 
-	ourDefinition.defineConstant("Identity", ourDefinition.newObject());
+    rb::Value identity = ourDefinition.newObject();
+    identity.freeze();
+	ourDefinition.defineConstant("Identity", identity);
 }
 
 rbTransformClass& rbTransform::getDefinition()
