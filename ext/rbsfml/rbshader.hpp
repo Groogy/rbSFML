@@ -43,6 +43,11 @@ public:
 
 	static rb::Value setParameter(rb::Value self, const std::vector<rb::Value>& args);
 
+	unsigned int getNativeHandle() const;
+
+	static void bind(const rbShader* shader);
+	static bool isAvailable();
+
 private:
     friend class rb::Value;
 	static rbShaderClass ourDefinition;

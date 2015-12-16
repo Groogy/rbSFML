@@ -39,6 +39,10 @@ void rbShader::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<0>("load_from_file", &rbShader::loadFromFile);
     ourDefinition.defineMethod<1>("load_from_memory", &rbShader::loadFromMemory);
     ourDefinition.defineMethod<2>("set_parameter", &rbShader::setParameter);
+    ourDefinition.defineMethod<3>("native_handle", &rbShader::getNativeHandle);
+
+    ourDefinition.defineFunction<4>("bind", &rbShader::bind);
+    ourDefinition.defineFunction<5>("available?", &rbShader::isAvailable);
 
     ourDefinition.aliasMethod("set_parameter", "[]=");
 
@@ -123,6 +127,21 @@ rb::Value rbShader::setParameter(rb::Value self, const std::vector<rb::Value>& a
             break;
     }
     return rb::Nil;
+}
+
+unsigned int rbShader::getNativeHandle() const
+{
+    return myObject.getNativeHandle();
+}
+
+void rbShader::bind(const rbShader* shader)
+{
+    sf::Shader::bind(&shader->myObject);
+}
+
+bool rbShader::isAvailable()
+{
+    return sf::Shader::isAvailable();
 }
 
 namespace rb
