@@ -34,6 +34,7 @@ class rbTexture : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static rbTextureClass& getDefinition();
 
 	rbTexture();
 	~rbTexture();

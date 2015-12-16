@@ -55,6 +55,11 @@ void rbTexture::defineClass(const rb::Value& sfml)
     ourDefinition.defineConstant("Pixels", rb::Value(sf::Texture::Pixels));
 }
 
+rbTextureClass& rbTexture::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbTexture::rbTexture()
 : rb::Object()
 , myObject()
