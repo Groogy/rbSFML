@@ -54,6 +54,11 @@ void rbImage::defineClass(const rb::Value& sfml)
 	ourDefinition.aliasMethod("inspect", "to_s");
 }
 
+rbImageClass& rbImage::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbImage::rbImage()
 : rb::Object()
 , myObject()

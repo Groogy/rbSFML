@@ -34,6 +34,7 @@ class rbImage : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static rbImageClass& getDefinition();
 
 	rbImage();
 	~rbImage();

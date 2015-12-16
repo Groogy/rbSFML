@@ -36,6 +36,7 @@ class rbWindow : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static rbWindowClass& getDefinition();
 
 	rbWindow();
 	~rbWindow();

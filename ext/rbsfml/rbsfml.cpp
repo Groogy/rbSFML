@@ -43,6 +43,7 @@
 #include "rbtransform.hpp"
 #include "rbview.hpp"
 #include "rbimage.hpp"
+#include "rbtexture.hpp"
 
 class rbSFML
 {
@@ -86,4 +87,5 @@ extern "C" void Init_rbsfml() {
 	rbTransform::defineClass(rb::Value(sfml));
 	rbView::defineClass(rb::Value(sfml));
 	rbImage::defineClass(rb::Value(sfml));
+	rbTexture::defineClass(rb::Value(sfml));
 }

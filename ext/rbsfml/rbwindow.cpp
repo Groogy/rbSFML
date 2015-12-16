@@ -83,6 +83,11 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	style.defineConstant("Default", rb::Value(sf::Style::Default));
 }
 
+rbWindowClass& rbWindow::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbWindow::rbWindow()
 : rb::Object()
 , myObject()
