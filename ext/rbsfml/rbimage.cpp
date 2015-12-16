@@ -37,18 +37,18 @@ void rbImage::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<3>("marshal_load", &rbImage::marshalLoad);
 	ourDefinition.defineMethod<4>("inspect", &rbImage::inspect);
 	ourDefinition.defineMethod<5>("create_from_color", &rbImage::createFromColor);
-	ourDefinition.defineMethod<5>("create_from_data", &rbImage::createFromData);
-    ourDefinition.defineMethod<5>("load_from_file", &rbImage::loadFromFile);
-    ourDefinition.defineMethod<6>("load_from_memory", &rbImage::loadFromMemory);
-    ourDefinition.defineMethod<6>("save_to_file", &rbImage::saveToFile);
-    ourDefinition.defineMethod<6>("size", &rbImage::getSize);
-    ourDefinition.defineMethod<6>("create_mask_from_color", &rbImage::createMaskFromColor);
-    ourDefinition.defineMethod<6>("copy", &rbImage::copy);
-    ourDefinition.defineMethod<6>("set_pixel", &rbImage::setPixel);
-    ourDefinition.defineMethod<6>("get_pixel", &rbImage::getPixel);
-    ourDefinition.defineMethod<6>("pixels", &rbImage::getPixel);
-    ourDefinition.defineMethod<6>("flip_horizontally", &rbImage::flipHorizontally);
-    ourDefinition.defineMethod<6>("flip_vertically", &rbImage::flipVertically);
+	ourDefinition.defineMethod<6>("create_from_data", &rbImage::createFromData);
+    ourDefinition.defineMethod<7>("load_from_file", &rbImage::loadFromFile);
+    ourDefinition.defineMethod<8>("load_from_memory", &rbImage::loadFromMemory);
+    ourDefinition.defineMethod<9>("save_to_file", &rbImage::saveToFile);
+    ourDefinition.defineMethod<10>("size", &rbImage::getSize);
+    ourDefinition.defineMethod<11>("create_mask_from_color", &rbImage::createMaskFromColor);
+    ourDefinition.defineMethod<12>("copy", &rbImage::copy);
+    ourDefinition.defineMethod<13>("set_pixel", &rbImage::setPixel);
+    ourDefinition.defineMethod<14>("get_pixel", &rbImage::getPixel);
+    ourDefinition.defineMethod<15>("pixels", &rbImage::getPixel);
+    ourDefinition.defineMethod<16>("flip_horizontally", &rbImage::flipHorizontally);
+    ourDefinition.defineMethod<17>("flip_vertically", &rbImage::flipVertically);
 
 
 	ourDefinition.aliasMethod("inspect", "to_s");
