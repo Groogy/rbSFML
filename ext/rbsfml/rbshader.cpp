@@ -152,7 +152,8 @@ rbShader* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbShader* object = nullptr;
-	Data_Get_Struct(myValue, rbShader, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbShader, object);
 	return object;
 }
 
@@ -161,7 +162,8 @@ const rbShader* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbShader* object = nullptr;
-	Data_Get_Struct(myValue, rbShader, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbShader, object);
 	return object;
 }
 

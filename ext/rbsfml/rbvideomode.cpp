@@ -174,7 +174,8 @@ rbVideoMode* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbVideoMode* object = nullptr;
-	Data_Get_Struct(myValue, rbVideoMode, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbVideoMode, object);
 	return object;
 }
 
@@ -183,7 +184,8 @@ const rbVideoMode* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbVideoMode* object = nullptr;
-	Data_Get_Struct(myValue, rbVideoMode, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbVideoMode, object);
 	return object;
 }
 

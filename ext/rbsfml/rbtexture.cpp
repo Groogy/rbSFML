@@ -292,7 +292,8 @@ rbTexture* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbTexture* object = nullptr;
-	Data_Get_Struct(myValue, rbTexture, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTexture, object);
 	return object;
 }
 
@@ -301,7 +302,8 @@ const rbTexture* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbTexture* object = nullptr;
-	Data_Get_Struct(myValue, rbTexture, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTexture, object);
 	return object;
 }
 

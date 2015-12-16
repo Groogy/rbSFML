@@ -273,7 +273,8 @@ rbTransform* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbTransform* object = nullptr;
-	Data_Get_Struct(myValue, rbTransform, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTransform, object);
 	return object;
 }
 
@@ -282,7 +283,8 @@ const rbTransform* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbTransform* object = nullptr;
-	Data_Get_Struct(myValue, rbTransform, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTransform, object);
 	return object;
 }
 

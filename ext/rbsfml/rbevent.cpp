@@ -444,7 +444,8 @@ rbEvent* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbEvent* object = nullptr;
-	Data_Get_Struct(myValue, rbEvent, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbEvent, object);
 	return object;
 }
 
@@ -453,7 +454,8 @@ const rbEvent* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbEvent* object = nullptr;
-	Data_Get_Struct(myValue, rbEvent, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbEvent, object);
 	return object;
 }
 

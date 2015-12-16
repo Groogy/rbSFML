@@ -203,7 +203,8 @@ rbContextSettings* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbContextSettings* object = nullptr;
-	Data_Get_Struct(myValue, rbContextSettings, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbContextSettings, object);
 	return object;
 }
 
@@ -212,7 +213,8 @@ const rbContextSettings* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbContextSettings* object = nullptr;
-	Data_Get_Struct(myValue, rbContextSettings, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbContextSettings, object);
 	return object;
 }
 

@@ -188,7 +188,8 @@ rbView* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbView* object = nullptr;
-	Data_Get_Struct(myValue, rbView, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbView, object);
 	return object;
 }
 
@@ -197,7 +198,8 @@ const rbView* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbView* object = nullptr;
-	Data_Get_Struct(myValue, rbView, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbView, object);
 	return object;
 }
 

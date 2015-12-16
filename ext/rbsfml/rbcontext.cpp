@@ -64,7 +64,8 @@ rbContext* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbContext* object = nullptr;
-	Data_Get_Struct(myValue, rbContext, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbContext, object);
 	return object;
 }
 
@@ -73,7 +74,8 @@ const rbContext* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbContext* object = nullptr;
-	Data_Get_Struct(myValue, rbContext, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbContext, object);
 	return object;
 }
 

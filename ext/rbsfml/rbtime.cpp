@@ -183,7 +183,8 @@ rbTime* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbTime* object = nullptr;
-	Data_Get_Struct(myValue, rbTime, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTime, object);
 	return object;
 }
 
@@ -192,7 +193,8 @@ const rbTime* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbTime* object = nullptr;
-	Data_Get_Struct(myValue, rbTime, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbTime, object);
 	return object;
 }
 

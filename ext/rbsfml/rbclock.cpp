@@ -90,7 +90,8 @@ rbClock* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbClock* object = nullptr;
-	Data_Get_Struct(myValue, rbClock, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbClock, object);
 	return object;
 }
 
@@ -99,7 +100,8 @@ const rbClock* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbClock* object = nullptr;
-	Data_Get_Struct(myValue, rbClock, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbClock, object);
 	return object;
 }
 

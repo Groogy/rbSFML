@@ -265,7 +265,8 @@ rbImage* Value::to() const
 {
 	errorHandling(T_DATA);
 	rbImage* object = nullptr;
-	Data_Get_Struct(myValue, rbImage, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbImage, object);
 	return object;
 }
 
@@ -274,7 +275,8 @@ const rbImage* Value::to() const
 {
 	errorHandling(T_DATA);
 	const rbImage* object = nullptr;
-	Data_Get_Struct(myValue, rbImage, object);
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbImage, object);
 	return object;
 }
 
