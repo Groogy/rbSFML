@@ -276,7 +276,10 @@ unsigned int rbTexture::getNativeHandle() const
 
 void rbTexture::bind(const rbTexture* texture, sf::Texture::CoordinateType type)
 {
-    sf::Texture::bind(&texture->myObject, type);
+    if(texture)
+        sf::Texture::bind(&texture->myObject, type);
+    else
+        sf::Texture::bind(nullptr, type);
 }
 
 unsigned int rbTexture::getMaximumSize()

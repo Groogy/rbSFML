@@ -136,7 +136,10 @@ unsigned int rbShader::getNativeHandle() const
 
 void rbShader::bind(const rbShader* shader)
 {
-    sf::Shader::bind(&shader->myObject);
+    if(shader)
+        sf::Shader::bind(&shader->myObject);
+    else
+        sf::Shader::bind(nullptr);
 }
 
 bool rbShader::isAvailable()
