@@ -177,6 +177,11 @@ bool Value::operator==(const Value& other) const
 	return equal(other);
 }
 
+bool Value::operator!=(const Value& other) const
+{
+	return !equal(other);
+}
+
 bool Value::isNil() const
 {
 	return myValue == Qnil;

@@ -78,6 +78,7 @@ namespace rb
 
 		bool equal(const Value& other) const;
 		bool operator==(const Value& other) const;
+		bool operator!=(const Value& other) const;
 
 		int getArrayLength() const;
 
