@@ -28,4 +28,10 @@ namespace rb
 		NEWOBJ_OF(obj, struct RObject, klass, T_OBJECT | (RGENGC_WB_PROTECTED_OBJECT ? FL_WB_PROTECTED : 0));
      	return (VALUE)obj;
 	}
+
+	VALUE AbstractAllocator::allocate(VALUE klass)
+    {
+        rb::raise(rb::RuntimeError, "Tried to allocate object of abstract class!");
+        return Qnil;
+    }
 }

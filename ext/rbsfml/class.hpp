@@ -46,6 +46,12 @@ namespace rb
 		static VALUE allocate(VALUE klass);
 	};
 
+	class AbstractAllocator
+	{
+	public:
+	    static VALUE allocate(VALUE klass);
+	};
+
 	template<typename Base, int MaxFunctions = 32>
 	class Class : public Module<Base, MaxFunctions>
 	{
