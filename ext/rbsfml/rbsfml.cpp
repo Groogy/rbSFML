@@ -47,6 +47,7 @@
 #include "rbshader.hpp"
 #include "rbrenderstates.hpp"
 #include "rbrendertarget.hpp"
+#include "rbvertex.hpp"
 
 class rbSFML
 {
@@ -94,4 +95,5 @@ extern "C" void Init_rbsfml() {
 	rbShader::defineClass(rb::Value(sfml));
 	rbRenderStates::defineClass(rb::Value(sfml));
 	rbRenderTarget::defineModule(rb::Value(sfml));
+	rbVertex::defineClass(rb::Value(sfml));
 }
