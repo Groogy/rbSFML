@@ -46,6 +46,7 @@
 #include "rbtexture.hpp"
 #include "rbshader.hpp"
 #include "rbrenderstates.hpp"
+#include "rbrendertarget.hpp"
 
 class rbSFML
 {
@@ -92,4 +93,5 @@ extern "C" void Init_rbsfml() {
 	rbTexture::defineClass(rb::Value(sfml));
 	rbShader::defineClass(rb::Value(sfml));
 	rbRenderStates::defineClass(rb::Value(sfml));
+	rbRenderTarget::defineModule(rb::Value(sfml));
 }

@@ -53,6 +53,11 @@ void rbView::defineClass(const rb::Value& sfml)
 	ourDefinition.aliasMethod("inspect", "to_s");
 }
 
+rbViewClass& rbView::getDefinition()
+{
+    return ourDefinition;
+}
+
 rbView::rbView()
 : rb::Object()
 , myObject()

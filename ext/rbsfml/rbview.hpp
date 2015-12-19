@@ -35,6 +35,7 @@ class rbView : public rb::Object
 {
 public:
 	static void defineClass(const rb::Value& sfml);
+	static rbViewClass& getDefinition();
 
 	rbView();
 	~rbView();
@@ -68,6 +69,8 @@ public:
 
 private:
     friend class rb::Value;
+    friend class rbRenderTarget;
+
 	static rbViewClass ourDefinition;
 
 	sf::View myObject;
