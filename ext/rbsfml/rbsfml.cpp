@@ -66,6 +66,14 @@ extern "C" void Init_rbsfml() {
 	sfml.defineFunction<2>("microseconds", &rbTime::microseconds);
 	sfml.defineFunction<3>("sleep", &rbSFML::sleep);
 
+	sfml.defineConstant("Points", rb::Value::create(sf::Points));
+    sfml.defineConstant("Lines", rb::Value::create(sf::Lines));
+    sfml.defineConstant("LinesStrip", rb::Value::create(sf::LinesStrip));
+    sfml.defineConstant("Triangles", rb::Value::create(sf::Triangles));
+    sfml.defineConstant("TrianglesStrip", rb::Value::create(sf::TrianglesStrip));
+    sfml.defineConstant("TrianglesFan", rb::Value::create(sf::TrianglesFan));
+    sfml.defineConstant("Quads", rb::Value::create(sf::Quads));
+
 	// System
 	rbNonCopyable::defineModule(rb::Value(sfml));
 	rbVector2::defineClass(rb::Value(sfml));

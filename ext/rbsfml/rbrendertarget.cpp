@@ -43,6 +43,7 @@ void rbRenderTarget::defineModule(const rb::Value& sfml)
 	ourDefinition.defineMethod<7>("push_gl_states", &rbRenderTarget::pushGLStates);
 	ourDefinition.defineMethod<8>("pop_gl_states", &rbRenderTarget::popGLStates);
 	ourDefinition.defineMethod<9>("reset_gl_states", &rbRenderTarget::resetGLStates);
+	ourDefinition.defineMethod<9>("draw", &rbRenderTarget::draw);
 }
 
 rbRenderTargetModule& rbRenderTarget::getDefinition()
@@ -150,6 +151,32 @@ void rbRenderTarget::popGLStates()
 void rbRenderTarget::resetGLStates()
 {
     return getRenderTarget().resetGLStates();
+}
+
+rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& args)
+{
+    sf::RenderTarget& target = self.to<sf::RenderTarget&>();
+    switch(args.size())
+    {
+        case 2:
+            // Not implemented
+            break;
+        case 3:
+            {
+                std::vector<sf::Vertex> vertices;
+                std::vector<rb::Value> data = args[0].to<std::vector<rb::Value>>();
+                for(int index = 0, size = data.size(); index < size; index++)
+                {
+                    vertices.push_back(data[index].to<sf::Vertex>());
+                }
+                target.draw(vertices.data(), vertices.size(), args[1].to<sf::PrimitiveType>(), args[2].to<sf::RenderStates>());
+            }
+            break;
+        default:
+            rb::expectedNumArgs(args.size(), 2, 3);
+            break;
+    }
+    return rb::Nil;
 }
 
 namespace rb

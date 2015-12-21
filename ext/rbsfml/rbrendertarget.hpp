@@ -57,6 +57,8 @@ public:
 	void popGLStates();
 	void resetGLStates();
 
+	static rb::Value draw(rb::Value self, const std::vector<rb::Value>& args);
+
 protected:
     virtual sf::RenderTarget& getRenderTarget() = 0;
     virtual const sf::RenderTarget& getRenderTarget() const = 0;

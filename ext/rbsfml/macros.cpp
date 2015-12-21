@@ -19,27 +19,22 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef RBSFML_MACROS_HEADER_
-#define RBSFML_MACROS_HEADER_
-
-#include <string>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include "value.hpp"
-
-namespace macro
-{
-	template<typename Type>
-	std::string toString(const Type& value);
-}
+#include "macros.hpp"
 
 namespace rb
 {
-    template<>
-    sf::PrimitiveType Value::to() const;
-    template<>
-    Value Value::create( sf::PrimitiveType value );
+
+template<>
+sf::PrimitiveType Value::to() const
+{
+	unsigned int value = to<unsigned int>();
+	return static_cast<sf::PrimitiveType>(value);
 }
 
-#include "macros.inc"
+template<>
+Value Value::create( sf::PrimitiveType value )
+{
+	return create(static_cast<unsigned int>(value));
+}
 
-#endif // RBSFML_MACROS_HEADER_
+}
