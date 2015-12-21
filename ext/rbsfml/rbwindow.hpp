@@ -24,7 +24,8 @@
 
 #include <SFML/Window/Window.hpp>
 #include "class.hpp"
-#include "object.hpp"
+#include "rbrenderbasetype.hpp"
+
 
 class rbWindow;
 class rbContextSettings;
@@ -32,7 +33,7 @@ class rbEvent;
 
 typedef rb::Class<rbWindow> rbWindowClass;
 
-class rbWindow : public rb::Object
+class rbWindow : public virtual rbRenderBaseType
 {
 public:
 	static void defineClass(const rb::Value& sfml);
@@ -77,11 +78,7 @@ public:
 	rb::Value eachEvent();
 
 private:
-	friend class rb::Value;
-
 	static rbWindowClass ourDefinition;
-
-	sf::Window myObject;
 };
 
 namespace rb
@@ -90,11 +87,6 @@ namespace rb
 	rbWindow* Value::to() const;
 	template<>
 	const rbWindow* Value::to() const;
-
-	template<>
-	sf::Window& Value::to() const;
-	template<>
-	const sf::Window& Value::to() const;
 }
 
 #endif // RBSFML_RBWINDOW_HPP_

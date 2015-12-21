@@ -44,9 +44,22 @@ namespace
 	constexpr char freezeSym[] = "freeze";
 }
 
+class rbWindowImpl : public rbWindow
+{
+public:
+protected:
+    sf::Window* getWindow() { return &myObject; }
+    const sf::Window* getWindow() const { return &myObject; }
+
+private:
+    sf::Window myObject;
+};
+
+typedef rb::DefaultAllocator<rbWindowImpl> AllocatorImpl;
+
 void rbWindow::defineClass(const rb::Value& sfml)
 {
-	ourDefinition = rbWindowClass::defineClassUnder("Window", sfml);
+	ourDefinition = rbWindowClass::defineClassUnder<AllocatorImpl>("Window", sfml);
 	ourDefinition.includeModule(rb::Value(rbNonCopyable::getDefinition()));
 	ourDefinition.defineMethod<0>("initialize", &rbWindow::initialize);
 	ourDefinition.defineMethod<1>("create", &rbWindow::create);
@@ -89,8 +102,7 @@ rbWindowClass& rbWindow::getDefinition()
 }
 
 rbWindow::rbWindow()
-: rb::Object()
-, myObject()
+: rbRenderBaseType()
 {
 }
 
@@ -124,7 +136,7 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 	case 1:
 	{
 		sf::WindowHandle handle = reinterpret_cast<sf::WindowHandle>(arguments[0].to<unsigned long>());
-		object->myObject.create(handle);
+		object->getWindow()->create(handle);
 		break;
 	}
 	case 2:
@@ -132,13 +144,13 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 		{
 			sf::WindowHandle handle = reinterpret_cast<sf::WindowHandle>(arguments[0].to<unsigned long>());
 			rbContextSettings* settings = arguments[1].to<rbContextSettings*>();
-			object->myObject.create(handle, settings->myObject);
+			object->getWindow()->create(handle, settings->myObject);
 		}
 		else
 		{
 			rbVideoMode* mode = arguments[0].to<rbVideoMode*>();
 			const std::string& title = arguments[1].to<const std::string&>();
-			object->myObject.create(mode->myObject, title);
+			object->getWindow()->create(mode->myObject, title);
 		}
 		break;
 	case 3:
@@ -146,7 +158,7 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 		rbVideoMode* mode = arguments[0].to<rbVideoMode*>();
 		const std::string& title = arguments[1].to<const std::string&>();
 		sf::Uint8 style = arguments[2].to<int>();
-		object->myObject.create(mode->myObject, title, style);
+		object->getWindow()->create(mode->myObject, title, style);
 		break;
 	}
 	case 4:
@@ -155,7 +167,7 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 		const std::string& title = arguments[1].to<const std::string&>();
 		sf::Uint8 style = arguments[2].to<int>();
 		rbContextSettings* settings = arguments[3].to<rbContextSettings*>();
-		object->myObject.create(mode->myObject, title, style, settings->myObject);
+		object->getWindow()->create(mode->myObject, title, style, settings->myObject);
 		break;
 	}
 	default:
@@ -166,46 +178,46 @@ rb::Value rbWindow::create(rb::Value self, const std::vector<rb::Value>& argumen
 
 void rbWindow::close()
 {
-	return myObject.close();
+	return getWindow()->close();
 }
 
 bool rbWindow::isOpen() const
 {
-	return myObject.isOpen();
+	getWindow()->isOpen();
 }
 
 rbContextSettings* rbWindow::getSettings() const
 {
 	rb::Value value = rbContextSettings::ourDefinition.newObject();
 	rbContextSettings* object = value.to<rbContextSettings*>();
-	object->myObject = myObject.getSettings();
+	object->myObject = getWindow()->getSettings();
 	value.call<freezeSym>();
 	return object;
 }
 
 void rbWindow::setPosition(sf::Vector2i position)
 {
-	myObject.setPosition(position);
+	getWindow()->setPosition(position);
 }
 
 sf::Vector2i rbWindow::getPosition() const
 {
-	return myObject.getPosition();
+	return getWindow()->getPosition();
 }
 
 void rbWindow::setSize(sf::Vector2u size)
 {
-	myObject.setSize(size);
+	getWindow()->setSize(size);
 }
 
 sf::Vector2u rbWindow::getSize() const
 {
-	return myObject.getSize();
+	return getWindow()->getSize();
 }
 
 void rbWindow::setTitle(const std::string& title)
 {
-	myObject.setTitle(title);
+	getWindow()->setTitle(title);
 }
 
 void rbWindow::setIcon(unsigned int width, unsigned int height, const std::vector<rb::Value>& pixels)
@@ -215,42 +227,42 @@ void rbWindow::setIcon(unsigned int width, unsigned int height, const std::vecto
 	{
 		convPixels[index] = pixels[index].to<int>();
 	}
-	myObject.setIcon(width, height, convPixels.data());
+	getWindow()->setIcon(width, height, convPixels.data());
 }
 
 void rbWindow::setVisible(bool enabled)
 {
-	myObject.setVisible(enabled);
+	getWindow()->setVisible(enabled);
 }
 
 void rbWindow::setVerticalSyncEnabled(bool enabled)
 {
-	myObject.setVerticalSyncEnabled(enabled);
+	getWindow()->setVerticalSyncEnabled(enabled);
 }
 
 void rbWindow::setMouseCursorVisible(bool enabled)
 {
-	myObject.setMouseCursorVisible(enabled);
+	getWindow()->setMouseCursorVisible(enabled);
 }
 
 void rbWindow::setKeyRepeatEnabled(bool enabled)
 {
-	myObject.setKeyRepeatEnabled(enabled);
+	getWindow()->setKeyRepeatEnabled(enabled);
 }
 
 void rbWindow::setFramerateLimit(unsigned int limit)
 {
-	myObject.setFramerateLimit(limit);
+	getWindow()->setFramerateLimit(limit);
 }
 
 void rbWindow::setJoystickThreshold(float treshold)
 {
-	myObject.setJoystickThreshold(treshold);
+	getWindow()->setJoystickThreshold(treshold);
 }
 
 rb::Value rbWindow::setActive(rb::Value self, const std::vector<rb::Value>& arguments)
 {
-	const rbWindow* object = self.to<const rbWindow*>();
+	sf::Window& object = self.to<sf::Window&>();
 	bool flag = true;
 	switch(arguments.size())
 	{
@@ -262,33 +274,33 @@ rb::Value rbWindow::setActive(rb::Value self, const std::vector<rb::Value>& argu
 	default:
 		rb::expectedNumArgs(arguments.size(), 0, 1);
 	};
-	return rb::Value::create(object->myObject.setActive(flag));
+	return rb::Value::create(object.setActive(flag));
 }
 
 void rbWindow::requestFocus()
 {
-	myObject.requestFocus();
+	getWindow()->requestFocus();
 }
 
 bool rbWindow::hasFocus() const
 {
-	return myObject.hasFocus();
+	return getWindow()->hasFocus();
 }
 
 void rbWindow::display()
 {
-	myObject.display();
+	getWindow()->display();
 }
 
 sf::WindowHandle rbWindow::getSystemHandle() const
 {
-	return myObject.getSystemHandle();
+	return getWindow()->getSystemHandle();
 }
 
 rbEvent* rbWindow::pollEvent()
 {
 	sf::Event event;
-	if(myObject.pollEvent(event) == false)
+	if(getWindow()->pollEvent(event) == false)
 		return nullptr;
 
 	rbEvent* object = rbEvent::createEvent(event);
@@ -298,7 +310,7 @@ rbEvent* rbWindow::pollEvent()
 rbEvent* rbWindow::waitEvent()
 {
 	sf::Event event;
-	if(myObject.waitEvent(event) == false)
+	if(getWindow()->waitEvent(event) == false)
 		return nullptr;
 
 	rbEvent* object = rbEvent::createEvent(event);
@@ -311,7 +323,7 @@ rb::Value rbWindow::eachEvent()
 		return rb::getEnumerator(myValue);
 
 	sf::Event event;
-	while(myObject.pollEvent(event))
+	while(getWindow()->pollEvent(event))
 	{
 		rbEvent* object = rbEvent::createEvent(event);
 		rb::yield(rb::Value(object));
@@ -340,24 +352,6 @@ const rbWindow* Value::to() const
 	if(myValue != Qnil)
 	    Data_Get_Struct(myValue, rbWindow, object);
 	return object;
-}
-
-template<>
-sf::Window& Value::to() const
-{
-	errorHandling(T_DATA);
-	rbWindow* object = nullptr;
-	Data_Get_Struct(myValue, rbWindow, object);
-	return object->myObject;
-}
-
-template<>
-const sf::Window& Value::to() const
-{
-	errorHandling(T_DATA);
-	const rbWindow* object = nullptr;
-	Data_Get_Struct(myValue, rbWindow, object);
-	return object->myObject;
 }
 
 }

@@ -24,14 +24,14 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "class.hpp"
-#include "object.hpp"
+#include "rbrenderbasetype.hpp"
 
 class rbView;
 class rbRenderTarget;
 
 typedef rb::Module<rbRenderTarget> rbRenderTargetModule;
 
-class rbRenderTarget : public rb::Object
+class rbRenderTarget : public virtual rbRenderBaseType
 {
 public:
 	static void defineModule(const rb::Value& sfml);
@@ -59,10 +59,6 @@ public:
 
 	static rb::Value draw(rb::Value self, const std::vector<rb::Value>& args);
 
-protected:
-    virtual sf::RenderTarget& getRenderTarget() = 0;
-    virtual const sf::RenderTarget& getRenderTarget() const = 0;
-
 private:
     friend class rb::Value;
 	static rbRenderTargetModule ourDefinition;
@@ -74,10 +70,6 @@ namespace rb
 	rbRenderTarget* Value::to() const;
 	template<>
 	const rbRenderTarget* Value::to() const;
-	template<>
-    sf::RenderTarget& Value::to() const;
-    template<>
-    const sf::RenderTarget& Value::to() const;
 }
 
 #endif // RBSFML_RBRENDERTARGET_HPP_

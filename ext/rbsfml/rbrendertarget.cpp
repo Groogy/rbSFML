@@ -52,7 +52,7 @@ rbRenderTargetModule& rbRenderTarget::getDefinition()
 }
 
 rbRenderTarget::rbRenderTarget()
-: rb::Object()
+: rbRenderBaseType()
 {
 }
 
@@ -79,26 +79,26 @@ rb::Value rbRenderTarget::clear(rb::Value self, const std::vector<rb::Value>& ar
 void rbRenderTarget::setView(const rbView* view)
 {
     const sf::View& val = rb::Value::create(view).to<const sf::View&>();
-    getRenderTarget().setView(val);
+    getRenderTarget()->setView(val);
 }
 
 rbView* rbRenderTarget::getView() const
 {
     rb::Value object = rbView::getDefinition().newObject();
-    object.to<sf::View&>() = getRenderTarget().getView();
+    object.to<sf::View&>() = getRenderTarget()->getView();
     return object.to<rbView*>();
 }
 
 rbView* rbRenderTarget::getDefaultView() const
 {
     rb::Value object = rbView::getDefinition().newObject();
-    object.to<sf::View&>() = getRenderTarget().getDefaultView();
+    object.to<sf::View&>() = getRenderTarget()->getDefaultView();
     return object.to<rbView*>();
 }
 
 sf::IntRect rbRenderTarget::getViewport(const rbView* view)
 {
-    return getRenderTarget().getViewport(view->myObject);
+    return getRenderTarget()->getViewport(view->myObject);
 }
 
 rb::Value rbRenderTarget::mapPixelToCoords(rb::Value self, const std::vector<rb::Value>& args)
@@ -135,22 +135,22 @@ rb::Value rbRenderTarget::mapCoordsToPixel(rb::Value self, const std::vector<rb:
 
 sf::Vector2u rbRenderTarget::getSize() const
 {
-    return getRenderTarget().getSize();
+    return getRenderTarget()->getSize();
 }
 
 void rbRenderTarget::pushGLStates()
 {
-    return getRenderTarget().pushGLStates();
+    return getRenderTarget()->pushGLStates();
 }
 
 void rbRenderTarget::popGLStates()
 {
-    return getRenderTarget().popGLStates();
+    return getRenderTarget()->popGLStates();
 }
 
 void rbRenderTarget::resetGLStates()
 {
-    return getRenderTarget().resetGLStates();
+    return getRenderTarget()->resetGLStates();
 }
 
 rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& args)
@@ -200,18 +200,6 @@ const rbRenderTarget* Value::to() const
 	if(myValue != Qnil)
 	    Data_Get_Struct(myValue, rbRenderTarget, object);
 	return object;
-}
-
-template<>
-sf::RenderTarget& Value::to() const
-{
-    return to<rbRenderTarget*>()->getRenderTarget();
-}
-
-template<>
-const sf::RenderTarget& Value::to() const
-{
-    return to<const rbRenderTarget*>()->getRenderTarget();
 }
 
 }
