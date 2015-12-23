@@ -20,6 +20,8 @@
  */
 
 #include "rbrenderwindow.hpp"
+#include "rbimage.hpp"
+#include "rbvector2.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 #include "base.hpp"
@@ -30,6 +32,8 @@ void rbRenderWindow::defineClass(const rb::Value& sfml)
 {
 	ourDefinition = rbRenderWindowClass::defineClassUnder("RenderWindow", sfml, rb::Value(rbWindow::getDefinition()));
 	ourDefinition.includeModule(rb::Value(rbRenderTarget::getDefinition()));
+	ourDefinition.defineMethod<0>("size", &rbRenderWindow::getSize);
+	ourDefinition.defineMethod<1>("capture", &rbRenderWindow::capture);
 }
 
 rbRenderWindowClass& rbRenderWindow::getDefinition()
@@ -46,6 +50,18 @@ rbRenderWindow::rbRenderWindow()
 
 rbRenderWindow::~rbRenderWindow()
 {
+}
+
+sf::Vector2u rbRenderWindow::getSize() const
+{
+    return myObject.getSize();
+}
+
+rb::Value rbRenderWindow::capture() const
+{
+    rb::Value value = rbImage::getDefinition().newObject();
+    value.to<sf::Image&>() = myObject.capture();
+    return value;
 }
 
 sf::RenderTarget* rbRenderWindow::getRenderTarget()

@@ -42,6 +42,10 @@ public:
 	rbRenderWindow();
 	~rbRenderWindow();
 
+	sf::Vector2u getSize() const;
+
+	rb::Value capture() const;
+
 protected:
     sf::RenderTarget* getRenderTarget();
     const sf::RenderTarget* getRenderTarget() const;
