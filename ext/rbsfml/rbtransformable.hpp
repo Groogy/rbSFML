@@ -22,7 +22,6 @@
 #ifndef RBSFML_RBTRANSFORMABLE_HPP_
 #define RBSFML_RBTRANSFORMABLE_HPP_
 
-#include <SFML/Graphics/RenderTarget.hpp>
 #include "class.hpp"
 #include "rbdrawablebasetype.hpp"
 
