@@ -25,6 +25,8 @@
 #include "class.hpp"
 #include "rbdrawablebasetype.hpp"
 
+#include <SFML/System/Vector2.hpp>
+
 class rbTransformable;
 
 typedef rb::Class<rbTransformable> rbTransformableClass;
@@ -55,7 +57,7 @@ public:
     void zoom(sf::Vector2f value);
 
     rb::Value getTransform() const;
-    rb::Value getInverseTransform() const;
+    rb::Value getInverseTransform() const;;
 
 private:
     friend class rb::Value;
