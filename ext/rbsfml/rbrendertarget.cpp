@@ -24,6 +24,8 @@
 #include "rbview.hpp"
 #include "rbvector2.hpp"
 #include "rbrect.hpp"
+#include "rbdrawablebasetype.hpp"
+#include "rbdrawable.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
@@ -158,8 +160,32 @@ rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& arg
     sf::RenderTarget& target = self.to<sf::RenderTarget&>();
     switch(args.size())
     {
+        case 1:
+            if(args[0].isKindOf(rb::Value(rbDrawable::getDefinition())))
+            {
+                target.draw(args[0].to<const sf::Drawable&>());
+
+            }
+            else
+            {
+                rb::raise(rb::TypeError, "was not given a drawable object");
+            }
+            break;
         case 2:
-            // Not implemented
+            if(args[0].isKindOf(rb::Value(rbDrawable::getDefinition())))
+            {
+                target.draw(args[0].to<const sf::Drawable&>(), args[1].to<sf::RenderStates>());
+            }
+            else
+            {
+                std::vector<sf::Vertex> vertices;
+                std::vector<rb::Value> data = args[0].to<std::vector<rb::Value>>();
+                for(int index = 0, size = data.size(); index < size; index++)
+                {
+                    vertices.push_back(data[index].to<sf::Vertex>());
+                }
+                target.draw(vertices.data(), vertices.size(), args[1].to<sf::PrimitiveType>());
+            }
             break;
         case 3:
             {
