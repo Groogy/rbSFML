@@ -49,6 +49,7 @@
 #include "rbrendertarget.hpp"
 #include "rbvertex.hpp"
 #include "rbrenderwindow.hpp"
+#include "rbtransformable.hpp"
 
 class rbSFML
 {
@@ -106,4 +107,5 @@ extern "C" void Init_rbsfml() {
 	rbRenderTarget::defineModule(rb::Value(sfml));
 	rbVertex::defineClass(rb::Value(sfml));
 	rbRenderWindow::defineClass(rb::Value(sfml));
+	rbTransformable::defineClass(rb::Value(sfml));
 }
