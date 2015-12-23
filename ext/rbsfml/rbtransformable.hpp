@@ -29,16 +29,13 @@
 
 class rbTransformable;
 
-typedef rb::Class<rbTransformable> rbTransformableClass;
+typedef rb::Module<rbTransformable> rbTransformableModule;
 
 class rbTransformable : public virtual rbDrawableBaseType
 {
 public:
-	static void defineClass(const rb::Value& sfml);
-	static rbTransformableClass& getDefinition();
-
-	rbTransformable();
-	virtual ~rbTransformable();
+	static void defineModule(const rb::Value& sfml);
+	static rbTransformableModule& getDefinition();
 
 	void setPosition(sf::Vector2f value);
 	const sf::Vector2f& getPosition() const;
@@ -61,15 +58,7 @@ public:
 
 private:
     friend class rb::Value;
-	static rbTransformableClass ourDefinition;
+	static rbTransformableModule ourDefinition;
 };
-
-namespace rb
-{
-	template<>
-	rbTransformable* Value::to() const;
-	template<>
-	const rbTransformable* Value::to() const;
-}
 
 #endif // RBSFML_RBTRANSFORMABLE_HPP_

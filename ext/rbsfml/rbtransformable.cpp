@@ -27,24 +27,12 @@
 
 #include <SFML/Graphics/Transformable.hpp>
 
-rbTransformableClass rbTransformable::ourDefinition;
+rbTransformableModule rbTransformable::ourDefinition;
 
-class rbTransformableImpl : public rbTransformable
+
+void rbTransformable::defineModule(const rb::Value& sfml)
 {
-public:
-protected:
-    sf::Transformable* getTransformable() { return &myObject; }
-    const sf::Transformable* getTransformable() const { return &myObject; }
-
-private:
-    sf::Transformable myObject;
-};
-
-typedef rb::DefaultAllocator<rbTransformableImpl> AllocatorImpl;
-
-void rbTransformable::defineClass(const rb::Value& sfml)
-{
-	ourDefinition = rbTransformableClass::defineClassUnder<AllocatorImpl>("Transformable", sfml);
+	ourDefinition = rbTransformableModule::defineModuleUnder("Transformable", sfml);
 	ourDefinition.defineMethod<0>("position=", &rbTransformable::setPosition);
 	ourDefinition.defineMethod<1>("position", &rbTransformable::getPosition);
 	ourDefinition.defineMethod<2>("rotation=", &rbTransformable::setRotation);
@@ -60,18 +48,9 @@ void rbTransformable::defineClass(const rb::Value& sfml)
     ourDefinition.defineMethod<12>("inverse_transform", &rbTransformable::getInverseTransform);
 }
 
-rbTransformableClass& rbTransformable::getDefinition()
+rbTransformableModule& rbTransformable::getDefinition()
 {
     return ourDefinition;
-}
-
-rbTransformable::rbTransformable()
-: rbDrawableBaseType()
-{
-}
-
-rbTransformable::~rbTransformable()
-{
 }
 
 void rbTransformable::setPosition(sf::Vector2f value)
@@ -141,29 +120,4 @@ rb::Value rbTransformable::getInverseTransform() const
     rb::Value object = rbTransform::getDefinition().newObject();
     object.to<sf::Transform&>() = getTransformable()->getInverseTransform();
     return object;
-}
-
-namespace rb
-{
-
-template<>
-rbTransformable* Value::to() const
-{
-	errorHandling(T_DATA);
-	rbTransformable* object = nullptr;
-	if(myValue != Qnil)
-	    Data_Get_Struct(myValue, rbTransformable, object);
-	return object;
-}
-
-template<>
-const rbTransformable* Value::to() const
-{
-	errorHandling(T_DATA);
-	const rbTransformable* object = nullptr;
-	if(myValue != Qnil)
-	    Data_Get_Struct(myValue, rbTransformable, object);
-	return object;
-}
-
 }
