@@ -52,6 +52,7 @@
 #include "rbtransformable.hpp"
 #include "rbdrawable.hpp"
 #include "rbsprite.hpp"
+#include "rbvertex.hpp"
 
 class rbSFML
 {
@@ -112,4 +113,5 @@ extern "C" void Init_rbsfml() {
 	rbTransformable::defineModule(rb::Value(sfml));
 	rbDrawable::defineModule(rb::Value(sfml));
 	rbSprite::defineClass(rb::Value(sfml));
+	rbVertex::defineClass(rb::Value(sfml));
 }
