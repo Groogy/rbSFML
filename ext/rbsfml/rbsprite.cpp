@@ -23,8 +23,14 @@
 #include "rbvector2.hpp"
 #include "rbrect.hpp"
 #include "rbtexture.hpp"
+#include "rbcolor.hpp"
 #include "error.hpp"
 #include "macros.hpp"
+
+namespace
+{
+    constexpr char symVarInternalTexture[] = "@__internal__texture";
+}
 
 rbSpriteClass rbSprite::ourDefinition;
 
@@ -36,6 +42,16 @@ void rbSprite::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<0>("initialize", &rbSprite::initialize);
 	ourDefinition.defineMethod<1>("initialize_copy", &rbSprite::initializeCopy);
 	ourDefinition.defineMethod<2>("marshal_dump", &rbSprite::marshalDump);
+	ourDefinition.defineMethod<3>("texture=", &rbSprite::setTexture);
+	ourDefinition.defineMethod<4>("texture", &rbSprite::getTexture);
+	ourDefinition.defineMethod<5>("texture_rect=", &rbSprite::setTextureRect);
+    ourDefinition.defineMethod<6>("texture_rect", &rbSprite::getTextureRect);
+    ourDefinition.defineMethod<5>("color=", &rbSprite::setColor);
+    ourDefinition.defineMethod<6>("color", &rbSprite::getColor);
+    ourDefinition.defineMethod<6>("local_bounds", &rbSprite::getLocalBounds);
+    ourDefinition.defineMethod<6>("global_bounds", &rbSprite::getGlobalBounds);
+
+	ourDefinition.aliasMethod("texture=", "set_texture");
 }
 
 rbSpriteClass& rbSprite::getDefinition()
@@ -62,10 +78,12 @@ rb::Value rbSprite::initialize(rb::Value self, const std::vector<rb::Value>& arg
             break;
         case 1:
             object.setTexture(args[0].to<const sf::Texture&>(), true);
+            self.setVar<symVarInternalTexture>(args[0]);
             break;
         case 2:
             object.setTexture(args[0].to<const sf::Texture&>(), true);
             object.setTextureRect(args[1].to<sf::IntRect>());
+            self.setVar<symVarInternalTexture>(args[0]);
             break;
         default:
         	rb::expectedNumArgs(args.size(), 0, 2);
@@ -85,6 +103,64 @@ rb::Value rbSprite::marshalDump() const
 {
     rb::raise(rb::TypeError, "can't dump %s", ourDefinition.getName().c_str() );
     return rb::Nil;
+}
+
+rb::Value rbSprite::setTexture(rb::Value self, const std::vector<rb::Value>& args)
+{
+    sf::Sprite& sprite = self.to<sf::Sprite&>();
+    rb::Value texture = rb::Nil;
+    bool resetRect = false;
+    switch(args.size())
+    {
+        case 2:
+            resetRect = args[1].to<bool>();
+        case 1:
+            texture = args[0];
+            break;
+        default:
+            rb::expectedNumArgs(args.size(), 1, 2);
+            break;
+    }
+
+    sprite.setTexture(texture.to<const sf::Texture&>(), resetRect);
+    self.setVar<symVarInternalTexture>(texture);
+    return rb::Nil;
+}
+
+rb::Value rbSprite::getTexture() const
+{
+    rb::Value self(myValue);
+    return self.getVar<symVarInternalTexture>();
+}
+
+void rbSprite::setTextureRect(sf::IntRect rect)
+{
+    myObject.setTextureRect(rect);
+}
+
+const sf::IntRect& rbSprite::getTextureRect() const
+{
+    return myObject.getTextureRect();
+}
+
+void rbSprite::setColor(sf::Color color)
+{
+    myObject.setColor(color);
+}
+
+const sf::Color& rbSprite::getColor() const
+{
+    return myObject.getColor();
+}
+
+sf::FloatRect rbSprite::getLocalBounds() const
+{
+    return myObject.getLocalBounds();
+}
+
+sf::FloatRect rbSprite::getGlobalBounds() const
+{
+    return myObject.getGlobalBounds();
 }
 
 sf::Drawable* rbSprite::getDrawable()

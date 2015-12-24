@@ -46,6 +46,18 @@ public:
 
 	rb::Value marshalDump() const;
 
+	static rb::Value setTexture(rb::Value self, const std::vector<rb::Value>& args);
+	rb::Value getTexture() const;
+
+	void setTextureRect(sf::IntRect rect);
+	const sf::IntRect& getTextureRect() const;
+
+	void setColor(sf::Color color);
+	const sf::Color& getColor() const;
+
+	sf::FloatRect getLocalBounds() const;
+	sf::FloatRect getGlobalBounds() const;
+
 protected:
     virtual sf::Drawable* getDrawable();
     virtual const sf::Drawable* getDrawable() const;
