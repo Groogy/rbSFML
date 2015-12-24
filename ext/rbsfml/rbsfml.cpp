@@ -54,6 +54,7 @@
 #include "rbsprite.hpp"
 #include "rbvertex.hpp"
 #include "rbfont.hpp"
+#include "rbtext.hpp"
 
 class rbSFML
 {
@@ -116,4 +117,5 @@ extern "C" void Init_rbsfml() {
 	rbSprite::defineClass(rb::Value(sfml));
 	rbVertex::defineClass(rb::Value(sfml));
 	rbFont::defineClass(rb::Value(sfml));
+	rbText::defineClass(rb::Value(sfml));
 }
