@@ -46,10 +46,10 @@ void rbSprite::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<4>("texture", &rbSprite::getTexture);
 	ourDefinition.defineMethod<5>("texture_rect=", &rbSprite::setTextureRect);
     ourDefinition.defineMethod<6>("texture_rect", &rbSprite::getTextureRect);
-    ourDefinition.defineMethod<5>("color=", &rbSprite::setColor);
-    ourDefinition.defineMethod<6>("color", &rbSprite::getColor);
-    ourDefinition.defineMethod<6>("local_bounds", &rbSprite::getLocalBounds);
-    ourDefinition.defineMethod<6>("global_bounds", &rbSprite::getGlobalBounds);
+    ourDefinition.defineMethod<7>("color=", &rbSprite::setColor);
+    ourDefinition.defineMethod<8>("color", &rbSprite::getColor);
+    ourDefinition.defineMethod<9>("local_bounds", &rbSprite::getLocalBounds);
+    ourDefinition.defineMethod<10>("global_bounds", &rbSprite::getGlobalBounds);
 
 	ourDefinition.aliasMethod("texture=", "set_texture");
 }
