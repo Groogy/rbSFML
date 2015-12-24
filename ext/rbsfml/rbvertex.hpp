@@ -48,6 +48,10 @@ namespace rb
 {
 	template<>
 	sf::Vertex Value::to() const;
+	template<>
+	Value Value::create(sf::Vertex vertex);
+	template<>
+    Value Value::create(const sf::Vertex& vertex);
 }
 
 #endif // RBSFML_RBVERTEX_HPP

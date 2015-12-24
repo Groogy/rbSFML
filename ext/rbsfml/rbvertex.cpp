@@ -104,4 +104,16 @@ sf::Vertex Value::to() const
     return vertex;
 }
 
+template<>
+Value Value::create(sf::Vertex vertex)
+{
+    return rbVertex::getDefinition().newObject(rb::Value::create(vertex.position), rb::Value::create(vertex.color), rb::Value::create(vertex.texCoords));
+}
+
+template<>
+Value Value::create(const sf::Vertex& vertex)
+{
+    return rbVertex::getDefinition().newObject(rb::Value::create(vertex.position), rb::Value::create(vertex.color), rb::Value::create(vertex.texCoords));
+}
+
 }
