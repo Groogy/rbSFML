@@ -48,7 +48,7 @@ template<const char* Name, typename ValueType>
 void Value::setVar(ValueType value)
 {
 	static ID sym = rb_intern(Name);
-	rb_ivar_set(myValue, sym, Value(value).to<VALUE>());
+	rb_ivar_set(myValue, sym, Value::create(value).to<VALUE>());
 }
 
 template<const char* Name, typename ValueType>
@@ -56,7 +56,7 @@ ValueType Value::getVar() const
 {
 	static ID sym = rb_intern(Name);
 	VALUE value = rb_ivar_get(myValue, sym);
-	return Value(value).to<ValueType>();
+	return Value::create(value).to<ValueType>();
 }
 
 }
