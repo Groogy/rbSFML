@@ -113,6 +113,13 @@ Value::Value(rb::Object* object)
 {
 }
 
+Value::Value(const rb::Object* object)
+: myValue(object ? object->myValue.myValue : Qnil)
+, myCachedStr()
+, myCachedArray()
+{
+}
+
 Value::Value(const std::vector<rb::Value>& collection)
 : myValue(Qnil)
 , myCachedStr()

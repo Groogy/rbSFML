@@ -58,6 +58,7 @@ namespace rb
 		explicit Value(unsigned int value);
 		explicit Value(bool value);
 		explicit Value(rb::Object* object);
+		explicit Value(const rb::Object* object);
 		explicit Value(const std::vector<Value>& collection);
 
 		template<typename Base, int MaxFunctions>
