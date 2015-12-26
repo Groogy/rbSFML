@@ -33,6 +33,9 @@ namespace
 }
 
 rbShapeClass rbShape::ourDefinition;
+rbCircleShapeClass rbShape::ourCircleDefinition;
+rbRectangleShapeClass rbShape::ourRectangleDefinition;
+rbConvexShapeClass rbShape::ourConvexDefinition;
 
 void rbShape::defineClass(const rb::Value& sfml)
 {
@@ -57,6 +60,24 @@ void rbShape::defineClass(const rb::Value& sfml)
 
 	ourDefinition.aliasMethod("texture=", "set_texture");
 	ourDefinition.aliasMethod("get_point", "[]");
+
+	ourCircleDefinition = rbCircleShapeClass::defineClassUnder("CircleShape", sfml, rb::Value(ourDefinition));
+	ourCircleDefinition.defineMethod<0>("initialize", &rbCircleShape::initialize);
+	ourCircleDefinition.defineMethod<1>("radius=", &rbCircleShape::setRadius);
+	ourCircleDefinition.defineMethod<2>("radius", &rbCircleShape::getRadius);
+	ourCircleDefinition.defineMethod<3>("point_count=", &rbCircleShape::setPointCount);
+
+	ourRectangleDefinition = rbRectangleShapeClass::defineClassUnder("RectangleShape", sfml, rb::Value(ourDefinition));
+    ourRectangleDefinition.defineMethod<0>("initialize", &rbRectangleShape::initialize);
+    ourRectangleDefinition.defineMethod<1>("size=", &rbRectangleShape::setSize);
+    ourRectangleDefinition.defineMethod<2>("size", &rbRectangleShape::getSize);
+
+    ourConvexDefinition = rbConvexShapeClass::defineClassUnder("ConvexShape", sfml, rb::Value(ourDefinition));
+    ourConvexDefinition.defineMethod<0>("initialize", &rbConvexShape::initialize);
+    ourConvexDefinition.defineMethod<1>("point_count=", &rbConvexShape::setPointCount);
+    ourConvexDefinition.defineMethod<2>("set_point", &rbConvexShape::setPoint);
+
+    ourConvexDefinition.aliasMethod("set_point", "[]=");
 }
 
 rbShapeClass& rbShape::getDefinition()
@@ -190,6 +211,121 @@ const sf::Transformable* rbShape::getTransformable() const
     return &getShape();
 }
 
+rb::Value rbCircleShape::initialize(rb::Value self, const std::vector<rb::Value>& args)
+{
+    rbCircleShape* shape = self.to<rbCircleShape*>();
+    switch(args.size())
+    {
+        case 0:
+            break;
+        case 2:
+            shape->myObject.setPointCount(args[1].to<unsigned int>());
+        case 1:
+            shape->myObject.setRadius(args[0].to<float>());
+            break;
+        default:
+            rb::expectedNumArgs(args.size(), 0, 2);
+            break;
+    }
+    return self;
+}
+
+void rbCircleShape::setRadius(float radius)
+{
+    myObject.setRadius(radius);
+}
+
+float rbCircleShape::getRadius() const
+{
+    return myObject.getRadius();
+}
+
+void rbCircleShape::setPointCount(unsigned int count)
+{
+    myObject.setPointCount(count);
+}
+
+sf::Shape& rbCircleShape::getShape()
+{
+    return myObject;
+}
+const sf::Shape& rbCircleShape::getShape() const
+{
+    return myObject;
+}
+
+rb::Value rbRectangleShape::initialize(rb::Value self, const std::vector<rb::Value>& args)
+{
+    rbRectangleShape* shape = self.to<rbRectangleShape*>();
+    switch(args.size())
+    {
+        case 0:
+            break;
+        case 1:
+            shape->myObject.setSize(args[0].to<sf::Vector2f>());
+            break;
+        default:
+            rb::expectedNumArgs(args.size(), 0, 1);
+            break;
+    }
+    return self;
+}
+
+void rbRectangleShape::setSize(sf::Vector2f size)
+{
+    myObject.setSize(size);
+}
+
+const sf::Vector2f& rbRectangleShape::getSize() const
+{
+    return myObject.getSize();
+}
+
+sf::Shape& rbRectangleShape::getShape()
+{
+    return myObject;
+}
+const sf::Shape& rbRectangleShape::getShape() const
+{
+    return myObject;
+}
+
+rb::Value rbConvexShape::initialize(rb::Value self, const std::vector<rb::Value>& args)
+{
+    rbConvexShape* shape = self.to<rbConvexShape*>();
+    switch(args.size())
+    {
+        case 0:
+            break;
+        case 1:
+            shape->myObject.setPointCount(args[0].to<unsigned int>());
+            break;
+        default:
+            rb::expectedNumArgs(args.size(), 0, 1);
+            break;
+    }
+    return self;
+}
+
+void rbConvexShape::setPointCount(unsigned int count)
+{
+    myObject.setPointCount(count);
+}
+
+void rbConvexShape::setPoint(unsigned int index, sf::Vector2f point)
+{
+    myObject.setPoint(index, point);
+}
+
+sf::Shape& rbConvexShape::getShape()
+{
+    return myObject;
+}
+const sf::Shape& rbConvexShape::getShape() const
+{
+    return myObject;
+}
+
 namespace rb
 {
 
@@ -210,6 +346,66 @@ const rbShape* Value::to() const
 	const rbShape* object = nullptr;
 	if(myValue != Qnil)
 	    Data_Get_Struct(myValue, rbShape, object);
+	return object;
+}
+
+template<>
+rbCircleShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	rbCircleShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbCircleShape, object);
+	return object;
+}
+
+template<>
+const rbCircleShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbCircleShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbCircleShape, object);
+	return object;
+}
+
+template<>
+rbRectangleShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	rbRectangleShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbRectangleShape, object);
+	return object;
+}
+
+template<>
+const rbRectangleShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbRectangleShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbRectangleShape, object);
+	return object;
+}
+
+template<>
+rbConvexShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	rbConvexShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbConvexShape, object);
+	return object;
+}
+
+template<>
+const rbConvexShape* Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbConvexShape* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbConvexShape, object);
 	return object;
 }
 

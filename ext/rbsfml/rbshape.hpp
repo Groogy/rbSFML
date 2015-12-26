@@ -27,10 +27,19 @@
 #include "rbtransformable.hpp"
 
 #include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/ConvexShape.hpp>
 
 class rbShape;
+class rbCircleShape;
+class rbRectangleShape;
+class rbConvexShape;
 
 typedef rb::Class<rbShape> rbShapeClass;
+typedef rb::Class<rbCircleShape> rbCircleShapeClass;
+typedef rb::Class<rbRectangleShape> rbRectangleShapeClass;
+typedef rb::Class<rbConvexShape> rbConvexShapeClass;
 
 class rbShape : public rbTransformable
 {
@@ -75,7 +84,60 @@ protected:
 
 private:
     friend class rb::Value;
+
 	static rbShapeClass ourDefinition;
+	static rbCircleShapeClass ourCircleDefinition;
+	static rbRectangleShapeClass ourRectangleDefinition;
+	static rbConvexShapeClass ourConvexDefinition;
+};
+
+class rbCircleShape : public rbShape
+{
+public:
+    static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
+
+    void setRadius(float radius);
+    float getRadius() const;
+    void setPointCount(unsigned int count);
+
+protected:
+    sf::Shape& getShape();
+    const sf::Shape& getShape() const;
+
+private:
+    sf::CircleShape myObject;
+};
+
+class rbRectangleShape : public rbShape
+{
+public:
+    static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
+
+    void setSize(sf::Vector2f size);
+    const sf::Vector2f& getSize() const;
+
+protected:
+    sf::Shape& getShape();
+    const sf::Shape& getShape() const;
+
+private:
+    sf::RectangleShape myObject;
+};
+
+class rbConvexShape : public rbShape
+{
+public:
+    static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
+
+    void setPointCount(unsigned int count);
+    void setPoint(unsigned int index, sf::Vector2f point);
+
+protected:
+    sf::Shape& getShape();
+    const sf::Shape& getShape() const;
+
+private:
+    sf::ConvexShape myObject;
 };
 
 namespace rb
@@ -84,6 +146,19 @@ namespace rb
 	rbShape* Value::to() const;
 	template<>
 	const rbShape* Value::to() const;
+	template<>
+    rbCircleShape* Value::to() const;
+    template<>
+    const rbCircleShape* Value::to() const;
+    template<>
+    rbRectangleShape* Value::to() const;
+    template<>
+    const rbRectangleShape* Value::to() const;
+    template<>
+    rbConvexShape* Value::to() const;
+    template<>
+    const rbConvexShape* Value::to() const;
+
 	template<>
     sf::Shape& Value::to() const;
     template<>
