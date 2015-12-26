@@ -36,7 +36,7 @@ rbTextClass rbText::ourDefinition;
 
 void rbText::defineClass(const rb::Value& sfml)
 {
-	ourDefinition = rbTextClass::defineClassUnder("Font", sfml);
+	ourDefinition = rbTextClass::defineClassUnder("Text", sfml);
 	ourDefinition.includeModule(rb::Value(rbDrawable::getDefinition()));
 	ourDefinition.includeModule(rb::Value(rbTransformable::getDefinition()));
 	ourDefinition.defineMethod<0>("initialize", &rbText::initialize);
