@@ -1,4 +1,4 @@
-require './lib/rbsfml.so'
+require './lib/sfml/rbsfml.so'
 
 describe SFML::Color do
   describe "in creation" do
