@@ -28,14 +28,17 @@
 
 class rbView;
 class rbRenderTarget;
+class rbRenderTargetRef;
 
 typedef rb::Module<rbRenderTarget> rbRenderTargetModule;
+typedef rb::Class<rbRenderTargetRef> rbRenderTargetRefClass;
 
 class rbRenderTarget : public virtual rbRenderBaseType
 {
 public:
 	static void defineModule(const rb::Value& sfml);
 	static rbRenderTargetModule& getDefinition();
+	static rbRenderTargetRefClass& getRefDefinition();
 
 	rbRenderTarget();
 	virtual ~rbRenderTarget();
@@ -62,6 +65,22 @@ public:
 private:
     friend class rb::Value;
 	static rbRenderTargetModule ourDefinition;
+	static rbRenderTargetRefClass ourRefDefinition;
+};
+
+class rbRenderTargetRef : public rbRenderTarget
+{
+public:
+    rbRenderTargetRef();
+
+    void setRef(sf::RenderTarget* object);
+
+protected:
+    virtual sf::RenderTarget* getRenderTarget();
+    virtual const sf::RenderTarget* getRenderTarget() const;
+
+private:
+    sf::RenderTarget* myObject;
 };
 
 namespace rb
@@ -70,6 +89,11 @@ namespace rb
 	rbRenderTarget* Value::to() const;
 	template<>
 	const rbRenderTarget* Value::to() const;
+
+	template<>
+    rbRenderTargetRef* Value::to() const;
+    template<>
+    const rbRenderTargetRef* Value::to() const;
 }
 
 #endif // RBSFML_RBRENDERTARGET_HPP_

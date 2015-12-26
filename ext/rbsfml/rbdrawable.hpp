@@ -30,11 +30,14 @@ class rbDrawable;
 
 typedef rb::Module<rbDrawable> rbDrawableModule;
 
-class rbDrawable
+class rbDrawable : public rbDrawableBaseType
 {
 public:
 	static void defineModule(const rb::Value& sfml);
+	static void defineIncludeFunction();
 	static rbDrawableModule& getDefinition();
+
+	static void included(const rb::Value& base);
 
 private:
 	static rbDrawableModule ourDefinition;

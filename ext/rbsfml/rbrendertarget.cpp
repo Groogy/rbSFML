@@ -26,10 +26,20 @@
 #include "rbrect.hpp"
 #include "rbdrawablebasetype.hpp"
 #include "rbdrawable.hpp"
+#include "rbrenderstates.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
+namespace
+{
+    constexpr char symVarInternalDrawStack[] = "@@__internal_draw_stack";
+
+    constexpr char symPush[] = "push";
+    constexpr char symPop[] = "pop";
+}
+
 rbRenderTargetModule rbRenderTarget::ourDefinition;
+rbRenderTargetRefClass rbRenderTarget::ourRefDefinition;
 
 void rbRenderTarget::defineModule(const rb::Value& sfml)
 {
@@ -46,11 +56,19 @@ void rbRenderTarget::defineModule(const rb::Value& sfml)
 	ourDefinition.defineMethod<8>("pop_gl_states", &rbRenderTarget::popGLStates);
 	ourDefinition.defineMethod<9>("reset_gl_states", &rbRenderTarget::resetGLStates);
 	ourDefinition.defineMethod<9>("draw", &rbRenderTarget::draw);
+
+	ourRefDefinition = rbRenderTargetRefClass::defineClassUnder("RenderTargetRef", sfml);
+	ourRefDefinition.includeModule(rb::Value(ourDefinition));
 }
 
 rbRenderTargetModule& rbRenderTarget::getDefinition()
 {
     return ourDefinition;
+}
+
+rbRenderTargetRefClass& rbRenderTarget::getRefDefinition()
+{
+    return ourRefDefinition;
 }
 
 rbRenderTarget::rbRenderTarget()
@@ -155,16 +173,26 @@ void rbRenderTarget::resetGLStates()
     return getRenderTarget()->resetGLStates();
 }
 
+#include <iostream>
+
 rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& args)
 {
+    if(rb::Value(ourDefinition).getVar<symVarInternalDrawStack>() == rb::Nil)
+    {
+        rb::Value(ourDefinition).setVar<symVarInternalDrawStack>(std::vector<rb::Value>());
+    }
+
+    rb::Value internalDrawStack = rb::Value(ourDefinition).getVar<symVarInternalDrawStack>();
+
     sf::RenderTarget& target = self.to<sf::RenderTarget&>();
     switch(args.size())
     {
         case 1:
             if(args[0].isKindOf(rb::Value(rbDrawable::getDefinition())))
             {
+                internalDrawStack.call<symPush>(rbRenderStates::getDefinition().newObject());
                 target.draw(args[0].to<const sf::Drawable&>());
-
+                internalDrawStack.call<symPop>();
             }
             else
             {
@@ -174,7 +202,9 @@ rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& arg
         case 2:
             if(args[0].isKindOf(rb::Value(rbDrawable::getDefinition())))
             {
+                internalDrawStack.call<symPush>(args[1]);
                 target.draw(args[0].to<const sf::Drawable&>(), args[1].to<sf::RenderStates>());
+                internalDrawStack.call<symPop>();
             }
             else
             {
@@ -205,6 +235,26 @@ rb::Value rbRenderTarget::draw(rb::Value self, const std::vector<rb::Value>& arg
     return rb::Nil;
 }
 
+rbRenderTargetRef::rbRenderTargetRef()
+: myObject(nullptr)
+{
+}
+
+void rbRenderTargetRef::setRef(sf::RenderTarget* object)
+{
+    myObject = object;
+}
+
+sf::RenderTarget* rbRenderTargetRef::getRenderTarget()
+{
+    return myObject;
+}
+
+const sf::RenderTarget* rbRenderTargetRef::getRenderTarget() const
+{
+    return myObject;
+}
+
 namespace rb
 {
 
@@ -225,6 +275,26 @@ const rbRenderTarget* Value::to() const
 	const rbRenderTarget* object = nullptr;
 	if(myValue != Qnil)
 	    Data_Get_Struct(myValue, rbRenderTarget, object);
+	return object;
+}
+
+template<>
+rbRenderTargetRef* Value::to() const
+{
+	errorHandling(T_DATA);
+	rbRenderTargetRef* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbRenderTargetRef, object);
+	return object;
+}
+
+template<>
+const rbRenderTargetRef* Value::to() const
+{
+	errorHandling(T_DATA);
+	const rbRenderTargetRef* object = nullptr;
+	if(myValue != Qnil)
+	    Data_Get_Struct(myValue, rbRenderTargetRef, object);
 	return object;
 }
 

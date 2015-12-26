@@ -120,4 +120,6 @@ extern "C" void Init_rbsfml() {
 	rbFont::defineClass(rb::Value(sfml));
 	rbText::defineClass(rb::Value(sfml));
 	rbShape::defineClass(rb::Value(sfml));
+
+	rbDrawable::defineIncludeFunction();
 }
