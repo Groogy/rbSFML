@@ -31,6 +31,9 @@
 
 namespace rb
 {
+    template<typename Allocator>
+    void defineAllocator(const rb::Value& klass);
+
 	template<typename Base>
 	class DefaultAllocator
 	{

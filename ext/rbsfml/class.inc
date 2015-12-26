@@ -22,6 +22,12 @@
 namespace rb
 {
 
+template<typename Allocator>
+void defineAllocator(const rb::Value& klass)
+{
+    rb_define_alloc_func(klass.to<VALUE>(), &Allocator::allocate);
+}
+
 template<typename Base>
 Base* DefaultAllocator<Base>::allocate()
 {
@@ -59,7 +65,7 @@ Class<Base, MaxFunctions> Class<Base, MaxFunctions>::defineClass(const std::stri
 	Module<Base, MaxFunctions>::myName = name;
 	Module<Base, MaxFunctions>::myParent = parent;
 
-	rb_define_alloc_func(Module<Base, MaxFunctions>::myDefinition, &Allocator::allocate);
+	defineAllocator<Allocator>(Module<Base, MaxFunctions>::myDefinition);
 
 	return Class();
 }
