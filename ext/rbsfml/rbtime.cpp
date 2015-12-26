@@ -43,6 +43,10 @@ void rbTime::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<11>("<=>", &rbTime::compare);
 
 	ourDefinition.aliasMethod("inspect", "to_s");
+
+	rb::Value zero = ourDefinition.newObject();
+	zero.freeze();
+	ourDefinition.defineConstant("Zero", zero);
 }
 
 rbTime* rbTime::seconds(float val)
