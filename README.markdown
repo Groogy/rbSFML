@@ -32,7 +32,7 @@ Windows
 
 4.  Clone this repository with `git clone git@github.com:Groogy/rbSFML.git`.
 
-5.  Ensure that your C++ compiler's location is in your PATH environment variable. Run `rake verbose` to see what compiler Ruby thinks you have. If the SFML headers and libraries are not in your compiler's default search paths, set the `SFML_INCLUDE` and `SFML_LIB` environment variables to their locations.
+5.  Ensure that your C++ compiler's location is in your PATH environment variable. Run `rake verbose` to see what compiler Ruby thinks you have. If the SFML headers and libraries are not in your compiler's default search paths, set the `SFML_INCLUDE` and `SFML_LIB` environment variables to their locations. You might have to do this as ell for GLEW if it as well is not in the search path.
 
 6.  Run one of the following commands in your terminal:
 
@@ -41,7 +41,7 @@ Windows
 
 7.  If you built SFML as a shared library, you will need the SFML DLLs in your PATH in order to `require` any of the rbSFML files (this can be accomplished by copying them to the directory where rbSFML is being `require`d).
 
-8.  Run `rake test` to ensure everything is working and then `rake gem` to package rbSFML as a Ruby gem.
+8.  Run `rake test` to ensure everything is working and then `rake install` to put the generated files somewhere Ruby can find it.
 
 Linux
 -----
@@ -60,7 +60,7 @@ Linux
 
   * `rake` - Build all SFML as shared libraries.
 
-7.  Run `rake test` to ensure everything is working and then `rake gem` to package rbSFML as a Ruby gem.
+7.  Run `rake test` to ensure everything is working and then `rake install` to put the generated files somewhere Ruby can find it.
 
 8.  You can build the documentation (at doc/frames.html) with `rake doc` and run the samples with `rake samples`.
 
