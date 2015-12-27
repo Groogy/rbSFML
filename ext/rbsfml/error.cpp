@@ -27,6 +27,11 @@ rb::Value TypeError(rb_eTypeError);
 rb::Value RuntimeError(rb_eRuntimeError);
 rb::Value ArgumentError(rb_eArgError);
 
+void raise(const rb::Value& exception)
+{
+    rb_exc_raise(exception.to<VALUE>());
+}
+
 void expectedNumArgs(int argCount, int count)
 {
 	raise(ArgumentError, "wrong number of arguments(%i for %i)", argCount, count);

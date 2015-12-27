@@ -24,9 +24,9 @@ namespace rb
 {
 
 template<typename ...Args>
-void raise(const rb::Value& value, Args... args)
+void raise(const rb::Value& value, const char* fmt, Args... args)
 {
-	rb_raise(value.to<VALUE>(), args...);
+	rb_raise(value.to<VALUE>(), fmt, args...);
 }
 
 template<typename ...Args>

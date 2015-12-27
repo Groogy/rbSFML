@@ -32,7 +32,8 @@ namespace rb
 	extern rb::Value ArgumentError;
 
 	template<typename ...Args>
-	void raise(const rb::Value& value, Args... args);
+	void raise(const rb::Value& value, const char* fmt, Args... args);
+    void raise(const rb::Value& value);
 
 	template<typename ...Args>
 	void expectedTypes(Args... args);
