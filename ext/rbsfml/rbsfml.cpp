@@ -56,6 +56,7 @@
 #include "rbfont.hpp"
 #include "rbtext.hpp"
 #include "rbshape.hpp"
+#include "rbdataptr.hpp"
 
 class rbSFML
 {
@@ -84,6 +85,7 @@ extern "C" void Init_rbsfml() {
 
 	// System
 	rbNonCopyable::defineModule(rb::Value(sfml));
+	rbDataPtr::defineClass(rb::Value(sfml));
 	rbVector2::defineClass(rb::Value(sfml));
 	rbVector3::defineClass(rb::Value(sfml));
 	rbTime::defineClass(rb::Value(sfml));
