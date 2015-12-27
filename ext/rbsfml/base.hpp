@@ -33,6 +33,10 @@ namespace rb
 
 	Value max(Value a, Value b);
 	Value min(Value a, Value b);
+
+	Value callSuper(const std::vector<Value>& args);
+
+	Value eval(const std::string& script);
 }
 
 #endif // RBSFML_BASE_HEADER_

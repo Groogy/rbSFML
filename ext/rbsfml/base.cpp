@@ -55,4 +55,19 @@ Value min(Value a, Value b)
 	return a.call<symLess>(b) == True ? a : b;
 }
 
+Value callSuper(const std::vector<Value>& args)
+{
+    VALUE* argArray = new VALUE[args.size()];
+    for(int index = 0, size = args.size(); index < size; index++)
+    {
+        argArray[index] = args[index].to<VALUE>();
+    }
+    return rb::Value(rb_call_super(args.size(), argArray));
+}
+
+Value eval(const std::string& script)
+{
+    return rb::Value::create(rb_eval_string(script.c_str()));
+}
+
 }
