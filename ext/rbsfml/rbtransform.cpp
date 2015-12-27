@@ -22,6 +22,7 @@
 #include "rbtransform.hpp"
 #include "rbvector2.hpp"
 #include "rbrect.hpp"
+#include "rbdataptr.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
@@ -52,6 +53,7 @@ void rbTransform::defineClass(const rb::Value& sfml)
     ourDefinition.defineMethod<19>("scale_around", &rbTransform::scaleAround);
     ourDefinition.defineMethod<20>("scale_around!", &rbTransform::scaleAroundBang);
     ourDefinition.defineMethod<21>("*", &rbTransform::multiply);
+    ourDefinition.defineMethod<22>("native_ptr", &rbTransform::getNativePtr);
 
 	ourDefinition.aliasMethod("inspect", "to_s");
 	ourDefinition.aliasMethod("to_ary", "to_a");
@@ -265,6 +267,13 @@ rb::Value rbTransform::multiply(const rb::Value& other) const
     {
         return rb::Value::create(transformPoint(other.to<sf::Vector2f>()));
     }
+}
+
+rbDataPtr* rbTransform::getNativePtr()
+{
+    rbDataPtr* ptr = rbDataPtr::getDefinition().newObject().to<rbDataPtr*>();
+    ptr->setPtr(reinterpret_cast<intptr_t>(&myObject));
+    return ptr;
 }
 
 namespace rb

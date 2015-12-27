@@ -27,6 +27,7 @@
 #include "object.hpp"
 
 class rbTransform;
+class rbDataPtr;
 
 typedef rb::Class<rbTransform> rbTransformClass;
 
@@ -70,6 +71,8 @@ public:
     rbTransform* scaleAroundBang(sf::Vector2f factors, sf::Vector2f center);
 
     rb::Value multiply(const rb::Value& other) const;
+
+    rbDataPtr* getNativePtr();
 
 private:
     friend class rb::Value;

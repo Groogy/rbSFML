@@ -24,6 +24,7 @@
 #include "rbrect.hpp"
 #include "rbimage.hpp"
 #include "rbwindow.hpp"
+#include "rbdataptr.hpp"
 #include "error.hpp"
 #include "macros.hpp"
 
@@ -47,9 +48,10 @@ void rbTexture::defineClass(const rb::Value& sfml)
     ourDefinition.defineMethod<12>("repeated=", &rbTexture::setRepeated);
     ourDefinition.defineMethod<13>("repeated?", &rbTexture::isRepeated);
     ourDefinition.defineMethod<14>("native_handle", &rbTexture::getNativeHandle);
+    ourDefinition.defineMethod<15>("native_ptr", &rbTexture::getNativePtr);
 
-    ourDefinition.defineFunction<15>("bind", &rbTexture::bind);
-    ourDefinition.defineFunction<16>("maximum_size", &rbTexture::getMaximumSize);
+    ourDefinition.defineFunction<16>("bind", &rbTexture::bind);
+    ourDefinition.defineFunction<17>("maximum_size", &rbTexture::getMaximumSize);
 
     ourDefinition.defineConstant("Normalized", rb::Value(sf::Texture::Normalized));
     ourDefinition.defineConstant("Pixels", rb::Value(sf::Texture::Pixels));
@@ -279,6 +281,13 @@ void rbTexture::bind(const rbTexture* texture, sf::Texture::CoordinateType type)
 unsigned int rbTexture::getMaximumSize()
 {
     return sf::Texture::getMaximumSize();
+}
+
+rbDataPtr* rbTexture::getNativePtr() const
+{
+    rbDataPtr* ptr = rbDataPtr::getDefinition().newObject().to<rbDataPtr*>();
+    ptr->setPtr(reinterpret_cast<intptr_t>(&myObject));
+    return ptr;
 }
 
 namespace rb

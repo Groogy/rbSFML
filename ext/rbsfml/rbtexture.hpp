@@ -27,6 +27,7 @@
 #include "object.hpp"
 
 class rbTexture;
+class rbDataPtr;
 
 typedef rb::Class<rbTexture> rbTextureClass;
 
@@ -65,6 +66,8 @@ public:
 
 	static void bind(const rbTexture* texture, sf::Texture::CoordinateType type);
 	static unsigned int getMaximumSize();
+
+	rbDataPtr* getNativePtr() const;
 
 private:
     friend class rb::Value;
