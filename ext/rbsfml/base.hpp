@@ -27,6 +27,9 @@
 
 namespace rb
 {
+    extern Value Float;
+    extern Value Fixnum;
+
 	Value yield(const Value& value);
 	Value getEnumerator(const Value& object);
 	bool blockGiven();

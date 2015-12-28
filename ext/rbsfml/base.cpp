@@ -29,6 +29,9 @@ namespace
 namespace rb
 {
 
+Value Float(rb_cFloat);
+Value Fixnum(rb_cFixnum);
+
 Value yield(const Value& value)
 {
 	return rb::Value(rb_yield(value.to<VALUE>()));
