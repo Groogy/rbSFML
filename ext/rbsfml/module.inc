@@ -235,4 +235,34 @@ VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE 
 	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(), Value(arg6).to<Arg6>());
 }
 
+template<typename Base, int MaxFunctions>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7>
+VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6, VALUE arg7)
+{
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(),
+	              Value(arg6).to<Arg6>(), Value(arg7).to<Arg7>()
+	);
+}
+
+template<typename Base, int MaxFunctions>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7, typename Arg8>
+VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6, VALUE arg7, VALUE arg8)
+{
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(),
+	              Value(arg6).to<Arg6>(), Value(arg7).to<Arg7>(), Value(arg8).to<Arg8>()
+	);
+}
+
+template<typename Base, int MaxFunctions>
+template<int ID, typename FunctionSignature, typename CallerSignature, typename Self, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7, typename Arg8, typename Arg9>
+VALUE Module<Base, MaxFunctions>::wrapperFunction(VALUE self, VALUE arg1, VALUE arg2, VALUE arg3, VALUE arg4, VALUE arg5, VALUE arg6, VALUE arg7, VALUE arg8, VALUE arg9)
+{
+	CallerSignature& caller = getCaller<ID, FunctionSignature, CallerSignature>();
+	return caller(Value(self), Value(arg1).to<Arg1>(), Value(arg2).to<Arg2>(), Value(arg3).to<Arg3>(), Value(arg4).to<Arg4>(), Value(arg5).to<Arg5>(),
+	              Value(arg6).to<Arg6>(), Value(arg7).to<Arg7>(), Value(arg8).to<Arg8>(), Value(arg9).to<Arg9>()
+	);
+}
+
 }
