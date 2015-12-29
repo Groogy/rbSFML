@@ -166,7 +166,7 @@ rb::Value rbTime::divide(const rb::Value& other) const
 
 	if(returnValue.isNil())
 		rb::expectedTypes("Fixnum", "Float", "Time");
-	return rb::Nil;
+	return returnValue;
 }
 
 int rbTime::compare(const rbTime* other) const
