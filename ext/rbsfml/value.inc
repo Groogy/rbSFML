@@ -36,6 +36,14 @@ Value::Value(const Module<Base, MaxFunctions>& module)
 {
 }
 
+template<const char* Name, typename ReturnType>
+ReturnType Value::getHashEntry() const
+{
+    static VALUE symbol = ID2SYM(rb_intern(Name));
+    rb::Value returnValue(rb_hash_aref(myValue, symbol));
+    return returnValue.to<ReturnType>();
+}
+
 template<const char* Name, typename ReturnType, typename ...Args>
 ReturnType Value::call(Args... args)
 {

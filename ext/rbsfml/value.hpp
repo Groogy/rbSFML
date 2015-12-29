@@ -83,6 +83,9 @@ namespace rb
 
 		int getArrayLength() const;
 
+		template<const char* Name, typename ReturnType = Value>
+		ReturnType getHashEntry() const;
+
 		void freeze();
 
 		template<const char* Name, typename ReturnType = Value, typename ...Args>
