@@ -54,6 +54,7 @@ namespace rb
 		explicit Value(unsigned char value);
 		explicit Value(int value);
 		explicit Value(float value);
+		explicit Value(double value);
 		explicit Value(long long int value);
 		explicit Value(unsigned int value);
 		explicit Value(bool value);
@@ -133,6 +134,8 @@ namespace rb
 	int Value::to() const;
 	template<>
 	float Value::to() const;
+	template<>
+    double Value::to() const;
 	template<>
 	long long int Value::to() const;
 	template<>

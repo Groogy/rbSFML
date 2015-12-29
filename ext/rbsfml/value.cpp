@@ -85,6 +85,13 @@ Value::Value(float value)
 {
 }
 
+Value::Value(double value)
+: myValue(rb_float_new(value))
+, myCachedStr()
+, myCachedArray()
+{
+}
+
 Value::Value(long long int value)
 : myValue(LL2NUM(value))
 , myCachedStr()
@@ -291,6 +298,13 @@ int Value::to() const
 
 template<>
 float Value::to() const
+{
+	errorHandling(T_FLOAT);
+	return NUM2DBL(myValue);
+}
+
+template<>
+double Value::to() const
 {
 	errorHandling(T_FLOAT);
 	return NUM2DBL(myValue);
