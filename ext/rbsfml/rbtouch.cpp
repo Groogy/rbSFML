@@ -29,7 +29,7 @@ rbTouchModule rbTouch::ourDefinition;
 void rbTouch::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbTouchModule::defineModuleUnder("Touch", sfml);
-	ourDefinition.defineFunction<0>("is_down?", &sf::Touch::isDown);
+	ourDefinition.defineFunction<0>("down?", &sf::Touch::isDown);
 	ourDefinition.defineFunction<1>("get_position", &rbTouch::getPosition);
 }
 

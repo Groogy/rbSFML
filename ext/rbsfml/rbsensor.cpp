@@ -29,7 +29,7 @@ rbSensorModule rbSensor::ourDefinition;
 void rbSensor::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbSensorModule::defineModuleUnder("Sensor", sfml);
-	ourDefinition.defineFunction<0>("is_available?", &sf::Sensor::isAvailable);
+	ourDefinition.defineFunction<0>("available?", &sf::Sensor::isAvailable);
 	ourDefinition.defineFunction<1>("set_enabled", &sf::Sensor::setEnabled);
 	ourDefinition.defineFunction<2>("get_value", &sf::Sensor::getValue);
 

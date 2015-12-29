@@ -28,7 +28,7 @@ rbKeyboardModule rbKeyboard::ourDefinition;
 void rbKeyboard::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbKeyboardModule::defineModuleUnder("Keyboard", sfml);
-	ourDefinition.defineFunction<0>("is_key_pressed?", &sf::Keyboard::isKeyPressed);
+	ourDefinition.defineFunction<0>("key_pressed?", &sf::Keyboard::isKeyPressed);
 	ourDefinition.defineFunction<1>("virtual_keyboard_visible=", &sf::Keyboard::setVirtualKeyboardVisible);
 
 	ourDefinition.defineConstant("Unknown", rb::Value(sf::Keyboard::Unknown));

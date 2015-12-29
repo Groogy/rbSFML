@@ -36,10 +36,10 @@ rbJoystickIdentificationClass rbJoystickIdentification::ourDefinition;
 void rbJoystick::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbJoystickModule::defineModuleUnder("Joystick", sfml);
-	ourDefinition.defineFunction<0>("is_connected", &sf::Joystick::isConnected);
+	ourDefinition.defineFunction<0>("connected=", &sf::Joystick::isConnected);
 	ourDefinition.defineFunction<1>("get_button_count", &sf::Joystick::getButtonCount);
 	ourDefinition.defineFunction<2>("has_axis?", &sf::Joystick::hasAxis);
-	ourDefinition.defineFunction<3>("is_button_pressed?", &sf::Joystick::isButtonPressed);
+	ourDefinition.defineFunction<3>("button_pressed?", &sf::Joystick::isButtonPressed);
 	ourDefinition.defineFunction<4>("get_axis_position", &sf::Joystick::getAxisPosition);
 	ourDefinition.defineFunction<5>("update", &sf::Joystick::update);
 	ourDefinition.defineFunction<6>("get_identification", &sf::Joystick::getIdentification);

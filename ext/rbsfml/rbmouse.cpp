@@ -29,7 +29,7 @@ rbMouseModule rbMouse::ourDefinition;
 void rbMouse::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbMouseModule::defineModuleUnder("Mouse", sfml);
-	ourDefinition.defineFunction<0>("is_button_pressed?", &sf::Mouse::isButtonPressed);
+	ourDefinition.defineFunction<0>("button_pressed?", &sf::Mouse::isButtonPressed);
 	ourDefinition.defineFunction<1>("get_position", &rbMouse::getPosition);
 	ourDefinition.defineFunction<2>("set_position", &rbMouse::setPosition);
 
