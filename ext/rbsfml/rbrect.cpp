@@ -53,8 +53,8 @@ void rbRect::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<1>("initialize_copy", &rbRect::initializeCopy);
 	ourDefinition.defineMethod<2>("marshal_dump", &rbRect::marshalDump);
 	ourDefinition.defineMethod<3>("marshal_load", &rbRect::marshalLoad);
-	ourDefinition.defineMethod<4>("contains", &rbRect::contains);
-	ourDefinition.defineMethod<5>("intersects", &rbRect::intersects);
+	ourDefinition.defineMethod<4>("contains?", &rbRect::contains);
+	ourDefinition.defineMethod<5>("intersects?", &rbRect::intersects);
 	ourDefinition.defineMethod<6>("==", &rbRect::equal);
 	ourDefinition.defineMethod<7>("eql?", &rbRect::strictEqual);
 	ourDefinition.defineMethod<8>("inspect", &rbRect::inspect);
