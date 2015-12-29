@@ -57,6 +57,7 @@
 #include "rbtext.hpp"
 #include "rbshape.hpp"
 #include "rbdataptr.hpp"
+#include "rbrect.hpp"
 
 class rbSFML
 {
@@ -104,6 +105,7 @@ extern "C" void Init_rbsfml() {
 	rbTouch::defineModule(rb::Value(sfml));
 
 	// Graphics
+	rbRect::defineClass(rb::Value(sfml));
 	rbColor::defineClass(rb::Value(sfml));
 	rbBlendMode::defineClass(rb::Value(sfml));
 	rbTransform::defineClass(rb::Value(sfml));
@@ -124,4 +126,5 @@ extern "C" void Init_rbsfml() {
 	rbShape::defineClass(rb::Value(sfml));
 
 	rbDrawable::defineIncludeFunction();
+	rbTransformable::defineIncludeFunction();
 }
