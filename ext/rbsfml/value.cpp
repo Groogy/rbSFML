@@ -149,6 +149,7 @@ ValueType Value::getType() const
 		case T_STRING: 		return ValueType::String;
 		case T_REGEXP: 		return ValueType::Regexp;
 		case T_ARRAY: 		return ValueType::Array;
+		case T_HASH:        return ValueType::Hash;
 		case T_STRUCT:		return ValueType::Struct;
 		case T_BIGNUM: 		return ValueType::Bignum;
 		case T_FILE: 		return ValueType::File;
