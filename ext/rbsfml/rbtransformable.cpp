@@ -29,28 +29,48 @@
 
 rbTransformableModule rbTransformable::ourDefinition;
 
+class rbTransformableImpl : public rbTransformable, sf::Transformable
+{
+public:
+protected:
+    sf::Transformable* getTransformable() { return this; }
+    const sf::Transformable* getTransformable() const { return this; }
+};
 
 void rbTransformable::defineModule(const rb::Value& sfml)
 {
 	ourDefinition = rbTransformableModule::defineModuleUnder("Transformable", sfml);
-	ourDefinition.defineMethod<0>("position=", &rbTransformable::setPosition);
-	ourDefinition.defineMethod<1>("position", &rbTransformable::getPosition);
-	ourDefinition.defineMethod<2>("rotation=", &rbTransformable::setRotation);
-    ourDefinition.defineMethod<3>("rotation", &rbTransformable::getRotation);
-    ourDefinition.defineMethod<4>("scale=", &rbTransformable::setScale);
-    ourDefinition.defineMethod<5>("scale", &rbTransformable::getScale);
-    ourDefinition.defineMethod<6>("origin=", &rbTransformable::setOrigin);
-    ourDefinition.defineMethod<7>("origin", &rbTransformable::getOrigin);
-    ourDefinition.defineMethod<8>("move", &rbTransformable::move);
-    ourDefinition.defineMethod<9>("rotate", &rbTransformable::rotate);
-    ourDefinition.defineMethod<10>("zoom", &rbTransformable::zoom);
-    ourDefinition.defineMethod<11>("transform", &rbTransformable::getTransform);
-    ourDefinition.defineMethod<12>("inverse_transform", &rbTransformable::getInverseTransform);
+	ourDefinition.defineMethod<1>("position=", &rbTransformable::setPosition);
+	ourDefinition.defineMethod<2>("position", &rbTransformable::getPosition);
+	ourDefinition.defineMethod<3>("rotation=", &rbTransformable::setRotation);
+    ourDefinition.defineMethod<4>("rotation", &rbTransformable::getRotation);
+    ourDefinition.defineMethod<5>("scale=", &rbTransformable::setScale);
+    ourDefinition.defineMethod<6>("scale", &rbTransformable::getScale);
+    ourDefinition.defineMethod<7>("origin=", &rbTransformable::setOrigin);
+    ourDefinition.defineMethod<8>("origin", &rbTransformable::getOrigin);
+    ourDefinition.defineMethod<9>("move", &rbTransformable::move);
+    ourDefinition.defineMethod<10>("rotate", &rbTransformable::rotate);
+    ourDefinition.defineMethod<11>("zoom", &rbTransformable::zoom);
+    ourDefinition.defineMethod<12>("transform", &rbTransformable::getTransform);
+    ourDefinition.defineMethod<13>("inverse_transform", &rbTransformable::getInverseTransform);
+}
+
+void rbTransformable::defineIncludeFunction()
+{
+    ourDefinition.defineFunction<0>("included", &rbTransformable::included);
 }
 
 rbTransformableModule& rbTransformable::getDefinition()
 {
     return ourDefinition;
+}
+
+void rbTransformable::included(const rb::Value& base)
+{
+    if(base.getType() == rb::ValueType::Class)
+    {
+        rb::defineAllocator<rb::DefaultAllocator<rbTransformableImpl>>(base);
+    }
 }
 
 void rbTransformable::setPosition(sf::Vector2f value)

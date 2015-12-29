@@ -79,8 +79,6 @@ rbDrawableBridge::rbDrawableBridge()
 {
 }
 
-#include <iostream>
-
 void rbDrawableBridge::onDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     rb::Value drawStack = rb::Value(rbRenderTarget::getDefinition()).getVar<symVarInternalDrawStack>();

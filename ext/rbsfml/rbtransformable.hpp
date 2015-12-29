@@ -35,7 +35,10 @@ class rbTransformable : public virtual rbDrawableBaseType
 {
 public:
 	static void defineModule(const rb::Value& sfml);
+	static void defineIncludeFunction();
 	static rbTransformableModule& getDefinition();
+
+	static void included(const rb::Value& base);
 
 	void setPosition(sf::Vector2f value);
 	const sf::Vector2f& getPosition() const;
