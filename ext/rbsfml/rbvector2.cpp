@@ -41,8 +41,17 @@ namespace
 	{
 		rb::Value leftX = left.getVar<varX>();
 		rb::Value leftY = left.getVar<varY>();
-		rb::Value rightX = right.getVar<varX>();
-		rb::Value rightY = right.getVar<varY>();
+		rb::Value rightX, rightY;
+		if(right.getType() == rb::ValueType::Float || right.getType() == rb::ValueType::Fixnum)
+		{
+		    rightX = right;
+		    rightY = right;
+		}
+		else
+		{
+		    rightX = right.getVar<varX>();
+            rightY = right.getVar<varY>();
+		}
 
 		rb::Value x = leftX.call<operation>(rightX);
 		rb::Value y = leftY.call<operation>(rightY);
