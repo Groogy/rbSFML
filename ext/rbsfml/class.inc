@@ -100,4 +100,11 @@ Value Class<Base, MaxFunctions>::newObject(Args... args) const
 	return obj.call<symNew>(args...);
 }
 
+template<typename Base, int MaxFunctions>
+template<typename Allocator>
+Value Class<Base, MaxFunctions>::newObjectWithObject(rb::Object* object) const
+{
+	return rb::Value::create(rb_data_object_alloc(Module<Base, MaxFunctions>::myDefinition, object, NULL, &Allocator::free));
+}
+
 }

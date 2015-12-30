@@ -72,6 +72,9 @@ namespace rb
 		template<typename ...Args>
 		Value newObject(Args... args) const;
 
+        template<typename Allocator = DefaultAllocator<Base>>
+        Value newObjectWithObject(rb::Object* object) const;
+
 	protected:
 		static Value myParent;
 	};
