@@ -28,7 +28,26 @@
 
 namespace
 {
-    constexpr char symVarInternalTextureCache[] = "@__internal__texture_cache";
+    constexpr char symVarInternalOwnerRef[] = "@__internal__owner_ref";
+
+    class rbTextureRefAllocator
+    {
+    public:
+        static rbTexture* allocate(sf::Texture* texture)
+        {
+            void* memory = xmalloc(sizeof(rbTexture));
+            if(memory == nullptr) rb_memerror();
+            rbTexture* object = new(memory) rbTexture(texture);
+            return object;
+        }
+
+        static void free(void* memory)
+        {
+            rbTexture* object = static_cast<rbTexture*>(memory);
+            object->~rbTexture();
+            xfree(memory);
+        }
+    };
 }
 
 rbRenderTextureClass rbRenderTexture::ourDefinition;
@@ -43,12 +62,12 @@ void rbRenderTexture::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<3>("smooth?", &rbRenderTexture::isSmooth);
 	ourDefinition.defineMethod<4>("repeated=", &rbRenderTexture::setRepeated);
     ourDefinition.defineMethod<5>("repeated?", &rbRenderTexture::isRepeated);
-    ourDefinition.defineMethod<6>("activate", &rbRenderTexture::setActive);
+    ourDefinition.defineMethod<6>("set_active", &rbRenderTexture::setActive);
     ourDefinition.defineMethod<7>("display", &rbRenderTexture::display);
 	ourDefinition.defineMethod<8>("size", &rbRenderTexture::getSize);
 	ourDefinition.defineMethod<9>("texture", &rbRenderTexture::getTexture);
 
-	ourDefinition.aliasMethod("activate", "active=");
+	ourDefinition.aliasMethod("set_active", "active=");
 }
 
 rbRenderTextureClass& rbRenderTexture::getDefinition()
@@ -85,7 +104,7 @@ rb::Value rbRenderTexture::initialize(rb::Value self, const std::vector<rb::Valu
             rb::expectedNumArgs(args.size(), "0, 2 or 3");
             break;
     }
-    //self.to<rbRenderTexture*>()->myObject.create(width, height, depthBuffer);
+    self.to<rbRenderTexture*>()->myObject.create(width, height, depthBuffer);
     return self;
 }
 
@@ -150,9 +169,6 @@ rb::Value rbRenderTexture::setActive(rb::Value self, const std::vector<rb::Value
 void rbRenderTexture::display()
 {
     myObject.display();
-
-    rb::Value self(this);
-    self.setVar<symVarInternalTextureCache>(rb::Nil);
 }
 
 sf::Vector2u rbRenderTexture::getSize() const
@@ -163,13 +179,11 @@ sf::Vector2u rbRenderTexture::getSize() const
 rb::Value rbRenderTexture::getTexture() const
 {
     rb::Value self(this);
-    if(self.getVar<symVarInternalTextureCache>() == rb::Nil)
-    {
-        rb::Value texture = rbTexture::getDefinition().newObject();
-        texture.to<sf::Texture&>() = myObject.getTexture();
-        self.setVar<symVarInternalTextureCache>(texture);
-    }
-    return self.getVar<symVarInternalTextureCache>();
+    rbTexture* object = rbTextureRefAllocator::allocate(const_cast<sf::Texture*>(&myObject.getTexture()));
+    rb::Value value = rbTexture::getDefinition().newObjectWithObject<rbTextureRefAllocator>(object);
+    value.setVar<symVarInternalOwnerRef>(self);
+    value.freeze();
+    return value;
 }
 
 sf::RenderTarget* rbRenderTexture::getRenderTarget()
