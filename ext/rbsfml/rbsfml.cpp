@@ -58,6 +58,7 @@
 #include "rbshape.hpp"
 #include "rbdataptr.hpp"
 #include "rbrect.hpp"
+#include "rbrendertexture.hpp"
 
 class rbSFML
 {
@@ -124,6 +125,7 @@ extern "C" void Init_rbsfml() {
 	rbFont::defineClass(rb::Value(sfml));
 	rbText::defineClass(rb::Value(sfml));
 	rbShape::defineClass(rb::Value(sfml));
+	rbRenderTexture::defineClass(rb::Value(sfml));
 
 	rbDrawable::defineIncludeFunction();
 	rbTransformable::defineIncludeFunction();
