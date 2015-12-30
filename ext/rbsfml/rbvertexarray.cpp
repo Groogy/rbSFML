@@ -68,11 +68,12 @@ rb::Value rbVertexArray::initialize(rb::Value self, const std::vector<rb::Value>
         case 0:
             break;
         case 2:
-            object.setPrimitiveType(args[0].to<sf::PrimitiveType>());
             object.resize(args[1].to<unsigned int>());
+        case 1:
+            object.setPrimitiveType(args[0].to<sf::PrimitiveType>());
             break;
         default:
-        	rb::expectedNumArgs(args.size(), "0 or 2");
+        	rb::expectedNumArgs(args.size(), 0, 2);
         	break;
     }
 
