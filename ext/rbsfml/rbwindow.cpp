@@ -87,6 +87,8 @@ void rbWindow::defineClass(const rb::Value& sfml)
 	ourDefinition.defineMethod<23>("wait_event", &rbWindow::waitEvent);
 	ourDefinition.defineMethod<24>("each_event", &rbWindow::eachEvent);
 
+	ourDefinition.aliasMethod("set_active", "active=");
+
 	rb::Module<StyleModule> style = rb::Module<StyleModule>::defineModuleUnder("Style", sfml);
 	style.defineConstant("None", rb::Value(sf::Style::None));
 	style.defineConstant("Titlebar", rb::Value(sf::Style::Titlebar));
