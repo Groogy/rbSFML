@@ -38,6 +38,7 @@ public:
 	static rbTextureClass& getDefinition();
 
 	rbTexture();
+	rbTexture(sf::Texture* texture);
 	~rbTexture();
 
 	static rb::Value initialize(rb::Value self, const std::vector<rb::Value>& args);
@@ -73,7 +74,8 @@ private:
     friend class rb::Value;
 	static rbTextureClass ourDefinition;
 
-	sf::Texture myObject;
+	sf::Texture* myObject;
+	bool myOwnsObject;
 };
 
 namespace rb

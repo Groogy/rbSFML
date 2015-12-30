@@ -64,12 +64,22 @@ rbTextureClass& rbTexture::getDefinition()
 
 rbTexture::rbTexture()
 : rb::Object()
-, myObject()
+, myObject(new sf::Texture())
+, myOwnsObject(true)
+{
+}
+
+rbTexture::rbTexture(sf::Texture* texture)
+: rb::Object()
+, myObject(texture)
+, myOwnsObject(false)
 {
 }
 
 rbTexture::~rbTexture()
 {
+    if(myOwnsObject)
+        delete myObject;
 }
 
 rb::Value rbTexture::initialize(rb::Value self, const std::vector<rb::Value>& args)
@@ -110,7 +120,7 @@ rb::Value rbTexture::marshalDump() const
 
 void rbTexture::create(unsigned int width, unsigned int height)
 {
-    myObject.create(width, height);
+    myObject->create(width, height);
 }
 
 rb::Value rbTexture::loadFromFile(rb::Value self, const std::vector<rb::Value>& args)
@@ -129,7 +139,7 @@ rb::Value rbTexture::loadFromFile(rb::Value self, const std::vector<rb::Value>& 
            rb::expectedNumArgs( args.size(), 1, 2 );
            break;
     }
-    bool result = object->myObject.loadFromFile(filename, rect);
+    bool result = object->myObject->loadFromFile(filename, rect);
     return rb::Value::create(result);
 }
 
@@ -156,7 +166,7 @@ rb::Value rbTexture::loadFromMemory(rb::Value self, const std::vector<rb::Value>
     {
         rawData[index] = data[index].to<sf::Uint8>();
     }
-    bool result = object->myObject.loadFromMemory(rawData, data.size(), rect);
+    bool result = object->myObject->loadFromMemory(rawData, data.size(), rect);
     delete[] rawData;
     return rb::Value::create(result);
 }
@@ -177,19 +187,19 @@ rb::Value rbTexture::loadFromImage(rb::Value self, const std::vector<rb::Value>&
            rb::expectedNumArgs( args.size(), 1, 2 );
            break;
     }
-    bool result = object->myObject.loadFromImage(*img, rect);
+    bool result = object->myObject->loadFromImage(*img, rect);
     return rb::Value::create(result);
 }
 
 sf::Vector2u rbTexture::getSize() const
 {
-    return myObject.getSize();
+    return myObject->getSize();
 }
 
 rb::Value rbTexture::copyToImage() const
 {
     rb::Value image = rbImage::getDefinition().newObject();
-    image.to<sf::Image&>() = myObject.copyToImage();
+    image.to<sf::Image&>() = myObject->copyToImage();
     return image;
 }
 
@@ -207,26 +217,26 @@ rb::Value rbTexture::update(rb::Value self, const std::vector<rb::Value>& args)
                 {
                     rawData[index] = data[index].to<sf::Uint8>();
                 }
-                texture->myObject.update(rawData);
+                texture->myObject->update(rawData);
                 delete[] rawData;
             }
             else if(args[0].isKindOf(rb::Value(rbImage::getDefinition())))
             {
-                texture->myObject.update(args[0].to<sf::Image&>());
+                texture->myObject->update(args[0].to<sf::Image&>());
             }
             else if(args[0].isKindOf(rb::Value(rbWindow::getDefinition())))
             {
-                texture->myObject.update(args[0].to<sf::Window&>());
+                texture->myObject->update(args[0].to<sf::Window&>());
             }
             break;
         case 3:
             if(args[0].isKindOf(rb::Value(rbImage::getDefinition())))
             {
-                texture->myObject.update(args[0].to<sf::Image&>(), args[1].to<unsigned int>(), args[2].to<unsigned int>());
+                texture->myObject->update(args[0].to<sf::Image&>(), args[1].to<unsigned int>(), args[2].to<unsigned int>());
             }
             else if(args[0].isKindOf(rb::Value(rbWindow::getDefinition())))
             {
-                texture->myObject.update(args[0].to<sf::Window&>(), args[1].to<unsigned int>(), args[2].to<unsigned int>());
+                texture->myObject->update(args[0].to<sf::Window&>(), args[1].to<unsigned int>(), args[2].to<unsigned int>());
             }
             break;
         case 5:
@@ -237,7 +247,7 @@ rb::Value rbTexture::update(rb::Value self, const std::vector<rb::Value>& args)
                 {
                     rawData[index] = data[index].to<sf::Uint8>();
                 }
-                texture->myObject.update(rawData, args[1].to<unsigned int>(), args[2].to<unsigned int>(), args[3].to<unsigned int>(), args[4].to<unsigned int>());
+                texture->myObject->update(rawData, args[1].to<unsigned int>(), args[2].to<unsigned int>(), args[3].to<unsigned int>(), args[4].to<unsigned int>());
                 delete[] rawData;
                 break;
             }
@@ -247,33 +257,33 @@ rb::Value rbTexture::update(rb::Value self, const std::vector<rb::Value>& args)
 
 void rbTexture::setSmooth(bool smooth)
 {
-    myObject.setSmooth(smooth);
+    myObject->setSmooth(smooth);
 }
 
 bool rbTexture::isSmooth() const
 {
-    return myObject.isSmooth();
+    return myObject->isSmooth();
 }
 
 void rbTexture::setRepeated(bool repeated)
 {
-    myObject.setRepeated(repeated);
+    myObject->setRepeated(repeated);
 }
 
 bool rbTexture::isRepeated() const
 {
-    return myObject.isRepeated();
+    return myObject->isRepeated();
 }
 
 unsigned int rbTexture::getNativeHandle() const
 {
-    return myObject.getNativeHandle();
+    return myObject->getNativeHandle();
 }
 
 void rbTexture::bind(const rbTexture* texture, sf::Texture::CoordinateType type)
 {
     if(texture)
-        sf::Texture::bind(&texture->myObject, type);
+        sf::Texture::bind(texture->myObject, type);
     else
         sf::Texture::bind(nullptr, type);
 }
@@ -286,7 +296,7 @@ unsigned int rbTexture::getMaximumSize()
 rbDataPtr* rbTexture::getNativePtr() const
 {
     rbDataPtr* ptr = rbDataPtr::getDefinition().newObject().to<rbDataPtr*>();
-    ptr->setPtr(reinterpret_cast<intptr_t>(&myObject));
+    ptr->setPtr(reinterpret_cast<intptr_t>(myObject));
     return ptr;
 }
 
@@ -316,13 +326,13 @@ const rbTexture* Value::to() const
 template<>
 sf::Texture& Value::to() const
 {
-    return to<rbTexture*>()->myObject;
+    return *to<rbTexture*>()->myObject;
 }
 
 template<>
 const sf::Texture& Value::to() const
 {
-    return to<const rbTexture*>()->myObject;
+    return *to<const rbTexture*>()->myObject;
 }
 
 template<>
