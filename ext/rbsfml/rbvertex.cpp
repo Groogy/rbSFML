@@ -53,9 +53,9 @@ const rbVertexClass& rbVertex::getDefinition()
 
 rb::Value rbVertex::initialize(rb::Value self, const std::vector<rb::Value>& args)
 {
-    self.setVar<symVarPosition>(rbVector2::getDefinition().newObject());
+    self.setVar<symVarPosition>(rbVector2::getDefinition().newObject(0.0, 0.0));
     self.setVar<symVarColor>(rbColor::getDefinition().newObject());
-    self.setVar<symVarTexCoords>(rbVector2::getDefinition().newObject());
+    self.setVar<symVarTexCoords>(rbVector2::getDefinition().newObject(0.0, 0.0));
 	switch( args.size() )
     {
         case 0:
