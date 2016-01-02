@@ -55,7 +55,7 @@ void rbRenderTarget::defineModule(const rb::Value& sfml)
 	ourDefinition.defineMethod<7>("push_gl_states", &rbRenderTarget::pushGLStates);
 	ourDefinition.defineMethod<8>("pop_gl_states", &rbRenderTarget::popGLStates);
 	ourDefinition.defineMethod<9>("reset_gl_states", &rbRenderTarget::resetGLStates);
-	ourDefinition.defineMethod<9>("draw", &rbRenderTarget::draw);
+	ourDefinition.defineMethod<10>("draw", &rbRenderTarget::draw);
 
 	ourRefDefinition = rbRenderTargetRefClass::defineClassUnder("RenderTargetRef", sfml);
 	ourRefDefinition.includeModule(rb::Value(ourDefinition));
